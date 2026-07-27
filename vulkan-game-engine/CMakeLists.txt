@@ -21,6 +21,8 @@ add_executable(vulkanengine
 	"main.cpp"
 	"lve_window.hpp"
 	"lve_window.cpp"
+	"lve_pipeline.cpp"
+	"lve_pipeline.cpp"
 	"first_app.hpp"
 	"first_app.cpp")
 
@@ -36,3 +38,12 @@ target_link_libraries(vulkanengine PRIVATE
 	glm::glm
 	spdlog::spdlog
 	fmt::fmt)
+
+# Copy shaders folder to the build directory every time the project is built
+add_custom_target(CopyShaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/shaders"
+        "${CMAKE_CURRENT_BINARY_DIR}/shaders"
+    COMMENT "Copying shaders to build directory..."
+)
+add_dependencies(vulkanengine CopyShaders)

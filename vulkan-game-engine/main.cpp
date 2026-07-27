@@ -3,8 +3,12 @@
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
+#include <spdlog/spdlog.h>
 
 int main() {
+  spdlog::set_pattern("[%H:%M:%S.%e] [%^%l%$] %v");
+  spdlog::set_level(spdlog::level::debug);
+
   lve::FirstApp app{};
 
   try
@@ -13,7 +17,7 @@ int main() {
   }
   catch (const std::exception& e)
   {
-    std::cerr << e.what() << '\n';
+    spdlog::error(e.what());
     return EXIT_FAILURE;
   }
 
