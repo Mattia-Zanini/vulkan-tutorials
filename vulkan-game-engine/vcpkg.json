@@ -1,0 +1,12 @@
+{
+  "name": "vulkan-game-engine",
+  "version": "1.0.0",
+  "dependencies": [
+    "glfw3",
+    "glm",
+    "vulkan",
+    "shaderc",
+    "spdlog",
+    "fmt"
+  ]
+}

@@ -1,0 +1,1251 @@
+Title: Learn Modern Vulkan in 2 Hours (Dynamic Rendering, No Render Passes!)
+URL: https://www.youtube.com/watch?v=DC9FBRQKNck
+
+(0:00) You often hear people talking about how hard Vulcan is and how it takes so much code just to get to a triangle. And
+(0:06) while that's true, there is a lot of code and Vulcan can be hard, I think the hardest part about learning Vulcan is
+(0:12) the lack of clear and easy to follow tutorials and code samples. This was my motive for putting together this hefty
+(0:19) video. Everything you need to go from zero to your first triangle in one easy
+(0:24) to follow lesson with a focus on modern Vulcan features. Many tutorials, even
+(0:29) recent ones, still use Vulcan 1.0 era features, which can nowadays be replaced
+(0:34) by their new and improved counterparts. There are also too many concepts introduced at once, far more than is
+(0:41) needed to put pixels on the screen, which can leave you with many points of failure when you're just starting out.
+(0:46) Even recent learning materials aren't without their issues. I recently went through the how to Vulcan 2006 guide and
+(0:53) though it's quite good, it does leave out some sections that force me to poke through the source code which I could
+(0:58) only make sense of because I've already worked with Vulcan. I personally have a very hard time learning from code like
+(1:05) this. Everything is just plopped inside of Maine. There's nothing to break up the complexity or help demonstrate the
+(1:12) various phases of Vulcan initialization and rendering. The comments that are there might as well just be line breaks
+(1:18) as they don't tell me anything. And speaking of line breaks, there aren't even those in this file, which makes me
+(1:24) really struggle to want to read this. I do truly appreciate the work that gets put into these materials, but can we
+(1:30) agree that educational materials need to be a little more beginner friendly? With
+(1:35) that said, I'm going to take a stab at presenting an absolute minimal and modern Vulcan example that beginners can
+(1:42) use to try and get to the holy triangle with less pain and confusion than what has been offered until now. We'll do
+(1:48) this by only focusing on the features we need to achieve this goal. As we add more features like model loading,
+(1:54) texturing, lighting, materials, etc., I'll introduce the Vulcan features that we need and that are best suited for the
+(2:01) task at hand. Essentially, I'd like to tackle specific milestones with each video, not introducing just particular
+(2:08) parts of the API. And speaking of the API, the Kronos group has put a lot of
+(2:13) effort into improving Vulcan since its initial release. This is why anybody starting today should focus on using the
+(2:20) core extensions on offer with the latest version of Vulcan, that being 1.4 at the time of recording. Many pain points have
+(2:26) been addressed with additions to the API or improvements over existing API. We'll
+(2:32) address these as we move forward and look at what the alternative was in the 1.0 era of Vulcan. This will make
+(2:38) learning much easier since the areas of Vulcan that required the most boilerplate code or caused the most
+(2:44) confusion have been the primary targets of improvement. Also, don't worry about whether you should use the latest
+(2:49) features since by the time you actually get to a place where you're shipping a game and having to worry about device
+(2:55) support, you'll likely already have it. Of course, you can always provide ways of supporting old devices, which in
+(3:01) practice usually results in an OpenGL renderer or simply code paths utilizing
+(3:08) widely supported legacy features. But you don't have to worry about that today
+(3:13) because you just need to worry about learning and making progress. So, let's get to it. To get the Vulcan SDK, head
+(3:20) over to the Lunar G website, which provides SDKs for Windows, Mac OS, and Linux. The Mac OS version of Vulcan is
+(3:28) actually a translation layer called Moltenv VK, which is a wrapper around Apple's native graphics API, Metal. Keep
+(3:35) this in mind if you're on Mac OS, as certain features may be lacking. One thing I'd like to point out, be sure to
+(3:42) install shader tool chain debug symbols. I found out the hard way they're needed later when we look at compiling shaders
+(3:49) at runtime. Without them, you won't be able to link your debug application against the shader compiler library.
+(3:56) Once you've installed the SDK, then you can pull in the Vulcan headers and get started. Let's quickly have a look at
+(4:02) the cmake list.txt file for this project. We'll be using SDL3 for the
+(4:07) windowing and platform specifics and the Vulcan library, of course, provided by the SDK that we just installed. The SDK
+(4:15) also lets you install Vulc which we'll use to load the Vulcan function pointers later on so that we can actually call
+(4:22) functions as well as the Vulcan memory allocator library VMA which is basically
+(4:27) standard nowadays for streamlining memory allocations. I'm also enabling the latest C++ for my MSVC tool chain
+(4:34) and telling CMake that I'd like to link to the aforementioned libraries as well.
+(4:41) Taking a look at the main.cpp CPP file. We can see that I've placed all of the code inside of a class called
+(4:46) application. This isn't a prescription on application architecture. I've just chosen the simplest way of encapsulating
+(4:54) things and breaking up the process in order to avoid having a bunch of global variables and functions. After creating
+(5:00) an instance of the application class, we call the initialize method where all of the setup work actually happens. The
+(5:06) first thing we do is initialize SDL3 for video. We do this in order to be able to
+(5:12) create a Vulcan capable window. We call SDL init subsystem and pass the SDL init
+(5:18) video flag. If everything goes well with the SDL initialization, we go on to
+(5:23) create a window and we pass the SDL window Vulcan to the list of window flags. To ensure that we can later
+(5:29) create a Vulcan capable window surface, we'll need this in order to create the swap chain later. This is a chain of
+(5:36) images that we get from the OS that we can draw on frame over frame. After ensuring that the window was created
+(5:42) successfully, we can move on to actually initializing Vulcan by calling our initialize Vulcan method.
+(5:50) Moving into the initialize Vulcan method, the first call is to the Vulcan create instance method. And in there,
+(5:56) the first thing we do is initialize Vulk. As mentioned earlier, Vulk is the library that's going to load the Vulcan
+(6:01) function pointers from our Vulcan instance later on. This here is the first Vulcan structure
+(6:07) we'll be using in our setup and it illustrates a common pattern used throughout the Vulcan API. You create a
+(6:14) strct which always starts with the letters VK and the first member you always fill is the stype member field.
+(6:21) This tells Vulcan what the type of the strct we're passing is. You might think this is redundant, but Vulcan uses this
+(6:28) identifier internally in order to be able to cast our structure to a generic type and then back to its concrete type
+(6:34) at a different time. Vulcan is a C API. So this is required in order for Vulcan to be extensible. As we'll see later on
+(6:41) when we use another field called P next. In the case of this strct vk application
+(6:47) info, we provide the type of the strct, the name of the application we're creating, and the Vulcan version that
+(6:53) we're targeting, which I've declared as a constant in the header for this class as Vulcan version 1.4.
+(7:02) With the app infrastructed, we now move on to creating a list of Vulcan extensions we'll be using with our
+(7:08) Vulcan instance. Since SDL is taking care of creating our window, we'll ask it what extensions it needs in order to
+(7:16) create the Vulcan surface. The SDL Vulcan get instance extensions function,
+(7:22) that's a mouthful, will tell us exactly that. This function takes a pointer to an integer which will be filled with the
+(7:28) size of the returned array and it returns an array of C strings representing the list of extensions SDL
+(7:35) will require to create the Vulcan surface. Once we have SDL's extension list, we can create the final list that
+(7:42) we'll be providing to Vulcan when we ask it to create the instance object. I'm also adding the VK extills
+(7:50) extension which is declared in the Vulcan headers under the VKXT
+(7:55) debug utils extension name constant. This extension lets us provide the
+(8:00) Vulcan instance with a callback function which can receive messages from the Vulcan driver letting us know about API
+(8:07) misuse or potential performance issues and is part of the overall validations layer feature of Vulcan that we'll
+(8:14) enable. Every Vulcan developer should enable this during development whether they're a beginner or an expert. We'll
+(8:20) look at enabling layers in a minute. Now it's just a matter of iterating through the extensions STL asked for and
+(8:27) pushing them into the requested extensions vector. Before we move on though, let's quickly take a look at
+(8:33) what's actually in there. First, we see the VKX debug utils, which I described a
+(8:40) minute ago for the debug callback, which is followed by VK KHR surface, which is
+(8:46) the generic Vulcan surface extension that we'll need to create a surface. There's also VKHR Win32 surface which is
+(8:54) needed for this particular platform. Windows Mac OS and Linux users will see a different extension. And both of these
+(9:01) last two extensions were returned by SDL further up and will be required when we create the Vulcan surface shortly. As
+(9:09) mentioned, we'll need to tell Vulcan which layers we want to enable for the runtime of our application. In this
+(9:15) case, all I'm asking for is the validation layers to be enabled, which is done by passing the VK layer kronos
+(9:22) validation identifier to the requested layers vector that we'll be passing on to Vulcan shortly.
+(9:29) Moving on from there, we create another VK strct that we'll provide with our instance creation, letting Vulcan know
+(9:35) what the debug callback function is we want it to call, as well as what type of messages we're interested in and the
+(9:42) severity levels we care about. The callback function has a very
+(9:48) specific signature as you can see on screen and is usually just a plain old C function that we provide a pointer to.
+(9:55) In my case, I've defined it as a static method in the application class which you can also provide a pointer to the
+(10:01) same way. This can't be a regular class instance method as Vulcan won't know what object to call it on. Take note
+(10:08) that in the method definition, I'm also able to filter out severity levels from there with a simple equality check. In
+(10:15) this case, I only care about message severity warning and higher. Okay, we have everything we need to
+(10:21) create the Vulcan instance. In order to do that, we create an instance of another strct named VK instance create
+(10:28) info and provide the information Vulcan needs to create the instance. This includes the app info strct detailing
+(10:36) our app name and bulk conversion, the instance level extensions we'll be requesting, the layers we wish to
+(10:42) enable, and the debug callback information we just looked at. When people say it takes 1,000 lines to draw
+(10:48) a triangle, this is one of the reasons for it. There's nothing overly terrible or difficult about what we're doing.
+(10:54) It's just a matter of providing lots of information to Vulcan so that it can later make informed decisions about how
+(11:00) to best execute the things that we tell it to execute. Looking at the P next field being set on the strct brings up
+(11:07) an important note. You'll recall I mentioned earlier that the stype field on the strruct is used by Vulcan for
+(11:13) extensibility support. An example of this is right here where we set the p next field to point to a vk debug utils
+(11:22) messenger create info extstruct. P next is a void pointer and another standard
+(11:27) field you'll see often. It allows us to essentially create our Vulcan structures into link lists each one pointing to the
+(11:35) next. When you call methods from the Vulcan API, in many cases, Vulcan will follow each P next pointer, cast it
+(11:42) internally to a base generic type and look at its stype member. This way, it
+(11:48) has a generic way of viewing the stype fields on any strcts provided. Using the
+(11:53) structure type field, it can then create a concrete object of that specific type and perform the appropriate work. This
+(12:00) is why it's important to always set the structure type in Vulcan. And while we're at it, it's important to remember
+(12:06) to always mems set your strcts to zero or just use an appropriate construction
+(12:11) method. In C++, using the braced initialization I'm using always initializes the fields. This way,
+(12:18) there's no risk of initializing a field with garbage data from memory and accidentally setting off strange
+(12:24) behavior. Another common pattern is the way we're passing the lists of extensions and
+(12:29) layers. You'll always see pairs of fields where one states the number of things you wish to pass and another
+(12:36) points to the memory holding those things. Now that you understand those basics, let's call our first Vulcan
+(12:42) function vkre instance. This function will take our instance create info strct, a pointer to an allocator
+(12:49) callback which we don't need and we'll pass null pointer and finally a pointer to the VK instance variable where we
+(12:55) wish to receive the handle to our newly created Vulcan instance. It's good practice to also check if the result of
+(13:01) our function calls is VK success so that if something goes wrong, we can end early and take appropriate measures.
+(13:09) Some functions return other details as we'll see later. So, it's important to understand what the functions return as
+(13:15) we'll see later when we work with our swap chain. And just for reference, all Vulcan object handles and other data are
+(13:22) stored in the application class instance we're working with, such as the VK instance handle we're receiving our
+(13:29) Vulcan instance into. With the VK instance created, we're
+(13:35) ready to ask Vul to get us the addresses to all of the Vulcan instance level functions. These will be all of the
+(13:42) functions that we'll use to interact with Vulcan going forward. Without this step, a call to any VK function will
+(13:49) result in a crash. So we call vulk load instance, pass in the Vulcan instance we
+(13:54) just created, and it takes care of the rest for us. And of course, if you create or initialize something, you need
+(14:00) to remember to also free it when you're done. Let's look at the portion of the shutdown function that is called at the
+(14:06) end of the program corresponding to the Vulcan instance creation process we just completed. These function calls are at
+(14:13) the very bottom of the shutdown function and are the very last thing to get cleaned up when the application ends.
+(14:18) Just like how they were the very first thing that we initialized when the application started. First, we call VK
+(14:25) destroy instance and tell Vulcan we're finished with the VK instance. Then we call vul finalize to clean up any
+(14:31) resources it may have used. Then we can destroy the window that we created with SDL by calling SDL destroy window. And
+(14:39) finally, we can shut down SDL as a whole by calling SDL quit. That's all there is
+(14:44) to it. We'll be adding more to this shutdown function as we go along, but for now, this is all we need to clean up
+(14:50) after ourselves. So, we have a Vulcan capable window created. We've initialized the VK
+(14:56) instance and can start calling Vulcan functions that we acquired through Vulk. Next up, we create the VK surface
+(15:03) object, which we're going to use to create our swap chain shortly. For now, creating the surface object itself is a
+(15:09) simple matter of calling SDL bulkin create surface passing in the window pointer and the handle to the VK
+(15:17) instance object. We continue to pass null pointer to all the allocation callbacks
+(15:22) and we provide a pointer to a VK surface variable in the application instance where we're actually going to receive
+(15:28) the surface handle. If we created the window correctly and requested the appropriate Vulcan
+(15:35) instance extensions, this function should return true and we can move forward. We've worked towards setting up
+(15:41) a window and an appropriate surface that we can eventually use for drawing, but we still haven't told Vulcan what GPU
+(15:48) we're going to be using to actually do so. In Vulcan, your GPU is represented by a physical device object. And even if
+(15:56) you have a single GPU in your system, you still need to tell Vulcan that you intend to use it. Let's take a look at
+(16:01) the find physical device method. This is one of those areas where tutorials spend far too much time up front iterating the
+(16:08) GPUs, checking capabilities, assigning scores to them, and trying to figure out which GPU to use. Having a solid
+(16:15) algorithm for detecting the appropriate GPU is important, but honestly, it's not that important when you're just starting
+(16:21) out and want to see some colors on the screen. As far as I'm concerned, I'd prefer beginners just pick the first GPU
+(16:27) in their system and move on. But I can't just leave you with that. So I'll take a little time and show you how to
+(16:32) enumerate the physical devices to pick one. It's also not a bad bit of code to learn from anyway as we'll see another
+(16:39) calling pattern that comes up a lot with Vulcan as you ask it to enumerate things or give you listings of some sort. What
+(16:46) you do is create an integer that will hold the number of things Vulcan is giving back to you. In this instance,
+(16:52) we're asking Vulcan to give us a list of the physical devices in our system by calling VK enumerate physical devices.
+(16:59) You'll notice that you're expected to do the call twice. The first time you call it using the Vulcan instance handle, a
+(17:06) pointer to the integer that will receive the count value, and a null pointer for the last parameter. This is where you'd
+(17:12) otherwise pass the pointer to a memory buffer of the correct size to receive the items Vulcan is giving you. When you
+(17:19) pass null pointer for the buffer address, Vulcan only gives you the count of the items and doesn't try to give you
+(17:25) any data. Once you have the count, you can allocate a buffer to hold that exact number of items and then call the
+(17:31) function again so that you can actually get them. This time we use the vectors data method to get the address of the
+(17:38) memory we allocated and Vulcan will have a place to write out the VK physical device handles for us. with our list of
+(17:45) physical devices. Let's look at a simple way to pick one. For now, we create a VK physical device variable and initialize
+(17:52) it to null pointer. This is the variable we'll return at the end of the method. Next, we check if we actually got back
+(17:59) any devices from Vulcan. If this value is zero, then the function will obviously skip everything and return the
+(18:04) null pointer that we assigned previously. The calling function will see that and report the error. Most
+(18:10) likely, you'll have at least one physical device in your system, or two if you're in a gaming laptop or a
+(18:15) workstation. First thing we do is initialize the chosen physical device to the first item in the list. Then we can
+(18:22) loop through the list of physical devices and inspect them. We create an instance of a VK physical device
+(18:28) property strct, which we'll ask Vulcan to fill with the details about the current physical device in the loop. We
+(18:34) call VK get physical device properties. pass the handle to the current physical device and the pointer to the strruct
+(18:41) that we created above. Once we have the properties, we can check the device type field to see if it's a discrete GPU
+(18:48) using the VK physical device type discrete GPU constant. Which means our loop here is looking for a dedicated GPU
+(18:56) over an integrated one. If we find a discrete GPU, we assign the handle to our result variable, break out of the
+(19:02) loop, and return. If we don't find a discrete GPU, then this method will just end up returning the first GPU in the
+(19:09) list. Once this method returns to us a physical device, it's time to take a
+(19:14) look at where our commands actually go when we tell our GPU to do work. Modern
+(19:19) graphics cards are packed with both generalized and specialized hardware. We have engines for rendering, high-speed
+(19:26) computation, and dedicated DMA engines for moving data between system and video
+(19:31) memory without stalling our graphics pipeline. The way Vulcan abstracts and exposes this hardware is through the use
+(19:37) of Q families. You can think of these as various types of pipes flowing into the
+(19:43) GPU for work delivery. And from those families, we can create VKQ objects that
+(19:49) represent the actual pipes that are based on those families that we can actually pump data into to send into the
+(19:55) GPU. Examples of Q families are graphics. This is where we submit render
+(20:00) commands for executing our various graphics shaders, compute, which we use for compute shaders and non-graphical
+(20:07) applications, and transfer, which are specialized hardware for directly accessing system memory. This allows for
+(20:14) seamless loading of assets into VRAMm in order to minimize frame rate disruption. There are also video decode and encode Q
+(20:21) families and a few more specialized ones that we won't be looking at yet. In order to get our triangle to the screen,
+(20:27) though, we need to be able to do the following things. One, tell the GPU to draw three vertices so that it can
+(20:34) execute a graphics pipeline to process and shade the appropriate pixels or more correctly, fragments. Then we need to
+(20:41) write those fragments into an OS provided set of images called the swap chain which we'll be creating soon. And
+(20:47) finally, we need to have the image presented after we're finished drawing on it in real time. The Vulcan
+(20:53) specification guarantees that if you have a graphics family Q, you have implicit support for graphical and
+(20:59) memory transfer operations, which is why to start the only thing we'll care about is the graphics Q family. And virtually
+(21:06) every single GPU will have this one. In fact, for our example, we aren't even transferring any model or image data
+(21:13) such as vertices and textures to the GPU. So, all we'll really need are the graphics capabilities. In fact, we won't
+(21:21) even care about dedicated transfer cues until a further video where we'll focus on loading game assets asynchronously
+(21:28) using the dedicated DMA engine in an optimized way. Until then, a graphics
+(21:33) skeue is more than enough to load and render models and textures without over complicating matters and prematurely
+(21:39) optimizing. To find our graphics Q, we'll first ask Vulcan to give us a list of the various Q families available to
+(21:46) our physical device, which also gives us some capability information about them. This is done by calling VK get physical
+(21:54) device Q family properties 2. We call this function multiple times as demonstrated in the previous section in
+(22:01) order to correctly size and fill a buffer with the appropriate structures. If you're curious about the number two
+(22:07) suffix at the end of some of these functions and structures, this is how the API has added updated versions of
+(22:13) legacy functions and structures without causing breaking changes to the existing legacy code in use today. Once Vulcan
+(22:20) has given us the list of Q families available for the GPU, we iterate over each one and check if it's right for us.
+(22:27) I previously mentioned that after we're finished drawing our triangle, we'll need to be able to present the image, of
+(22:32) course, to the window. This is done by communicating with the presentation engine and the Windows system interface
+(22:38) to ensure that we can reach a level of synchronization between our renderer and the OS subsystem responsible for
+(22:45) actually displaying our window to the screen. We'll discuss that synchronization shortly, but for now we
+(22:51) need to check if our Q family has support for presentation and more specifically if it has surface support.
+(22:57) The Q family which we'll use for graphics is usually universal and will almost certainly have presentation
+(23:03) support. Though we'll be good Vulcan devs and we'll make sure to check for it explicitly. First, we'll create a for
+(23:09) loop in order to create an index variable that we can use to index into the list of properties objects that
+(23:15) Vulcan gave us. And for each index, we call VK get physical device surface
+(23:20) support KHR, passing in our physical device handle, the current Q family index, the VK surface object we
+(23:28) previously created, and a pointer to our boolean variable that we declared above to receive the result. This will tell us
+(23:34) if the Q family at the given index will have support for presentation. Next, we
+(23:39) grab the current properties object by indexing into the list that Vulcan provided. And we check if the current Q
+(23:45) family has the VK Q graphics bit set in the Q flax field which is exposed by the
+(23:51) Q family properties object. And we use a bitwise and to check for that bit. Of course, we're also checking if the
+(23:58) result is true for the presentation support we discussed. And if both of these conditions are true, we keep track
+(24:04) of the Q family index using a member field in the application class. Then we can just break out of the loop and
+(24:10) function by returning true. We'll need this index shortly to create the Q object we'll be using to submit render
+(24:16) commands to the GPU.
+(24:22) If everything goes well and we get our graphics skew index, we get a true result here and can move on to the most
+(24:28) important object of our application. And this is the logical device or more accurately the VK device handle. Modern
+(24:35) GPUs are powerful devices that are designed to be used by multiple applications at once. If you run a game
+(24:42) and play a video at the same time, the same GPU will be rendering frames in your game while at the same time it's
+(24:48) decoding video frames in your browser. This is handled by allowing various instances of the GPU to operate
+(24:55) concurrently, sharing and prioritizing hardware resources. To use an analogy,
+(25:00) if you think of the physical device as a class type in your application, you can think of the VK device as an instance of
+(25:07) that class representing an actual instantiation and usage of that class.
+(25:12) You never submit work directly to the physical device. You access the GPU via a logical device handle provided to us
+(25:19) as a point of access for GPU resources. Let's see how we can get ourselves one of these.
+(25:27) Drilling into the create device function, we see that it takes a VK physical device as a parameter. And I've
+(25:33) done this just to reinforce the idea that a VK device is created based on a VK physical device. We start off the
+(25:41) process by creating a series of structures that will hold the supported features of our selected physical
+(25:46) device. These structures will tell us what Vulcan features are supported. And
+(25:51) each strct represents a different version of Vulcan. As you can see, each one is numbered. 14 is Vulcan 1.4, 13 is
+(26:00) 1.3, and so on. The bottom structure represents Vulcan 1.1, and we're using
+(26:05) the two suffix variant in order to have access to the P next fields. As we
+(26:10) discussed, this pointer lets us link structures together to form a link list the Vulcan can traverse until it finds a
+(26:17) null next pointer. In our case, that'll be the Vulcan 1.4 feature structure.
+(26:22) These structures contain a series of boolean fields that will be populated by Vulcan when we call VK get physical
+(26:30) device features 2 and pass the first structure in the chain. Once we have our supported features, we check to make
+(26:36) sure that each feature we're actually interested in is available to our graphics hardware and driver. It's
+(26:42) important to remember that different operating systems have different driver quality and Vulcan support. So, it's
+(26:48) crucial to ensure a feature is supported before you assume you can use it. If all of the features we're interested in are
+(26:55) supported, we move on to the next section where we once again produce another chain of these feature
+(27:00) structures, except this time we'll be the one setting the appropriate feature fields to true. We'll be using this
+(27:06) chain in a minute to tell Vulcan that we want these features to be enabled when we create the VK device object.
+(27:13) Remember, you should always enable only the features you're actually planning on using, which means making sure to create
+(27:19) the second chain of strcts and explicitly setting the appropriate boolean fields. It might be enticing to
+(27:25) get the supported features using the first chain of strcts and just pass that along when we create the device, but
+(27:31) this is bad practice. This way, you would enable everything, which will cause the driver to make certain
+(27:36) decisions and assumptions that could impact your application's performance, and you could certainly end up paying
+(27:42) for something that you're not using at all. You should also be aware of which parts of the API you are using and which
+(27:48) extensions it belongs to. This will only make you more informed and able to make better decisions. You could eventually
+(27:55) provide wider support by conditionally enabling certain features for different hardware configurations. Like I said
+(28:00) earlier though, at this stage, use the non- vendor specific features that will make your life easier and let you make
+(28:06) progress as rapidly as possible. And basically everything we're using today is already part of the official Vulcan
+(28:13) feature set. Once we've set up our requested features, we need to prepare another structure to tell Vulcan that
+(28:19) we'll need a queue so that we can actually submit work to the GPU using our device. We previously found a
+(28:25) particular Q family that supports graphics and presentation features and kept track of its index in the
+(28:31) application class member field. We prepare a VK device Q create info structure and populate it with the Q
+(28:39) family index, the number of Q objects we'd like to create, and a pointer to the list of Q priorities corresponding
+(28:46) to each Q object that we're asking to create. In this case, it's just a single Q. So, it's a vector of one elements
+(28:52) with a priority of 1.0, which is standard. It's quite rare that you'd want multiple
+(28:58) graphics cues, as there really won't be any benefits for most applications. And if you do ask for more cues, the GPU
+(29:05) might actually allocate its resources more thinly in anticipation for multiple cues and actually harm your performance.
+(29:12) Even if you're looking to create a modern multi-threaded renderer, you don't achieve that with multiple cues,
+(29:18) but rather by recording multiple command buffers concurrently in multiple threads and then submitting those command
+(29:24) buffers into a single que. We're almost ready to create the VK device object.
+(29:29) We'll just need another strct of VK device create info that wraps everything up together. We set the required sype
+(29:36) field and the P next field to point to the first feature structure of our requested features chain. We specify how
+(29:43) many VK device Q create info structures we're passing which in our case is just a single graphics Q and that's followed
+(29:51) by the count and list of extensions that we're enabling at the device level. Here we only have the VK KHR swapchain
+(29:59) extension which is a companion to the surface extension we enabled at the instance level. We'll need this in order
+(30:05) to interact with the always provided swap chain using our VK device. And I'm also setting the P enabled features
+(30:12) field here to null pointer explicitly to stress that in modern Vulcan you provide
+(30:17) a chain of strcts for the enabled features as we've done above and you don't use this field to pass that chain.
+(30:24) Keep this in mind as trying to pass this chain using this field will only result in a compile error as the types don't
+(30:30) even match. Finally, we call vkreate device provide the physical device
+(30:35) handle, a pointer to the strct we just created, null pointer for the allocator
+(30:41) callback, and a pointer to a VK device handle variable we declared in the application class. If this returns VK
+(30:48) success, we'll have ourselves a VK device object that we can finally start using to access GPU resources. And the
+(30:56) first of those resources will be the VKQ object that we ask Vulcan to create for us with the device. This simply involves
+(31:03) calling VK get device Q with our new device handle, the Q family index we're
+(31:09) interested in, and the index of the Q which we just created, which is zero since we only created a single Q. We
+(31:16) also provide a pointer to a VKQ variable that'll receive the Q handle. If everything went well, we'll have our
+(31:22) device handle, our Q handle, and we're ready to move on. If you're enjoying
+(31:27) this video so far and want more of this content, please consider liking and subscribing to the channel. This really
+(31:34) helps with the algorithm and makes all the hours of recording and editing that much more worth it. You can also support
+(31:40) me using my coffee link, which is in the description. Now, let's get back to the lesson. I've mentioned GPU resources
+(31:47) multiple times now, but when we talk about GPU resources, we're most commonly referring to images that hold texture
+(31:54) data and buffers to hold vertex, material, or virtually any other scene data. This has historically been a pain
+(32:01) point for beginners as even simple allocations required multiple steps such
+(32:06) as describing the buffer size and usage parameters, creating the buffer and getting back a VK buffer handle, using
+(32:14) that buffer to generate a memory requirement structure, enumerating and picking an appropriate memory type from
+(32:20) the physical device. And once you have the buffer requirements, creating a memory allocation request structure to
+(32:26) actually allocate the memory and get back a VK device memory handle. And this often requires quite a bit of code just
+(32:33) for simple memory allocations. Nowadays, it's highly recommended to use a library
+(32:38) called VMA, which stands for Vulcan memory allocator. The library is used by
+(32:43) major companies and has become a standard tool for Vulcan developers of all levels and is included with the
+(32:50) Vulcan SDK. It aims to provide a huge reduction in boilerplate code by
+(32:55) automatically setting up most of the commonly used fields, enumerating and using the appropriate memory type and
+(33:01) managing the memory allocations for us. This doesn't mean we can't fine-tune memory use further. It simply offers a
+(33:08) reduction in complexity and code size required for memory allocation. Setting up VMA is actually very simple as we'll
+(33:15) see in the initialize VMA method. First, we create an empty strruct of type VMA
+(33:20) Vulcan functions and empty initialize it. Then we create another structure of type VMA allocator create info where we
+(33:28) provide VMA some info about our current setup and intentions. Most of the fields like physical device, device, Vulcan
+(33:36) instance and Vulcan version are self-explanatory. The ones to note though are the flags field where we're
+(33:42) currently telling VMA that we intend to use the buffer device address features of modern Vulcan which will let us
+(33:48) access VRAM directly in shaders using a pointer. We won't need it for this first tutorial, but I'm enabling it now as
+(33:54) we'll use it in the next video when we load GLTF scenes into our application.
+(34:00) The other notable field is the P Vulcan functions field, which we're setting to the address of the currently empty
+(34:06) Vulcan function strct we declared above. With the two strcts now linked up, we can call VMA import Vulcan functions
+(34:13) from Vulk. As we've already set up Vulk at the beginning of our application, this will populate the VMA Vulcan
+(34:20) function structure with all of the function pointers VMA will need to manage memory for us. Now it's just a
+(34:25) matter of calling VMA create allocator passing in a pointer to the VMA alloc infostruct as well as a pointer to a VMA
+(34:33) allocator member field declared in the class. If this function returns VK success, we're done here and we have an
+(34:40) allocator that we're able to use going forward. Before moving on to the next step, let's revisit the shutdown method
+(34:47) and ensure the new objects we've created have corresponding code blocks to clean them up. The order is important here
+(34:54) since if you delete the VK device before deleting any allocated resources for it,
+(34:59) Vulcan will complain. This is why we first call VMA destroy allocator and pass in the VMA allocator handle. Though
+(35:07) this will only destroy the allocator. We'll look at how to free VMA allocated resources shortly. Then we call VK
+(35:15) destroy surface KHR passing in the VK instance and the VK surface KHR handles
+(35:22) as well as null pointer for the allocator call back. Then we can finally call VK destroy device with the device
+(35:28) handle and null for the call back which will destroy the VK device.
+(35:34) As we've worked through the Vulcan initialization, the term swap chain has come up a number of times, but we still
+(35:40) haven't talked about what it really is and how it's designed to be used. To begin to understand what the swap chain
+(35:46) represents, recall that we created our window with Vulcan support enabled. In order to create a Vulcan surface object,
+(35:54) what we did was set up the groundwork to acquire a set of operating system owned images that will be the render targets
+(36:01) of our fragment shader. Since the operating system owns the window and everything inside it, we need to treat
+(36:07) those images as if they've been loaned to us and could be taken away at any time. We ask the operating system for
+(36:13) the images, then request one each frame and use the GPU to ensure that it's
+(36:18) prepared so that it can be drawn on. Once we perform our rendering operations, we use the GPU again to
+(36:24) ensure that its data layout is appropriate for presentation and then hand it back to the presentation engine
+(36:30) for display. When we look at the rendering method, you'll have a much better understanding of how this is done
+(36:36) through the use of semaphors to synchronize our renderer with the underlying presentation system.
+(36:42) We'll also learn what to do when the swap chain becomes invalid due to common events like resizing, minimizing or
+(36:48) shifting the window from one screen to another. What this means is that the swap chain, its images, and any other
+(36:55) image used as a render attachment need to be recreated to reflect the new window dimensions. The create swap chain
+(37:02) method receives the resolution via the width and height parameters and immediately stores them in the
+(37:08) application instance as the new swap chain size. We differentiate between the regular window dimensions and the swap
+(37:14) chain dimensions because the events that invalidate the swap chain can occur at any time. And it's important that we
+(37:21) don't use the new window dimensions during any swap chain related operations until we've had a chance to recreate the
+(37:27) swap chain with the new size. The first order of business is to get some information about the surface which will
+(37:33) dictate how large the image swap chain is going to be. We create an empty strruct of type vk surface capabilities
+(37:40) khr and pass it as a pointer to vk get physical device surface capabilities khr
+(37:48) which also requires our physical device and the surface object. Once we have our surface capabilities, we can make an
+(37:54) informed decision on how many images we're asking for. We first initialize an integer for our requested image count
+(38:01) using the larger value between two which is the number of images that we want and the minimum number of images as dictated
+(38:07) by the capabilities object. If Vulcan states that we can ask for a minimum of three images, we want to make sure that
+(38:13) we're not under that threshold as that'll cause an error and we won't get a swap chain. Unlike the minimum number
+(38:19) of images, the maximum number can be zero which states that we can ask for an unlimited number of them. though there's
+(38:26) a memory limit you could hit here and it's certainly not a good idea to ask for too many. So we make sure that if
+(38:31) that value is not zero and there is a limit we don't accidentally go over it by taking the smaller of these two
+(38:37) values our current desired image count and the maximum as dictated by the capabilities. Once we know how many
+(38:44) images we want, we can create a strct of type VK swap chain create info KHR which
+(38:50) will give Vulcan everything it needs to know to create our swap chain. We need to provide the following fields. The
+(38:56) strct type as usual, the handle to our existing surface object, the minimum
+(39:01) number of images that we're interested in, our desired swap chain image format, and I'll later show you how we actually
+(39:07) ensure that it's supported. We set the swap chain color space to sRGB, which is
+(39:13) universally used and will ensure colors are reproduced correctly on our displays. We also need to set the swap
+(39:19) chain extent, which is another way of saying the dimensions of the swap chain images. This field states that each swap
+(39:26) chain image should be an array of one images, which really just means a single image. Next, we tell Vulcan how we
+(39:33) intend to use the swap chain images. And since all we need to do is draw on them, the VK image usage color attachment bit
+(39:40) is the only one we need to set. It states that we'll be attaching the images as our render target later when
+(39:46) we begin rendering. The pre-transform field tells the OS how to orient the
+(39:51) image. We're using the current transform value of our surface capabilities to ensure that if the users have rotated
+(39:57) their monitors and there is an existing rotation in place, we account for it. In
+(40:02) most cases, this will have a value of VK surface transform identity bit KHR as in
+(40:09) identity matrix or just simply no rotation or transformation. The composite alpha field tells the window
+(40:16) compositor to ensure our window is fully opaque. And this is because we can actually make our surface transparent by
+(40:21) drawing colors to our swap chain with alpha values less than one. And finally, we need to select the presentation mode.
+(40:28) This refers to how the presentation engine chooses which images we should draw on and the timing at which to
+(40:34) display them. We're going with VK present mode FIFO KHR because the
+(40:39) standard guarantees that if we can create a surface object then we can use this presentation mode and it's also a
+(40:45) great one with VSYNC enabled. It creates a first in first out Q where images are
+(40:50) pushed when we finish rendering on them and submit them for presentation. During a vblank, the presentation engine picks
+(40:57) the image from the front of the queue and displays it while any new images that we finish rendering on are pushed
+(41:02) to the back of the queue. And again, because of the vblank weight, this mode also enables VSYNC for us. If we render
+(41:08) very quickly and the que fills up faster than the display can present, we can get a stall on the CPU until a Q slot is
+(41:15) available, which in essence throttles our renderer. The next mode that's available is the VK present mode mailbox
+(41:22) KHR, which behaves a lot like the FIFO mode, except if the queue is full, the new image just replaces one of the
+(41:29) existing ones in the queue and doesn't cause a stall. Then there's the VK present mode immediate KHR, which just
+(41:35) displays the image immediately when it's sent for presentation, but this can cause screen tearing as it doesn't wait
+(41:41) for a Vblank, which would essentially be our VSync off mode. And finally, there's a VK present mode FIFO relaxed KHR,
+(41:49) which behaves like the regular FIFO mode when the renderer is faster than the refresh rate, but behaves like immediate
+(41:55) mode when the renderer can't keep up. So, when the renderer does end up submitting an image to the presentation
+(42:01) engine, it displays it immediately, which could cause tearing. Let's take a quick detour and go over the swap chain
+(42:08) image format. In order to make sure we don't request an unsupported image format, I've added a block of code in
+(42:14) the find physical device method which ensures that the selected physical device and surface combination can
+(42:21) actually support the swap chain color format that we're requesting. This is quite simple and we've seen this
+(42:26) convention before a few times. We call VK get physical device surface formats
+(42:32) KHR multiple times in order to fill a vector of VK surface formats KHR values
+(42:38) which will tell us the supported color formats. Then we just iterate over the list and check if the one we want is
+(42:44) included breaking out of the loop when we do find it. The format I've chosen is VK format B8
+(42:53) G8 R8 A8 sRGB and is almost universally supported. But if by some chance your
+(43:00) GPU and surface combination can't support it, be sure to check which physical device is being chosen and also
+(43:06) review the vector of supported formats that Vulcan returns. And finally, we can call VK create swapchain KHR and pass
+(43:14) our device swap chain create info null pointer for the allocation call back and
+(43:20) a pointer to a VK swap chain KHR variable where we're going to receive the swap chain handle. If all goes well,
+(43:26) we can now retrieve the images from the swap chain so that we have something to work with. We'll store the images in a
+(43:33) vector container stored in our class instance. Aside from the images, our swap chain will also have a series of VK
+(43:40) image view objects which will describe how we wish to access the images as well as a number of VK semaphors which we'll
+(43:47) use to synchronize the presentation engine with our renderer. We retrieve the images by calling VK get swap chain
+(43:54) images KHR the usual way. First getting back the image count so that we can size
+(43:59) the vector appropriately. Then retrieving the actual images. We need the image count here because when we
+(44:06) created the swap chain, we told Vulcan what the minimum number of images that we would like is, but we may get more
+(44:12) than that depending on the presentation mode. Once we have the images, we also resize a vector of VK image view
+(44:19) objects. Then iterate over the swap chain images and create an image view into each one. For each image in our
+(44:26) swap chain images vector, create a VK image view create info structure along
+(44:31) with the following fields. The structure type is set to VK structure type image view create info. The image field will
+(44:39) take the handle to the current swap chain image for this loop iterations index. The view type will tell Vulcan
+(44:46) that this is a regular 2D image. The format will be the image format we chose for the swap chain. And the subresource
+(44:53) range lets us dictate which portion of the image we'd like to access. Images
+(44:58) can be arrays themselves and each one can have various myip levels. The swap
+(45:04) chain images are just single images. So we'll specify a one for the myipmap level count and a one for the array
+(45:11) layer count as well as zero for the base myip level and base array layer. These represent the starting indices into the
+(45:18) myip and array lists. Then we can call VK create image view with our device. The pointer to our
+(45:24) image view create infostruct. No allocator callback as usual and a
+(45:30) pointer to the VK image view handle for the current image index.
+(45:35) We start each frame by asking the presentation engine for an available swap chain image at which point we can
+(45:41) begin submitting commands to the GPU. Once all of the submitted commands are complete, we then submit the final image
+(45:48) to the presentation engine for display. In order to successfully hand the image off to the presentation engine, we need
+(45:54) a way to signal that our rendering work has been completed and that the image is ready for display. We do this with the
+(46:01) use of a semaphore, which are used to synchronize operations between different GPU cues. We'll create what's called a
+(46:08) binary semaphore that will simply signal to the presentation engine responsible for compositing the image to do so at
+(46:14) the right time. We'll tell the GPU to signal a semaphore after it has
+(46:19) completed the requested operations and we'll tell the presentation engine to wait on that same semaphore before
+(46:25) attempting to present the image. In order to do this correctly, we create a semaphore corresponding to each swap
+(46:32) chain image. When the presentation engine tells us which image we're allowed to draw on by providing its
+(46:37) index, we'll use that same index to pick the appropriate semaphore during rendering. As I showed earlier, we have
+(46:44) a vector of DK semaphore objects in our application class, which will resize to
+(46:50) be the same size as the number of images in the swap chain. With that in place, it's just a matter of iterating over the
+(46:56) semaphors and creating a structure of type VK semaphore create info. Since
+(47:02) we're using just the regular binary semaphore which is either signaled or not signaled. The strruct doesn't
+(47:07) require anything other than the structure type. Then the semaphore is created by calling vkre seaphore passing
+(47:14) the device a pointer to the structure above no call back as usual and a pointer to the current vk semaphore
+(47:21) object where we'll store the handle. And once our loop finishes we'll have a semaphore for each image in the swap
+(47:28) chain. Since we're just creating the swap chain at the moment, we'll look at how the semaphors are actually used once
+(47:33) we're inside the render method. When drawing to the swap chain, we process all of our scene meshes in a sequence,
+(47:39) sending draw commands along with mesh and material data to the GPU. The commands can be recorded in a particular
+(47:45) order, but there are no guarantees that they'll finish in any particular order.
+(47:50) This is because GPUs will process each triangle, vertex, and fragment in parallel. So any order we think we've
+(47:57) set by issuing the commands in some particular order will be irrelevant. If an object is drawn in the foreground
+(48:04) closer to the viewer and later a more distant object is drawn at that same screen position, the order of the
+(48:10) shading operations can cause fragments of the closer object to become hidden by fragments of the distant object. This is
+(48:18) obviously incorrect and we need to ensure visibility order is maintained regardless of draw order. To solve this,
+(48:25) the concept of a depth buffer is introduced, sometimes called a Zbuffer. And it works by storing the fragment
+(48:31) depth in a separate image than the one we're outputting color information into. In our example, when we draw the closer
+(48:37) object, the color and depth information would be written in the color and depth images. So later when a distant object
+(48:44) is drawn at that same position, the render pipeline can check if the depth of the new fragment is further from the
+(48:50) viewer than the existing fragments and simply avoid shading the new fragment altogether. Unlike swap chain images
+(48:57) which are owned by the operating system, in this case we need to create a VK image ourselves. Also unlike the swap
+(49:04) chain images, we only ever need a single depth image for our renderer. When we submit a set of commands to the graphics
+(49:10) skew to render a particular frame, we submit them to the graphics skew in bulk. There may be 50 commands submitted
+(49:17) at the same time for a given frame, potentially completing out of order from their submission order, but the GPU will
+(49:23) complete the entire set of commands first before it begins processing the next set of commands in the queue. This
+(49:30) means that the GPU only ever renders a single frame at a time, only ever needing a single depth buffer at a given
+(49:37) time. To create a VK image for our depth buffer, we create an instance of a VK
+(49:44) image create info structure providing the following fields. The structure type, the image type set to a standard
+(49:51) 2D image. The depth format which we'll set to VK format D32S float representing
+(49:59) a depth only buffer of 32-bit signed floating point values. Eventually, we'll
+(50:05) use a different format here to create a buffer that stores both depth and stencil information. But for now, we'll
+(50:10) focus on depth only. For the extent field, we'll use the dimensions of the swap chain. We don't need multiple myip
+(50:17) levels for the depth buffer. And we don't need this to be an array of images. We're not multi-sampling the
+(50:23) depth buffer. So, we'll set the samples field to VK sample count one bit. The
+(50:28) tiling field tells Vulcan how the bytes representing our image should be arranged in memory. In this case, we'll
+(50:34) use VK image tiling optimal, which tells Vulcan to choose a memory arrangement
+(50:40) optimal for sampling. We set the usage field to VK image usage depth stencil
+(50:45) attachment bit so that the image can be used during both depth or stencil operations. And then we need to specify
+(50:52) the initial layout of the image to undefined, letting Vulcan know that we don't care, nor do we want Vulcan to
+(50:59) waste any time looking at the memory that is initially allocated. We'll talk a little more about image layouts during
+(51:05) rendering. With the image characteristics defined, we now need to allocate memory for the image. In the
+(51:11) past, we would have had to create a whole lot of code to create the VK image ourselves, detect memory requirements,
+(51:17) allocate the memory, and so on and so forth. But in our case, we'll let the Vulcan memory allocator shine. All we
+(51:24) have to do is create an instance of VMA allocation create info. Set the flags to
+(51:29) VMA allocation create dedicated memory bit, telling VMA that we want a chunk of
+(51:35) memory dedicated specifically to our depth buffer and not a piece of a larger allocation. and set the usage field to
+(51:42) VMA memory usage auto, which tells VMA to look into our image create infrastructure and make decisions about
+(51:49) where to allocate the memory, GPU or system memory, as well as how that memory is going to be accessed during
+(51:56) execution. Next, we call VMA create image passing
+(52:01) our VMA allocator pointer to the depth image create infrastructure, the allocation infrastructure we just
+(52:08) created, a pointer to a VK image that will receive the handle to our depth image, and a pointer to a VMA allocation
+(52:16) handle that will represent the memory used by the depth image. Just like before, in order for Vulcan to know
+(52:22) which portion of the image should be accessed during depth writing and sampling operations, we'll create a view
+(52:28) into the image memory that will let us use it as a depth attachment later. We
+(52:33) create a VK image view create info structure. Setting the image field to our new depth image handle the view type
+(52:41) to VK image view type 2D. The format to VK format D32S float like before and the
+(52:49) sub resource range telling Vulcan that we want to access only the depth aspect of the image data which also happens to
+(52:55) be the only aspect in our case. And we also tell it that we only have a single myip level and a single array layer for
+(53:02) this image. Once again, we call VK create image view with the device pointer to the image
+(53:08) view create infostruct no call back and a pointer to a VK image view that will
+(53:14) hold the handle. And we now have everything we need to use a depth buffer.
+(53:20) We previously discussed the number of different events that could invalidate our swap chain, which would require us
+(53:26) to recreate it at the start of a frame. Before we can recreate it though, we need to destroy any existing resources
+(53:33) previously allocated for the current swap chain. And only then should we call the create swapchain method with the new
+(53:39) dimensions to recreate it. Let's take a look at how we clean up the swap chain and the order in which we do it. First,
+(53:45) we'll destroy the image views we created for the swap chain images. Then we'll destroy the semaphors we created for
+(53:52) each image. Next, we destroy the swap chain object itself. And anytime we
+(53:58) recreate the swap chain, we also need to recreate the depth buffer since they need to be the same dimensions. We start
+(54:04) by destroying the depth buffer image view and then call VMA destroy image to
+(54:09) destroy the depth image itself along with the memory allocated for it. This requires the VMA allocator, the depth VK
+(54:17) image handle, and the VMA allocation handle that we stored when we allocated the buffer. The destroy swap chain
+(54:24) method we're looking at will not only be called when we recreate the swap chain. We'll also call it inside the shutdown
+(54:31) method when we're cleaning up the application at the end of execution. You can place it right above the call to VMA
+(54:37) destroy allocator to ensure that any VMA allocations for the swap chain are
+(54:42) cleaned up before trying to destroy the allocator itself.
+(54:48) Now that we have images that we can render to, let's start creating our graphics pipeline, which we'll be using
+(54:53) to draw onto the images. Before creating the actual Vulcan pipeline, I'd like to
+(54:58) go over how we compile our shaders, which we'll need in order to attach them to our pipeline further on. Vulcan uses
+(55:05) a shader format called Spearv, which is not something you write by hand, but rather it's an intermediate binary
+(55:11) format produced by compiling a shader source such as GLSL. Unlike OpenGL
+(55:17) though where you pass your GLSL source code directly to OpenGL with Vulcan we
+(55:22) need to compile the shader code ourselves. This could be done by invoking the GLSLC compiler from the
+(55:29) command line or writing a custom target for our CMake project which can compile the shaders for us at build time. The
+(55:36) approach we're going to take is to use the shader C compiler at runtime. While having the shaders pre-ompiled offers a
+(55:43) faster startup for our application, there's a huge benefit to compiling at runtime as in the future we'll be
+(55:49) implementing hot reloading of the shaders, letting us see our code changes reflected immediately without restarting
+(55:56) the application. You may recall that when I showed the project cmake list.txt txt file. One of the components we
+(56:03) brought in from the Vulcan SDK was the shader C combined component, which is
+(56:08) the runtime shader compiler we'll be using. We'll first need to include the shader C compiler header into our source
+(56:15) code. And then we can move our eyes down to the create shader module method. It receives the shader file name as well as
+(56:22) another parameter of type shader C shader kind, which tells the compiler what type of shader we're compiling. It
+(56:29) could be a vertex, fragment, or another type of shader. Once we enter the body of the function, we first build up the
+(56:35) file path by concatenating the folder where the shaders are stored to the file name that was passed in. I like to keep
+(56:42) my shaders in my application source tree. So, I have to set the working directory for my run configuration in
+(56:49) order for my application to find them at runtime. In Visual Studio, you do this with the debug properties panel for
+(56:56) regular VS solutions or the debug and launch settings for CMake only projects.
+(57:08) Once we have the shader path established, we can load the file from disk and store the source in a string.
+(57:14) I've written a read text file helper method which will read the entire file into a string stream buffer object and
+(57:21) then return it as a regular std string. If the file is successfully read, we move on to the compilation phase.
+(57:29) Thanks to shader C, the process is quite simple. We create an instance of the compiler class as well as an instance of
+(57:36) the compile options class. Here we specify that we're targeting Vulcan and specifically Vulcan version 1.4.
+(57:44) Next, we set the target to Spearv 1.6 and the compiler optimization level to
+(57:50) performance. With that, we can call the compiler's compile GLSL to SPV method,
+(57:57) passing our source code string, the shader kind we received in the method,
+(58:02) the original file name, which shader C can use for reference later, and the compile options.
+(58:08) After this method completes, be sure to check the compilation status and also print out any compilation error messages
+(58:15) that may exist. If there is an error in our compilation, we just return a null pointer and leave the function. If
+(58:22) everything goes well and our shader is successfully compiled down to Spear V, we'll have an object of type compilation
+(58:28) result containing a buffer of unsigned integers representing the compiled Spearv binary data.
+(58:36) All that's left is to create the VK shader module object which will be the
+(58:41) handle to the compiled Vulcan shader that we'll be using with our pipeline. This is done by creating an instance of
+(58:47) the VK shader module create infrastructure setting its type accordingly and the size of the shader
+(58:54) in bytes which can be calculated by subtracting the beginning iterator from the ending iterator and then multiplying
+(59:01) the result by the size of the 32-bit integers that make up each element of the array. The P code field expects a
+(59:09) pointer to the start of the buffer which can be retrieved by using the results C begin method. Now we can call VK create
+(59:16) shader module passing our VK device a pointer to the VK shader module create
+(59:22) infrastructure no allocator callback and the address of the VK shader module
+(59:28) variable we declared and initialized to null above provided everything goes well
+(59:33) our method will now return the handle to the VK shader module that we can use with our pipeline
+(59:39) with the bulk of the shader work complete let's take a look at the create shaders method that we're calling during During initialization, it calls the
+(59:46) create shader module method twice. Once to create the vertex shader and once to create the fragment shader. Both shader
+(59:53) modules are stored in our application class instance in their associated VK shader module fields.
+(1:00:01) Anyone who's worked with an older graphics API will know that they're basically large state machines. The
+(1:00:07) latest versions of OpenGL have tried to move away from this model as much as they can, but at its heart, OpenGL is a
+(1:00:14) stateful API and the same can be said for DirectX11 and earlier versions.
+(1:00:19) Vulcan is a much more explicit API than both of those. In fact, Vulcan is even more explicit than its twin, Direct
+(1:00:26) 3D12. Older APIs allow you to easily change rendering state and submit draw
+(1:00:31) commands to the driver, which is actually really nice when you're learning graphics programming and would like to prototype and iterate quickly.
+(1:00:39) But this ease comes with a decent amount of driver overhead. The graphics driver is forced to make a lot of runtime
+(1:00:45) assumptions as it can't anticipate what you'll ask it to do mid-frame. It tries
+(1:00:51) really hard to maintain a functioning and correct state which really cripples its ability to optimize GPU commands and
+(1:00:58) execution. Modern graphics APIs have taken a different route from the state machines of the past and Vulcan is no
+(1:01:05) exception. All of the configuration about how we will ultimately render our pixels to the frame buffer are stored in
+(1:01:12) the VK pipeline object. We switch between VK pipeline objects at runtime,
+(1:01:17) but initialize and preconfigure them ahead of time, providing the driver and in turn GPU all of the information that
+(1:01:24) it needs to execute our drawing commands efficiently. Providing all of this information up front means the driver
+(1:01:30) gets no surprises in the middle of a rendering pass and can really choose how best to execute the given set of
+(1:01:36) commands. This doesn't mean that absolutely everything has to be set in stone. Some state change is quite cheap
+(1:01:42) and efficient such as scissor and viewport changes which we'll take a look at later on. When talking about
+(1:01:49) pipelines in Vulcan, the two parts we need to concern ourselves with are the layout object and the pipeline itself.
+(1:01:56) You can think of the pipeline layout as a function signature and the pipeline as
+(1:02:01) the body of the function. You configure the various inputs into the pipeline using the layout and then choose how you
+(1:02:08) wish to use those inputs using various configuration options and shader modules. It's quite common to have a
+(1:02:14) single pipeline layout with various different pipelines representing different materials being used in the
+(1:02:20) scene. You can think of it almost like polymorphism. The function signature is the same, but the pipeline changes, and
+(1:02:28) so do the various rendering configurations and shaders, yielding different results. Our first triangle
+(1:02:34) doesn't require anything with regards to a pipeline layout, so it resembles a method that takes no parameters, but
+(1:02:41) we'll need to create one anyways. The create graphics pipeline function returns a VK pipeline handle. So in the
+(1:02:48) future, we'll add different parameters to this function, but get back VK pipelines that we'll use to represent
+(1:02:54) different materials for our scenes. In order to create the pipeline layout object, we first create an instance of
+(1:03:00) the VK pipeline layout create info structure. As always, set the structure type. Then we set the set layout count
+(1:03:08) and push constants range count fields to zero. This lets Vulcan know that this pipeline layout will not be associated
+(1:03:15) with any descriptor sets or push constants, both of which are ways to get data into our shaders. Since our shaders
+(1:03:22) in this introductory video are very simple, we won't be looking at adding anything here until the next video.
+(1:03:28) After this, we call VK create pipeline layout and pass in our VK device, the
+(1:03:34) pointer to our pipeline layout create infrastructure, no allocator callback,
+(1:03:39) and a pointer to the VK pipeline layout variable where we can receive the handle to our new layout object.
+(1:03:48) Moving on, we can start looking at the structures that will describe the VK pipeline itself. There are quite a few
+(1:03:54) of them, but they're quite simple to understand, so we can move through them more rapidly. The next block of code
+(1:04:00) creates a vector of two VK pipeline shader stage create info structures,
+(1:04:05) which are used to associate any shader modules we've previously compiled with the various stages of the graphics
+(1:04:11) pipeline. The stage field specifies the pipeline stage we're associating a shader module with. The module field
+(1:04:18) receives the VK shader module handles we just created earlier. And the P name
+(1:04:24) field needs the name of the entry point function that will be executed. In this case, each shader has a main function.
+(1:04:31) So this is what we're setting here for both shaders. You can also use a single VK shader module for multiple stages by
+(1:04:38) using a different entry point function for the vertex and fragment shader stages. This can make it easier to work
+(1:04:44) on your shaders as it reduces the need to bounce back and forth between different shader files and reduces the
+(1:04:50) need to duplicate code between them as well. We'll look into this in the next video. This is a good time to have our
+(1:04:56) first look at the source code for the vertex and fragment shaders that we're using in this tutorial. These are very
+(1:05:02) simple as all we want in this lesson is to initialize Vulcan without introducing any unnecessary complexity. Over
+(1:05:09) complicating the shaders and pipeline at this stage is a great way to run into beginner errors and have yourself
+(1:05:15) scratching your head. It's best to stay absolutely as simple as possible at this phase and make sure we can get pixels on
+(1:05:22) the screen before moving on to anything more complex. This is why for this lesson I've hardcoded the triangle
+(1:05:29) vertices directly in the vertex shader, which avoids the need to deal with creating vertex and index buffers and
+(1:05:35) uploading the data into them. There will be plenty of that in the next lesson when we look at loading GLTF mesh data.
+(1:05:42) The vertex shader starts with the GLSL version number 4.60, which is the latest
+(1:05:48) as of today, but irrelevant for what we're doing in this video. Moving on, this is the array of vertices called
+(1:05:54) positions containing the three vectors needed to represent our triangle. Notice
+(1:05:59) the order of vertices is top, bottom left, and then bottom right, which
+(1:06:04) results in a counterclockwise orientation of the vertex order. This is important as we'll see shortly. Vulcan
+(1:06:11) needs to know what vertex order describes the front faces of our geometry. I'll explain this in a minute.
+(1:06:18) Next is another array of three vectors. This time representing three different colors, red, green, and blue. Here we're
+(1:06:25) declaring a vector 3 output variable from the vertex shader stage, which is
+(1:06:30) the color we'll be assigning to any vertex that we process with the shader. Take note of the location equals zero,
+(1:06:37) which dictates how this output variable maps to an input variable in the
+(1:06:42) fragment shader that we'll see next. The important concept to understand is that the vertex shader deals with the
+(1:06:49) individual vertices of the mesh we're rendering. The fragment shader deals with all of the fragments filling in
+(1:06:55) that triangle. They're called fragments because they don't always map directly to pixel locations. We can represent sub
+(1:07:02) pixels, though that's not relevant for us right now. What this means, though, is that if we're outputting data from
+(1:07:08) the vertex shader into the fragment shader, we're going from three pieces of data mapping against thousands,
+(1:07:15) potentially millions of fragments that represent the inner area of a given triangle. This means that the three
+(1:07:22) colors that we're setting per vertex for our triangle need to be interpolated per fragment depending on the fragment's
+(1:07:28) position within the triangle. Your GPU is designed to do this on a massive parallel scale. So, it's not a problem
+(1:07:35) for it at all. We just need to make sure that we connect the wires correctly between the vertex and fragment shaders
+(1:07:41) by using the same location index between the input and output variables.
+(1:07:47) The main function of the vertex shader uses the internal GL vertex index
+(1:07:52) variable provided to us by Vulcan to index into the vertex positions array we
+(1:07:57) looked at above. As its name implies, this variable represents the index of the current vertex we're processing.
+(1:08:04) When we call our draw function, which we'll look at shortly, we tell Vulcan that we want to draw three vertices
+(1:08:10) representing our triangle using what is called the triangle list topology, which just means that we want to draw a list
+(1:08:17) of triangles, though in our case, it's just a list comprised of a single triangle. What Vulcan then does is
+(1:08:23) invoke our vertex shader for each vertex in our mesh, giving us a chance to transform it as needed. In order for the
+(1:08:30) vertex shader to produce the final transformed output vertex, we need to write a value into another internal
+(1:08:36) variable called gl position. Whatever vertex we store there will be the output
+(1:08:41) vertex position of the shader. GL position though is a vector with four elements whereas our triangle vertices
+(1:08:48) are vector 3es with three elements. The vertex shader output needs to be a four
+(1:08:53) element vector. And in the next video, we'll see why this is important when it comes to perspective projection, which
+(1:08:59) gives our scene a 3D look. For now, let's just create a ve 4 by passing our
+(1:09:04) vec 3 to its constructor and passing a one for the fourth element. With the output vertex position done, we use the
+(1:09:12) same gltex index method to grab a color out of our colors array and pass it directly to the output color variable we
+(1:09:19) discussed previously, which feeds into our fragment shader. The fragment shader is even simpler. In
+(1:09:25) this case, we once again see the GLSL version number at the top followed by a couple of variables. The input ve 3 is
+(1:09:33) the interpolated vertex color for the current fragment invocation, which will be a blend of the three primary red,
+(1:09:40) green, and blue colors we set pervertex previously. The input variable's location index is set to zero to match
+(1:09:46) the index of its pair, the output variable we just saw on the vertex shader with a matching zero location.
+(1:09:53) The frag color output variable is where we're writing the output color of the fragment and maps to the index of a
+(1:10:00) color attachment target we will set with the same index when we issue the begin render command shortly. We once again
+(1:10:07) use the vec 4 constructor to wrap our interpolated vertex color and ensure that the fourth element, the colors
+(1:10:14) alpha channel is set to one, representing a fully opaque color.
+(1:10:20) Now that we've seen both shaders, let's keep moving through the create graphics pipeline method and refer back to these
+(1:10:25) shaders as needed going forward.
+(1:10:31) Normally, when feeding our vertex shaders with mesh data, we prepare buffers in memory in VRM that hold all
+(1:10:37) of the vertices representing our mesh data. Each vertex can contain a position, a color, UV information for
+(1:10:44) texturing, a normal for lighting calculations, and other details depending on our feature set. It's all
+(1:10:50) up to us. In order for Vulcan to be able to correctly read each vertex and feed it into our shader, it normally needs
+(1:10:57) information outlining what fields are a part of each vertex, their data types, and how they're laid out in memory.
+(1:11:04) Since we're not concerning ourselves with vertex buffers in this introduction, and have hard-coded our
+(1:11:09) vertices, we get to ignore this portion of the pipeline setup. In fact, we'll be
+(1:11:14) using a more modern approach when feeding the vertex shader by not asking Vulcan to push vertices into it from a
+(1:11:21) buffer, but rather we'll employ a technique called vertex pulling where we provide a pointer to the vertex buffer
+(1:11:28) to the shader and directly index into it using our vertex index. Essentially,
+(1:11:34) we're pulling vertices out of a buffer rather than expecting Vulcan to push them in for us. More on this when we
+(1:11:40) load gltf models in the next video. For now, we just need to provide an empty VK
+(1:11:45) pipeline vertex input state create info structure by setting its type and moving
+(1:11:51) on. I mentioned previously that the pipeline will be expecting to draw using a triangle list topology and this is
+(1:11:58) where we're setting that the pipeline needs to know how to assemble the vertices we're providing. So, it's a
+(1:12:05) requirement that we configure it with a topology type. There are various other topologies like triangle fans, triangle
+(1:12:11) strips, points, lines, but as you've probably guessed, I won't be explaining
+(1:12:17) those here needlessly. We'll take a look at them as we need them in the future. So for now, create the VK pipeline input
+(1:12:24) assembly state create infrastructure. Set its type and the triangle list topology constant and keep moving. We've
+(1:12:31) already discussed how the depth buffer works, why it's important, and it's here that we configure it for our pipeline.
+(1:12:38) To remind you, depth testing allows us to render our scenes without worrying about having to sort and draw objects
+(1:12:45) from furthest to closest. We simply render the scene and if our pipeline attempts to draw a fragment in a
+(1:12:51) position where one already has been written, it ensures that the source fragment, the one we're drawing, is
+(1:12:57) closer than the destination fragment, the one already in the image before the fragment shader even executes for it. If
+(1:13:04) the source fragment is further away, then it fails the depth test and is discarded, allowing us to avoid shading
+(1:13:11) it needlessly and more importantly prevents overwriting the existing closer
+(1:13:16) fragment that is already in the image. Here we create the VK pipeline depth stencil state create info instance. Set
+(1:13:24) the type and configure the exact operation. First we enable depth testing. Then we enable depth writing
+(1:13:31) which is what actually writes the depth value of each fragment into the depth buffer allowing this whole depth testing
+(1:13:37) to even occur. Then we specify the depth compare operation. What we normally want
+(1:13:43) is exactly what I described. We need the source fragments depth to be less than the existing fragments in order to pass
+(1:13:50) the depth test. So we set the depth compare op field to VK compare op less
+(1:13:56) to ensure that incoming fragments have a depth value that is less than any existing fragments already in the image.
+(1:14:02) At the moment we're not concerning ourselves with stencil testing or stencil effects. So we set the stencil
+(1:14:08) test enable field to false and we're done with the structure. Let's look back at the vertices that we
+(1:14:15) are using to define the triangle for our lesson. The center of the screen is at 0 0 on the x and y axis. Our top vertex is
+(1:14:24) at 0 on the x axis and0.5 on the y- axis. This places it in the
+(1:14:30) center of the screen horizontally and in the upper half of the screen vertically. This is because in Vulcan the negative
+(1:14:36) direction on the y-axis goes upwards. The other two vertices follow the same pattern.0.5x 0.5x goes to the left and
+(1:14:45) positive 0.5 y goes down to the bottom half of the screen forming our bottom left vertex and 0.5x and 0.5 y forming
+(1:14:55) our bottom right vertex. We're using 0.5 here because we're specifically defining
+(1:15:00) the vertices in what is called NDC or normalized device coordinates, which is
+(1:15:05) a fancy way of saying that we have coordinates that go from -1 to 1 on the X and Y axis and 0 to one on the Z axis.
+(1:15:15) This allows Vulcan to use coordinates that are normalized and independent from the actual dimensions or resolution of
+(1:15:21) the output image. positive one on the x-axis will always be the rightmost edge
+(1:15:27) of the screen regardless if we're rendering at 1080p or 4K. With this in
+(1:15:32) mind, we don't normally specify coordinates in normalized device space. They end up that way after they have
+(1:15:38) been transformed by our matrices. Since in this lesson though, we're only focusing on drawing the triangle. We
+(1:15:44) aren't looking at matrices yet. We're simply providing our vertices as NDC coordinates in the vertex shader
+(1:15:51) directly. We will see how this normally happens when we introduce a projection matrix and transform vertices with it in
+(1:15:57) the next lesson. With all this in mind, in order for our image to be displayed across the actual dimensions of our
+(1:16:03) screen, we need to provide Vulcan with a viewport specifying the extent of our view area. The viewport size is
+(1:16:10) something that you can provide directly into the pipeline. But it's one of those rendering states that are so cheap to
+(1:16:15) change that we're going to configure the pipeline to allow the viewport to change dynamically without baking its
+(1:16:21) parameters into the actual pipeline. This happens further down in the code and we'll see it later. We still need to
+(1:16:27) tell Vulcan that we intend to use a single viewport. So we set the viewport count to one here, but we don't need to
+(1:16:33) provide a list of viewport objects here since we'll change the viewport dynamically. The scissor testing allows
+(1:16:40) us to mask areas of the screen during rendering, letting us make sure that we're not rendering outside of a given
+(1:16:45) rectangular area. This is used a lot when drawing UI elements such as scroll boxes or text boxes that need the text
+(1:16:53) to clip at the edge of a text box. We aren't doing anything like that now, but since we're enabling dynamic scissor
+(1:16:59) testing as well, we'll be providing a scissor area that matches the dimensions of our swap chain image encompassing the
+(1:17:06) entire render area. The concept here is the same. We tell Vulcan to expect a single scissor rectangle, but we don't
+(1:17:13) provide it now since it's going to be dynamic. After vertices have been processed
+(1:17:19) within the pipeline, Vulcan needs to decide which parts of the screen need to be rasterized. This stage involves
+(1:17:25) culling unnecessary faces and deciding which parts of a face will need to be shaded in. We create a VK pipeline
+(1:17:32) rasterization state create infrastructure to configure the rasterizer. Here we're saying that we
+(1:17:38) want the polygon mode to be fill which means we want the entire area of our triangle to be filled in. We can also
+(1:17:45) set this to a mode like line for a wireframe image or point if we would like to visualize just the vertices. The
+(1:17:52) cull mode dictates which triangle faces we'd like to ignore or call during rasterization. You'll recall that we
+(1:17:59) ordered our triangle vertices in a counterclockwise order. And here is where we tell the pipeline that
+(1:18:06) counterclockwise faces are the front faces and that would like to call the back faces. This happens for performance
+(1:18:12) reasons, though there are cases you need to show the back faces, such as if you're creating a see-through object,
+(1:18:18) but you mostly want to avoid drawing back faces if you don't need them. Finally, I also set the line width here
+(1:18:24) to one, which isn't necessary, but if you'd like to try the wireframe mode, you should also specify a line width.
+(1:18:32) If we wanted to enable a multi-sampling anti-alyzing technique for the renderer, the VK pipeline multi-sampling state
+(1:18:39) create impulse structure is where we would configure that. Let's not worry about this yet, though, and set the
+(1:18:44) sample count to one, effectively disabling multi-sampling.
+(1:18:50) The next two structures are for configuring the blending operations in the pipeline. Blending is the process of
+(1:18:56) mixing two colors together during rendering and is used primarily for producing transparent objects like glass
+(1:19:02) and water. But there are many other effects that can be achieved as well. This topic will get a video of its own
+(1:19:08) when we look at how to handle transparent objects, but for now we just need to provide the minimal information
+(1:19:13) our pipeline will need. The VK pipeline color blend attachment state structure
+(1:19:18) is used to configure the color blending operations and write operations for a particular color attachment target. In
+(1:19:25) our case, that's the swap chain image we'll be rendering to. Even though we're explicitly disabling blending
+(1:19:30) operations, we do need to provide a color right mask, which tells Vulcan which color bits we would like written
+(1:19:36) to our swap chain image. If for example we removed the R component from this mask, we would see that any color values
+(1:19:43) written to our swap chain would have a zero for their red component. We're also creating an instance of a VK pipeline
+(1:19:50) color blend state create infrastructure where we specify that we're providing configuration for a single color output
+(1:19:56) attachment and providing a pointer to the object we just filled in above.
+(1:20:02) In order for us to be able to change viewport and scissor mask information dynamically, we need to explicitly tell
+(1:20:08) Vulcan that we're planning to do so when we create the pipeline. We do this by filling in a structure of type VK
+(1:20:14) pipeline dynamic state create info and providing a list of dynamic states that we're intending to enable. Here we're
+(1:20:21) creating a vector of VK dynamic state values and stating that we want to be able to change the viewport and scissor
+(1:20:27) at runtime. Then we hand it off to the dynamic state create infrastructure by providing its sites and data pointer.
+(1:20:35) Not to be confused with dynamic state, dynamic rendering is a newer Vulcan 1.3
+(1:20:40) feature that allows us to avoid having to create render passes, subpasses, and frame buffer objects. These used to be a
+(1:20:47) real pain point for beginners and a source of code bloat. Not only did they require quite a bit of boilerplate to
+(1:20:53) set up, they were also difficult to understand because of some of the implicit synchronization behavior
+(1:20:59) inherent to render passes and their subpasses. Dynamic rendering lets us be more explicit about resource transitions
+(1:21:06) during rendering and also require far less code to use. In order for us to enable dynamic rendering, we fill in a
+(1:21:12) structure object of type VK pipeline rendering create info where we specify the number of color attachments we'll be
+(1:21:19) rendering to, which is our swap chain render target, and a pointer to a VK format array corresponding to the number
+(1:21:26) of color attachments we're specifying. Since we only have a single color attachment, we're passing the address of
+(1:21:32) our swap chain color format that we saw earlier. We also need to specify the depth attachment format here as well.
+(1:21:39) and we're passing the same depth format we saw earlier in the video. Well, that was a lot of structures, but hopefully
+(1:21:45) this was easy to follow and understand. I know it seems like a lot of code, but this is something we're writing once for
+(1:21:51) the entire render, and we'll be expanding upon with different parameters in order to be able to create different
+(1:21:56) pipelines in the future. All that's left here is to create an instance of the VK graphics pipeline create infrastructure
+(1:22:04) and provide the addresses of all the structures we created previously. This is also a good opportunity for a quick
+(1:22:10) summary. We start with the structure type. As always, in order to enable a modern feature like dynamic rendering,
+(1:22:17) we must pass the dynamic rendering infrastructure into the P next pointer. This is a good example of Vulcan's
+(1:22:23) extensibility using P next. We set up the shader stages and associated them with the VK shader modules we compiled.
+(1:22:31) We provided a blank vertex input state since our vertices are stored directly in the vertex shader. We specified our
+(1:22:39) input assembly state to tell our pipeline that we need a triangle list topology. We told Vulcan that we intend
+(1:22:45) to use a single viewport and scissor test but did not specify them here statically. We configured the rasterizer
+(1:22:52) to state that we want back faces cul and front faces filled in completely. We
+(1:22:58) told Vulcan that we're not using multi-sampling. We're enabling depth testing and
+(1:23:04) writing, but keeping the stenciling disabled for now. We configured our color blending by providing information
+(1:23:11) about our single color attachment and keeping color blending disabled for now.
+(1:23:16) We stated that we want the viewport and scissor states to be dynamically mutable so that we can change them during
+(1:23:22) rendering. and we created a pipeline layout object that isn't expecting any push constants or descriptor sets. The
+(1:23:30) last field isn't required, but I've put it here to stress the fact that we're not using render passes, which most
+(1:23:36) older tutorials and videos demonstrate, but rather we're using dynamic rendering, which has to be configured
+(1:23:43) using the P next field above. And this field here needs to be initialized to null in order to create our pipeline
+(1:23:49) correctly. Finally, we can call the VK create graphics pipeline function passing our
+(1:23:56) VK device null pointer for the pipeline cache which will come in handy in the future. The number of pipeline create
+(1:24:03) infrastructures we're passing which is one and the pointer to the VK pipeline infrastructure above. As always, null
+(1:24:10) pointer for the allocator callback. And finally, the address of a VK pipeline variable where we're going to receive
+(1:24:17) our new shiny VK pipeline handle. We also make sure that everything executed
+(1:24:22) okay and return our new pipeline handle from this function where we can receive it in the calling code.
+(1:24:30) Traditional rendering APIs allow you to send work to the GPU and immediately start executing the commands. That's why
+(1:24:37) they're called immediate mode APIs. This can be easier to work with, but it forces us to rely on the graphics driver
+(1:24:43) to handle CPU and GPU synchronization. And as we already know, the driver can't
+(1:24:49) possibly optimize for every scenario. So, it leaves a lot of performance on the table. Vulcan for the most part
+(1:24:55) doesn't perform any synchronization for us. So, the CPU and GPU will run
+(1:25:00) completely independently. So, it's up to us to ensure that we introduce the necessary synchronization in order to
+(1:25:06) avoid corrupting memory during rendering. Vulcan provides us with the tools we need to make this happen.
+(1:25:12) Though, it can be tricky and a lot of beginners get tripped up and frustrated precisely here. A naive renderer flow
+(1:25:20) could look something like this. The CPU prepares the data for a frame it once rendered and submits the work to the
+(1:25:26) GPU, waits for it to complete, and then sends off the image to be presented.
+(1:25:31) Once this process completes, the CPU once again begins preparing the next frame, and the process continues
+(1:25:38) indefinitely. As you might have guessed though, this creates stalls in the render where the CPU and GPU are idly
+(1:25:45) waiting on each other, wasting precious time that could be spent doing actual work. It would be much better for us to
+(1:25:51) have the CPU prepare a frame, submit it to the GPU for rendering and presentation, then immediately begin
+(1:25:58) preparing the next frames data and draw commands. If done correctly, this results in much smoother and more
+(1:26:04) responsive games. The key thing to remember is that memory that the GPU is using at any given time should not be
+(1:26:12) written to by the CPU while it's preparing for the next frame. So, how do we achieve concurrency? Then what we do
+(1:26:19) is ensure that the data that must be read or written to concurrently by both sides should be replicated a number of
+(1:26:26) times. This means that if the GPU is reading from a set of data for frame one, the CPU can be busy preparing the
+(1:26:33) data for frame two in a completely different block of memory. For example, if a shader is reading a matrix or a
+(1:26:40) vector in order to draw an object at a given position during frame one, the CPU must only be allowed to change a
+(1:26:47) separate copy of that object's data while it prepares to submit frame two.
+(1:26:52) This is called having multiple frames in flight. What we need to do is take all of our CPU GPU shared objects and create
+(1:27:00) multiple copies of them. In this lesson, we have a strct called frame resources which contains fields for any shared
+(1:27:07) resource. Then we create a frame resources instance per frame in flight.
+(1:27:13) If we wanted to have the CPU be able to work on up to three frames while the GPU is busy rendering, then we'll have three
+(1:27:20) instances of the frame resources struck. A common point of confusion here is the
+(1:27:25) frames in flight number and the number of swap chain images. I've seen this confused even amongst prominent
+(1:27:31) tutorials. These are independent concepts and aren't tied to one another. The swap chain images are just the
+(1:27:38) canvases that the OS lends us to draw on before we hand them back for presentation. And we rotate through them
+(1:27:45) frame over frame. The frames in flight are just multiple copies of our data so
+(1:27:50) that the CPU and GPU don't step on each other's toes while working. With that
+(1:27:55) said though, we should make sure that the minimum number of swap chain images matches our number of frames in flight.
+(1:28:01) So if we wanted three frames in flight, then we should have at least three swap chain images. As long as a frame in
+(1:28:07) flight can ask for an available image and is able to acquire one quickly, then things can run smoothly. If we only have
+(1:28:14) two swap chain images and say four frames in flight, then you could see how you could potentially end up waiting for
+(1:28:21) the presentation engine to finish displaying one on screen before it can free it and hand it back to you to draw
+(1:28:27) on it again, creating a bottleneck. We're going to drill down into this even more during rendering. So, let's push
+(1:28:33) on. Moving into the create sync resources method, let's have a look at what we'll
+(1:28:39) need in order to allow the CPU and GPU to work concurrently like I described previously. In this tutorial, we'll be
+(1:28:46) using a more modern feature of Vulcan called timeline semaphors in order to achieve the frame over frame
+(1:28:52) synchronization. But it's important to also understand how this has been done with Vulcan traditionally as many
+(1:28:58) tutorials and examples haven't caught up. and it'll also give you a better understanding and appreciation of the
+(1:29:04) problems the timeline semaphors solve. Synchronization between the CPU and GPU
+(1:29:10) has in the past been done with the use of fences represented by the VK fence
+(1:29:15) objects. Fences are used when you want the CPU to wait on operations to complete by the GPU before proceeding.
+(1:29:22) Signaling a fence on the GPU unblocks the waiting CPU, allowing it to continue
+(1:29:28) working on data that was previously in use by the GPU. Assume we have a renderer with up to two frames in
+(1:29:34) flight. We would create two resource blocks in our renderer, allowing the CPU to record up to two frames before
+(1:29:41) stalling and waiting for the GPU. Along with each resource block, we also create
+(1:29:47) an associated VK fence object which is used for protecting each resource block
+(1:29:52) from an overwrite if it's currently used by the GPU. As we discussed, it's critical that we don't write over
+(1:29:59) resources for a particular frame while the GPU could be busy reading from those
+(1:30:04) same resources. We begin by rendering frames one and two, neither of which need to worry
+(1:30:10) about overwriting any inuse resources since nothing is obviously using those
+(1:30:15) resources yet. Frame one uses resource block one and frame two uses resource
+(1:30:21) block two. The two frames can be recorded and submitted to the GPU as quickly as possible since our renderer
+(1:30:27) can record up to two frames in flight. Frame three needs to wait for the
+(1:30:33) resources from frame one to become available again in order to overwrite them. Once the GPU has completed
+(1:30:40) rendering frame one, it signals the fence associated with the resource block, letting the CPU know that it has
+(1:30:47) finished reading from those resources. The CPU can then begin preparing frame 3's data by reusing resource block one.
+(1:30:55) Frame three is recorded and submitted to the GPU and frame four can begin using
+(1:31:00) the same process and utilizing resource block two. The renderer can then continue producing frames 5 6 7 8 and so
+(1:31:07) on by alternating between the two blocks of resources available for the two possible frames in flight. One thing to
+(1:31:14) note is that if a VK fence is being used for the first time, such as in frames one and two in our example, we wouldn't
+(1:31:22) want the CPU to sit there and wait forever for a fence to be signaled that has never actually been submitted to the
+(1:31:28) GPU with any work. This is why fence objects must be initialized to the signal state so that when the CPU tries
+(1:31:35) to wait for them for the first time, they're already signaled and it can proceed.
+(1:31:40) So fences are used for synchronizing the CPU with the GPU. But sometimes you also
+(1:31:46) need to synchronize the GPU with itself across multiple cues. In these cases,
+(1:31:51) you would use a binary semaphore to perform the synchronization and you could end up with quite a few semaphore
+(1:31:57) objects making things messy and errorprone if you have to synchronize multiple times. We won't look at GPU
+(1:32:04) toGPU synchronization for now, but I'm simply mentioning this to state that a
+(1:32:09) single timeline semaphore can be used to replace the aforementioned fences and
+(1:32:14) any semaphore is used for GPU toGPU synchronization. Okay, but what's a timeline semaphore? A regular binary
+(1:32:21) semaphore can only be in an unsignaled and signaled state. A timeline seaphore
+(1:32:27) represents a monotonically increasing 64-bit integer. Put simply, this just
+(1:32:32) means that a timeline semaphore value never decreases. It can plateau and stay the same or increase, but it never gets
+(1:32:40) smaller. Now, instead of having the CPU wait on a fence to be signaled by the GPU for a given frame, we can simply
+(1:32:48) wait for a single timeline semaphore to reach a certain value instead, which
+(1:32:53) gets set by the GPU when a batch of submitted commands are completed. And since semaphors can also be used for GPU
+(1:33:02) toGPU synchronization, we can use that same timeline semaphore object to synchronize work between GPU cues. All
+(1:33:10) you need to know for now is that we create a single timeline semaphore to synchronize our frames in flight. When
+(1:33:16) we look at the render method shortly, the purpose and usage of the timeline seaphore will become much more clear. We
+(1:33:23) first create an instance of a VK summaphore type create info structure. Set its stype field and set the
+(1:33:30) semaphore type field to VK semaphore type timeline. And then we specify the
+(1:33:36) initial integer value of the semaphore which we're setting to two. Next, we
+(1:33:41) need a VK semaphore create info structure. We set its type and use the P next field to pass the address of our
+(1:33:48) semaphore type info object. Once again, we see the P next field being used in
+(1:33:53) order to utilize newer Vulcan functionality that wasn't available in the initial specification. When Vulcan
+(1:34:00) sees that we're passing a semaphore type structure in the P next field, it will look at the semaphore type field and
+(1:34:06) create our timeline seaphore. Instead of creating the usual binary semaphore with
+(1:34:12) those two structures set up, we can call VK create semaphore passing in the VK
+(1:34:18) device, the address of our semaphore infostruct null allocator callback and the address
+(1:34:25) of a VK semaphore field in the class instance that will receive the new timeline semaphore. If all goes well, we
+(1:34:32) can move on to the next section. Despite how useful timeline semaphors are, there's one thing that they can't
+(1:34:39) synchronize for us, and that's our interactions with the presentation engine. Before we can draw anything each
+(1:34:45) frame, we need to make sure that we have something to draw too. Of course, I'm talking about one of the swap chain
+(1:34:51) images. The issue is that we don't choose which image to draw on, but rather ask the presentation engine for
+(1:34:57) one each frame. This process is asynchronous. So we don't just immediately get a ready-made image right
+(1:35:03) when we ask for it. What we do get is the index of the image that we're going to draw on, allowing us to prepare our
+(1:35:10) draw operations accordingly. The signal from the presentation engine that the image at the given index is ready to be
+(1:35:16) rendered on may happen after we've already sent the commands to the GPU. So we need a way to block our draw commands
+(1:35:22) from executing on the GPU until the presentation engine has given us the go-ahad. This is done with a binary
+(1:35:29) semaphore. We simply create a binary semaphore for each of our frames in flight. Pass it along when we ask to
+(1:35:36) acquire an image, submit our draw commands, and then the semaphore is signaled by the presentation engine,
+(1:35:42) letting us know that we can begin rendering to the swap chain image. The GPU executes the submitted commands and
+(1:35:49) signals our render complete seaphor. When the commands have all been executed, we then submit the swap chain
+(1:35:55) image for presentation along with that same render complete semaphore so that the presentation engine can have
+(1:36:02) something to wait on. Once that semaphore is signaled by the GPU, the presentation engine knows we're done
+(1:36:08) rendering and that the image can be displayed on screen.
+(1:36:13) Here we iterate over our frames and flight objects and create the binary semaphors just like we did previously.
+(1:36:22) At this point, we're almost ready to start rendering. But in order to get our draw commands to the GPU, we need to
+(1:36:28) discuss one more final thing as part of the Vulcan initialization, and that's the command buffers. I mentioned earlier
+(1:36:34) that older graphics APIs functioned as large state machines. You change a state, submit a few draw commands,
+(1:36:41) change another state, submit some more commands. As simple as that sounds, from a programming perspective, it doesn't
+(1:36:46) map well to how GPUs actually operate and execute instructions in the cues. What our hardware and driver really
+(1:36:53) wants is for us to prepare everything up front. This is why we create our graphics pipelines up front and also why
+(1:36:59) we're going to record commands up front. When we prepare the commands ahead of time and submit them once in bulk, we
+(1:37:05) gain a number of things. We decouple the command recording from the GPU submission which means that we can
+(1:37:11) submit all the commands in bulk once in the frame and the GPU knows everything up front allowing it to prioritize and
+(1:37:18) optimize. This approach is also much better for creating multi-threaded renderers. Each thread could record
+(1:37:24) commands independently into its own buffers and synchronize with the other threads only during submission. Game
+(1:37:31) programmers have been doing this for many years by implementing their own commands and command buffer structures.
+(1:37:37) Though the older graphics API still required commands to be submitted one by one, which means if you have 100 draw
+(1:37:44) commands, you have to do 100 calls into the graphics driver. Nowadays, Vulcan
+(1:37:49) and the rest of the modern graphics APIs have this functionality built in first class, allowing us to record as many
+(1:37:56) commands as we want and then submit them in a single shot. In order to record commands in Vulcan, we need what is
+(1:38:02) called a command buffer. And to be able to store those commands, each command buffer needs to be linked with a command
+(1:38:09) pool, which is a memory pool of commands in order to reduce runtime memory allocations. With our multi-frame
+(1:38:15) inflight setup, we create a command buffer per frame in flight. This way, when we submit one command buffer for
+(1:38:22) processing on the GPU, we can start recording immediately into another command buffer for the next frame. We're
+(1:38:28) also creating a command pool per command buffer. This way, each command buffer has its own memory. At the start of each
+(1:38:35) frame, all we have to do is reset the command pool in order to be able to reuse its memory and record again for
+(1:38:41) that next frame. Taking a look at the create command buffers method, our work is pretty simple. We iterate over our
+(1:38:48) frames and flight structures once again and create a command pool and command buffer for each one. Creating the
+(1:38:54) command pool is simple. We create an instance of the VK command pool create infrastructure. The important thing
+(1:39:01) though is that we need to specify the Q family index we're associating with the command pool. We can only submit
+(1:39:07) commands using this pool to Q's that share the same family index. Different Q
+(1:39:12) families have different hardware requirements. So you cannot record commands requiring one Q family into a
+(1:39:18) command pool that has been created for a different Q family. To create the pool, we call vkreate command pool. Pass our
+(1:39:26) device, the address of the pool infrastructure, no callback, and the address of the vk command pool object in
+(1:39:32) the current frame resources object. If the pools created successfully, we can move to allocating the command buffer.
+(1:39:40) For this, we need an instance of the VK command buffer allocate infrastructure.
+(1:39:45) Here we can specify the command pool we just created for this command buffer and the commands we record into this buffer
+(1:39:52) will be created using it. When we reset or destroy the command pool, this command buffer will also be reset or
+(1:39:59) destroyed. We also need to specify the type of the command buffer we want. This can be either a primary or secondary
+(1:40:06) command buffer. In short, primary command buffers are those that we submit directly to Q's and secondary command
+(1:40:13) buffers can be submitted into a primary command buffer allowing a sort of hierarchy of submissions. Lastly, we
+(1:40:20) specify the number of command buffers we wish to create. Right now, since we only have a single command buffer per frame
+(1:40:26) and flight, we can just specify one here. To allocate the command buffer, we call vkallocate command buffers with our
+(1:40:33) device allocate infrastructure and where to receive the vk command buffer object.
+(1:40:39) As I showed previously, we'll be storing the command buffers inside instances of the frame resources strct.
+(1:40:46) With that done, before we draw our triangle, let's take a short detour to our shutdown method and make sure we're
+(1:40:52) cleaning things up properly. The last time we looked at this method, we had added code to clean up the VMA allocator
+(1:40:59) memory. Since then, we've added a number of objects into our renderer that need to be destroyed when we shut down the
+(1:41:05) application. Before we start deleting objects though, we're going to flush the GPU. All this
+(1:41:12) means is that we're waiting for any pending work to finish executing before we start cleaning up. This is done with
+(1:41:18) a simple call to VK device weight idle and passing our device handle to it.
+(1:41:23) This is a very heavy-handed synchronization method and should generally never be used in your runtime
+(1:41:28) code. Since we're only doing this during the shutdown, it's perfectly okay. Once we're sure the GPU has done its work, we
+(1:41:36) can call the various cleanup methods. This code is quite self-explanatory, so I'm not going to dwell too long on
+(1:41:41) things. First, we'll destroy the timeline semaphore. Then, we iterate over all of the frame resources objects
+(1:41:47) and destroy the image acquired semaphors as well as the command pools. We don't need to destroy the command buffers
+(1:41:53) themselves as they're allocated using the command pools. Next, we'll destroy the pipeline layout followed by the
+(1:42:00) pipeline. Then, we'll destroy the shader modules that were used by the pipeline.
+(1:42:05) Finally, we'll add a call to our destroy swap chain method to clean up any swap chain related resources. We looked at
+(1:42:11) this method in the swap chain section of the video and how we're also using it when we recreate the swap chain. And
+(1:42:18) with that, we're done with the cleanup code. Just remember to call this shutdown method at the end of your application to actually clean things up.
+(1:42:25) Now it's time to move on to the main event, which is our rendering code. Let's take a look. At this point, we've
+(1:42:30) discussed all of the pieces we'll be using in our application, such as the swap chain, the synchronization objects,
+(1:42:36) the command buffers, and it's here that we actually put them to use. The first block here isn't related to our
+(1:42:42) rendering code, but it should happen at the start of every frame. We're checking a boolean that flags if the swap chain
+(1:42:48) recreation is needed. This value gets set to true further down in the case the swap chain has become invalid.
+(1:42:55) If we need to recreate the swap chain, we first need to destroy any swap chain and depth buffer resources currently in
+(1:43:01) use, then recreate them. Since they may actually currently be in use, though, we can't just pull the rug out from under
+(1:43:07) the GPU's feet. We need to give it a little time to finish whatever it's doing. Then we can destroy the swap
+(1:43:13) chain. Once again, we see the VK device weight idle function, which lets us wait for the GPU to finish doing what it's
+(1:43:19) doing before we recreate the swap chain. We're introducing a major stall here and saying that the CPU will simply sit here
+(1:43:25) and wait until the GPU is done executing every submitted command. This is another one of those instances where it's okay
+(1:43:32) to use this function because it's not actually being used to synchronize rendering. Window resizing and swap
+(1:43:38) chain recreation are exceptional scenarios and not part of the rendering hot path.
+(1:43:45) Since we're using a timeline semaphore to keep our frames in flight and out of each other's resources at the start of
+(1:43:51) each frame, we need to generate a few values that will help identify which resources we're using, what timeline
+(1:43:57) value we'll wait on, and what timeline value will signal for this particular frame. By taking the current frames
+(1:44:04) index and using the modulo operator with the max frames in flight number, we can
+(1:44:10) get the current frames resource index. When discussing all of this, please remember that our maximum frames in
+(1:44:16) flight is two. Doing this operation gives us a value alternating between 0 and 1, which acts as the index into our
+(1:44:24) frame resources array. Next, we compute the value that the current frame will set the timeline semaphore to when it
+(1:44:31) completes. When a future frame tries to reuse the current frames resources two frames from now, this will be the value
+(1:44:37) that it will wait on to ensure that the resources have become available. With that in mind, the weight value is the
+(1:44:44) value that the current frame will wait on before it begins using the resources. We're taking the current frame signal
+(1:44:50) value and simply subtracting our max frames in flight value, which again is two, ensuring that the current frame
+(1:44:56) waits for the signal from two frames ago in order to proceed. You'll recall how
+(1:45:01) we use the timeline semaphore to restrict access to frame resources if the previous frame using those resources
+(1:45:08) is still in flight on the GPU. The new timeline value is set at the end of each frame by the GPU after all commands have
+(1:45:16) finished processing, letting the waiting frame know that the resources can be reused once again. To introduce the
+(1:45:22) weight and ensure we're not starting to write over data that may still be in use, we use the VK weight semaphors
+(1:45:28) function. In order to call it, we need to create an instance of the VK semaphore weight infrastructure where we
+(1:45:34) specify the number of semaphors we need to wait on which in our current case is just one. The P semaphors receives the
+(1:45:41) address of a list of semaphors which in our case is just a single timeline semaphore address. The P values is a
+(1:45:48) list of weight values we wish to wait on matching each semaphore in the semaphors list respectively. Since we're only
+(1:45:55) waiting on our timeline semaphore, we just pass the address of the weight value we computed above. We can then
+(1:46:01) call VK weight semaphors and pass our device, the address of our semaphore weight structure, and the timeout value
+(1:46:08) for the weight period, which we'll just set to a very large integer for now. This call forces the CPU to sit there
+(1:46:14) and wait for the timeline to reach the value we provided. Upon that value, the CPU would unblock and allow it to
+(1:46:21) continue executing this code. You may already be asking this question though. What happens during the first two
+(1:46:27) frames? Why are they waiting on any signals if there is nothing preceding them? You might think that we should
+(1:46:33) wrap this weight call in an if block ensuring it only executes for frames 3, 4, and so on since they will actually
+(1:46:40) have something to wait on. Adding this if block though would introduce a branch on the render hot path which is only
+(1:46:46) relevant for the first two frames which is ridiculous considering our application will likely render hundreds
+(1:46:52) of frames per second. To understand how we get around this consider what the initial values are for our timeline
+(1:46:58) semaphore and the signal and weight values for each frame. The timeline semaphore starts with a value of two
+(1:47:05) based on the maximum frames in flight. The next signal value variable starts with a value of max frames in flight +
+(1:47:12) 1, which means frames 1 and two have signal values of three and four. The
+(1:47:18) weight values for frames one and two are computed by subtracting the max frames in flight number from the frame signal
+(1:47:24) values. So frames one and two wait on values 1 and two. And of course, since
+(1:47:29) we set the initial value of the timeline semaphore to a value of two, the first two frames don't actually have to wait
+(1:47:36) on anything since they wait on values 1 and two. They just start executing immediately. Once frame three comes
+(1:47:43) along, its signal value will be five and its weight value will be three. We know
+(1:47:48) that frame three will want to use the resources from frame one. So, it will wait for the timeline semaphore to hold
+(1:47:55) the value of three before starting. And as I just showed, frame one will set the
+(1:48:00) timeline semaphore to that value upon completing. Frame four will signal a
+(1:48:05) value of six and wait on a value of four, matching the signal value of frame
+(1:48:10) two. Be sure to rewind and work this out on paper if you need to. It can be a little confusing at first. Make sure you
+(1:48:17) wrap your head around this whole process though because this is the tripping point for many beginners.
+(1:48:22) After the call to vkweight semaph force completes, we know it's safe to start working on the current frame. We can
+(1:48:29) begin by grabbing the current frame resources object using the index we computed above. Once we have that, we
+(1:48:35) can reset the command pool so that we can reuse its memory and record a fresh set of commands for this current frame.
+(1:48:42) We provide our device, the current command pool we're resetting, and a value of zero for the flags parameter.
+(1:48:51) Now that we know which resources we can work with, we can proceed in asking for a swap chain image to draw on. We'll
+(1:48:57) need the binary image ready semaphore which we're storing inside of our frame resources object. We can grab it out of
+(1:49:03) there, then call VK acquire next image KHR to ask for a swap chain image. The
+(1:49:10) parameters are the current device, the swap chain we're working with, a timeout value for the weight, which will once
+(1:49:16) again set to a large integer, the binary semaphore to be signaled when the image is ready to be drawn on, and we'll pass
+(1:49:23) null for the fence parameter as we're not using that. Finally, just the address of an integer that will receive
+(1:49:29) the swap chain image index. This function will likely return quickly and give us the index of the next image
+(1:49:35) available for us which means that the OS compositor is finished with the image. This does not mean that the GPU itself
+(1:49:42) is done displaying it. This is where the semaphore comes in. It will be signaled once the GPU is finished with the image
+(1:49:49) telling us we can once again start rendering onto it. The actual return value of this function is BK success if
+(1:49:56) everything is okay with the image and we're drawing as normal. There may be exception instances though where the
+(1:50:01) swap chain images are no longer valid for one reason or another and the swap chain needs to be recreated. If the
+(1:50:08) return value is VK error out ofdate KHR, then the swap chain images can no longer
+(1:50:13) be used at all and we need to immediately recreate the swap chain. In this case, we set the swap chain
+(1:50:19) recreate flag to true and exit out of the method immediately. As you saw previously, this flag is checked at the
+(1:50:25) start of this method and the swap chain is recreated as required. If the acquire
+(1:50:30) result code is VK suboptimal KHR, this means that the swap chain is still
+(1:50:35) usable, but we should recreate it as soon as possible to avoid performance and graphical issues. This is the result
+(1:50:42) code you would get when you resize the window, which would lead to a draw surface that no longer matches the swap
+(1:50:48) chain dimensions. In this case, we'll flag that we want the swap chain recreated at the start of the next
+(1:50:53) frame, but we'll continue rendering this one as usual. We're ready to start recording commands in this frame's
+(1:50:59) command buffer. So, we'll tell Vulcan that would like to begin that process by calling VK begin command buffer. It
+(1:51:06) takes the current frames command buffer as well as the address of a VK command buffer begin info instance which we'll
+(1:51:13) use to tell Vulcan that the command buffer will only be submitted to the queue a single time before needing to be
+(1:51:19) reset. You'll recall that the command pool reset you saw at the start of the frame also resets the command buffer.
+(1:51:26) When working with modern graphics APIs, care must be taken to ensure that the various resources used throughout the
+(1:51:33) pipeline are in the correct memory layout depending on the use case. This means that the bits and byes of an
+(1:51:38) image, for example, are laid out one way when they are rendered to and a different way when they're being
+(1:51:44) presented to the screen. Before talking more about layouts and their transitions, let's quickly talk about
+(1:51:49) what barriers are. But before we talk about what barriers are, let's make sure that we have a general idea of what the
+(1:51:55) Vulcan pipeline is. And no, I'm not talking about the VK pipeline object we created earlier, but rather the highle
+(1:52:02) flow that your geometry goes through when you submit something to be rendered. the various stages your
+(1:52:07) vertices go through from input assembly through your shaders onto rasterization
+(1:52:13) where the geometry turns into actual pixels and finally into blending where your pixels or fragments are blended
+(1:52:19) into the existing image. Some of these boxes will be familiar as we configured those stages when we created our
+(1:52:25) graphics pipeline. We don't need to study the entire pipeline at the moment as we'll discover and learn more about
+(1:52:30) it as we implement more features. For this video, we only really care about the vertex and fragment shader stages.
+(1:52:37) When we tell Vulcan to draw our triangle, our current application jumps into the vertex shader where our
+(1:52:43) vertices are hardcoded and then they make it through rasterization where Vulcan decides which part of the screen
+(1:52:49) needs to be filled with color. Then through our fragment shader, where the colors are written into our swap chain
+(1:52:55) image. You'll also recall that we have a depth image that we created and enable depth testing in the pipeline. So we
+(1:53:01) need to quickly mention the early and late fragment test stages. The early fragment test stage is able to look at a
+(1:53:07) given fragment that needs to be shaded and decide whether it needs to be shaded at all. As you may have guessed, this
+(1:53:14) would be where the depth testing initially occurs. If a given fragment is behind an existing fragment that has
+(1:53:20) already been drawn, then the early fragment test will simply discard this and avoid running the fragment shader
+(1:53:26) needlessly. If for some reason you decide to change the depth value of a fragment in your fragment shader, Vulcan
+(1:53:33) will know this and be forced to always run the fragment shader since the early test wouldn't be able to decide if a
+(1:53:39) fragment should be discarded given that its depth changes after the early fragment test occurs. In this case, the
+(1:53:46) late fragment test would run and make that decision prior to blending your final output color into the image. With
+(1:53:53) Vulcan, we get explicit control about how commands flow through the pipeline we just looked at. We can create
+(1:53:59) dependencies where we block certain commands from executing until previous commands have reached a specific point
+(1:54:06) in the pipeline. This is done through the use of barriers which let us specify a source and destination pipeline stage
+(1:54:13) for the barrier. The source stage specifies the Vulcan pipeline stage we need existing commands to reach before
+(1:54:20) allowing any subsequent commands to reach the destination stage. Essentially, we can say that we need all
+(1:54:26) existing commands to reach a specific point in the pipeline before we move on to a later stage. This control can be
+(1:54:33) fine grained even further by specifying the type of access we want to block at the source and destination stages. For
+(1:54:40) example, we may only want to block writes during a particular stage and not worry about commands requiring a read
+(1:54:46) operation. Along with the barriers, we can perform transitions on the memory layouts of particular resources. Like I
+(1:54:53) mentioned earlier, it's important for resources like our swap chain and depth images to be in specific memory layouts
+(1:54:59) depending on how they will be used during a given stage. The layout transitions are performed during the
+(1:55:05) barriers as the barriers themselves protect the resource from being used in particular ways until the transition has
+(1:55:12) taken place. In the current block of code, we're stating that we would like to create a barrier where any writes
+(1:55:18) into the color attachment, that being the swap chain image, are blocked until the swap chain image specified here, has
+(1:55:26) been transitioned into the VK image layout color attachment optimal. This layout type is what the hardware prefers
+(1:55:33) when it needs to write fragments into the swap chain image. The source stage mask here states that we're creating the
+(1:55:39) barrier at the point when color attachment output happens in the pipeline. And a source access mask of
+(1:55:45) zero dictates that we don't care about which operations we're blocking. This will include reads and writes. The old
+(1:55:53) layout of the image is set to undefined, which means that we don't know nor do we care what the previous layout was. We
+(1:56:00) just need the image to be transitioned into the requested new layout. Once the transition is complete, rights to the
+(1:56:07) image will be allowed to continue and the swap chain image can be populated with our fragment data. We can further
+(1:56:13) control which part of the image we want to transition using the subresource range field. In our case, we're
+(1:56:19) transitioning our swap chain color image. So, we set the aspect mask to VK image aspect color bit. The base myip
+(1:56:26) level is set to zero and the myip count is set to one since this is a swap chain
+(1:56:32) image and it doesn't get sampled at various myip levels. The same goes for the image array details. We have only a
+(1:56:38) single image element here. So we set the base array layer to zero and the layer count to one. You'll notice that this
+(1:56:45) barrier object is created into a vector. This is because we have another barrier and transition that we want to perform
+(1:56:52) before we can start rendering. Just like we need to ensure that the swap chain is in the correct memory layout for output,
+(1:56:58) we need to ensure that the depth image is also appropriately transitioned. With this, we're telling Vulcan to place a
+(1:57:04) barrier, which ensures that previous commands have completed the early fragment test stage. And the depth image
+(1:57:10) we specify here has been transitioned into the depth attachment optimal layout. This is because any writes into
+(1:57:17) our depth image during the early and late fragment stages will require the image to be in this layout for optimal
+(1:57:24) performance. The subresource range is similar to the swap chain image with the exception that we're setting our aspect
+(1:57:30) mask to VK image aspect depth bit. With the VK image barrier 2 objects now
+(1:57:36) sitting in the vector, we can fill out a structure of type VK dependency info where we specify the number of barriers
+(1:57:42) we wish to create and provide a pointer to the memory containing the barriers themselves that we just defined. Then
+(1:57:49) it's just a matter of calling VK command pipeline barrier 2 passing the command buffer and the address to the dependency
+(1:57:56) infrastruct object above. The barriers will be recorded into the command buffer. And when the GPU executes our
+(1:58:03) commands later, any commands recorded prior to this point must complete the
+(1:58:08) stage and access specified by the source mask fields. Commands after this call
+(1:58:14) must wait at the stages and access specified in the destination mask fields.
+(1:58:20) In this lesson, we're using a newer feature of Vulcan called dynamic rendering. Dynamic rendering is a more
+(1:58:26) explicit and streamlined way of doing rendering compared to the traditional render passes and subpasses that Vulcan
+(1:58:32) offers. Render passes are a much heavier feature that require frame buffers, the configuration of attachments, subpass
+(1:58:39) dependencies, layout transitions, and implicit barriers. The newer dynamic rendering approach is much more explicit
+(1:58:46) and easier to follow since we explicitly perform our barriers, layout transitions, and everything else. Render
+(1:58:52) passes are a bit of a black box that you configure and hope you got it right, making debugging quite a bit more
+(1:58:58) difficult. The benefits of traditional render passes have been that they allow you to set up subpasses, which can take
+(1:59:04) advantage of tile-based and mobile GPUs much more efficiently, allowing us to perform more complex render operations
+(1:59:11) while keeping our working data in fast GPU cache memory. This is something dynamic rendering lacked until recently.
+(1:59:18) The VK KHR dynamic rendering local read extension was added, allowing us to take
+(1:59:23) full advantage of these advanced GPU features using dynamic rendering. We'll look at this in a lot more detail when
+(1:59:29) we implement a deferred renderer into the application. Vulcan's dynamic rendering no longer
+(1:59:35) requires frame buffer objects, but you still need to tell Vulcan about your render targets. To do this, we need to
+(1:59:41) create a couple of instances of the VK rendering attachment info structure. one to describe our swap chain color output
+(1:59:48) target and another for the depth target. Looking at the swap chain image target details here, we'll configure how Vulcan
+(1:59:55) should treat our swap chain image during rendering. We specify the image view that would like to use as the render
+(2:00:01) target. Since we created our image view objects when we created the swap chain, we can just use our swap chain image
+(2:00:08) index to grab the corresponding image view for the current image index. We're also telling Vulcan what layout to
+(2:00:14) expect our color attachment image to be in when we start rendering. The load op field specifies what we want Vulcan to
+(2:00:21) do with any existing data that's currently on the image when rendering starts. Since we're starting a new
+(2:00:27) frame, we want Vulcan to just clear whatever is currently in the image using the clear color specified in the clear
+(2:00:33) value field. The store op states what we want to happen to the data at the end of
+(2:00:38) the dynamic rendering pass. We obviously want to keep that data so that we can present it on screen. So we specify VK
+(2:00:45) attachment store op store. For the depth buffer attachment, we specify our depth
+(2:00:50) image view as the attachment target. The image layout should be VK image layout
+(2:00:56) depth attachment optimal just like what was specified in our barrier to transition the image. The load operation
+(2:01:02) is once again clear even though we're not working with stencil data yet. The depth buffer needs to be initialized to
+(2:01:08) a value of one, which is the furthest value a fragment can have. During rendering, the zcoordinates are
+(2:01:15) normalized to be in a range from 0 to 1. If we cleared the depth buffer with a value of zero, none of our fragments
+(2:01:22) that we're rendering would pass the depth test since the existing value in the image is zero, which is already the
+(2:01:28) closest a fragment can be. This would result in nothing being written to our output targets and we would just get a
+(2:01:34) blank image. For the store operation, we don't need the depth data beyond this frame as we're not displaying it
+(2:01:40) anywhere or reading from it. So, we tell Vulcan that we don't care what happens to this data and the hardware can
+(2:01:46) discard it if it needs to. With the attachments described, we can tell Vulcan to begin rendering. To do this,
+(2:01:53) we create an object of type VK rendering info which provides the high-level details for the dynamic render pass. The
+(2:02:00) render area field defines the limits of our render operation. Think of it as an absolute canvas size for the renderer.
+(2:02:07) We want to use the entire swap chain image here. So, we specify zero for the X and Y coordinates and the swap chain
+(2:02:13) dimensions for the width and height. The layer count specifies the number of image array layers we'd like to render
+(2:02:19) to. This would be useful for various advanced techniques, but since we're rendering directly to our swap chain, we
+(2:02:26) simply specify a value of one here. Here we're specifying that we have a single color attachment target, that being the
+(2:02:32) swap chain image. The PC color attachments field receives the address of the color attachments object we just
+(2:02:38) created. There may be cases where you have multiple color attachments, like if you were building a deferred renderer
+(2:02:44) and had to store more than just color data during the first render pass. The pd depth attachment field stores the
+(2:02:51) address of the depth attachment object we created above. With that structure created, now we can call the vk command
+(2:02:58) begin rendering function providing our command buffer and the address of the rendering info object. The start of the
+(2:03:04) dynamic rendering pass will be recorded in the command buffer. And from here on we can perform any of the draw
+(2:03:10) operations we would like for the current frame.
+(2:03:16) When we created the graphics pipeline, we stated that we would like to be able to set the viewport and scissor areas
+(2:03:21) dynamically during rendering. It's here that we can do that. The viewport area allows us to specify the area of the
+(2:03:28) screen that we'll be rendering into, which will also dictate the extent of the normalized device coordinates. This
+(2:03:35) is different from the render area we specified above as the viewport is more of a mathematical concept that dictates
+(2:03:42) how vertices will be processed in the pipeline. To set the viewport, we create a VK viewport object specifying the X
+(2:03:49) and Y position of the top left corner of the viewport as well as a width and height value for its extent. Calling VK
+(2:03:57) command set viewport during our dynamic render pass is what will actually set the viewport. For this, we pass in our
+(2:04:03) command buffer. We specify the index of the first viewport object, also the total number of viewport objects and the
+(2:04:10) address of the list or single viewport object that we're providing. The scissor test allows the renderer to
+(2:04:17) completely discard areas of the screen outside of a given rectangle. Normally, this is how you render things like text
+(2:04:23) boxes or scroll widgets where the content of the user control needs to be able to scroll along the screen but only
+(2:04:30) have a portion of itself visible to the user. For our purposes, we're setting the extent to the entire swap chain
+(2:04:36) image as we don't need to perform any specific scissor tests yet. To set the scissor area, we call vk command set
+(2:04:43) scissor passing our command buffer, the index of the first scissor, the number of scissors, and the address of our
+(2:04:50) scissor object. We finally reach the holy grail of all aspiring Vulcan developers, our first draw call. In
+(2:04:57) order for Vulcan to know how to draw our vertices, we need to tell it to use our graphics pipeline. We do that with a
+(2:05:03) call to vk command bind pipeline. This function takes in our command buffer as
+(2:05:08) well as an argument specifying where we wish to bind the pipeline. Since we're using a graphics pipeline, we need to
+(2:05:14) set the bind point to graphics ensuring that the correct hardware is used for our pipeline. The last parameter is
+(2:05:20) where we specify the actual VK pipeline handle which we got when we created the pipeline earlier. Now with the pipeline
+(2:05:26) bound, we can tell Vulcan to draw some vertices. Calling VK command draw is how
+(2:05:32) we do that. We specify the command buffer as well as the number of vertices we want to draw followed by the number
+(2:05:39) of instances. At the moment, we're only drawing a single triangle at the center of the screen. The last two parameters
+(2:05:45) specify the vertex and instance indices that we want to start at, which we don't care about right now, and we'll leave at
+(2:05:51) zero. Since our bound pipeline expects a list of triangles to be supplied, Vulcan will take the three vertices and
+(2:05:58) rasterize a triangle for us using the settings we configured into the pipeline. To finalize the render pass,
+(2:06:03) we call VK command end rendering and provide the command buffer. At this point, we're telling Vulcan that we're
+(2:06:09) done with drawing for this current frame. So now our command buffer contains our rendering commands. And
+(2:06:15) after the GPU processes them, we'll have a picture of a triangle on the swap chain image. In order to display this
+(2:06:21) image though, the swap chain needs to be in a different memory layout. So, you guessed it, we need another barrier.
+(2:06:27) With this barrier, we're stating that all rights to the color attachment need to complete. But since we're not
+(2:06:33) blocking some specific stage in the pipeline from continuing, our destination stage is simply set to none
+(2:06:39) with an access mask of zero. What the barrier will do is wait on all rights to the swap chain image to complete before
+(2:06:45) performing the layout transition. The layouts should start to make sense now. We previously transitioned the swap
+(2:06:52) chain image to a color attachment optimal layout in order to write to it. Now we'll be sending the image for
+(2:06:58) presentation. So we want to change its layout to one suitable for presentation. The VK image layout present source KHR
+(2:07:06) is what we want. Once again, we need to specify the swap chain image so the barrier knows what image to transition.
+(2:07:12) And the sub resource range is just like before. Creating this barrier is nothing new for us. Now we just need to create
+(2:07:18) the dependency info object and then call vk command pipeline barrier 2. At this
+(2:07:24) point the command cube will have a barrier that will ensure all color output commands are complete before
+(2:07:29) transitioning the image for presentation. Now that we've recorded the commands required to render the
+(2:07:34) triangle, we need to submit our recorded commands to the GPU so they can actually be executed. Before a command buffer can
+(2:07:41) be submitted to a queue, it needs to be ended. And this is done with a simple call to the VK and command buffer along
+(2:07:48) with the command buffer handle. Now it's time to move on to submitting the command buffer to the queue. We've
+(2:07:54) already discussed why it's important to synchronize our drawing commands with the presentation engine, which is what
+(2:07:59) actually displays the image on screen. In short, we need to ensure the swap chain image is ready for use before any
+(2:08:06) color output can happen. We previously created a binary semaphore that the presentation engine can use to signal to
+(2:08:13) the GPU when we can start actually writing to the image. We handed the semaphore to the presentation engine
+(2:08:19) when we called VK acquire next image KHR and it will signal it when ready. Now we
+(2:08:25) need to ensure that the GPU blocks output to that image until the semaphore is signaled. We do this by passing the
+(2:08:31) image ready semaphore along with our Q submission. First, we need a VK semaphore submit info object which
+(2:08:38) specifies what semaphore to wait on and what stage of the pipeline needs to be blocked until that semaphore is
+(2:08:44) signaled. Since we don't want any writing to the swap chain image, we set the VK pipeline stage to color
+(2:08:51) attachment output bit here that handles what to wait on. But we also need to emit a couple of signals at the end of
+(2:08:58) the frame's execution on the GPU. At the end of the frame, the image is going to be handed off to the presentation engine
+(2:09:04) for presentation. The presentation engine will use the render completion binary semaphore as the signal to wait
+(2:09:11) on before trying to display the image and it will receive that signal when all graphics commands have finished
+(2:09:18) executing. Once the semaphore is signaled, the ownership of the image is transferred
+(2:09:23) back to the presentation engine and the images out of our hands. As you'll recall, if the CPU is waiting on this
+(2:09:30) frame's completion in order to reuse its resources, like the command buffer and pool, the timeline semaphore needs to be
+(2:09:38) updated the moment the GPU execution for this frame is complete. We simply tell Vulcan to signal the timeline seaphore
+(2:09:45) and provide the signal value we calculated at the start of the frame. The waiting frame on the CPU will see
+(2:09:51) that the timeline's value has changed and recording will proceed in the associated frame and flight.
+(2:09:57) In order to submit the command buffer to the queue, we need to create a couple of structures, of course. First, we create
+(2:10:03) a VK command buffer submit info object where we simply specify the command buffer that we're sending to the queue.
+(2:10:10) Next, we create a VK submit info 2 object. And here, we specify the number of semaphors that need to be weighted
+(2:10:16) on. In our case, that's just the image acquired semaphore followed by the number of command buffers we're
+(2:10:22) submitting, which is just the single command buffer we specified above. Then followed by the number of semaphors
+(2:10:29) we're going to signal along with the data pointer provided by the vector of signal semaphors we just created.
+(2:10:36) Calling vkqsubmit 2 is how we finally submit everything. This call requires
+(2:10:42) the handle of the graphics Q we created during initialization. the number of submissions we're making along with the
+(2:10:48) address to those submission objects. Also, there's an optional fence that could be signaled when all execution is
+(2:10:54) complete. Since we're using a timeline seaphore, we don't need this fence and we can simply pass a null here. With our
+(2:11:01) commands now submitted to the GPU, we can tell the presentation engine to display the image. Of course, the image
+(2:11:07) won't be immediately displayed as we have our trusty render complete semaphore that will be signaled once all
+(2:11:13) rendering is complete. create an instance of the VK present info structure where you specify the number
+(2:11:19) of semaphors to wait on before presenting the image followed by the single render complete semaphore that we
+(2:11:26) would like to actually wait on. Next, we specify the number of swap chains we're using which is just one and the address
+(2:11:32) of the swap chain itself followed by the address of the image index which we got at the start of the frame. We can also
+(2:11:39) provide a list of VK result variables to be filled with results of each swapchain presentation, but we don't need that and
+(2:11:46) we can just pass a null. Finally, call VKQ present KHR along with the graphics
+(2:11:51) cube we'd like to use and the address of the present info object. This will request the swap chain image to be
+(2:11:57) presented, but only after the GPU commands have finished executing as signaled by the render complete
+(2:12:03) semaphore. And that's all there is to it. No, but seriously, I know this was a lot
+(2:12:10) of code, but think about it. You now have a solid foundation to build your Vulcan renderer. I hope I managed to
+(2:12:16) explain the concepts and API in a way that's easy to understand while being respectful of your time. I'm very
+(2:12:23) interested in hearing what you plan on making with your newfound Vulcan powers. Please let me know down in the comments.
+(2:12:29) If you appreciate content like this and the effort that goes into it, please consider supporting the channel using my
+(2:12:35) coffee link or simply just being a subscriber. Thank you for watching and watch out for the next video.

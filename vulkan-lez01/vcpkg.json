@@ -1,0 +1,19 @@
+{
+  "name": "vulkan-lez-01",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "sdl3",
+      "features": [
+        "vulkan"
+      ]
+    },
+    "glm",
+    "volk",
+    "vulkan",
+    "vulkan-memory-allocator",
+    "shaderc",
+    "spdlog",
+    "fmt"
+  ]
+}
