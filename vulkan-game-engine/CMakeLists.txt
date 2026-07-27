@@ -4,11 +4,11 @@ if(APPLE)
 	set(CMAKE_OSX_DEPLOYMENT_TARGET "15.0")
 endif()
 
-set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
-project(VulkanLearning VERSION 0.1 LANGUAGES C CXX)
+project(VulkanGameEngine VERSION 0.1 LANGUAGES C CXX)
 
 find_package(glfw3 CONFIG REQUIRED)
 find_package(Vulkan REQUIRED)
@@ -17,15 +17,19 @@ find_package(glm REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
-add_executable(vulkanapp
-	"main.cpp")
+add_executable(vulkanengine
+	"main.cpp"
+	"lve_window.hpp"
+	"lve_window.cpp"
+	"first_app.hpp"
+	"first_app.cpp")
 
 # For MSVC, you often need the 'latest' flag specifically
 if(MSVC)
-    target_compile_options(vulkanapp PRIVATE /std:c++latest)
+    target_compile_options(vulkanengine PRIVATE /std:c++latest)
 endif()
 
-target_link_libraries(vulkanapp PRIVATE
+target_link_libraries(vulkanengine PRIVATE
 	Vulkan::Vulkan
 	unofficial::shaderc::shaderc
 	glfw
