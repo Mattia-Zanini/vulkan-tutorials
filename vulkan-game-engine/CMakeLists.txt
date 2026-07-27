@@ -17,14 +17,14 @@ find_package(glm REQUIRED)
 find_package(spdlog CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 
+# Aggiungi il percorso delle directory dei file sorgente
+# Utilizza GLOB per raccogliere automaticamente i file sorgente
+file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
+
 add_executable(vulkanengine
-	"main.cpp"
-	"lve_window.hpp"
-	"lve_window.cpp"
-	"lve_pipeline.cpp"
-	"lve_pipeline.cpp"
-	"first_app.hpp"
-	"first_app.cpp")
+	${SOURCES}
+	${HEADERS})
 
 # For MSVC, you often need the 'latest' flag specifically
 if(MSVC)
