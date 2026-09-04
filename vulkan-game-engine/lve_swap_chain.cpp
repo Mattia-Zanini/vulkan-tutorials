@@ -382,8 +382,8 @@ namespace lve {
     // Nessuna sincronizzazione con il ciclo di refresh del monitor. L'immagine viene inviata subito
     // a schermo appena pronta. Può causare visibile "screen tearing" (lo schermo mostra pezzi di
     // frame diversi contemporaneamente). Usato principalmente per benchmark o per misurare il
-    // massimo framerate raggiungibile. for (const auto &availablePresentMode :
-    // availablePresentModes) {
+    // massimo framerate raggiungibile.
+    // for (const auto &availablePresentMode : availablePresentModes) {
     //   if (availablePresentMode == VK_PRESENT_MODE_IMMEDIATE_KHR) {
     //     spdlog::info("Present mode: Immediate");
     //     return availablePresentMode;
