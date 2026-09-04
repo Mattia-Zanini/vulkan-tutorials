@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lve_device.hpp"
+#include "vulkan/vulkan_core.h"
 
 #include <cstdint>
 #include <string>
@@ -55,6 +56,8 @@ namespace lve {
     LvePipeline(const LvePipeline&) = delete;
     LvePipeline& operator=(const LvePipeline&) = delete;
 
+    // Lega la pipeline grafica al command buffer per le successive operazioni di disegno
+    void bind(VkCommandBuffer commandBuffer);
     static PipelineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
 
   private:

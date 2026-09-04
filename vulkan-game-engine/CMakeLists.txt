@@ -42,11 +42,30 @@ target_link_libraries(vulkanengine PRIVATE
 	spdlog::spdlog
 	fmt::fmt)
 
-# Copy shaders folder to the build directory every time the project is built
-add_custom_target(CopyShaders ALL
-    COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_SOURCE_DIR}/shaders"
-        "${CMAKE_CURRENT_BINARY_DIR}/shaders"
-    COMMENT "Copying shaders to build directory..."
+# Compile shaders with glslc and place .spv in the build directory
+find_program(GLSLC_EXECUTABLE glslc HINTS /usr/local/bin $ENV{VULKAN_SDK}/bin REQUIRED)
+
+file(GLOB SHADER_SOURCES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.vert"
+    "${CMAKE_CURRENT_SOURCE_DIR}/shaders/*.frag"
 )
-add_dependencies(vulkanengine CopyShaders)
+
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/shaders")
+
+set(SPV_OUTPUTS "")
+foreach(SHADER ${SHADER_SOURCES})
+    get_filename_component(SHADER_NAME ${SHADER} NAME)
+    set(SPV_FILE "${CMAKE_CURRENT_BINARY_DIR}/shaders/${SHADER_NAME}.spv")
+
+    add_custom_command(
+        OUTPUT ${SPV_FILE}
+        COMMAND ${GLSLC_EXECUTABLE} "${SHADER}" -o "${SPV_FILE}"
+        DEPENDS "${SHADER}"
+        COMMENT "Compiling shader ${SHADER_NAME} to SPIR-V..."
+        VERBATIM
+    )
+    list(APPEND SPV_OUTPUTS ${SPV_FILE})
+endforeach()
+
+add_custom_target(CompileShaders ALL DEPENDS ${SPV_OUTPUTS})
+add_dependencies(vulkanengine CompileShaders)

@@ -49,6 +49,6 @@ namespace lve {
     // accessibili dagli shader
     VkPipelineLayout pipelineLayout;
     // Command Buffer: registrano i comandi di rendering da inviare alla GPU
-    std::vector<VkCommandBuffer> commandBuffer;
+    std::vector<VkCommandBuffer> commandBuffers;
   };
 }

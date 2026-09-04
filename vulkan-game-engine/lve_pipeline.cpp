@@ -148,6 +148,13 @@ namespace lve {
     }
   }
 
+  // Registra il comando di binding della pipeline grafica al command buffer.
+  // VK_PIPELINE_BIND_POINT_GRAPHICS specifica che si tratta di una pipeline grafica (a differenza
+  // di compute o ray tracing).
+  void LvePipeline::bind(VkCommandBuffer commandBuffer) {
+    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+  }
+
   PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height) {
     PipelineConfigInfo configInfo{};
 
