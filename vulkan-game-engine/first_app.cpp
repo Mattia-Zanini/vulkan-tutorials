@@ -39,23 +39,23 @@ namespace lve {
   void generateSierpinski(
     std::vector<LveModel::Vertex>& vertices,
     int depth,
-    glm::vec2 a,
-    glm::vec2 b,
-    glm::vec2 c) {
+    LveModel::Vertex a,
+    LveModel::Vertex b,
+    LveModel::Vertex c) {
     // caso base
     if (depth == 0) {
-      vertices.push_back(LveModel::Vertex{ a });
-      vertices.push_back(LveModel::Vertex{ b });
-      vertices.push_back(LveModel::Vertex{ c });
+      vertices.push_back(a);
+      vertices.push_back(b);
+      vertices.push_back(c);
       return;
     }
 
-    // trovo i punti medi
-    glm::vec2 ab = (a + b) / 2.0f;
-    glm::vec2 bc = (b + c) / 2.0f;
-    glm::vec2 ca = (c + a) / 2.0f;
+    // trovo i punti medi sia per la posizione (vec2) che per il colore (vec3)
+    LveModel::Vertex ab{ (a.position + b.position) * 0.5f, (a.color + b.color) * 0.5f };
+    LveModel::Vertex bc{ (b.position + c.position) * 0.5f, (b.color + c.color) * 0.5f };
+    LveModel::Vertex ca{ (c.position + a.position) * 0.5f, (c.color + a.color) * 0.5f };
 
-    // chiamate ricorsive
+    // chiamate ricorsiv
     generateSierpinski(vertices, depth - 1, a, ab, ca); // triangolo in alto
     generateSierpinski(vertices, depth - 1, ab, b, bc); // triangolo a destra
     generateSierpinski(vertices, depth - 1, ca, bc, c); // triangolo a sinistra
