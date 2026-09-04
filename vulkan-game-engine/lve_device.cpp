@@ -2,7 +2,6 @@
 
 // std headers
 #include <cstring>
-#include <iostream>
 #include <set>
 #include <unordered_set>
 #include <spdlog/spdlog.h>
@@ -11,38 +10,31 @@ namespace lve {
 
   // local callback functions
   static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
-    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-    void* pUserData) {
+      VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+      VkDebugUtilsMessageTypeFlagsEXT messageType,
+      const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData, void* pUserData) {
     spdlog::error("validation layer: {}", pCallbackData->pMessage);
 
     return VK_FALSE;
   }
 
-  VkResult CreateDebugUtilsMessengerEXT(
-    VkInstance instance,
-    const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
-    const VkAllocationCallbacks* pAllocator,
-    VkDebugUtilsMessengerEXT* pDebugMessenger) {
+  VkResult CreateDebugUtilsMessengerEXT(VkInstance instance,
+                                        const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo,
+                                        const VkAllocationCallbacks* pAllocator,
+                                        VkDebugUtilsMessengerEXT* pDebugMessenger) {
     auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      instance,
-      "vkCreateDebugUtilsMessengerEXT");
+        instance, "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr) {
       return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
-    }
-    else {
+    } else {
       return VK_ERROR_EXTENSION_NOT_PRESENT;
     }
   }
 
-  void DestroyDebugUtilsMessengerEXT(
-    VkInstance instance,
-    VkDebugUtilsMessengerEXT debugMessenger,
-    const VkAllocationCallbacks* pAllocator) {
+  void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger,
+                                     const VkAllocationCallbacks* pAllocator) {
     auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
-      instance,
-      "vkDestroyDebugUtilsMessengerEXT");
+        instance, "vkDestroyDebugUtilsMessengerEXT");
     if (func != nullptr) {
       func(instance, debugMessenger, pAllocator);
     }
@@ -103,8 +95,7 @@ namespace lve {
 
       populateDebugMessengerCreateInfo(debugCreateInfo);
       createInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debugCreateInfo;
-    }
-    else {
+    } else {
       createInfo.enabledLayerCount = 0;
       createInfo.pNext = nullptr;
     }
@@ -188,7 +179,7 @@ namespace lve {
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
     poolInfo.queueFamilyIndex = queueFamilyIndices.graphicsFamily;
     poolInfo.flags =
-      VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+        VK_COMMAND_POOL_CREATE_TRANSIENT_BIT | VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
     if (vkCreateCommandPool(device_, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
       throw std::runtime_error("failed to create command pool!");
@@ -205,34 +196,36 @@ namespace lve {
     bool swapChainAdequate = false;
     if (extensionsSupported) {
       SwapChainSupportDetails swapChainSupport = querySwapChainSupport(device);
-      swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+      swapChainAdequate =
+          !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
     VkPhysicalDeviceFeatures supportedFeatures;
     vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
 
     return indices.isComplete() && extensionsSupported && swapChainAdequate &&
-      supportedFeatures.samplerAnisotropy;
+           supportedFeatures.samplerAnisotropy;
   }
 
-  void LveDevice::populateDebugMessengerCreateInfo(
-    VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
+  void LveDevice::populateDebugMessengerCreateInfo(VkDebugUtilsMessengerCreateInfoEXT& createInfo) {
     createInfo = {};
     createInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     createInfo.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-      VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+                                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
     createInfo.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-      VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-      VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+                             VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+                             VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
     createInfo.pfnUserCallback = debugCallback;
-    createInfo.pUserData = nullptr;  // Optional
+    createInfo.pUserData = nullptr; // Optional
   }
 
   void LveDevice::setupDebugMessenger() {
-    if (!enableValidationLayers) return;
+    if (!enableValidationLayers)
+      return;
     VkDebugUtilsMessengerCreateInfoEXT createInfo;
     populateDebugMessengerCreateInfo(createInfo);
-    if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) != VK_SUCCESS) {
+    if (CreateDebugUtilsMessengerEXT(instance, &createInfo, nullptr, &debugMessenger) !=
+        VK_SUCCESS) {
       throw std::runtime_error("failed to set up debug messenger!");
     }
   }
@@ -309,11 +302,8 @@ namespace lve {
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
-    vkEnumerateDeviceExtensionProperties(
-      device,
-      nullptr,
-      &extensionCount,
-      availableExtensions.data());
+    vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount,
+                                         availableExtensions.data());
 
     std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
 
@@ -372,26 +362,22 @@ namespace lve {
 
     if (presentModeCount != 0) {
       details.presentModes.resize(presentModeCount);
-      vkGetPhysicalDeviceSurfacePresentModesKHR(
-        device,
-        surface_,
-        &presentModeCount,
-        details.presentModes.data());
+      vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface_, &presentModeCount,
+                                                details.presentModes.data());
     }
     return details;
   }
 
-  VkFormat LveDevice::findSupportedFormat(
-    const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) {
+  VkFormat LveDevice::findSupportedFormat(const std::vector<VkFormat>& candidates,
+                                          VkImageTiling tiling, VkFormatFeatureFlags features) {
     for (VkFormat format : candidates) {
       VkFormatProperties props;
       vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &props);
 
       if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
         return format;
-      }
-      else if (
-        tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+      } else if (tiling == VK_IMAGE_TILING_OPTIMAL &&
+                 (props.optimalTilingFeatures & features) == features) {
         return format;
       }
     }
@@ -403,7 +389,7 @@ namespace lve {
     vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memProperties);
     for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
       if ((typeFilter & (1 << i)) &&
-        (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+          (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
         return i;
       }
     }
@@ -411,12 +397,9 @@ namespace lve {
     throw std::runtime_error("failed to find suitable memory type!");
   }
 
-  void LveDevice::createBuffer(
-    VkDeviceSize size,
-    VkBufferUsageFlags usage,
-    VkMemoryPropertyFlags properties,
-    VkBuffer& buffer,
-    VkDeviceMemory& bufferMemory) {
+  void LveDevice::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage,
+                               VkMemoryPropertyFlags properties, VkBuffer& buffer,
+                               VkDeviceMemory& bufferMemory) {
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -478,16 +461,16 @@ namespace lve {
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
     VkBufferCopy copyRegion{};
-    copyRegion.srcOffset = 0;  // Optional
-    copyRegion.dstOffset = 0;  // Optional
+    copyRegion.srcOffset = 0; // Optional
+    copyRegion.dstOffset = 0; // Optional
     copyRegion.size = size;
     vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
     endSingleTimeCommands(commandBuffer);
   }
 
-  void LveDevice::copyBufferToImage(
-    VkBuffer buffer, VkImage image, uint32_t width, uint32_t height, uint32_t layerCount) {
+  void LveDevice::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height,
+                                    uint32_t layerCount) {
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
     VkBufferImageCopy region{};
@@ -503,21 +486,14 @@ namespace lve {
     region.imageOffset = { 0, 0, 0 };
     region.imageExtent = { width, height, 1 };
 
-    vkCmdCopyBufferToImage(
-      commandBuffer,
-      buffer,
-      image,
-      VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-      1,
-      &region);
+    vkCmdCopyBufferToImage(commandBuffer, buffer, image, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1,
+                           &region);
     endSingleTimeCommands(commandBuffer);
   }
 
-  void LveDevice::createImageWithInfo(
-    const VkImageCreateInfo& imageInfo,
-    VkMemoryPropertyFlags properties,
-    VkImage& image,
-    VkDeviceMemory& imageMemory) {
+  void LveDevice::createImageWithInfo(const VkImageCreateInfo& imageInfo,
+                                      VkMemoryPropertyFlags properties, VkImage& image,
+                                      VkDeviceMemory& imageMemory) {
     if (vkCreateImage(device_, &imageInfo, nullptr, &image) != VK_SUCCESS) {
       throw std::runtime_error("failed to create image!");
     }
@@ -539,4 +515,4 @@ namespace lve {
     }
   }
 
-}  // namespace lve
+} // namespace lve

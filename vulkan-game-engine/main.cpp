@@ -1,8 +1,6 @@
 #include "first_app.hpp"
 
 #include <cstdlib>
-#include <iostream>
-#include <stdexcept>
 #include <spdlog/spdlog.h>
 
 int main() {
@@ -11,12 +9,9 @@ int main() {
 
   lve::FirstApp app{};
 
-  try
-  {
+  try {
     app.run();
-  }
-  catch (const std::exception& e)
-  {
+  } catch (const std::exception& e) {
     spdlog::error(e.what());
     return EXIT_FAILURE;
   }
