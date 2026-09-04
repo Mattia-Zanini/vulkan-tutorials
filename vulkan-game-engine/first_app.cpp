@@ -36,13 +36,45 @@ namespace lve {
     vkDeviceWaitIdle(lveDevice.device());
   }
 
+  void generateSierpinski(
+    std::vector<LveModel::Vertex>& vertices,
+    int depth,
+    glm::vec2 a,
+    glm::vec2 b,
+    glm::vec2 c) {
+    // caso base
+    if (depth == 0) {
+      vertices.push_back(LveModel::Vertex{ a });
+      vertices.push_back(LveModel::Vertex{ b });
+      vertices.push_back(LveModel::Vertex{ c });
+      return;
+    }
+
+    // trovo i punti medi
+    glm::vec2 ab = (a + b) / 2.0f;
+    glm::vec2 bc = (b + c) / 2.0f;
+    glm::vec2 ca = (c + a) / 2.0f;
+
+    // chiamate ricorsive
+    generateSierpinski(vertices, depth - 1, a, ab, ca); // triangolo in alto
+    generateSierpinski(vertices, depth - 1, ab, b, bc); // triangolo a destra
+    generateSierpinski(vertices, depth - 1, ca, bc, c); // triangolo a sinistra
+  }
+
   void FirstApp::loadModels() {
     // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
-    std::vector<LveModel::Vertex> vertices{
+    /*std::vector<LveModel::Vertex> vertices{
       { { 0.0f, -0.5f } },
       { { 0.5f, 0.5f } },
       { { -0.5f, 0.5f } }
-    };
+    };*/
+
+    glm::vec2 a = { 0.0f, -0.8f };
+    glm::vec2 b = { 0.8f, 0.8f };
+    glm::vec2 c = { -0.8f, 0.8f };
+
+    std::vector<LveModel::Vertex> vertices{};
+    generateSierpinski(vertices, 7, a, b, c);
 
     // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel
     lveModel = std::make_unique<LveModel>(lveDevice, vertices);
