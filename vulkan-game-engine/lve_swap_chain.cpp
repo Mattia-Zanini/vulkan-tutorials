@@ -56,7 +56,7 @@ namespace lve {
     vkWaitForFences(device.device(), 1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
     VkResult result = vkAcquireNextImageKHR(device.device(), swapChain, std::numeric_limits<uint64_t>::max(),
-                                            imageAvailableSemaphores[currentFrame], // must be a not signaled semaphore
+                                            imageAvailableSemaphores[currentFrame], // deve essere un semaforo non segnalato
                                             VK_NULL_HANDLE, imageIndex);
 
     return result;
@@ -140,8 +140,8 @@ namespace lve {
       createInfo.pQueueFamilyIndices = queueFamilyIndices;
     } else {
       createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-      createInfo.queueFamilyIndexCount = 0;     // Optional
-      createInfo.pQueueFamilyIndices = nullptr; // Optional
+      createInfo.queueFamilyIndexCount = 0;     // Opzionale
+      createInfo.pQueueFamilyIndices = nullptr; // Opzionale
     }
 
     createInfo.preTransform = swapChainSupport.capabilities.currentTransform;
@@ -156,10 +156,10 @@ namespace lve {
       throw std::runtime_error("failed to create swap chain!");
     }
 
-    // we only specified a minimum number of images in the swap chain, so the implementation is
-    // allowed to create a swap chain with more. That's why we'll first query the final number of
-    // images with vkGetSwapchainImagesKHR, then resize the container and finally call it again to
-    // retrieve the handles.
+    // Abbiamo specificato solo un numero minimo di immagini nella swap chain, quindi l'implementazione
+    // è autorizzata a crearne di più. Per questo motivo prima interroghiamo il numero effettivo
+    // di immagini con vkGetSwapchainImagesKHR, ridimensioniamo il vettore e lo richiamiamo
+    // per ottenere gli handle.
     vkGetSwapchainImagesKHR(device.device(), swapChain, &imageCount, nullptr);
     swapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(device.device(), swapChain, &imageCount, swapChainImages.data());

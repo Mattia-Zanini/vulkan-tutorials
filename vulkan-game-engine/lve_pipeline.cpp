@@ -206,9 +206,9 @@ namespace lve {
     // Depth bias: altera i valori di profondità (usato per tecniche come shadow mapping per evitare
     // shadow acne)
     configInfo.rasterizationInfo.depthBiasEnable = VK_FALSE;
-    configInfo.rasterizationInfo.depthBiasConstantFactor = 0.0f; // Optional
-    configInfo.rasterizationInfo.depthBiasClamp = 0.0f;          // Optional
-    configInfo.rasterizationInfo.depthBiasSlopeFactor = 0.0f;    // Optional
+    configInfo.rasterizationInfo.depthBiasConstantFactor = 0.0f; // Opzionale
+    configInfo.rasterizationInfo.depthBiasClamp = 0.0f;          // Opzionale
+    configInfo.rasterizationInfo.depthBiasSlopeFactor = 0.0f;    // Opzionale
 
     // ==========================================
     // MULTISAMPLING (MSAA)
@@ -218,10 +218,10 @@ namespace lve {
     configInfo.multisampleInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
     configInfo.multisampleInfo.sampleShadingEnable = VK_FALSE;
     configInfo.multisampleInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-    configInfo.multisampleInfo.minSampleShading = 1.0f;          // Optional
-    configInfo.multisampleInfo.pSampleMask = nullptr;            // Optional
-    configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE; // Optional
-    configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;      // Optional
+    configInfo.multisampleInfo.minSampleShading = 1.0f;          // Opzionale
+    configInfo.multisampleInfo.pSampleMask = nullptr;            // Opzionale
+    configInfo.multisampleInfo.alphaToCoverageEnable = VK_FALSE; // Opzionale
+    configInfo.multisampleInfo.alphaToOneEnable = VK_FALSE;      // Opzionale
 
     // ==========================================
     // COLOR BLENDING
@@ -231,22 +231,22 @@ namespace lve {
     configInfo.colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     // Blending disabilitato: il nuovo colore sovrascrive direttamente il valore precedente
     configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
-    configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Optional
-    configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-    configInfo.colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;             // Optional
-    configInfo.colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;  // Optional
-    configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Optional
-    configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;             // Optional
+    configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Opzionale
+    configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Opzionale
+    configInfo.colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;             // Opzionale
+    configInfo.colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;  // Opzionale
+    configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO; // Opzionale
+    configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;             // Opzionale
 
     configInfo.colorBlendInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
     configInfo.colorBlendInfo.logicOpEnable = VK_FALSE;
-    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Optional
+    configInfo.colorBlendInfo.logicOp = VK_LOGIC_OP_COPY; // Opzionale
     configInfo.colorBlendInfo.attachmentCount = 1;
     configInfo.colorBlendInfo.pAttachments = &configInfo.colorBlendAttachment;
-    configInfo.colorBlendInfo.blendConstants[0] = 0.0f; // Optional
-    configInfo.colorBlendInfo.blendConstants[1] = 0.0f; // Optional
-    configInfo.colorBlendInfo.blendConstants[2] = 0.0f; // Optional
-    configInfo.colorBlendInfo.blendConstants[3] = 0.0f; // Optional
+    configInfo.colorBlendInfo.blendConstants[0] = 0.0f; // Opzionale
+    configInfo.colorBlendInfo.blendConstants[1] = 0.0f; // Opzionale
+    configInfo.colorBlendInfo.blendConstants[2] = 0.0f; // Opzionale
+    configInfo.colorBlendInfo.blendConstants[3] = 0.0f; // Opzionale
 
     // ==========================================
     // DEPTH & STENCIL TESTING
@@ -259,11 +259,11 @@ namespace lve {
     configInfo.depthStencilInfo.depthWriteEnable = VK_TRUE;
     configInfo.depthStencilInfo.depthCompareOp = VK_COMPARE_OP_LESS;
     configInfo.depthStencilInfo.depthBoundsTestEnable = VK_FALSE;
-    configInfo.depthStencilInfo.minDepthBounds = 0.0f; // Optional
-    configInfo.depthStencilInfo.maxDepthBounds = 1.0f; // Optional
+    configInfo.depthStencilInfo.minDepthBounds = 0.0f; // Opzionale
+    configInfo.depthStencilInfo.maxDepthBounds = 1.0f; // Opzionale
     configInfo.depthStencilInfo.stencilTestEnable = VK_FALSE;
-    configInfo.depthStencilInfo.front = {}; // Optional
-    configInfo.depthStencilInfo.back = {};  // Optional
+    configInfo.depthStencilInfo.front = {}; // Opzionale
+    configInfo.depthStencilInfo.back = {};  // Opzionale
 
     return configInfo;
   }
