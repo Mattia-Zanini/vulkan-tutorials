@@ -63,18 +63,23 @@ namespace lve {
 
   void FirstApp::loadModels() {
     // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
-    /*std::vector<LveModel::Vertex> vertices{
-      { { 0.0f, -0.5f } },
-      { { 0.5f, 0.5f } },
-      { { -0.5f, 0.5f } }
-    };*/
-
     glm::vec2 a = { 0.0f, -0.8f };
     glm::vec2 b = { 0.8f, 0.8f };
     glm::vec2 c = { -0.8f, 0.8f };
 
-    std::vector<LveModel::Vertex> vertices{};
-    generateSierpinski(vertices, 7, a, b, c);
+    // Definiamo i colori primari (rosso, verde, blu) per ciascun vertice del triangolo
+    glm::vec3 red = { 1.0f, 0.0f, 0.0f };
+    glm::vec3 green = { 0.0f, 1.0f, 0.0f };
+    glm::vec3 blue = { 0.0f, 0.0f, 1.0f };
+
+    // Inizializziamo i vertici combinando posizione 2D e colore RGB (interleaved).
+    // Lo stadio di rasterizzazione calcolerà automaticamente le coordinate baricentriche per interpolare
+    // sfumature morbide tra i vertici su ciascun pixel/frammento del triangolo.
+    std::vector<LveModel::Vertex> vertices{
+      { a, red },
+      { b, green },
+      { c, blue }
+    };
 
     // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel
     lveModel = std::make_unique<LveModel>(lveDevice, vertices);

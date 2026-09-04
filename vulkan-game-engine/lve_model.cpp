@@ -67,7 +67,7 @@ namespace lve {
   }
 
   std::vector<VkVertexInputAttributeDescription> LveModel::Vertex::getAttributeDescriptions() {
-    std::vector<VkVertexInputAttributeDescription> attributeDescriptions(1);
+    std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
     // Binding a cui appartiene questo attributo
     attributeDescriptions[0].binding = 0;
     // Corrisponde a layout(location = 0) specificato nel vertex shader
@@ -76,6 +76,16 @@ namespace lve {
     attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
     // Offset in byte dall'inizio della struct del vertice (0 poiché position è il primo attributo)
     attributeDescriptions[0].offset = offsetof(Vertex, position);
+
+    // 2° Attributo: Colore (interleaved nello stesso binding)
+    attributeDescriptions[1].binding = 0;
+    // Corrisponde a layout(location = 1) specificato nel vertex shader
+    attributeDescriptions[1].location = 1;
+    // Formato del dato: 3 float a 32-bit (vec3 RGB)
+    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
+    // Offset calcolato automaticamente con offsetof per individuare la posizione del membro 'color' nella struct
+    attributeDescriptions[1].offset = offsetof(Vertex, color);
+
     return attributeDescriptions;
   }
 }
