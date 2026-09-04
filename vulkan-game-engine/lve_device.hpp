@@ -49,8 +49,13 @@ namespace lve {
     QueueFamilyIndices findPhysicalQueueFamilies() { return findQueueFamilies(physicalDevice); }
     VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 
-    // Buffer Helper Functions
-    void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+    // Funzione helper per creare un VkBuffer e allocare/associare la memoria GPU richiesta
+    void createBuffer(
+      VkDeviceSize size,
+      VkBufferUsageFlags usage,
+      VkMemoryPropertyFlags properties,
+      VkBuffer& buffer,
+      VkDeviceMemory& bufferMemory);
     VkCommandBuffer beginSingleTimeCommands();
     void endSingleTimeCommands(VkCommandBuffer commandBuffer);
     void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);

@@ -1,15 +1,19 @@
 #include "first_app.hpp"
+#include "lve_model.hpp"
 #include "vulkan/vulkan_core.h"
 
 // std
 #include <array>
+#include <memory>
 #include <stdexcept>
+#include <vector>
 
 namespace lve {
 
   FirstApp::FirstApp() {
     // Inizializza le risorse Vulkan necessarie: layout della pipeline, la pipeline grafica e i
     // command buffers
+    loadModels();
     createPipelineLayout();
     createPipeline();
     createCommandBuffers();
@@ -30,6 +34,18 @@ namespace lve {
     // Evita errori e messaggi dai validation layers dovuti alla distruzione di risorse ancora in
     // uso dalla GPU.
     vkDeviceWaitIdle(lveDevice.device());
+  }
+
+  void FirstApp::loadModels() {
+    // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
+    std::vector<LveModel::Vertex> vertices{
+      { { 0.0f, -0.5f } },
+      { { 0.5f, 0.5f } },
+      { { -0.5f, 0.5f } }
+    };
+
+    // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel
+    lveModel = std::make_unique<LveModel>(lveDevice, vertices);
   }
 
   void FirstApp::createPipelineLayout() {
@@ -121,11 +137,10 @@ namespace lve {
       // command buffer).
       vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 
-      // Lega la pipeline grafica e registra il comando di disegno:
-      // 3 vertici, 1 istanza, offset iniziale vertici = 0, offset prima istanza = 0.
-      // I vertici sono hardcoded direttamente nel vertex shader in questo step.
+      // Associa la pipeline grafica, poi associa il vertex buffer del modello ed esegue il draw
       lvePipeline->bind(commandBuffers[i]);
-      vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
+      lveModel->bind(commandBuffers[i]);
+      lveModel->draw(commandBuffers[i]);
 
       // Termina il render pass e conclude la registrazione del command buffer
       vkCmdEndRenderPass(commandBuffers[i]);

@@ -376,7 +376,18 @@ namespace lve {
     throw std::runtime_error("failed to find suitable memory type!");
   }
 
-  void LveDevice::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory) {
+  // Helper per creare un buffer e associargli la relativa memoria sul device:
+  // 1. Crea l'handle VkBuffer definendo dimensione e scopo d'uso (es. vertex buffer).
+  // 2. Interroga i requisiti di memoria (dimensione effettiva allineata e tipi di memoria compatibili).
+  // 3. Trova il tipo di memoria hardware che soddisfa sia i requisiti del buffer che le proprietà richieste (es. HOST_VISIBLE, HOST_COHERENT).
+  // 4. Alloca la memoria (VkDeviceMemory) e la associa (bind) al buffer con offset 0.
+  void LveDevice::createBuffer(
+    VkDeviceSize size,
+    VkBufferUsageFlags usage,
+    VkMemoryPropertyFlags properties,
+    VkBuffer& buffer,
+    VkDeviceMemory& bufferMemory) {
+    // 1. Configurazione e creazione dell'oggetto buffer
     VkBufferCreateInfo bufferInfo{};
     bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
     bufferInfo.size = size;
@@ -387,9 +398,11 @@ namespace lve {
       throw std::runtime_error("failed to create vertex buffer!");
     }
 
+    // 2. Query dei requisiti di memoria per questo specifico buffer
     VkMemoryRequirements memRequirements;
     vkGetBufferMemoryRequirements(device_, buffer, &memRequirements);
 
+    // 3. Configurazione e allocazione della memoria GPU
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
@@ -399,6 +412,7 @@ namespace lve {
       throw std::runtime_error("failed to allocate vertex buffer memory!");
     }
 
+    // 4. Associazione (bind) tra il buffer e la memoria allocata
     vkBindBufferMemory(device_, buffer, bufferMemory, 0);
   }
 

@@ -1,6 +1,7 @@
 #include "lve_pipeline.hpp"
-#include "vulkan/vulkan_core.h"
+#include "lve_model.hpp"
 
+#include <cstdint>
 #include <fstream>
 #include <iostream>
 #include <fmt/format.h>
@@ -8,7 +9,13 @@
 #include <spdlog/spdlog.h>
 
 namespace lve {
-  LvePipeline::LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : lveDevice{ device } { createGraphicsPipeline(vertFilePath, fragFilePath, configInfo); }
+  LvePipeline::LvePipeline(
+    LveDevice& device,
+    const std::string& vertFilePath,
+    const std::string& fragFilePath,
+    const PipelineConfigInfo& configInfo) : lveDevice{ device } {
+    createGraphicsPipeline(vertFilePath, fragFilePath, configInfo);
+  }
 
   LvePipeline::~LvePipeline() {
     // Rilascio delle risorse Vulkan allocate per i moduli shader e la pipeline
@@ -37,7 +44,10 @@ namespace lve {
     return buffer;
   }
 
-  void LvePipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) {
+  void LvePipeline::createGraphicsPipeline(
+    const std::string& vertFilePath,
+    const std::string& fragFilePath,
+    const PipelineConfigInfo& configInfo) {
     // Verifica che le risorse obbligatorie esterne siano state fornite prima di creare la pipeline
     assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline:: no pipelineLayout provided in configInfo");
     assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline:: no renderPass provided in configInfo");
@@ -72,14 +82,19 @@ namespace lve {
     shaderStages[1].pNext = nullptr;
     shaderStages[1].pSpecializationInfo = nullptr;
 
-    // Descrive il formato dei dati dei vertici in ingresso (binding e attributi)
-    // Impostato a 0 per ora dato che i vertici sono hardcoded direttamente nel vertex shader
+    // Recupera le descrizioni dei binding e degli attributi dei vertici dal nostro modello.
+    // Il binding specifica il passo (stride) di avanzamento nel buffer di memoria;
+    // Gli attributi descrivono i singoli campi (posizione, colore, ecc.) e come mapparsi alle location dello shader.
+    auto bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
+    auto attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+
+    // Configura il vertex input state della pipeline collegando le descrizioni di binding e attributi
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
     vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-    vertexInputInfo.vertexAttributeDescriptionCount = 0;
-    vertexInputInfo.vertexBindingDescriptionCount = 0;
-    vertexInputInfo.pVertexAttributeDescriptions = nullptr;
-    vertexInputInfo.pVertexBindingDescriptions = nullptr;
+    vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
+    vertexInputInfo.vertexBindingDescriptionCount = static_cast<uint32_t>(bindingDescriptions.size());
+    vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
+    vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
 
     // Combina Viewport e Scissor.
     // Viene creata come variabile locale inizializzata a zero con le parentesi graffe {} (che
