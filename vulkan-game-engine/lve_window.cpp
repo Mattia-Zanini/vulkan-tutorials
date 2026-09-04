@@ -3,10 +3,7 @@
 #include <spdlog/spdlog.h>
 
 namespace lve {
-  LveWindow::LveWindow(int w, int h, std::string name)
-      : width{ w }, height{ h }, windowName{ name } {
-    initWindow();
-  }
+  LveWindow::LveWindow(int w, int h, std::string name) : width{ w }, height{ h }, windowName{ name } { initWindow(); }
 
   LveWindow::~LveWindow() {
     glfwDestroyWindow(window);

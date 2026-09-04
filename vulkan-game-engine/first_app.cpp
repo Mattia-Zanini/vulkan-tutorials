@@ -44,8 +44,7 @@ namespace lve {
     // shader
     pipelineLayoutInfo.pushConstantRangeCount = 0;
     pipelineLayoutInfo.pPushConstantRanges = nullptr;
-    if (vkCreatePipelineLayout(lveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) !=
-        VK_SUCCESS) {
+    if (vkCreatePipelineLayout(lveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
       throw std::runtime_error("failed to create pipeline layout!");
     }
   }
@@ -54,8 +53,7 @@ namespace lve {
     // Utilizziamo le dimensioni (width/height) della swap chain e non della finestra:
     // su display ad alta densità (es. Retina su macOS), le coordinate finestra differiscono dal
     // numero reale di pixel.
-    auto pipelineConfig =
-        LvePipeline::defaultPipelineConfigInfo(lveSwapChain.width(), lveSwapChain.height());
+    auto pipelineConfig = LvePipeline::defaultPipelineConfigInfo(lveSwapChain.width(), lveSwapChain.height());
 
     // Il render pass funge da "blueprint" che descrive la struttura del framebuffer (attachment di
     // colore, depth, ecc.) La pipeline deve sapere in anticipo con quale layout di render pass sarà
@@ -64,8 +62,7 @@ namespace lve {
     pipelineConfig.pipelineLayout = pipelineLayout;
 
     // Creiamo l'istanza della pipeline mediante unique_ptr
-    lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv",
-                                                "shaders/simple_shader.frag.spv", pipelineConfig);
+    lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
   }
 
   void FirstApp::createCommandBuffers() {
@@ -86,8 +83,7 @@ namespace lve {
     allocInfo.commandPool = lveDevice.getCommandPool();
     allocInfo.commandBufferCount = static_cast<uint32_t>(commandBuffers.size());
 
-    if (vkAllocateCommandBuffers(lveDevice.device(), &allocInfo, commandBuffers.data()) !=
-        VK_SUCCESS) {
+    if (vkAllocateCommandBuffers(lveDevice.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
       throw std::runtime_error("failed to allocate command buffers!");
     }
 

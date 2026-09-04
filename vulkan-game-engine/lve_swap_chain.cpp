@@ -12,8 +12,7 @@
 
 namespace lve {
 
-  LveSwapChain::LveSwapChain(LveDevice& deviceRef, VkExtent2D extent)
-      : device{ deviceRef }, windowExtent{ extent } {
+  LveSwapChain::LveSwapChain(LveDevice& deviceRef, VkExtent2D extent) : device{ deviceRef }, windowExtent{ extent } {
     createSwapChain();
     createImageViews();
     createRenderPass();
@@ -54,19 +53,16 @@ namespace lve {
   }
 
   VkResult LveSwapChain::acquireNextImage(uint32_t* imageIndex) {
-    vkWaitForFences(device.device(), 1, &inFlightFences[currentFrame], VK_TRUE,
-                    std::numeric_limits<uint64_t>::max());
+    vkWaitForFences(device.device(), 1, &inFlightFences[currentFrame], VK_TRUE, std::numeric_limits<uint64_t>::max());
 
-    VkResult result = vkAcquireNextImageKHR(
-        device.device(), swapChain, std::numeric_limits<uint64_t>::max(),
-        imageAvailableSemaphores[currentFrame], // must be a not signaled semaphore
-        VK_NULL_HANDLE, imageIndex);
+    VkResult result = vkAcquireNextImageKHR(device.device(), swapChain, std::numeric_limits<uint64_t>::max(),
+                                            imageAvailableSemaphores[currentFrame], // must be a not signaled semaphore
+                                            VK_NULL_HANDLE, imageIndex);
 
     return result;
   }
 
-  VkResult LveSwapChain::submitCommandBuffers(const VkCommandBuffer* buffers,
-                                              uint32_t* imageIndex) {
+  VkResult LveSwapChain::submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex) {
     if (imagesInFlight[*imageIndex] != VK_NULL_HANDLE) {
       vkWaitForFences(device.device(), 1, &imagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
@@ -89,8 +85,7 @@ namespace lve {
     submitInfo.pSignalSemaphores = signalSemaphores;
 
     vkResetFences(device.device(), 1, &inFlightFences[currentFrame]);
-    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) !=
-        VK_SUCCESS) {
+    if (vkQueueSubmit(device.graphicsQueue(), 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
       throw std::runtime_error("failed to submit draw command buffer!");
     }
 
@@ -121,8 +116,7 @@ namespace lve {
     VkExtent2D extent = chooseSwapExtent(swapChainSupport.capabilities);
 
     uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;
-    if (swapChainSupport.capabilities.maxImageCount > 0 &&
-        imageCount > swapChainSupport.capabilities.maxImageCount) {
+    if (swapChainSupport.capabilities.maxImageCount > 0 && imageCount > swapChainSupport.capabilities.maxImageCount) {
       imageCount = swapChainSupport.capabilities.maxImageCount;
     }
 
@@ -188,8 +182,7 @@ namespace lve {
       viewInfo.subresourceRange.baseArrayLayer = 0;
       viewInfo.subresourceRange.layerCount = 1;
 
-      if (vkCreateImageView(device.device(), &viewInfo, nullptr, &swapChainImageViews[i]) !=
-          VK_SUCCESS) {
+      if (vkCreateImageView(device.device(), &viewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture image view!");
       }
     }
@@ -233,13 +226,10 @@ namespace lve {
     VkSubpassDependency dependency = {};
     dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
     dependency.srcAccessMask = 0;
-    dependency.srcStageMask =
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
     dependency.dstSubpass = 0;
-    dependency.dstStageMask =
-        VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
-    dependency.dstAccessMask =
-        VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT | VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
     std::array<VkAttachmentDescription, 2> attachments = { colorAttachment, depthAttachment };
     VkRenderPassCreateInfo renderPassInfo = {};
@@ -271,8 +261,7 @@ namespace lve {
       framebufferInfo.height = swapChainExtent.height;
       framebufferInfo.layers = 1;
 
-      if (vkCreateFramebuffer(device.device(), &framebufferInfo, nullptr,
-                              &swapChainFramebuffers[i]) != VK_SUCCESS) {
+      if (vkCreateFramebuffer(device.device(), &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
         throw std::runtime_error("failed to create framebuffer!");
       }
     }
@@ -303,8 +292,7 @@ namespace lve {
       imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
       imageInfo.flags = 0;
 
-      device.createImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImages[i],
-                                 depthImageMemorys[i]);
+      device.createImageWithInfo(imageInfo, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImages[i], depthImageMemorys[i]);
 
       VkImageViewCreateInfo viewInfo{};
       viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -317,8 +305,7 @@ namespace lve {
       viewInfo.subresourceRange.baseArrayLayer = 0;
       viewInfo.subresourceRange.layerCount = 1;
 
-      if (vkCreateImageView(device.device(), &viewInfo, nullptr, &depthImageViews[i]) !=
-          VK_SUCCESS) {
+      if (vkCreateImageView(device.device(), &viewInfo, nullptr, &depthImageViews[i]) != VK_SUCCESS) {
         throw std::runtime_error("failed to create texture image view!");
       }
     }
@@ -338,21 +325,15 @@ namespace lve {
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-      if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr,
-                            &imageAvailableSemaphores[i]) != VK_SUCCESS ||
-          vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr,
-                            &renderFinishedSemaphores[i]) != VK_SUCCESS ||
-          vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+      if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS || vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS || vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
         throw std::runtime_error("failed to create synchronization objects for a frame!");
       }
     }
   }
 
-  VkSurfaceFormatKHR LveSwapChain::chooseSwapSurfaceFormat(
-      const std::vector<VkSurfaceFormatKHR>& availableFormats) {
+  VkSurfaceFormatKHR LveSwapChain::chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) {
     for (const auto& availableFormat : availableFormats) {
-      if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM &&
-          availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+      if (availableFormat.format == VK_FORMAT_B8G8R8A8_UNORM && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
         return availableFormat;
       }
     }
@@ -363,8 +344,7 @@ namespace lve {
   // Il Present Mode configura il modo in cui la swap chain sincronizza la presentazione delle
   // immagini con il display. L'unico present mode garantito dalle specifiche Vulkan su qualsiasi
   // hardware è VK_PRESENT_MODE_FIFO_KHR.
-  VkPresentModeKHR LveSwapChain::chooseSwapPresentMode(
-      const std::vector<VkPresentModeKHR>& availablePresentModes) {
+  VkPresentModeKHR LveSwapChain::chooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes) {
     // 1. MAILBOX (Triplo Buffering sbloccato):
     // La GPU non si ferma mai quando entrambi i back buffer sono pieni; continua a renderizzare
     // scartando e sovrascrivendo il frame più vecchio. Quando il monitor si aggiorna (V-Sync),
@@ -403,21 +383,13 @@ namespace lve {
       return capabilities.currentExtent;
     } else {
       VkExtent2D actualExtent = windowExtent;
-      actualExtent.width =
-          std::max(capabilities.minImageExtent.width,
-                   std::min(capabilities.maxImageExtent.width, actualExtent.width));
-      actualExtent.height =
-          std::max(capabilities.minImageExtent.height,
-                   std::min(capabilities.maxImageExtent.height, actualExtent.height));
+      actualExtent.width = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
+      actualExtent.height = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));
 
       return actualExtent;
     }
   }
 
-  VkFormat LveSwapChain::findDepthFormat() {
-    return device.findSupportedFormat(
-        { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
-        VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT);
-  }
+  VkFormat LveSwapChain::findDepthFormat() { return device.findSupportedFormat({ VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT }, VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT); }
 
 } // namespace lve

@@ -8,11 +8,7 @@
 #include <spdlog/spdlog.h>
 
 namespace lve {
-  LvePipeline::LvePipeline(LveDevice& device, const std::string& vertFilePath,
-                           const std::string& fragFilePath, const PipelineConfigInfo& configInfo)
-      : lveDevice{ device } {
-    createGraphicsPipeline(vertFilePath, fragFilePath, configInfo);
-  }
+  LvePipeline::LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) : lveDevice{ device } { createGraphicsPipeline(vertFilePath, fragFilePath, configInfo); }
 
   LvePipeline::~LvePipeline() {
     // Rilascio delle risorse Vulkan allocate per i moduli shader e la pipeline
@@ -41,14 +37,10 @@ namespace lve {
     return buffer;
   }
 
-  void LvePipeline::createGraphicsPipeline(const std::string& vertFilePath,
-                                           const std::string& fragFilePath,
-                                           const PipelineConfigInfo& configInfo) {
+  void LvePipeline::createGraphicsPipeline(const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo) {
     // Verifica che le risorse obbligatorie esterne siano state fornite prima di creare la pipeline
-    assert(configInfo.pipelineLayout != VK_NULL_HANDLE &&
-           "Cannot create graphics pipeline:: no pipelineLayout provided in configInfo");
-    assert(configInfo.renderPass != VK_NULL_HANDLE &&
-           "Cannot create graphics pipeline:: no renderPass provided in configInfo");
+    assert(configInfo.pipelineLayout != VK_NULL_HANDLE && "Cannot create graphics pipeline:: no pipelineLayout provided in configInfo");
+    assert(configInfo.renderPass != VK_NULL_HANDLE && "Cannot create graphics pipeline:: no renderPass provided in configInfo");
 
     auto vertCode = readFile(vertFilePath);
     auto fragCode = readFile(fragFilePath);
@@ -116,8 +108,7 @@ namespace lve {
     pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
     pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
     pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
-    pipelineInfo.pDynamicState =
-        nullptr; // Stati dinamici opzionali (modificabili a runtime senza ricreare la pipeline)
+    pipelineInfo.pDynamicState = nullptr; // Stati dinamici opzionali (modificabili a runtime senza ricreare la pipeline)
 
     pipelineInfo.layout = configInfo.pipelineLayout;
     pipelineInfo.renderPass = configInfo.renderPass;
@@ -127,22 +118,17 @@ namespace lve {
     pipelineInfo.basePipelineIndex = -1;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
 
-    if (vkCreateGraphicsPipelines(
-            lveDevice.device(),
-            VK_NULL_HANDLE, // Pipeline cache opzionale per velocizzare la compilazione
-            1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
+    if (vkCreateGraphicsPipelines(lveDevice.device(),
+                                  VK_NULL_HANDLE, // Pipeline cache opzionale per velocizzare la compilazione
+                                  1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS) {
       throw std::runtime_error("failed to create graphics pipeline");
     }
   }
 
-  void LvePipeline::createShaderModule(const std::vector<char>& code,
-                                       VkShaderModule* shaderModule) {
-    VkShaderModuleCreateInfo createinfo{ .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
-                                         .codeSize = code.size(),
-                                         .pCode = reinterpret_cast<const uint32_t*>(code.data()) };
+  void LvePipeline::createShaderModule(const std::vector<char>& code, VkShaderModule* shaderModule) {
+    VkShaderModuleCreateInfo createinfo{ .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO, .codeSize = code.size(), .pCode = reinterpret_cast<const uint32_t*>(code.data()) };
 
-    if (vkCreateShaderModule(lveDevice.device(), &createinfo, nullptr, shaderModule) !=
-        VK_SUCCESS) {
+    if (vkCreateShaderModule(lveDevice.device(), &createinfo, nullptr, shaderModule) != VK_SUCCESS) {
       spdlog::error("failed to create shader module");
       throw std::runtime_error("failed to create shader module");
     }
@@ -151,9 +137,7 @@ namespace lve {
   // Registra il comando di binding della pipeline grafica al command buffer.
   // VK_PIPELINE_BIND_POINT_GRAPHICS specifica che si tratta di una pipeline grafica (a differenza
   // di compute o ray tracing).
-  void LvePipeline::bind(VkCommandBuffer commandBuffer) {
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-  }
+  void LvePipeline::bind(VkCommandBuffer commandBuffer) { vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline); }
 
   PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height) {
     PipelineConfigInfo configInfo{};
@@ -164,8 +148,7 @@ namespace lve {
     // Raggruppa i vertici in geometrie primitive. Con TRIANGLE_LIST ogni gruppo di 3 vertici
     // consecutivi forma un triangolo separato. primitiveRestartEnable permette (se true) di
     // spezzare geometrie continue (strip) inserendo un indice speciale nell'index buffer.
-    configInfo.inputAssemblyInfo.sType =
-        VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+    configInfo.inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
     configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
@@ -230,9 +213,7 @@ namespace lve {
     // ==========================================
     // Controlla come combinare il colore calcolato dal fragment shader con quello già presente nel
     // framebuffer. Maschera dei canali RGBA che possono essere scritti
-    configInfo.colorBlendAttachment.colorWriteMask =
-        VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT |
-        VK_COLOR_COMPONENT_A_BIT;
+    configInfo.colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
     // Blending disabilitato: il nuovo colore sovrascrive direttamente il valore precedente
     configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
     configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Optional
