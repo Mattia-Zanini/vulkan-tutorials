@@ -5,6 +5,11 @@
 #include "lve_swap_chain.hpp"
 #include "vulkan/vulkan_core.h"
 
+// libs
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
+
 // std
 #include <array>
 #include <cstdint>
@@ -14,6 +19,16 @@
 #include <vector>
 
 namespace lve {
+
+  // Struttura dati per le Push Constants: permette di passare piccoli blocchi di dati ai vari stadi dello shader
+  // direttamente tramite il command buffer (senza allocazioni di memoria o descrittori).
+  // Lo standard Vulkan garantisce almeno 128 byte condivisi tra tutti gli stadi.
+  struct SimplePushConstantData {
+    glm::vec2 offset;
+    // In memoria GPU (regole di allineamento std430/std140), un vec3 deve essere allineato a un multiplo di 16 byte (4N).
+    // Usiamo alignas(16) per forzare lo stesso padding di 8 byte anche nella struct host C++, evitando disallineamenti di lettura.
+    alignas(16) glm::vec3 color;
+  };
 
   FirstApp::FirstApp() {
     // Inizializza le risorse Vulkan necessarie: modelli, layout della pipeline, swap chain e command buffers
@@ -68,9 +83,9 @@ namespace lve {
 
   void FirstApp::loadModels() {
     // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
-    glm::vec2 a = { 0.0f, -0.8f };
-    glm::vec2 b = { 0.8f, 0.8f };
-    glm::vec2 c = { -0.8f, 0.8f };
+    glm::vec2 a = { 0.0f, -0.5f };
+    glm::vec2 b = { 0.5f, 0.5f };
+    glm::vec2 c = { -0.5f, 0.5f };
 
     // Definiamo i colori primari (rosso, verde, blu) per ciascun vertice del triangolo
     glm::vec3 red = { 1.0f, 0.0f, 0.0f };
@@ -91,17 +106,23 @@ namespace lve {
   }
 
   void FirstApp::createPipelineLayout() {
+    // Configura il range di push constants: specifica quali stadi dello shader possono accedervi,
+    // l'offset di partenza (0) e la dimensione totale occupata in byte.
+    VkPushConstantRange pushConstantRange{};
+    pushConstantRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT;
+    pushConstantRange.offset = 0;
+    pushConstantRange.size = sizeof(SimplePushConstantData);
+
     // Pipeline Layout: definisce come passare dati agli shader oltre ai dati dei vertici.
     // Include descrittori (texture, Uniform Buffer Objects) e push constants.
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    // Per ora creiamo un layout vuoto (senza set layouts e senza push constants)
+    // Per ora creiamo un layout vuoto per i set di descrittori
     pipelineLayoutInfo.setLayoutCount = 0;
     pipelineLayoutInfo.pSetLayouts = nullptr;
-    // Push constants: metodo estremamente efficiente per inviare piccole quantità di dati agli
-    // shader
-    pipelineLayoutInfo.pushConstantRangeCount = 0;
-    pipelineLayoutInfo.pPushConstantRanges = nullptr;
+    // Collega il range di push constants al layout della pipeline grafica
+    pipelineLayoutInfo.pushConstantRangeCount = 1;
+    pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
     if (vkCreatePipelineLayout(lveDevice.device(), &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
       throw std::runtime_error("failed to create pipeline layout!");
     }
@@ -226,6 +247,10 @@ namespace lve {
   }
 
   void FirstApp::recordCommandBuffer(int imageIndex) {
+    // Contatore per simulare un'animazione incrementale variando l'offset orizzontale a ogni frame registrato
+    static int frame = 0;
+    frame = (frame + 1) % 100;
+
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -248,7 +273,7 @@ namespace lve {
     // Indice 0: Color attachment (colore di sfondo RGB + Alpha)
     // Indice 1: Depth/Stencil attachment (valore di profondità iniziale = 1.0, punto più lontano)
     std::array<VkClearValue, 2> clearValues{};
-    clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+    clearValues[0].color = { 0.01f, 0.01f, 0.01f, 1.0f };
     clearValues[1].depthStencil = { 1.0f, 0 };
     renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
     renderPassInfo.pClearValues = clearValues.data();
@@ -275,7 +300,23 @@ namespace lve {
     // Associa la pipeline grafica, poi associa il vertex buffer del modello ed esegue il draw
     lvePipeline->bind(commandBuffers[imageIndex]);
     lveModel->bind(commandBuffers[imageIndex]);
-    lveModel->draw(commandBuffers[imageIndex]);
+
+    // Disegna 4 copie dello stesso modello semplicemente aggiornando i dati di push constants
+    // (offset per la traslazione e colore) prima di ciascuna draw call
+    for (int j = 0; j < 4; j++) {
+      SimplePushConstantData push{};
+      push.offset = { -0.5f + frame * 0.02f, -0.4f + j * 0.25f };
+      push.color = { 0.0f, 0.0f, 0.2f + 0.2f * j };
+      // Invia i dati delle push constants al command buffer per gli stadi Vertex e Fragment
+      vkCmdPushConstants(
+        commandBuffers[imageIndex],
+        pipelineLayout,
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+        0,
+        sizeof(SimplePushConstantData),
+        &push);
+      lveModel->draw(commandBuffers[imageIndex]);
+    }
 
     // Termina il render pass e conclude la registrazione del command buffer
     vkCmdEndRenderPass(commandBuffers[imageIndex]);
