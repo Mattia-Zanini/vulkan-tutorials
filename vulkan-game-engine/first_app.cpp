@@ -1,5 +1,7 @@
 #include "first_app.hpp"
 #include "GLFW/glfw3.h"
+#include "glm/common.hpp"
+#include "glm/ext/matrix_float2x2.hpp"
 #include "lve_model.hpp"
 #include "lve_pipeline.hpp"
 #include "lve_swap_chain.hpp"
@@ -9,6 +11,7 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
+#include <glm/gtc/constants.hpp>
 
 // std
 #include <array>
@@ -24,6 +27,8 @@ namespace lve {
   // direttamente tramite il command buffer (senza allocazioni di memoria o descrittori).
   // Lo standard Vulkan garantisce almeno 128 byte condivisi tra tutti gli stadi.
   struct SimplePushConstantData {
+    // Matrice di trasformazione 2x2: inizializzata alla matrice identità di default (nessuna scala o rotazione applicata)
+    glm::mat2 transform{ 1.0f };
     glm::vec2 offset;
     // In memoria GPU (regole di allineamento std430/std140), un vec3 deve essere allineato a un multiplo di 16 byte (4N).
     // Usiamo alignas(16) per forzare lo stesso padding di 8 byte anche nella struct host C++, evitando disallineamenti di lettura.
@@ -32,7 +37,7 @@ namespace lve {
 
   FirstApp::FirstApp() {
     // Inizializza le risorse Vulkan necessarie: modelli, layout della pipeline, swap chain e command buffers
-    loadModels();
+    loadGameObjects();
     createPipelineLayout();
     // Crea la swap chain iniziale e la pipeline associata
     recreateSwapChain();
@@ -81,7 +86,7 @@ namespace lve {
     generateSierpinski(vertices, depth - 1, ca, bc, c); // triangolo a sinistra
   }
 
-  void FirstApp::loadModels() {
+  void FirstApp::loadGameObjects() {
     // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
     glm::vec2 a = { 0.0f, -0.5f };
     glm::vec2 b = { 0.5f, 0.5f };
@@ -101,8 +106,20 @@ namespace lve {
       { c, blue }
     };
 
-    // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel
-    lveModel = std::make_unique<LveModel>(lveDevice, vertices);
+    // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel.
+    // Usiamo uno shared_ptr in modo che più entità possano referenziare e condividere la stessa geometria.
+    auto lveModel = std::make_shared<LveModel>(lveDevice, vertices);
+
+    // Creiamo una nuova entità (LveGameObject) tramite il factory method
+    auto triangle = LveGameObject::createGameObject();
+    triangle.model = lveModel; // Assegna il modello condiviso
+    triangle.color = { 0.1f, 0.8f, 0.1f };
+    triangle.transform2d.translation.x = 0.2f;                    // Traslazione orizzontale
+    triangle.transform2d.scale = { 2.0f, 0.5f };                  // Scala non uniforme (allargato in X, compresso in Y)
+    triangle.transform2d.rotation = 0.25f * glm::two_pi<float>(); // Rotazione di 90 gradi (pi / 2 rad)
+
+    // Aggiunge il game object al vettore trasferendone la proprietà tramite std::move (LveGameObject non è copiabile)
+    gameObjects.push_back(std::move(triangle));
   }
 
   void FirstApp::createPipelineLayout() {
@@ -247,10 +264,6 @@ namespace lve {
   }
 
   void FirstApp::recordCommandBuffer(int imageIndex) {
-    // Contatore per simulare un'animazione incrementale variando l'offset orizzontale a ogni frame registrato
-    static int frame = 0;
-    frame = (frame + 1) % 100;
-
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 
@@ -297,31 +310,42 @@ namespace lve {
     vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
     vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
 
-    // Associa la pipeline grafica, poi associa il vertex buffer del modello ed esegue il draw
-    lvePipeline->bind(commandBuffers[imageIndex]);
-    lveModel->bind(commandBuffers[imageIndex]);
-
-    // Disegna 4 copie dello stesso modello semplicemente aggiornando i dati di push constants
-    // (offset per la traslazione e colore) prima di ciascuna draw call
-    for (int j = 0; j < 4; j++) {
-      SimplePushConstantData push{};
-      push.offset = { -0.5f + frame * 0.02f, -0.4f + j * 0.25f };
-      push.color = { 0.0f, 0.0f, 0.2f + 0.2f * j };
-      // Invia i dati delle push constants al command buffer per gli stadi Vertex e Fragment
-      vkCmdPushConstants(
-        commandBuffers[imageIndex],
-        pipelineLayout,
-        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-        0,
-        sizeof(SimplePushConstantData),
-        &push);
-      lveModel->draw(commandBuffers[imageIndex]);
-    }
+    renderGameObjects(commandBuffers[imageIndex]);
 
     // Termina il render pass e conclude la registrazione del command buffer
     vkCmdEndRenderPass(commandBuffers[imageIndex]);
     if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
       throw std::runtime_error("failed to record command buffer!");
+    }
+  }
+
+  void FirstApp::renderGameObjects(VkCommandBuffer commandBuffer) {
+    // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
+    lvePipeline->bind(commandBuffer);
+
+    for (auto& obj : gameObjects) {
+      // Aggiorna continuamente la rotazione per animare l'oggetto a ogni frame (mantiene l'angolo nel range [0, 2*pi])
+      obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+
+      // Prepara i dati delle push constants specifici per questo oggetto
+      SimplePushConstantData push{};
+      push.offset = obj.transform2d.translation;
+      push.color = obj.color;
+      // Calcola la matrice di trasformazione 2x2 (rotazione * scala) tramite il componente
+      push.transform = obj.transform2d.mat2();
+
+      // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
+      vkCmdPushConstants(
+        commandBuffer,
+        pipelineLayout,
+        VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+        0,
+        sizeof(SimplePushConstantData),
+        &push);
+
+      // Collega il vertex buffer del modello ed emette il comando di disegno
+      obj.model->bind(commandBuffer);
+      obj.model->draw(commandBuffer);
     }
   }
 } // namespace lve

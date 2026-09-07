@@ -4,7 +4,8 @@
 #include "lve_pipeline.hpp"
 #include "lve_device.hpp"
 #include "lve_swap_chain.hpp"
-#include "lve_model.hpp"
+#include "lve_game_object.hpp"
+#include "vulkan/vulkan_core.h"
 
 // std
 #include <memory>
@@ -27,7 +28,8 @@ namespace lve {
     void run();
 
   private:
-    void loadModels();
+    // Inizializza i game object (modelli, trasformazioni, colori) dell'applicazione
+    void loadGameObjects();
     void createPipelineLayout();
     void createPipeline();
     void createCommandBuffers();
@@ -38,6 +40,8 @@ namespace lve {
     void recreateSwapChain();
     // Registra i comandi di rendering nel command buffer per ogni frame prima della sottomissione
     void recordCommandBuffer(int imageIndex);
+    // Esegue il ciclo di rendering su tutti i game object attivi registrando i comandi di bind e draw
+    void renderGameObjects(VkCommandBuffer commandBuffer);
 
     // L'ordine di dichiarazione definisce l'ordine di inizializzazione (dall'alto in basso)
     // e di distruzione (in ordine inverso, dal basso in alto). Questo ordine è critico:
@@ -56,7 +60,7 @@ namespace lve {
     VkPipelineLayout pipelineLayout;
     // Command Buffer: registrano i comandi di rendering da inviare alla GPU
     std::vector<VkCommandBuffer> commandBuffers;
-    // Modello: contiene i dati geometrici dei vertici e il relativo vertex buffer allocato sulla GPU
-    std::unique_ptr<LveModel> lveModel;
+    // Collezione dei Game Object presenti nella scena (ciascuno dotato di modello, trasformazione 2D e colore)
+    std::vector<LveGameObject> gameObjects;
   };
 }
