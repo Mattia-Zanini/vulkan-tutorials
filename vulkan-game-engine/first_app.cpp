@@ -110,16 +110,44 @@ namespace lve {
     // Usiamo uno shared_ptr in modo che più entità possano referenziare e condividere la stessa geometria.
     auto lveModel = std::make_shared<LveModel>(lveDevice, vertices);
 
-    // Creiamo una nuova entità (LveGameObject) tramite il factory method
-    auto triangle = LveGameObject::createGameObject();
-    triangle.model = lveModel; // Assegna il modello condiviso
-    triangle.color = { 0.1f, 0.8f, 0.1f };
-    triangle.transform2d.translation.x = 0.2f;                    // Traslazione orizzontale
-    triangle.transform2d.scale = { 2.0f, 0.5f };                  // Scala non uniforme (allargato in X, compresso in Y)
-    triangle.transform2d.rotation = 0.25f * glm::two_pi<float>(); // Rotazione di 90 gradi (pi / 2 rad)
+    // Palette di colori in spazio sRGB (tratta da https://www.color-hex.com/color-palette/5361)
+    std::vector<glm::vec3> colors{
+      { 1.0f, 0.7f, 0.73f },
+      { 1.0f, 0.87f, 0.73f },
+      { 1.0f, 1.0f, 0.73f },
+      { 0.73f, 1.0f, 0.8f },
+      { 0.73, 0.88f, 1.0f }
+    };
 
-    // Aggiunge il game object al vettore trasferendone la proprietà tramite std::move (LveGameObject non è copiabile)
-    gameObjects.push_back(std::move(triangle));
+    // Conversione da spazio sRGB a lineare (gamma correction con esponente 2.2):
+    // i valori RGB definiti dall'utente o dal web sono solitamente in sRGB; convertendoli in spazio lineare
+    // la swap chain (che utilizza un formato sRGB) riapplicherà la curva corretta evitando colori slavati o troppo chiari
+    for (auto& color : colors) {
+      color = glm::pow(color, glm::vec3{ 2.2f });
+    }
+
+    // Istanziazione di 40 game object che condividono lo stesso modello geometrico di base (lveModel).
+    // NOTA SULL'ORDINE VISIVO E IL DEPTH BUFFER:
+    // Anche se lavoriamo in 2D e tutti i triangoli hanno z = 0 nello shader, il triangolo più piccolo (i = 0)
+    // appare sempre "in cima" e non viene coperto dai triangoli più grandi successivi (i > 0).
+    // Questo accade perché:
+    // 1) gameObjects[0] (il più piccolo) viene disegnato per primo e scrive la sua profondità (0.0) nel Depth Buffer.
+    // 2) La pipeline grafica è configurata con VK_COMPARE_OP_LESS per il Depth Test.
+    // 3) Quando i triangoli più grandi successivi provano a colorare i pixel centrali, il loro test di profondità
+    //    diventa (0.0 < 0.0), che è FALSO: di conseguenza i pixel sovrapposti vengono scartati dalla GPU,
+    //    preservando il triangolo iniziale e disegnando solo le porzioni esterne "non ancora occupate".
+    for (int i = 0; i < 40; i++) {
+      // Creiamo una nuova entità (LveGameObject) tramite il factory method
+      auto triangle = LveGameObject::createGameObject();
+      triangle.model = lveModel;                                     // Assegna il modello condiviso (riuso del vertex buffer sulla GPU)
+      triangle.color = colors[i % colors.size()];                    // Alterna ciclicamente i colori della palette
+      triangle.transform2d.translation.x = 0.0f;                     // Traslazione orizzontale fissa
+      triangle.transform2d.scale = glm::vec2(0.5f) + i * 0.025f;     // Scala progressivamente crescente per ogni triangolo
+      triangle.transform2d.rotation = i * glm::pi<float>() * 0.025f; // Rotazione iniziale sfasata
+
+      // Aggiunge il game object al vettore trasferendone la proprietà tramite std::move (LveGameObject non è copiabile)
+      gameObjects.push_back(std::move(triangle));
+    }
   }
 
   void FirstApp::createPipelineLayout() {
@@ -320,6 +348,18 @@ namespace lve {
   }
 
   void FirstApp::renderGameObjects(VkCommandBuffer commandBuffer) {
+    // Fase di Update: aggiorna lo stato dei componenti dei game object per il frame corrente.
+    // Incrementa la velocità di rotazione in maniera progressiva per ogni triangolo (differenziale),
+    // mantenendo il valore dell'angolo entro l'intervallo [0, 2*pi] tramite glm::mod.
+    int i = 0;
+    for (auto& obj : gameObjects) {
+      i += 1;
+      obj.transform2d.rotation = glm::mod<float>(
+        obj.transform2d.rotation + 0.001f * i,
+        2.f * glm::pi<float>());
+    }
+
+    // Fase di Render:
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(commandBuffer);
 
