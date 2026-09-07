@@ -31,7 +31,13 @@ namespace lve {
     void createPipelineLayout();
     void createPipeline();
     void createCommandBuffers();
+    // Dealloca i command buffer dal command pool (usato quando cambia il numero di immagini della swap chain)
+    void freeCommandBuffers();
     void drawFrame();
+    // Ricrea la swap chain (e la pipeline dipendente) quando la finestra viene ridimensionata
+    void recreateSwapChain();
+    // Registra i comandi di rendering nel command buffer per ogni frame prima della sottomissione
+    void recordCommandBuffer(int imageIndex);
 
     // L'ordine di dichiarazione definisce l'ordine di inizializzazione (dall'alto in basso)
     // e di distruzione (in ordine inverso, dal basso in alto). Questo ordine è critico:
@@ -39,9 +45,8 @@ namespace lve {
     // chain.
     LveWindow lveWindow{ WIDTH, HEIGHT, "Hello Vulkan!" };
     LveDevice lveDevice{ lveWindow };
-    // Swap chain: gestisce i frame buffer multipli (double/triple buffering) e sincronizza la
-    // presentazione a schermo
-    LveSwapChain lveSwapChain{ lveDevice, lveWindow.getExtent() };
+    // Swap chain: gestita tramite unique_ptr per consentire la distruzione e ricreazione dinamica al resize della finestra
+    std::unique_ptr<LveSwapChain> lveSwapChain;
 
     // Smart pointer (unique_ptr): gestisce automaticamente la memoria della pipeline senza dover
     // chiamare manualmente delete

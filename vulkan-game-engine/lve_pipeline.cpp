@@ -96,19 +96,6 @@ namespace lve {
     vertexInputInfo.pVertexAttributeDescriptions = attributeDescriptions.data();
     vertexInputInfo.pVertexBindingDescriptions = bindingDescriptions.data();
 
-    // Combina Viewport e Scissor.
-    // Viene creata come variabile locale inizializzata a zero con le parentesi graffe {} (che
-    // garantiscono pNext = nullptr e flags = 0). Non risiede più dentro PipelineConfigInfo per
-    // evitare puntatori penzolanti (dangling pointers): se PipelineConfigInfo venisse copiata, i
-    // puntatori pViewports e pScissors punterebbero ancora ai membri della vecchia struct
-    // deallocata.
-    VkPipelineViewportStateCreateInfo viewportInfo{};
-    viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-    viewportInfo.viewportCount = 1;
-    viewportInfo.pViewports = &configInfo.viewport;
-    viewportInfo.scissorCount = 1;
-    viewportInfo.pScissors = &configInfo.scissor;
-
     // Assemblaggio della struttura principale per la creazione della pipeline grafica
     // Collega tutti gli stadi programmabili e le configurazioni a funzione fissa definite in
     // configInfo
@@ -118,12 +105,12 @@ namespace lve {
     pipelineInfo.pStages = shaderStages;
     pipelineInfo.pVertexInputState = &vertexInputInfo;
     pipelineInfo.pInputAssemblyState = &configInfo.inputAssemblyInfo;
-    pipelineInfo.pViewportState = &viewportInfo;
+    pipelineInfo.pViewportState = &configInfo.viewportInfo;
     pipelineInfo.pRasterizationState = &configInfo.rasterizationInfo;
     pipelineInfo.pMultisampleState = &configInfo.multisampleInfo;
     pipelineInfo.pColorBlendState = &configInfo.colorBlendInfo;
     pipelineInfo.pDepthStencilState = &configInfo.depthStencilInfo;
-    pipelineInfo.pDynamicState = nullptr; // Stati dinamici opzionali (modificabili a runtime senza ricreare la pipeline)
+    pipelineInfo.pDynamicState = &configInfo.dynamicStateInfo; // Stati dinamici opzionali (modificabili a runtime senza ricreare la pipeline)
 
     pipelineInfo.layout = configInfo.pipelineLayout;
     pipelineInfo.renderPass = configInfo.renderPass;
@@ -154,9 +141,7 @@ namespace lve {
   // di compute o ray tracing).
   void LvePipeline::bind(VkCommandBuffer commandBuffer) { vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline); }
 
-  PipelineConfigInfo LvePipeline::defaultPipelineConfigInfo(uint32_t width, uint32_t height) {
-    PipelineConfigInfo configInfo{};
-
+  void LvePipeline::defaultPipelineConfigInfo(PipelineConfigInfo& configInfo) {
     // ==========================================
     // 1° STADIO: INPUT ASSEMBLER
     // ==========================================
@@ -167,23 +152,13 @@ namespace lve {
     configInfo.inputAssemblyInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
     configInfo.inputAssemblyInfo.primitiveRestartEnable = VK_FALSE;
 
-    // ==========================================
-    // VIEWPORT & SCISSOR
-    // ==========================================
-    // Il Viewport trasforma le coordinate normalizzate di gl_Position ([-1, 1]) nello spazio pixel
-    // dell'immagine (width, height). minDepth e maxDepth specificano l'intervallo di profondità per
-    // la coordinata Z.
-    configInfo.viewport.x = 0.0f;
-    configInfo.viewport.y = 0.0f;
-    configInfo.viewport.width = static_cast<float>(width);
-    configInfo.viewport.height = static_cast<float>(height);
-    configInfo.viewport.minDepth = 0.0f;
-    configInfo.viewport.maxDepth = 1.0f;
-
-    // Lo Scissor definisce un rettangolo di ritaglio: i pixel al di fuori vengono scartati invece
-    // di essere ridimensionati.
-    configInfo.scissor.offset = { 0, 0 };
-    configInfo.scissor.extent = { width, height };
+    // Viewport e Scissor dinamici: impostiamo pViewports e pScissors a nullptr
+    // poiché le loro dimensioni e offset effettivi verranno forniti dinamicamente nel command buffer a ogni frame
+    configInfo.viewportInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+    configInfo.viewportInfo.viewportCount = 1;
+    configInfo.viewportInfo.pViewports = nullptr;
+    configInfo.viewportInfo.scissorCount = 1;
+    configInfo.viewportInfo.pScissors = nullptr;
 
     // ==========================================
     // 3° STADIO: RASTERIZATION
@@ -265,6 +240,15 @@ namespace lve {
     configInfo.depthStencilInfo.front = {}; // Opzionale
     configInfo.depthStencilInfo.back = {};  // Opzionale
 
-    return configInfo;
+    // ==========================================
+    // STATI DINAMICI (DYNAMIC STATES)
+    // ==========================================
+    // Segnala alla pipeline che Viewport e Scissor non sono fissi ma verranno configurati
+    // dinamicamente durante la registrazione del command buffer (evitando di dover ricreare la pipeline al resize della finestra)
+    configInfo.dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+    configInfo.dynamicStateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+    configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStateEnables.data();
+    configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
+    configInfo.dynamicStateInfo.flags = 0;
   }
 }

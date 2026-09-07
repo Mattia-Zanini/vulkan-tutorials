@@ -7,6 +7,7 @@
 
 // std lib headers
 #include <vector>
+#include <memory>
 
 namespace lve {
   // Swap Chain: serie di frame buffer utilizzati per mostrare le immagini a video (window surface).
@@ -22,6 +23,8 @@ namespace lve {
     static constexpr int MAX_FRAMES_IN_FLIGHT = 2;
 
     LveSwapChain(LveDevice& deviceRef, VkExtent2D windowExtent);
+    // Costruttore con passaggio della vecchia swap chain (permette di riutilizzare risorse e fluidificare il resize)
+    LveSwapChain(LveDevice& deviceRef, VkExtent2D windowExtent, std::shared_ptr<LveSwapChain> previous);
     ~LveSwapChain();
 
     LveSwapChain(const LveSwapChain&) = delete;
@@ -43,6 +46,7 @@ namespace lve {
     VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
 
   private:
+    void init();
     void createSwapChain();
     void createImageViews();
     void createDepthResources();
@@ -71,6 +75,8 @@ namespace lve {
     VkExtent2D windowExtent;
 
     VkSwapchainKHR swapChain;
+    // Riferimento alla precedente swap chain utilizzato solo durante la fase di creazione/inizializzazione
+    std::shared_ptr<LveSwapChain> oldSwapChain;
 
     std::vector<VkSemaphore> imageAvailableSemaphores;
     std::vector<VkSemaphore> renderFinishedSemaphores;

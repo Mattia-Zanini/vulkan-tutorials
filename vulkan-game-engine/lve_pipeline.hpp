@@ -10,38 +10,29 @@
 namespace lve {
   // Struct per configurare i vari stadi a funzione fissa (Fixed Function) della pipeline grafica
   struct PipelineConfigInfo {
-    // Viewport: descrive la trasformazione dalle coordinate normalizzate di output [-1, 1] ai pixel
-    // dell'immagine target
-    VkViewport viewport;
+    PipelineConfigInfo(const PipelineConfigInfo&) = delete;
+    PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 
-    // Scissor: definisce un rettangolo di ritaglio; qualunque pixel al di fuori viene scartato
-    VkRect2D scissor;
-
-    // 1° stadio (Input Assembler): raggruppa la lista di vertici grezzi in geometrie (es.
-    // triangoli, linee, punti)
+    VkPipelineViewportStateCreateInfo viewportInfo;
+    // 1° stadio (Input Assembler): raggruppa la lista di vertici grezzi in geometrie (es. triangoli, linee, punti)
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;
-
-    // 3° stadio (Rasterizer): scompone la geometria in frammenti per ogni pixel e gestisce culling,
-    // fill mode e depth clamp
+    // 3° stadio (Rasterizer): scompone la geometria in frammenti per ogni pixel e gestisce culling, fill mode e depth clamp
     VkPipelineRasterizationStateCreateInfo rasterizationInfo;
-
     // Configura il multisampling (MSAA) per l'antialiasing lungo i bordi della geometria
     VkPipelineMultisampleStateCreateInfo multisampleInfo;
-
-    // Configurazione del blending per il singolo attachment (come mescolare il colore del frammento
-    // col framebuffer)
+    // Configurazione del blending per il singolo attachment (come mescolare il colore del frammento col framebuffer)
     VkPipelineColorBlendAttachmentState colorBlendAttachment;
-
     // Configurazione globale del color blending
     VkPipelineColorBlendStateCreateInfo colorBlendInfo;
-
-    // Configura il depth testing (scarta i frammenti coperti da oggetti più vicini usando il depth
-    // buffer) e lo stencil test
+    // Configura il depth testing (scarta i frammenti coperti da oggetti più vicini usando il depth buffer) e lo stencil test
     VkPipelineDepthStencilStateCreateInfo depthStencilInfo;
+
+    // Elenco degli stati dinamici abilitati (es. Viewport e Scissor modificabili nel command buffer senza ricreare la pipeline)
+    std::vector<VkDynamicState> dynamicStateEnables;
+    VkPipelineDynamicStateCreateInfo dynamicStateInfo;
 
     // Risorse esterne (uniform buffer, push constants, descriptor set) accessibili dagli shader
     VkPipelineLayout pipelineLayout = nullptr;
-
     // Render pass e relativo subpass in cui verrà eseguita la pipeline
     VkRenderPass renderPass = nullptr;
     uint32_t subpass = 0;
@@ -49,7 +40,11 @@ namespace lve {
 
   class LvePipeline {
   public:
-    LvePipeline(LveDevice& device, const std::string& vertFilePath, const std::string& fragFilePath, const PipelineConfigInfo& configInfo);
+    LvePipeline(
+      LveDevice& device,
+      const std::string& vertFilePath,
+      const std::string& fragFilePath,
+      const PipelineConfigInfo& configInfo);
     ~LvePipeline();
 
     LvePipeline(const LvePipeline&) = delete;
@@ -57,7 +52,7 @@ namespace lve {
 
     // Lega la pipeline grafica al command buffer per le successive operazioni di disegno
     void bind(VkCommandBuffer commandBuffer);
-    static PipelineConfigInfo defaultPipelineConfigInfo(uint32_t width, uint32_t height);
+    static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
 
   private:
     static std::vector<char> readFile(const std::string& filePath);

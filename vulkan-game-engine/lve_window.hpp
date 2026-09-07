@@ -24,13 +24,22 @@ namespace lve {
     // segno). È necessario il cast esplicito a uint32_t poiché GLFW memorizza le dimensioni come
     // int con segno.
     VkExtent2D getExtent() { return { static_cast<uint32_t>(width), static_cast<uint32_t>(height) }; }
+
     void createWindowSurface(VkInstance instance, VkSurfaceKHR* surface);
+    // Restituisce true se le dimensioni della finestra sono cambiate
+    bool wasWindowResized() { return framebufferResized; }
+    // Resetta il flag di resize dopo che la swap chain è stata ricreata
+    void resetWindowResizedFlag() { framebufferResized = false; }
 
   private:
+    // Callback invocata da GLFW ogni volta che le dimensioni del framebuffer della finestra cambiano
+    static void framebufferResizedCallBack(GLFWwindow* window, int width, int height);
     void initWindow();
 
-    const int width;
-    const int height;
+    // width e height non sono più const poiché la finestra può essere ridimensionata a runtime
+    int width;
+    int height;
+    bool framebufferResized = false;
 
     std::string windowName;
     GLFWwindow* window;

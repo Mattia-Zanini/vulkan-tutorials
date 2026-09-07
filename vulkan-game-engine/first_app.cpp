@@ -1,21 +1,26 @@
 #include "first_app.hpp"
+#include "GLFW/glfw3.h"
 #include "lve_model.hpp"
+#include "lve_pipeline.hpp"
+#include "lve_swap_chain.hpp"
 #include "vulkan/vulkan_core.h"
 
 // std
 #include <array>
+#include <cstdint>
 #include <memory>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace lve {
 
   FirstApp::FirstApp() {
-    // Inizializza le risorse Vulkan necessarie: layout della pipeline, la pipeline grafica e i
-    // command buffers
+    // Inizializza le risorse Vulkan necessarie: modelli, layout della pipeline, swap chain e command buffers
     loadModels();
     createPipelineLayout();
-    createPipeline();
+    // Crea la swap chain iniziale e la pipeline associata
+    recreateSwapChain();
     createCommandBuffers();
   }
 
@@ -103,19 +108,51 @@ namespace lve {
   }
 
   void FirstApp::createPipeline() {
+    assert(lveSwapChain != nullptr && "Cannot create pipeline before swap chain");
+    assert(pipelineLayout != nullptr && "Cannot create pipeline before pipeline layout");
+
+    PipelineConfigInfo pipelineConfig{};
     // Utilizziamo le dimensioni (width/height) della swap chain e non della finestra:
     // su display ad alta densità (es. Retina su macOS), le coordinate finestra differiscono dal
     // numero reale di pixel.
-    auto pipelineConfig = LvePipeline::defaultPipelineConfigInfo(lveSwapChain.width(), lveSwapChain.height());
+    LvePipeline::defaultPipelineConfigInfo(pipelineConfig);
 
     // Il render pass funge da "blueprint" che descrive la struttura del framebuffer (attachment di
     // colore, depth, ecc.) La pipeline deve sapere in anticipo con quale layout di render pass sarà
     // compatibile per produrre l'output corretto.
-    pipelineConfig.renderPass = lveSwapChain.getRenderPass();
+    pipelineConfig.renderPass = lveSwapChain->getRenderPass();
     pipelineConfig.pipelineLayout = pipelineLayout;
 
     // Creiamo l'istanza della pipeline mediante unique_ptr
     lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
+  }
+
+  void FirstApp::recreateSwapChain() {
+    auto extent = lveWindow.getExtent();
+    // Gestione della minimizzazione della finestra: finché una delle dimensioni è 0,
+    // mettiamo in pausa il programma e attendiamo nuovi eventi GLFW
+    while (extent.width == 0 || extent.height == 0) {
+      extent = lveWindow.getExtent();
+      glfwWaitEvents();
+    }
+
+    // Attende che la GPU abbia terminato l'esecuzione dei comandi prima di distruggere o ricreare la swap chain
+    vkDeviceWaitIdle(lveDevice.device());
+
+    if (lveSwapChain == nullptr) {
+      lveSwapChain = std::make_unique<LveSwapChain>(lveDevice, extent);
+    } else {
+      // Ricrea la swap chain passando la precedente (tramite std::move) per agevolare il riuso delle risorse
+      lveSwapChain = std::make_unique<LveSwapChain>(lveDevice, extent, std::move(lveSwapChain));
+      // Se il numero di immagini della nuova swap chain differisce, riallochiamo i command buffer
+      if (lveSwapChain->imageCount() != commandBuffers.size()) {
+        freeCommandBuffers();
+        createCommandBuffers();
+      }
+    }
+
+    // Ricrea la pipeline (al momento necessaria finché non verificheremo la piena compatibilità dei render pass)
+    createPipeline();
   }
 
   void FirstApp::createCommandBuffers() {
@@ -123,7 +160,7 @@ namespace lve {
     // ma vengono registrati in un command buffer e poi sottomessi alla coda del device.
     // Creiamo un command buffer per ciascuna immagine della swap chain (relazione 1:1 con i
     // framebuffer), registrandoli una sola volta all'avvio per poi riutilizzarli a ogni frame.
-    commandBuffers.resize(lveSwapChain.imageCount());
+    commandBuffers.resize(lveSwapChain->imageCount());
 
     VkCommandBufferAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -139,70 +176,111 @@ namespace lve {
     if (vkAllocateCommandBuffers(lveDevice.device(), &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
       throw std::runtime_error("failed to allocate command buffers!");
     }
+  }
 
-    // Registrazione dei comandi di disegno per ciascun command buffer
-    for (int i = 0; i < commandBuffers.size(); i++) {
-      VkCommandBufferBeginInfo beginInfo{};
-      beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+  void FirstApp::freeCommandBuffers() {
+    // Rilascia la memoria di tutti i command buffer precedentemente allocati nel command pool
+    vkFreeCommandBuffers(
+      lveDevice.device(),
+      lveDevice.getCommandPool(),
+      static_cast<uint32_t>(commandBuffers.size()),
+      commandBuffers.data());
 
-      if (vkBeginCommandBuffer(commandBuffers[i], &beginInfo) != VK_SUCCESS) {
-        throw std::runtime_error("failed to begin recording command buffer!");
-      }
-
-      // Configurazione dell'inizio del Render Pass
-      VkRenderPassBeginInfo renderPassInfo{};
-      renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
-      renderPassInfo.renderPass = lveSwapChain.getRenderPass();
-      renderPassInfo.framebuffer = lveSwapChain.getFrameBuffer(i);
-
-      // Render area: definisce la regione in cui avvengono i load/store degli shader.
-      // Si utilizza l'extent della swap chain (pixel reali) e non quello della finestra.
-      renderPassInfo.renderArea.offset = { 0, 0 };
-      renderPassInfo.renderArea.extent = lveSwapChain.getSwapChainExtent();
-
-      // Valori di clear iniziali per gli attachment definiti nel Render Pass:
-      // Indice 0: Color attachment (colore di sfondo RGB + Alpha)
-      // Indice 1: Depth/Stencil attachment (valore di profondità iniziale = 1.0, punto più lontano)
-      std::array<VkClearValue, 2> clearValues{};
-      clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
-      clearValues[1].depthStencil = { 1.0f, 0 };
-      renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
-      renderPassInfo.pClearValues = clearValues.data();
-
-      // Inizio del render pass. VK_SUBPASS_CONTENTS_INLINE indica che i comandi del render pass
-      // sono incorporati direttamente in questo primary command buffer (senza uso di secondary
-      // command buffer).
-      vkCmdBeginRenderPass(commandBuffers[i], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-      // Associa la pipeline grafica, poi associa il vertex buffer del modello ed esegue il draw
-      lvePipeline->bind(commandBuffers[i]);
-      lveModel->bind(commandBuffers[i]);
-      lveModel->draw(commandBuffers[i]);
-
-      // Termina il render pass e conclude la registrazione del command buffer
-      vkCmdEndRenderPass(commandBuffers[i]);
-      if (vkEndCommandBuffer(commandBuffers[i]) != VK_SUCCESS) {
-        throw std::runtime_error("failed to record command buffer!");
-      }
-    }
+    commandBuffers.clear();
   }
 
   void FirstApp::drawFrame() {
     uint32_t imageIndex;
     // Ottiene l'indice della prossima immagine disponibile nella swap chain su cui renderizzare.
-    // Gestisce automaticamente la sincronizzazione CPU/GPU (fences e semafori) per double/triple
-    // buffering.
-    auto result = lveSwapChain.acquireNextImage(&imageIndex);
+    // Gestisce automaticamente la sincronizzazione CPU/GPU (fences e semafori) per double/triple buffering.
+    auto result = lveSwapChain->acquireNextImage(&imageIndex);
+
+    // Se la swap chain non è più valida (es. resize immediato della finestra), la ricrea ed esce dal frame
+    if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+      recreateSwapChain();
+      return;
+    }
+
     if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
       throw std::runtime_error("failed to acquire swap chain image!");
     }
 
+    // Registra i comandi di rendering per l'immagine corrente prima della sottomissione
+    recordCommandBuffer(imageIndex);
+
     // Invia il command buffer corrispondente alla graphics queue del device ed esegue il comando.
-    // La swap chain presenterà poi a schermo l'immagine renderizzata al momento opportuno (in base
-    // al present mode).
-    result = lveSwapChain.submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+    // La swap chain presenterà poi a schermo l'immagine renderizzata al momento opportuno (in base al present mode).
+    result = lveSwapChain->submitCommandBuffers(&commandBuffers[imageIndex], &imageIndex);
+
+    // Se la superficie è cambiata, è subottimale oppure è stato intercettato l'evento di resize dalla callback GLFW,
+    // resettiamo il flag e ricreiamo la swap chain
+    if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || lveWindow.wasWindowResized()) {
+      lveWindow.resetWindowResizedFlag();
+      recreateSwapChain();
+      return;
+    }
+
     if (result != VK_SUCCESS) {
       throw std::runtime_error("failed to present swap chain image!");
+    }
+  }
+
+  void FirstApp::recordCommandBuffer(int imageIndex) {
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+
+    if (vkBeginCommandBuffer(commandBuffers[imageIndex], &beginInfo) != VK_SUCCESS) {
+      throw std::runtime_error("failed to begin recording command buffer!");
+    }
+
+    // Configurazione dell'inizio del Render Pass
+    VkRenderPassBeginInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
+    renderPassInfo.renderPass = lveSwapChain->getRenderPass();
+    renderPassInfo.framebuffer = lveSwapChain->getFrameBuffer(imageIndex);
+
+    // Render area: definisce la regione in cui avvengono i load/store degli shader.
+    // Si utilizza l'extent della swap chain (pixel reali) e non quello della finestra.
+    renderPassInfo.renderArea.offset = { 0, 0 };
+    renderPassInfo.renderArea.extent = lveSwapChain->getSwapChainExtent();
+
+    // Valori di clear iniziali per gli attachment definiti nel Render Pass:
+    // Indice 0: Color attachment (colore di sfondo RGB + Alpha)
+    // Indice 1: Depth/Stencil attachment (valore di profondità iniziale = 1.0, punto più lontano)
+    std::array<VkClearValue, 2> clearValues{};
+    clearValues[0].color = { 0.1f, 0.1f, 0.1f, 1.0f };
+    clearValues[1].depthStencil = { 1.0f, 0 };
+    renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
+    renderPassInfo.pClearValues = clearValues.data();
+
+    // Inizio del render pass. VK_SUBPASS_CONTENTS_INLINE indica che i comandi del render pass
+    // sono incorporati direttamente in questo primary command buffer (senza uso di secondary
+    // command buffer).
+    vkCmdBeginRenderPass(commandBuffers[imageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+    // Configurazione dinamica di Viewport e Scissor:
+    // Poiché sono stati dichiarati come stati dinamici (VK_DYNAMIC_STATE_VIEWPORT/SCISSOR),
+    // possiamo aggiornarne le dimensioni in tempo reale nel command buffer per adattarli alla swap chain
+    VkViewport viewport{};
+    viewport.x = 0.0f;
+    viewport.y = 0.0f;
+    viewport.width = static_cast<float>(lveSwapChain->getSwapChainExtent().width);
+    viewport.height = static_cast<float>(lveSwapChain->getSwapChainExtent().height);
+    viewport.minDepth = 0.0f;
+    viewport.maxDepth = 1.0f;
+    VkRect2D scissor{ { 0, 0 }, lveSwapChain->getSwapChainExtent() };
+    vkCmdSetViewport(commandBuffers[imageIndex], 0, 1, &viewport);
+    vkCmdSetScissor(commandBuffers[imageIndex], 0, 1, &scissor);
+
+    // Associa la pipeline grafica, poi associa il vertex buffer del modello ed esegue il draw
+    lvePipeline->bind(commandBuffers[imageIndex]);
+    lveModel->bind(commandBuffers[imageIndex]);
+    lveModel->draw(commandBuffers[imageIndex]);
+
+    // Termina il render pass e conclude la registrazione del command buffer
+    vkCmdEndRenderPass(commandBuffers[imageIndex]);
+    if (vkEndCommandBuffer(commandBuffers[imageIndex]) != VK_SUCCESS) {
+      throw std::runtime_error("failed to record command buffer!");
     }
   }
 } // namespace lve
