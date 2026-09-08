@@ -1,6 +1,7 @@
 #include "simple_render_system.hpp"
 #include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
+#include <regex>
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -86,6 +87,11 @@ namespace lve {
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(commandBuffer);
 
+    // Ottimizzazione: precalcola la moltiplicazione projection * view una sola volta per frame,
+    // invece di farlo per ogni oggetto. Questo sposta gli oggetti dalle coordinate del mondo
+    // alle coordinate della camera, e infine nello spazio di clip (frustum).
+    auto projectionView = camera.getProjection() * camera.getView();
+
     for (auto& obj : gameObjects) {
       // Aggiorna continuamente le componenti di rotazione per animare l'oggetto:
       // rotazione principale attorno all'asse Y (verticale) e rotazione secondaria attorno all'asse X a metà velocità
@@ -95,10 +101,11 @@ namespace lve {
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
       push.color = obj.color;
-      // Combina la matrice di proiezione della camera con la matrice di trasformazione del modello (proiezione * modelMatrix).
+      // Combina projectionView (projection * view) con la matrice di trasformazione del modello (modelMatrix).
+      // Sequenza: Model -> View -> Projection
       // Nota: in futuro, con gli Uniform Buffer Objects (UBO), la matrice di proiezione verrà inviata separatamente
       // evitando di dover calcolare la moltiplicazione per ciascun oggetto sulla CPU.
-      push.transform = camera.getProjection() * obj.transform.mat4();
+      push.transform = projectionView * obj.transform.mat4();
 
       // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
       vkCmdPushConstants(

@@ -3,8 +3,8 @@
 // std headers
 #include <cstring>
 #include <set>
-#include <unordered_set>
 #include <spdlog/spdlog.h>
+#include <unordered_set>
 
 namespace lve {
 

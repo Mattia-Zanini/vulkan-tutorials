@@ -2,11 +2,11 @@
 #include "lve_model.hpp"
 
 #include <cstdint>
+#include <fmt/format.h>
 #include <fstream>
 #include <iostream>
-#include <fmt/format.h>
-#include <stdexcept>
 #include <spdlog/spdlog.h>
+#include <stdexcept>
 
 namespace lve {
   LvePipeline::LvePipeline(

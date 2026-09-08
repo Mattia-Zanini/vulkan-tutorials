@@ -1,5 +1,6 @@
 #include "first_app.hpp"
 
+#include "glm/ext/vector_float3.hpp"
 #include "glm/trigonometric.hpp"
 #include "lve_camera.hpp"
 #include "lve_model.hpp"
@@ -29,6 +30,10 @@ namespace lve {
     SimpleRenderSystem simpleRenderSystem{ lveDevice, lveRenderer.getSwapChainRenderPass() };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
+    // Imposta la vista specificando la direzione o un punto bersaglio (target)
+    // In questo caso, posiziona la telecamera in (-1, -2, 2) e la punta verso (0, 0, 1.5)
+    // camera.setViewDirection(glm::vec3{ 0.f }, glm::vec3{ 0.5f, 0.f, 1.f });
+    camera.setViewTarget(glm::vec3{ -1.f, -2.f, 2.f }, glm::vec3{ 0.f, 0.f, 1.5f });
 
     while (!lveWindow.shouldClose()) {
       glfwPollEvents();
