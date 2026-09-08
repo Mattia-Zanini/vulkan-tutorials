@@ -2,12 +2,12 @@
 
 #include "lve_device.hpp"
 
-// vulkan headers
+// libs
 #include <vulkan/vulkan.h>
 
-// std lib headers
-#include <vector>
+// std
 #include <memory>
+#include <vector>
 
 namespace lve {
   // Swap Chain: serie di frame buffer utilizzati per mostrare le immagini a video (window surface).
@@ -45,6 +45,12 @@ namespace lve {
     VkResult acquireNextImage(uint32_t* imageIndex);
     VkResult submitCommandBuffers(const VkCommandBuffer* buffers, uint32_t* imageIndex);
 
+    // Verifica la compatibilità dei formati (colore e profondità) tra la swap chain corrente e una nuova.
+    // Se i formati coincidono, il render pass esistente rimane compatibile e le pipeline grafiche non necessitano di essere ricreate.
+    bool compareSwapFormats(const LveSwapChain& swapChain) const {
+      return swapChain.swapChainDepthFormat == swapChainDepthFormat && swapChain.swapChainImageFormat == swapChainImageFormat;
+    }
+
   private:
     void init();
     void createSwapChain();
@@ -60,6 +66,8 @@ namespace lve {
     VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities);
 
     VkFormat swapChainImageFormat;
+    // Formato dell'attachment di profondità della swap chain (tracciato per verificare la compatibilità del render pass al resize)
+    VkFormat swapChainDepthFormat;
     VkExtent2D swapChainExtent;
 
     std::vector<VkFramebuffer> swapChainFramebuffers;

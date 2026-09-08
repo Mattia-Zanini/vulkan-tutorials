@@ -59,7 +59,7 @@ namespace lve {
     LveGameObject& operator=(LveGameObject&&) = default;
 
     // Restituisce l'ID univoco dell'oggetto
-    const id_t getid() { return id; }
+    id_t getid() const { return id; }
 
     // Riferimento condiviso al modello: più game object possono condividere lo stesso vertex buffer allocato sulla GPU
     std::shared_ptr<LveModel> model{};
