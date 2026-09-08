@@ -126,7 +126,7 @@ $$
 Nei chip grafici moderni, il passaggio di divisione per $w$ (**Perspective Divide**) è cablato a livello hardware e viene eseguito automaticamente subito dopo il vertex shader sull'output `gl_Position`:
 
 $$
-\text{gl_Position} = \begin{bmatrix} x_{\text{clip}} \\ y_{\text{clip}} \\ z_{\text{clip}} \\ w_{\text{clip}} \end{bmatrix} \xrightarrow{\text{Hardware}} \mathbf{v}_{\text{NDC}} = \begin{bmatrix} x_{\text{clip}} / w_{\text{clip}} \\ y_{\text{clip}} / w_{\text{clip}} \\ z_{\text{clip}} / w_{\text{clip}} \end{bmatrix}
+gl_{\text{Position}} = \begin{bmatrix} x_{\text{clip}} \\ y_{\text{clip}} \\ z_{\text{clip}} \\ w_{\text{clip}} \end{bmatrix} \xrightarrow{\text{Hardware}} \mathbf{v}_{\text{NDC}} = \begin{bmatrix} x_{\text{clip}} / w_{\text{clip}} \\ y_{\text{clip}} / w_{\text{clip}} \\ z_{\text{clip}} / w_{\text{clip}} \end{bmatrix}
 $$
 
 Se progettiamo la matrice affinché la quarta riga imposti:
