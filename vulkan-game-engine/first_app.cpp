@@ -1,5 +1,7 @@
 #include "first_app.hpp"
 
+#include "glm/trigonometric.hpp"
+#include "lve_camera.hpp"
 #include "lve_model.hpp"
 #include "simple_render_system.hpp"
 #include "vulkan/vulkan_core.h"
@@ -17,10 +19,7 @@
 
 namespace lve {
 
-  FirstApp::FirstApp() {
-    // Inizializza le risorse Vulkan necessarie: modelli, layout della pipeline, swap chain e command buffers
-    loadGameObjects();
-  }
+  FirstApp::FirstApp() { loadGameObjects(); }
 
   FirstApp::~FirstApp() {}
 
@@ -28,15 +27,28 @@ namespace lve {
     // Sistema di rendering: incapsula pipeline, layout e logica di disegno per i game object,
     // configurandosi con il render pass fornito dal renderer
     SimpleRenderSystem simpleRenderSystem{ lveDevice, lveRenderer.getSwapChainRenderPass() };
+    // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
+    LveCamera camera{};
 
     while (!lveWindow.shouldClose()) {
       glfwPollEvents();
+
+      // Calcola l'aspect ratio corrente della finestra/swap chain per compensare le distorsioni dovute al ridimensionamento
+      float aspect = lveRenderer.getAspectRatio();
+      // Proiezione ortografica alternativa (decommentabile per test):
+      // camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
+
+      // Configura la matrice di proiezione prospettica:
+      // fovy: campo visivo verticale (Field of View) in radianti (50 gradi)
+      // aspect: rapporto di aspetto larghezza/altezza
+      // near e far: piani di clipping vicino (0.1) e lontano (10.0)
+      camera.setPerspectiveProjection(glm::radians(50.f), aspect, 0.1f, 10.f);
 
       // beginFrame restituisce nullptr se la swap chain viene ricreata (es. resize della finestra);
       // in tal caso saltiamo la registrazione e sottomissione dei comandi per questo frame
       if (auto commandBuffer = lveRenderer.beginFrame()) {
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
-        simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects);
+        simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
         lveRenderer.endSwapChainRenderPass(commandBuffer);
         lveRenderer.endFrame();
       }
@@ -140,12 +152,10 @@ namespace lve {
     // Crea un game object per rappresentare il cubo 3D
     auto cube = LveGameObject::createGameObject();
     cube.model = lveModel;
-    // Trasla il cubo a z = 0.5 e lo scala a 0.5:
-    // il viewing volume canonico di Vulkan copre x in [-1, 1], y in [-1, 1] e z in [0, 1].
-    // Scalando il cubo a metà dimensione e traslandolo a z = 0.5 viene centrato interamente
-    // all'interno del volume visibile; lasciandolo all'origine (z = 0), la metà frontale
-    // cadrebbe fuori (z < 0) e verrebbe tagliata (clipped) dal frustum di visualizzazione.
-    cube.transform.translation = { .0f, .0f, .5f };
+    // Con la proiezione prospettica, gli oggetti a valori di Z maggiori appaiono più lontani e rimpiccioliti.
+    // Posizionando il cubo a z = 1.5 (invece di 0.5), esso si trova a una distanza visiva confortevole all'interno
+    // del frustum compreso tra near (0.1) e far (10.0), mantenendo all'incirca le dimensioni percepite in precedenza.
+    cube.transform.translation = { .0f, .0f, 1.5f };
     cube.transform.scale = { .5f, .5f, .5f };
     gameObjects.push_back(std::move(cube));
   }

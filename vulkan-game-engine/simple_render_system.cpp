@@ -80,7 +80,9 @@ namespace lve {
     lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
   }
 
-  void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer, std::vector<LveGameObject>& gameObjects) {
+  void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer,
+                                             std::vector<LveGameObject>& gameObjects,
+                                             const LveCamera& camera) {
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(commandBuffer);
 
@@ -93,8 +95,10 @@ namespace lve {
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
       push.color = obj.color;
-      // Calcola la matrice di trasformazione affine 4x4 combinata (Translate * Ry * Rx * Rz * Scale)
-      push.transform = obj.transform.mat4();
+      // Combina la matrice di proiezione della camera con la matrice di trasformazione del modello (proiezione * modelMatrix).
+      // Nota: in futuro, con gli Uniform Buffer Objects (UBO), la matrice di proiezione verrà inviata separatamente
+      // evitando di dover calcolare la moltiplicazione per ciascun oggetto sulla CPU.
+      push.transform = camera.getProjection() * obj.transform.mat4();
 
       // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
       vkCmdPushConstants(

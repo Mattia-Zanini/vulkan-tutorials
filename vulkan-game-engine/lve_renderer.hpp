@@ -28,6 +28,8 @@ namespace lve {
     bool isFrameInProgress() const { return isFrameStarted; };
     // Fornisce l'accesso al render pass della swap chain (necessario per configurare le pipeline nei vari render system)
     VkRenderPass getSwapChainRenderPass() const { return lveSwapChain->getRenderPass(); };
+    // Restituisce l'aspect ratio (larghezza / altezza) corrente della swap chain per calcolare le matrici di proiezione
+    float getAspectRatio() const { return lveSwapChain->extentAspectRatio(); };
     // Restituisce il command buffer per il frame corrente (assicurandosi che il frame sia iniziato)
     VkCommandBuffer getCurrentCommandBuffer() const {
       assert(isFrameStarted && "Cannot get command buffer when frame not in progress");

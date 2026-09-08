@@ -1,5 +1,6 @@
 #pragma once
 
+#include "lve_camera.hpp"
 #include "lve_device.hpp"
 #include "lve_game_object.hpp"
 #include "lve_pipeline.hpp"
@@ -23,8 +24,11 @@ namespace lve {
     SimpleRenderSystem(const SimpleRenderSystem&) = delete;
     SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
-    // Registra i comandi di rendering per ciascun game object compatibile presente nella lista
-    void renderGameObjects(VkCommandBuffer commandBuffer, std::vector<LveGameObject>& gameObjects);
+    // Registra i comandi di rendering per ciascun game object compatibile, applicando la matrice di proiezione della camera
+    void renderGameObjects(
+      VkCommandBuffer commandBuffer,
+      std::vector<LveGameObject>& gameObjects,
+      const LveCamera& camera);
 
   private:
     void createPipelineLayout();
