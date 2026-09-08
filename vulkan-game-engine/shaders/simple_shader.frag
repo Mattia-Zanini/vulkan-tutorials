@@ -1,18 +1,17 @@
 #version 450
 
-// Riceve il colore interpolato dallo stadio di rasterizzazione (corrisponde a layout(location = 0) out nello vertex shader).
-// Ciò che conta è che location e tipo di dato coincidano (il nome della variabile può differire).
+// Riceve il colore interpolato dal vertex shader tramite lo stadio di rasterizzazione
+layout(location = 0) in vec3 fragColor;
 layout(location = 0) out vec4 outColor;
 
 // Blocco di Push Constants accessibile nel Fragment Shader (stessa definizione e layout di memoria del vertex shader)
 layout(push_constant) uniform Push {
-  mat2 transform; // Mantiene allineato il layout di memoria con il blocco push constants del vertex shader
-  vec2 offset;
+  mat4 transform; // Mantiene allineato il layout di memoria con il blocco push constants del vertex shader
   vec3 color;
 }
 push;
 
 void main() {
-  // Assegna il colore fornito direttamente tramite push constant con canale Alpha = 1.0
-  outColor = vec4(push.color, 1.0);
+  // Utilizza il colore per-vertice interpolato (fragColor) con canale Alpha = 1.0
+  outColor = vec4(fragColor, 1.0);
 }

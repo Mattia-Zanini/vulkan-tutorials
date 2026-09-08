@@ -16,9 +16,9 @@ namespace lve {
   // Gestisce il caricamento dei vertici dalla CPU, l'allocazione della memoria e il trasferimento su GPU (Vulkan buffer).
   class LveModel {
   public:
-    // Rappresenta i singoli vertici e i relativi attributi (posizione 2D e colore RGB interleaved).
+    // Rappresenta i singoli vertici e i relativi attributi (posizione 3D e colore RGB interleaved).
     struct Vertex {
-      glm::vec2 position;
+      glm::vec3 position; // Posizione nello spazio tridimensionale (x, y, z)
       glm::vec3 color;
 
       // Descrive il binding (rate di avanzamento nello stream dei dati, stride in byte tra vertici successivi).

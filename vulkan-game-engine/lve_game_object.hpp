@@ -1,41 +1,60 @@
 #pragma once
 
-#include "glm/ext/matrix_float2x2.hpp"
-#include "glm/ext/vector_float2.hpp"
-#include "glm/trigonometric.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
 #include "lve_model.hpp"
+
+// libs
+#include <glm/gtc/matrix_transform.hpp>
 
 // std
 #include <memory>
 
 namespace lve {
 
-  // Componente per gestire le trasformazioni 2D: traslazione, scala e rotazione.
-  // Utilizza una matrice 2x2 per combinare scala e rotazione (trasformazioni lineari).
-  struct Transform2dComponent {
-    glm::vec2 translation{};       // Posizione 2D (offset)
-    glm::vec2 scale{ 1.0f, 1.0f }; // Fattore di scala su asse X e Y (default: 1.0, nessuna alterazione di dimensione)
-    float rotation;                // Angolo di rotazione espresso in radianti
+  // Componente per gestire le trasformazioni 3D: traslazione, scala e rotazione (angoli di Eulero).
+  // Utilizza coordinate omogenee e una matrice 4x4 per combinare traslazione, rotazioni e scala in una sola operazione.
+  struct TransformComponent {
+    glm::vec3 translation{};             // Posizione 3D (x, y, z) nello spazio
+    glm::vec3 scale{ 1.0f, 1.0f, 1.0f }; // Fattore di scala lungo gli assi X, Y e Z (default: 1.0)
+    glm::vec3 rotation{};                // Angoli di rotazione espressi in radianti attorno agli assi X, Y e Z
 
-    // Costruisce e restituisce la matrice di trasformazione lineare 2x2 (rotazione * scala).
-    // In GLSL e GLM, i costruttori delle matrici accettano vettori colonna:
-    // ogni colonna rappresenta la nuova destinazione dei vettori della base standard:
-    // colonna 0 = vettore i (1, 0), colonna 1 = vettore j (0, 1).
-    glm::mat2 mat2() {
-      const float s = glm::sin(rotation);
-      const float c = glm::cos(rotation);
-      // Matrice di rotazione 2D: definita per colonne {colonna0, colonna1}.
-      // In coordinate normalizzate Vulkan con asse Y rivolto verso il basso,
-      // questo produce visivamente una rotazione in senso orario.
-      glm::mat2 rotMatrix{ { c, s }, { -s, c } };
-
-      // Matrice di scala 2D: scala lungo i rispettivi assi principali
-      glm::mat2 scaleMat{ { scale.x, 0.0f }, { 0.0f, scale.y } };
-
-      // La moltiplicazione tra matrici non è commutativa:
-      // Moltiplicando rotMatrix * scaleMat applichiamo prima la scala e poi la rotazione (ordine di valutazione da destra a sinistra).
-      return rotMatrix * scaleMat;
-    };
+    // Calcola la matrice di trasformazione affine 4x4 combinata (Translate * Ry * Rx * Rz * Scale).
+    // Le rotazioni utilizzano la convenzione estrinseca degli angoli di Tait-Bryan con ordine Y(1), X(2), Z(3)
+    // (equivalente all'ordine intrinseco inverso Z-X-Y: roll, pitch, yaw).
+    // La formula espansa algebricamente evita moltiplicazioni ridondanti e chiamate multiple a glm::rotate.
+    // I costruttori delle matrici GLM accettano vettori colonna:
+    // le prime 3 colonne codificano scala e rotazione (con 4a componente 0.0),
+    // mentre la 4a colonna codifica la traslazione con coordinata omogenea w = 1.0.
+    // Riferimento matematico: https://en.wikipedia.org/wiki/Euler_angles#Rotation_matrix
+    glm::mat4 mat4() {
+      const float c3 = glm::cos(rotation.z);
+      const float s3 = glm::sin(rotation.z);
+      const float c2 = glm::cos(rotation.x);
+      const float s2 = glm::sin(rotation.x);
+      const float c1 = glm::cos(rotation.y);
+      const float s1 = glm::sin(rotation.y);
+      return glm::mat4{
+        {
+          scale.x * (c1 * c3 + s1 * s2 * s3),
+          scale.x * (c2 * s3),
+          scale.x * (c1 * s2 * s3 - c3 * s1),
+          0.0f,
+        },
+        {
+          scale.y * (c3 * s1 * s2 - c1 * s3),
+          scale.y * (c2 * c3),
+          scale.y * (c1 * c3 * s2 + s1 * s3),
+          0.0f,
+        },
+        {
+          scale.z * (c2 * s1),
+          scale.z * (-s2),
+          scale.z * (c1 * c2),
+          0.0f,
+        },
+        { translation.x, translation.y, translation.z, 1.0f }
+      };
+    }
   };
 
   // Rappresenta un'entità di gioco (Game Object).
@@ -64,7 +83,7 @@ namespace lve {
     // Riferimento condiviso al modello: più game object possono condividere lo stesso vertex buffer allocato sulla GPU
     std::shared_ptr<LveModel> model{};
     glm::vec3 color{};
-    Transform2dComponent transform2d{};
+    TransformComponent transform{};
 
   private:
     // Costruttore privato: la creazione è consentita esclusivamente tramite factory method createGameObject()

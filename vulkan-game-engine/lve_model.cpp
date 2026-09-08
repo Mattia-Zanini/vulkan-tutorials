@@ -72,8 +72,8 @@ namespace lve {
     attributeDescriptions[0].binding = 0;
     // Corrisponde a layout(location = 0) specificato nel vertex shader
     attributeDescriptions[0].location = 0;
-    // Formato del dato: 2 float a 32-bit (vec2)
-    attributeDescriptions[0].format = VK_FORMAT_R32G32_SFLOAT;
+    // Formato del dato: 3 float a 32-bit (vec3) per la posizione 3D
+    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
     // Offset in byte dall'inizio della struct del vertice (0 poiché position è il primo attributo)
     attributeDescriptions[0].offset = offsetof(Vertex, position);
 

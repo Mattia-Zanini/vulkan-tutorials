@@ -1,5 +1,6 @@
 #include "first_app.hpp"
 
+#include "lve_model.hpp"
 #include "simple_render_system.hpp"
 #include "vulkan/vulkan_core.h"
 
@@ -72,68 +73,81 @@ namespace lve {
     generateSierpinski(vertices, depth - 1, ca, bc, c); // triangolo a sinistra
   }
 
-  void FirstApp::loadGameObjects() {
-    // Definiamo le coordinate 2D dei vertici del triangolo (x, y) nello spazio normalizzato [-1, 1]
-    glm::vec2 a = { 0.0f, -0.5f };
-    glm::vec2 b = { 0.5f, 0.5f };
-    glm::vec2 c = { -0.5f, 0.5f };
-
-    // Definiamo i colori primari (rosso, verde, blu) per ciascun vertice del triangolo
-    glm::vec3 red = { 1.0f, 0.0f, 0.0f };
-    glm::vec3 green = { 0.0f, 1.0f, 0.0f };
-    glm::vec3 blue = { 0.0f, 0.0f, 1.0f };
-
-    // Inizializziamo i vertici combinando posizione 2D e colore RGB (interleaved).
-    // Lo stadio di rasterizzazione calcolerà automaticamente le coordinate baricentriche per interpolare
-    // sfumature morbide tra i vertici su ciascun pixel/frammento del triangolo.
+  // Funzione helper temporanea: genera la geometria di un cubo 1x1x1 centrato rispetto a un offset specificato,
+  // con colori per-vertice distinti per ciascuna delle sei facce (left, right, top, bottom, nose, tail)
+  std::unique_ptr<LveModel> createCubeModel(LveDevice& device, glm::vec3 offset) {
     std::vector<LveModel::Vertex> vertices{
-      { a, red },
-      { b, green },
-      { c, blue }
+
+      // left face (white)
+      { { -.5f, -.5f, -.5f }, { .9f, .9f, .9f } },
+      { { -.5f, .5f, .5f }, { .9f, .9f, .9f } },
+      { { -.5f, -.5f, .5f }, { .9f, .9f, .9f } },
+      { { -.5f, -.5f, -.5f }, { .9f, .9f, .9f } },
+      { { -.5f, .5f, -.5f }, { .9f, .9f, .9f } },
+      { { -.5f, .5f, .5f }, { .9f, .9f, .9f } },
+
+      // right face (yellow)
+      { { .5f, -.5f, -.5f }, { .8f, .8f, .1f } },
+      { { .5f, .5f, .5f }, { .8f, .8f, .1f } },
+      { { .5f, -.5f, .5f }, { .8f, .8f, .1f } },
+      { { .5f, -.5f, -.5f }, { .8f, .8f, .1f } },
+      { { .5f, .5f, -.5f }, { .8f, .8f, .1f } },
+      { { .5f, .5f, .5f }, { .8f, .8f, .1f } },
+
+      // top face (orange, remember y axis points down)
+      { { -.5f, -.5f, -.5f }, { .9f, .6f, .1f } },
+      { { .5f, -.5f, .5f }, { .9f, .6f, .1f } },
+      { { -.5f, -.5f, .5f }, { .9f, .6f, .1f } },
+      { { -.5f, -.5f, -.5f }, { .9f, .6f, .1f } },
+      { { .5f, -.5f, -.5f }, { .9f, .6f, .1f } },
+      { { .5f, -.5f, .5f }, { .9f, .6f, .1f } },
+
+      // bottom face (red)
+      { { -.5f, .5f, -.5f }, { .8f, .1f, .1f } },
+      { { .5f, .5f, .5f }, { .8f, .1f, .1f } },
+      { { -.5f, .5f, .5f }, { .8f, .1f, .1f } },
+      { { -.5f, .5f, -.5f }, { .8f, .1f, .1f } },
+      { { .5f, .5f, -.5f }, { .8f, .1f, .1f } },
+      { { .5f, .5f, .5f }, { .8f, .1f, .1f } },
+
+      // nose face (blue)
+      { { -.5f, -.5f, 0.5f }, { .1f, .1f, .8f } },
+      { { .5f, .5f, 0.5f }, { .1f, .1f, .8f } },
+      { { -.5f, .5f, 0.5f }, { .1f, .1f, .8f } },
+      { { -.5f, -.5f, 0.5f }, { .1f, .1f, .8f } },
+      { { .5f, -.5f, 0.5f }, { .1f, .1f, .8f } },
+      { { .5f, .5f, 0.5f }, { .1f, .1f, .8f } },
+
+      // tail face (green)
+      { { -.5f, -.5f, -0.5f }, { .1f, .8f, .1f } },
+      { { .5f, .5f, -0.5f }, { .1f, .8f, .1f } },
+      { { -.5f, .5f, -0.5f }, { .1f, .8f, .1f } },
+      { { -.5f, -.5f, -0.5f }, { .1f, .8f, .1f } },
+      { { .5f, -.5f, -0.5f }, { .1f, .8f, .1f } },
+      { { .5f, .5f, -0.5f }, { .1f, .8f, .1f } },
+
     };
-
-    // Alloca il vertex buffer sulla GPU e copia i dati dei vertici tramite LveModel.
-    // Usiamo uno shared_ptr in modo che più entità possano referenziare e condividere la stessa geometria.
-    auto lveModel = std::make_shared<LveModel>(lveDevice, vertices);
-
-    // Palette di colori in spazio sRGB (tratta da https://www.color-hex.com/color-palette/5361)
-    std::vector<glm::vec3> colors{
-      { 1.0f, 0.7f, 0.73f },
-      { 1.0f, 0.87f, 0.73f },
-      { 1.0f, 1.0f, 0.73f },
-      { 0.73f, 1.0f, 0.8f },
-      { 0.73, 0.88f, 1.0f }
-    };
-
-    // Conversione da spazio sRGB a lineare (gamma correction con esponente 2.2):
-    // i valori RGB definiti dall'utente o dal web sono solitamente in sRGB; convertendoli in spazio lineare
-    // la swap chain (che utilizza un formato sRGB) riapplicherà la curva corretta evitando colori slavati o troppo chiari
-    for (auto& color : colors) {
-      color = glm::pow(color, glm::vec3{ 2.2f });
+    for (auto& v : vertices) {
+      v.position += offset;
     }
+    return std::make_unique<LveModel>(device, vertices);
+  }
 
-    // Istanziazione di 40 game object che condividono lo stesso modello geometrico di base (lveModel).
-    // NOTA SULL'ORDINE VISIVO E IL DEPTH BUFFER:
-    // Anche se lavoriamo in 2D e tutti i triangoli hanno z = 0 nello shader, il triangolo più piccolo (i = 0)
-    // appare sempre "in cima" e non viene coperto dai triangoli più grandi successivi (i > 0).
-    // Questo accade perché:
-    // 1) gameObjects[0] (il più piccolo) viene disegnato per primo e scrive la sua profondità (0.0) nel Depth Buffer.
-    // 2) La pipeline grafica è configurata con VK_COMPARE_OP_LESS per il Depth Test.
-    // 3) Quando i triangoli più grandi successivi provano a colorare i pixel centrali, il loro test di profondità
-    //    diventa (0.0 < 0.0), che è FALSO: di conseguenza i pixel sovrapposti vengono scartati dalla GPU,
-    //    preservando il triangolo iniziale e disegnando solo le porzioni esterne "non ancora occupate".
-    for (int i = 0; i < 40; i++) {
-      // Creiamo una nuova entità (LveGameObject) tramite il factory method
-      auto triangle = LveGameObject::createGameObject();
-      triangle.model = lveModel;                                     // Assegna il modello condiviso (riuso del vertex buffer sulla GPU)
-      triangle.color = colors[i % colors.size()];                    // Alterna ciclicamente i colori della palette
-      triangle.transform2d.translation.x = 0.0f;                     // Traslazione orizzontale fissa
-      triangle.transform2d.scale = glm::vec2(0.5f) + i * 0.025f;     // Scala progressivamente crescente per ogni triangolo
-      triangle.transform2d.rotation = i * glm::pi<float>() * 0.025f; // Rotazione iniziale sfasata
+  void FirstApp::loadGameObjects() {
+    // Crea il modello del cubo tramite la funzione helper e lo condivide come puntatore gestito
+    std::shared_ptr<LveModel> lveModel = createCubeModel(lveDevice, { .0f, .0f, .0f });
 
-      // Aggiunge il game object al vettore trasferendone la proprietà tramite std::move (LveGameObject non è copiabile)
-      gameObjects.push_back(std::move(triangle));
-    }
+    // Crea un game object per rappresentare il cubo 3D
+    auto cube = LveGameObject::createGameObject();
+    cube.model = lveModel;
+    // Trasla il cubo a z = 0.5 e lo scala a 0.5:
+    // il viewing volume canonico di Vulkan copre x in [-1, 1], y in [-1, 1] e z in [0, 1].
+    // Scalando il cubo a metà dimensione e traslandolo a z = 0.5 viene centrato interamente
+    // all'interno del volume visibile; lasciandolo all'origine (z = 0), la metà frontale
+    // cadrebbe fuori (z < 0) e verrebbe tagliata (clipped) dal frustum di visualizzazione.
+    cube.transform.translation = { .0f, .0f, .5f };
+    cube.transform.scale = { .5f, .5f, .5f };
+    gameObjects.push_back(std::move(cube));
   }
 
 } // namespace lve

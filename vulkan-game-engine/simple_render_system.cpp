@@ -19,9 +19,9 @@ namespace lve {
   // direttamente tramite il command buffer (senza allocazioni di memoria o descrittori).
   // Lo standard Vulkan garantisce almeno 128 byte condivisi tra tutti gli stadi.
   struct SimplePushConstantData {
-    // Matrice di trasformazione 2x2: inizializzata alla matrice identità di default (nessuna scala o rotazione applicata)
-    glm::mat2 transform{ 1.0f };
-    glm::vec2 offset;
+    // Matrice di trasformazione affine 4x4 (combina scala, rotazione ed offset/traslazione tramite coordinate omogenee).
+    // Inizializzata di default alla matrice identità.
+    glm::mat4 transform{ 1.f };
     // In memoria GPU (regole di allineamento std430/std140), un vec3 deve essere allineato a un multiplo di 16 byte (4N).
     // Usiamo alignas(16) per forzare lo stesso padding di 8 byte anche nella struct host C++, evitando disallineamenti di lettura.
     alignas(16) glm::vec3 color;
@@ -81,31 +81,20 @@ namespace lve {
   }
 
   void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer, std::vector<LveGameObject>& gameObjects) {
-    // Fase di Update: aggiorna lo stato dei componenti dei game object per il frame corrente.
-    // Incrementa la velocità di rotazione in maniera progressiva per ogni triangolo (differenziale),
-    // mantenendo il valore dell'angolo entro l'intervallo [0, 2*pi] tramite glm::mod.
-    int i = 0;
-    for (auto& obj : gameObjects) {
-      i += 1;
-      obj.transform2d.rotation = glm::mod<float>(
-        obj.transform2d.rotation + 0.001f * i,
-        2.f * glm::pi<float>());
-    }
-
-    // Fase di Render:
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(commandBuffer);
 
     for (auto& obj : gameObjects) {
-      // Aggiorna continuamente la rotazione per animare l'oggetto a ogni frame (mantiene l'angolo nel range [0, 2*pi])
-      obj.transform2d.rotation = glm::mod(obj.transform2d.rotation + 0.01f, glm::two_pi<float>());
+      // Aggiorna continuamente le componenti di rotazione per animare l'oggetto:
+      // rotazione principale attorno all'asse Y (verticale) e rotazione secondaria attorno all'asse X a metà velocità
+      obj.transform.rotation.y = glm::mod(obj.transform.rotation.y + 0.01f, glm::two_pi<float>());
+      obj.transform.rotation.x = glm::mod(obj.transform.rotation.x + 0.005f, glm::two_pi<float>());
 
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
-      push.offset = obj.transform2d.translation;
       push.color = obj.color;
-      // Calcola la matrice di trasformazione 2x2 (rotazione * scala) tramite il componente
-      push.transform = obj.transform2d.mat2();
+      // Calcola la matrice di trasformazione affine 4x4 combinata (Translate * Ry * Rx * Rz * Scale)
+      push.transform = obj.transform.mat4();
 
       // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
       vkCmdPushConstants(
