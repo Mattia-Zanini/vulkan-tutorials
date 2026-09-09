@@ -31,6 +31,9 @@ namespace lve {
     // Resetta il flag di resize dopo che la swap chain è stata ricreata
     void resetWindowResizedFlag() { framebufferResized = false; }
 
+    // Restituisce il puntatore alla finestra GLFW (necessario per leggere gli input, es. KeyboardMovementController)
+    GLFWwindow* getGLFWwindow() const { return window; }
+
   private:
     // Callback invocata da GLFW ogni volta che le dimensioni del framebuffer della finestra cambiano
     static void framebufferResizedCallBack(GLFWwindow* window, int width, int height);

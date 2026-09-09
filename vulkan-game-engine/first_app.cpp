@@ -1,8 +1,9 @@
 #include "first_app.hpp"
 
-#include "glm/ext/vector_float3.hpp"
-#include "glm/trigonometric.hpp"
+#include "glm/common.hpp"
+#include "keyboard_movement_controller.hpp"
 #include "lve_camera.hpp"
+#include "lve_game_object.hpp"
 #include "lve_model.hpp"
 #include "simple_render_system.hpp"
 #include "vulkan/vulkan_core.h"
@@ -14,9 +15,12 @@
 #include <glm/gtc/constants.hpp>
 
 // std
+#include <chrono>
 #include <memory>
 #include <utility>
 #include <vector>
+
+#define MAX_FRAME_TIME (float)0.0166666667
 
 namespace lve {
 
@@ -30,18 +34,36 @@ namespace lve {
     SimpleRenderSystem simpleRenderSystem{ lveDevice, lveRenderer.getSwapChainRenderPass() };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
-    // Imposta la vista specificando la direzione o un punto bersaglio (target)
-    // In questo caso, posiziona la telecamera in (-1, -2, 2) e la punta verso (0, 0, 1.5)
-    // camera.setViewDirection(glm::vec3{ 0.f }, glm::vec3{ 0.5f, 0.f, 1.f });
-    camera.setViewTarget(glm::vec3{ -1.f, -2.f, 2.f }, glm::vec3{ 0.f, 0.f, 1.5f });
+
+    // Oggetto invisibile usato per mantenere lo stato della telecamera (posizione, orientamento)
+    // dal momento che la classe LveCamera non memorizza internamente questi dati tra un frame e l'altro
+    auto viewerObject = LveGameObject::createGameObject();
+    KeyboardMovementController cameraController{};
+
+    // Inizializza il timer usando chrono per avere una precisione elevata (necessario per calcolare il dt)
+    auto currentTime = std::chrono::high_resolution_clock::now();
 
     while (!lveWindow.shouldClose()) {
       glfwPollEvents();
 
+      // Calcola il "time step" (o delta time / dt) misurando quanto tempo è trascorso
+      // dall'ultima iterazione. Questo serve a separare la logica del gioco (es. movimento)
+      // dal framerate (es. un cubo girerebbe più velocemente a 120fps che a 60fps senza dt).
+      auto newTime = std::chrono::high_resolution_clock::now();
+      float frameTime = std::chrono::duration<float, std::chrono::seconds::period>(newTime - currentTime).count();
+      currentTime = newTime;
+
+      // Limita il frame time massimo per evitare scatti eccessivi nel caso in cui il programma
+      // venga bloccato temporaneamente (ad esempio, se l'utente ridimensiona la finestra).
+      frameTime = glm::min(frameTime, MAX_FRAME_TIME);
+
+      // Aggiorna lo stato del viewerObject in base all'input e al dt
+      cameraController.moveInPlaneXZ(lveWindow.getGLFWwindow(), frameTime, viewerObject);
+      // Aggiorna infine la camera vera e propria leggendo la posizione e la rotazione del viewerObject
+      camera.setViewYXZ(viewerObject.transform.translation, viewerObject.transform.rotation);
+
       // Calcola l'aspect ratio corrente della finestra/swap chain per compensare le distorsioni dovute al ridimensionamento
       float aspect = lveRenderer.getAspectRatio();
-      // Proiezione ortografica alternativa (decommentabile per test):
-      // camera.setOrthographicProjection(-aspect, aspect, -1, 1, -1, 1);
 
       // Configura la matrice di proiezione prospettica:
       // fovy: campo visivo verticale (Field of View) in radianti (50 gradi)

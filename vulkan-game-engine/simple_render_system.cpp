@@ -1,7 +1,6 @@
 #include "simple_render_system.hpp"
 #include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
-#include <regex>
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -93,11 +92,6 @@ namespace lve {
     auto projectionView = camera.getProjection() * camera.getView();
 
     for (auto& obj : gameObjects) {
-      // Aggiorna continuamente le componenti di rotazione per animare l'oggetto:
-      // rotazione principale attorno all'asse Y (verticale) e rotazione secondaria attorno all'asse X a metà velocità
-      obj.transform.rotation.y = glm::mod(obj.transform.rotation.y + 0.01f, glm::two_pi<float>());
-      obj.transform.rotation.x = glm::mod(obj.transform.rotation.x + 0.005f, glm::two_pi<float>());
-
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
       push.color = obj.color;

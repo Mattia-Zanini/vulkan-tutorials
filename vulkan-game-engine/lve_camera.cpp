@@ -63,9 +63,8 @@ namespace lve {
   void LveCamera::setViewTarget(glm::vec3 position, glm::vec3 target, glm::vec3 up) {
     // Calcola il vettore direzione dal punto della telecamera verso il bersaglio
     glm::vec3 direction = target - position;
-    glm::vec3 zeroVector{ 0.f };
 
-    assert(direction != zeroVector && "Can't have a null vector as target-camera direction");
+    assert(glm::dot(direction, direction) > std::numeric_limits<float>::epsilon() && "Can't have a null vector as target-camera direction");
 
     setViewDirection(position, direction, up);
   }
