@@ -19,9 +19,23 @@ namespace std {
   // Specializzazione del template std::hash per la struttura Vertex.
   // Serve all'unordered_map per generare un hash unico (size_t) partendo da tutti i dati del vertice,
   // permettendoci di individuare velocemente vertici duplicati.
+  //
+  // Di norma, aggiungere cose a namespace std è vietato in C++, tranne per un'unica eccezione concessa
+  // dallo standard: puoi aprire namespace std per fornire la specializzazione di un template per un
+  // tuo tipo personalizzato.
+  //
+  // In parole semplici è come se stessi dicendo al compilatore: "Quando qualcuno ti chiede di calcolare
+  // std::hash sul tipo specifico lve::LveModel::Vertex, non usare il template generico: usa questa
+  // definizione esatta che ti sto scrivendo qui."
   template <>
   struct hash<lve::LveModel::Vertex> {
     size_t operator()(lve::LveModel::Vertex const& vertex) const {
+      // Questo definisce un Functor (oggetto funzione).
+      // Permette a una classe o struct di essere invocata come se fosse una funzione normale usando
+      // le parentesi tonde ().
+      // Quando std::unordered_map deve calcolare l'hash di un vertice v, chiama internamente:
+      // size_t hashValue = std::hash<Vertex>{}(v); // Crea l'oggetto hash e invoca operator()(v)
+
       size_t seed = 0;
       lve::hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.uv);
       return seed;
