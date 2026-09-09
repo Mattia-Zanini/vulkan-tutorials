@@ -2,7 +2,9 @@
 
 #include "glm/common.hpp"
 #include "keyboard_movement_controller.hpp"
+#include "lve_buffer.hpp"
 #include "lve_camera.hpp"
+#include "lve_frame_info.hpp"
 #include "lve_game_object.hpp"
 #include "lve_model.hpp"
 #include "simple_render_system.hpp"
@@ -24,11 +26,32 @@
 
 namespace lve {
 
+  // Uniform Buffer Object (UBO) globale: permette di passare dati arbitrari in sola lettura agli shader
+  // superando i limiti di dimensione delle push constants (128 byte garantiti vs almeno 16KB per gli UBO).
+  struct GlobalUbo {
+    glm::mat4 projectionView{ 1.f };
+    glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
+  };
+
   FirstApp::FirstApp() { loadGameObjects(); }
 
   FirstApp::~FirstApp() {}
 
   void FirstApp::run() {
+    // Crea un buffer uniforme con istanze pari a MAX_FRAMES_IN_FLIGHT per implementare il double buffering.
+    // In questo modo la CPU può scrivere i dati dell'UBO per il frame successivo mentre la GPU legge quelli del frame corrente.
+    // L'allineamento minimo (minUniformBufferOffsetAlignment) garantisce la corretta spaziatura tra istanze consecutive.
+    // Non viene usato HOST_COHERENT per poter eseguire il flush esplicito solo dell'indice di frame corrente.
+    LveBuffer globalUboBuffer{
+      lveDevice,
+      sizeof(GlobalUbo),
+      LveSwapChain::MAX_FRAMES_IN_FLIGHT,
+      VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+      lveDevice.properties.limits.minUniformBufferOffsetAlignment
+    };
+    globalUboBuffer.map();
+
     // Sistema di rendering: incapsula pipeline, layout e logica di disegno per i game object,
     // configurandosi con il render pass fornito dal renderer
     SimpleRenderSystem simpleRenderSystem{ lveDevice, lveRenderer.getSwapChainRenderPass() };
@@ -74,8 +97,20 @@ namespace lve {
       // beginFrame restituisce nullptr se la swap chain viene ricreata (es. resize della finestra);
       // in tal caso saltiamo la registrazione e sottomissione dei comandi per questo frame
       if (auto commandBuffer = lveRenderer.beginFrame()) {
+        int frameIndex = lveRenderer.getFrameIndex();
+        // Raggruppa i parametri del frame corrente in una singola struct da passare ai render systems
+        FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera };
+
+        // Fase 1: Aggiornamento degli oggetti e della memoria
+        GlobalUbo ubo{};
+        ubo.projectionView = camera.getProjection() * camera.getView();
+        // Scrive e rilascia selettivamente (flush) la memoria UBO per il frame corrente
+        globalUboBuffer.writeToIndex(&ubo, frameIndex);
+        globalUboBuffer.flushIndex(frameIndex);
+
+        // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
-        simpleRenderSystem.renderGameObjects(commandBuffer, gameObjects, camera);
+        simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
         lveRenderer.endSwapChainRenderPass(commandBuffer);
         lveRenderer.endFrame();
       }

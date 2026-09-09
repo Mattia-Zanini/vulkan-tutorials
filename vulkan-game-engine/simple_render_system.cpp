@@ -80,16 +80,14 @@ namespace lve {
     lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
   }
 
-  void SimpleRenderSystem::renderGameObjects(VkCommandBuffer commandBuffer,
-                                             std::vector<LveGameObject>& gameObjects,
-                                             const LveCamera& camera) {
+  void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<LveGameObject>& gameObjects) {
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
-    lvePipeline->bind(commandBuffer);
+    lvePipeline->bind(frameInfo.commandBuffer);
 
     // Ottimizzazione: precalcola la moltiplicazione projection * view una sola volta per frame,
     // invece di farlo per ogni oggetto. Questo sposta gli oggetti dalle coordinate del mondo
     // alle coordinate della camera, e infine nello spazio di clip (frustum).
-    auto projectionView = camera.getProjection() * camera.getView();
+    auto projectionView = frameInfo.camera.getProjection() * frameInfo.camera.getView();
 
     for (auto& obj : gameObjects) {
       // Prepara i dati delle push constants specifici per questo oggetto
@@ -105,7 +103,7 @@ namespace lve {
 
       // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
       vkCmdPushConstants(
-        commandBuffer,
+        frameInfo.commandBuffer,
         pipelineLayout,
         VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
         0,
@@ -113,8 +111,9 @@ namespace lve {
         &push);
 
       // Collega il vertex buffer del modello ed emette il comando di disegno
-      obj.model->bind(commandBuffer);
-      obj.model->draw(commandBuffer);
+      obj.model->bind(frameInfo.commandBuffer);
+      obj.model->draw(frameInfo.commandBuffer);
     }
   }
+
 } // namespace lve

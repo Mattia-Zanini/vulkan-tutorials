@@ -1,7 +1,7 @@
 #pragma once
 
+#include "lve_buffer.hpp"
 #include "lve_device.hpp"
-#include <cstdint>
 
 // libs
 // Forza GLM a utilizzare i radianti per gli angoli su qualsiasi piattaforma (evitando ambiguità con i gradi).
@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 
 // std
+#include <cstdint>
 #include <memory>
 #include <vector>
 
@@ -69,16 +70,14 @@ namespace lve {
 
     LveDevice& lveDevice;
 
-    // In Vulkan, l'oggetto buffer e la memoria allocata ad esso associata sono gestiti separatamente dal programmatore.
-    VkBuffer vertexBuffer;
-    VkDeviceMemory vertexBufferMemory;
+    // LveBuffer incapsula VkBuffer e VkDeviceMemory gestendone automaticamente il ciclo di vita (RAII).
+    std::unique_ptr<LveBuffer> vertexBuffer;
     uint32_t vertexCount;
 
     // L'index buffer opzionale ci permette di specificare ogni vertice unico una sola volta
     // e di istruire la GPU su come combinarli in triangoli fornendo solo gli indici.
     bool hasIndexBuffer = false;
-    VkBuffer indexBuffer;
-    VkDeviceMemory indexBufferMemory;
+    std::unique_ptr<LveBuffer> indexBuffer;
     uint32_t indexCount;
   };
 }
