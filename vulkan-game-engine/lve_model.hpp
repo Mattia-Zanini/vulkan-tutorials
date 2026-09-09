@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lve_device.hpp"
+#include <cstdint>
 
 // libs
 // Forza GLM a utilizzare i radianti per gli angoli su qualsiasi piattaforma (evitando ambiguità con i gradi).
@@ -27,7 +28,16 @@ namespace lve {
       static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
     };
 
-    LveModel(LveDevice& lveDevice, const std::vector<Vertex>& vertices);
+    // Builder è un oggetto temporaneo di supporto utilizzato per memorizzare le informazioni
+    // sui vertici e sugli indici prima che vengano copiati nella memoria del buffer del modello (sulla GPU).
+    // Questo permette di evitare la duplicazione dei vertici (usando gli index buffers) e di aggiungere
+    // futuri attributi senza appesantire la memoria.
+    struct Builder {
+      std::vector<Vertex> vertices{};
+      std::vector<uint32_t> indices{};
+    };
+
+    LveModel(LveDevice& lveDevice, const LveModel::Builder& builder);
     ~LveModel();
 
     // Elimina costruttore di copia e operatore di assegnazione poiché la classe gestisce risorse Vulkan esplicite (buffer e memoria).
@@ -41,12 +51,21 @@ namespace lve {
 
   private:
     void createVertexBuffers(const std::vector<Vertex>& vertices);
+    void createIndexBuffers(const std::vector<uint32_t>& indices);
 
     LveDevice& lveDevice;
+
     // In Vulkan, l'oggetto buffer e la memoria allocata ad esso associata sono gestiti separatamente dal programmatore.
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;
     uint32_t vertexCount;
+
+    // L'index buffer opzionale ci permette di specificare ogni vertice unico una sola volta
+    // e di istruire la GPU su come combinarli in triangoli fornendo solo gli indici.
+    bool hasIndexBuffer = false;
+    VkBuffer indexBuffer;
+    VkDeviceMemory indexBufferMemory;
+    uint32_t indexCount;
   };
 }
 // namespace lve
