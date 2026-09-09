@@ -1,6 +1,7 @@
 #include "lve_model.hpp"
 #include "lve_utils.hpp"
 #include "vulkan/vulkan_core.h"
+#include <cstddef>
 
 // libs
 #define TINYOBJLOADER_IMPLEMENTATION
@@ -189,24 +190,13 @@ namespace lve {
   }
 
   std::vector<VkVertexInputAttributeDescription> LveModel::Vertex::getAttributeDescriptions() {
-    std::vector<VkVertexInputAttributeDescription> attributeDescriptions(2);
-    // Binding a cui appartiene questo attributo
-    attributeDescriptions[0].binding = 0;
-    // Corrisponde a layout(location = 0) specificato nel vertex shader
-    attributeDescriptions[0].location = 0;
-    // Formato del dato: 3 float a 32-bit (vec3) per la posizione 3D
-    attributeDescriptions[0].format = VK_FORMAT_R32G32B32_SFLOAT;
-    // Offset in byte dall'inizio della struct del vertice (0 poiché position è il primo attributo)
-    attributeDescriptions[0].offset = offsetof(Vertex, position);
+    std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
 
-    // 2° Attributo: Colore (interleaved nello stesso binding)
-    attributeDescriptions[1].binding = 0;
-    // Corrisponde a layout(location = 1) specificato nel vertex shader
-    attributeDescriptions[1].location = 1;
-    // Formato del dato: 3 float a 32-bit (vec3 RGB)
-    attributeDescriptions[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-    // Offset calcolato automaticamente con offsetof per individuare la posizione del membro 'color' nella struct
-    attributeDescriptions[1].offset = offsetof(Vertex, color);
+    // Configura i 4 attributi per i vertici: posizione, colore, normale (per illuminazione diffusa) e coordinate UV
+    attributeDescriptions.push_back({ 0, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, position) });
+    attributeDescriptions.push_back({ 1, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, color) });
+    attributeDescriptions.push_back({ 2, 0, VK_FORMAT_R32G32B32_SFLOAT, offsetof(Vertex, normal) });
+    attributeDescriptions.push_back({ 3, 0, VK_FORMAT_R32G32_SFLOAT, offsetof(Vertex, uv) });
 
     return attributeDescriptions;
   }
@@ -239,16 +229,13 @@ namespace lve {
             attrib.vertices[3 * index.vertex_index + 2],
           };
 
-          // tinyobjloader supporta l'estensione non ufficiale dei colori allegati ai vertici
-          auto colorIndex = 3 * index.vertex_index + 2;
-          if (colorIndex < attrib.colors.size()) {
-            vertex.color = {
-              attrib.colors[colorIndex - 2],
-              attrib.colors[colorIndex - 1],
-              attrib.colors[colorIndex - 0],
-            };
-          } else
-            vertex.color = { 1.f, 1.f, 1.f }; // imposta il colore di default
+          // In tinyobjloader attrib.colors ha la stessa dimensione di attrib.vertices ed è precompilato
+          // con valori 1.0 (bianco) di default quando il colore non è specificato nel file .obj
+          vertex.color = {
+            attrib.colors[3 * index.vertex_index + 0],
+            attrib.colors[3 * index.vertex_index + 1],
+            attrib.colors[3 * index.vertex_index + 2],
+          };
         }
 
         // Estrae le normali (3 componenti)

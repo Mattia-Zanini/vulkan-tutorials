@@ -87,45 +87,23 @@ namespace lve {
     vkDeviceWaitIdle(lveDevice.device());
   }
 
-  void generateSierpinski(
-    std::vector<LveModel::Vertex>& vertices,
-    int depth,
-    LveModel::Vertex a,
-    LveModel::Vertex b,
-    LveModel::Vertex c) {
-    // caso base
-    if (depth == 0) {
-      vertices.push_back(a);
-      vertices.push_back(b);
-      vertices.push_back(c);
-      return;
-    }
-
-    // trovo i punti medi sia per la posizione (vec2) che per il colore (vec3)
-    LveModel::Vertex ab{ (a.position + b.position) * 0.5f, (a.color + b.color) * 0.5f };
-    LveModel::Vertex bc{ (b.position + c.position) * 0.5f, (b.color + c.color) * 0.5f };
-    LveModel::Vertex ca{ (c.position + a.position) * 0.5f, (c.color + a.color) * 0.5f };
-
-    // chiamate ricorsiv
-    generateSierpinski(vertices, depth - 1, a, ab, ca); // triangolo in alto
-    generateSierpinski(vertices, depth - 1, ab, b, bc); // triangolo a destra
-    generateSierpinski(vertices, depth - 1, ca, bc, c); // triangolo a sinistra
-  }
-
   void FirstApp::loadGameObjects() {
-    // Carica il modello 3D leggendo le coordinate, indici e colori dal file .obj fornito,
-    // usando la libreria tinyobjloader integrata nel Builder.
-    std::shared_ptr<LveModel> lveModel = LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj");
+    // Carica il modello con shading piatto (flat shading / face normals: ciascuna faccia ha normali distinte)
+    std::shared_ptr<LveModel> lveModel = LveModel::createModelFromFile(lveDevice, "models/flat_vase.obj");
+    auto flatVase = LveGameObject::createGameObject();
+    flatVase.model = lveModel;
+    flatVase.transform.translation = { -.5f, .5f, 2.5f };
+    // Scala non uniforme lungo Y (1.5 rispetto a 3.0 su X e Z) per testare la correttezza della normalMatrix
+    flatVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
+    gameObjects.push_back(std::move(flatVase));
 
-    // Crea un game object per rappresentare il modello appena caricato
-    auto gameObj = LveGameObject::createGameObject();
-    gameObj.model = lveModel;
-    // Con la proiezione prospettica, gli oggetti a valori di Z maggiori appaiono più lontani e rimpiccioliti.
-    // Posizioniamo il vaso un po' più lontano (Z=2.5) e lo ingrandiamo di 3 volte per renderlo visibile,
-    // mantenendolo nel frustum visivo tra near (0.1) e far (10.0).
-    gameObj.transform.translation = { .0f, .0f, 2.5f };
-    gameObj.transform.scale = glm::vec3{ 3.f };
-    gameObjects.push_back(std::move(gameObj));
+    // Carica lo stesso modello con shading liscio (smooth shading / vertex normals: normali interpolate sulla superficie)
+    lveModel = LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj");
+    auto smoothVase = LveGameObject::createGameObject();
+    smoothVase.model = lveModel;
+    smoothVase.transform.translation = { .5f, .5f, 2.5f };
+    smoothVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
+    gameObjects.push_back(std::move(smoothVase));
   }
 
 } // namespace lve

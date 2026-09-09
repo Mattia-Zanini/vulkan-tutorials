@@ -22,9 +22,9 @@ namespace lve {
     // Matrice di trasformazione affine 4x4 (combina scala, rotazione ed offset/traslazione tramite coordinate omogenee).
     // Inizializzata di default alla matrice identità.
     glm::mat4 transform{ 1.f };
-    // In memoria GPU (regole di allineamento std430/std140), un vec3 deve essere allineato a un multiplo di 16 byte (4N).
-    // Usiamo alignas(16) per forzare lo stesso padding di 8 byte anche nella struct host C++, evitando disallineamenti di lettura.
-    alignas(16) glm::vec3 color;
+    // Matrice delle normali passata come mat4 (anziché mat3) per rispettare le regole di allineamento
+    // di Vulkan (dove ogni riga/colonna richiede un allineamento a 16 byte); GLM gestisce automaticamente il padding
+    glm::mat4 normalMatrix{ 1.f };
   };
 
   SimpleRenderSystem::SimpleRenderSystem(LveDevice& device, VkRenderPass renderPass) : lveDevice{ device } {
@@ -94,12 +94,14 @@ namespace lve {
     for (auto& obj : gameObjects) {
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
-      push.color = obj.color;
+
+      // Calcola la modelMatrix una volta sola per evitare calcoli duplicati
+      auto modelMatrix = obj.transform.mat4();
       // Combina projectionView (projection * view) con la matrice di trasformazione del modello (modelMatrix).
       // Sequenza: Model -> View -> Projection
-      // Nota: in futuro, con gli Uniform Buffer Objects (UBO), la matrice di proiezione verrà inviata separatamente
-      // evitando di dover calcolare la moltiplicazione per ciascun oggetto sulla CPU.
-      push.transform = projectionView * obj.transform.mat4();
+      push.transform = projectionView * modelMatrix;
+      // Assegna la matrice delle normali calcolata per trasformare le normali nello spazio mondo
+      push.normalMatrix = obj.transform.normalMatrix();
 
       // Invia i dati delle push constants alla GPU prima del disegno dell'oggetto
       vkCmdPushConstants(
