@@ -1,10 +1,33 @@
 #include "lve_model.hpp"
+#include "lve_utils.hpp"
 #include "vulkan/vulkan_core.h"
+
+// libs
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/hash.hpp>
 
 // std
 #include <cassert>
 #include <cstdint>
 #include <cstring>
+#include <spdlog/spdlog.h>
+#include <unordered_map>
+
+namespace std {
+  // Specializzazione del template std::hash per la struttura Vertex.
+  // Serve all'unordered_map per generare un hash unico (size_t) partendo da tutti i dati del vertice,
+  // permettendoci di individuare velocemente vertici duplicati.
+  template <>
+  struct hash<lve::LveModel::Vertex> {
+    size_t operator()(lve::LveModel::Vertex const& vertex) const {
+      size_t seed = 0;
+      lve::hashCombine(seed, vertex.position, vertex.color, vertex.normal, vertex.uv);
+      return seed;
+    }
+  };
+} // namespace std
 
 namespace lve {
   LveModel::LveModel(LveDevice& device, const LveModel::Builder& builder) : lveDevice{ device } {
@@ -21,6 +44,14 @@ namespace lve {
       vkDestroyBuffer(lveDevice.device(), indexBuffer, nullptr);
       vkFreeMemory(lveDevice.device(), indexBufferMemory, nullptr);
     }
+  }
+
+  std::unique_ptr<LveModel> LveModel::createModelFromFile(LveDevice& device, const std::string& filepath) {
+    Builder builder{};
+    builder.loadModel(filepath);
+    spdlog::info("Vertex count: {}", builder.vertices.size());
+
+    return std::make_unique<LveModel>(device, builder);
   }
 
   void LveModel::bind(VkCommandBuffer commandBuffer) {
@@ -165,5 +196,74 @@ namespace lve {
 
     return attributeDescriptions;
   }
+
+  void LveModel::Builder::loadModel(const std::string& filepath) {
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    // Utilizza tinyobjloader per parsare il file .obj. Popolerà attrib (posizioni, colori, normali, uvs)
+    // e shapes (lista dei volti/facce, ciascuno contenente le triplette di indici per i propri vertici)
+    if (tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filepath.c_str()) == false)
+      throw std::runtime_error(warn + err);
+
+    vertices.clear();
+    indices.clear();
+
+    // unordered_map per mappare vertici univoci all'indice corrispondente all'interno del vettore 'vertices'
+    std::unordered_map<Vertex, uint32_t> uniqueVertices{};
+    for (const auto& shape : shapes) {
+      for (const auto& index : shape.mesh.indices) {
+        Vertex vertex{};
+
+        // Estrae la posizione dal vettore piatto (con valori raggruppati a 3 a 3)
+        if (index.vertex_index >= 0) {
+          vertex.position = {
+            attrib.vertices[3 * index.vertex_index + 0],
+            attrib.vertices[3 * index.vertex_index + 1],
+            attrib.vertices[3 * index.vertex_index + 2],
+          };
+
+          // tinyobjloader supporta l'estensione non ufficiale dei colori allegati ai vertici
+          auto colorIndex = 3 * index.vertex_index + 2;
+          if (colorIndex < attrib.colors.size()) {
+            vertex.color = {
+              attrib.colors[colorIndex - 2],
+              attrib.colors[colorIndex - 1],
+              attrib.colors[colorIndex - 0],
+            };
+          } else
+            vertex.color = { 1.f, 1.f, 1.f }; // imposta il colore di default
+        }
+
+        // Estrae le normali (3 componenti)
+        if (index.normal_index >= 0) {
+          vertex.normal = {
+            attrib.normals[3 * index.normal_index + 0],
+            attrib.normals[3 * index.normal_index + 1],
+            attrib.normals[3 * index.normal_index + 2],
+          };
+        }
+
+        // Estrae le coordinate UV (2 componenti)
+        if (index.texcoord_index >= 0) {
+          vertex.uv = {
+            attrib.texcoords[2 * index.texcoord_index + 0],
+            attrib.texcoords[2 * index.texcoord_index + 1],
+          };
+        }
+
+        // Se il vertice non è mai stato incontrato, lo inseriamo nel vettore dei vertici univoci
+        if (uniqueVertices.count(vertex) == 0) {
+          uniqueVertices[vertex] = static_cast<uint32_t>(vertices.size());
+          vertices.push_back(vertex);
+        }
+        // In ogni caso, aggiungiamo l'indice del vertice univoco al nostro index buffer
+        indices.push_back(uniqueVertices[vertex]);
+      }
+    }
+  }
+
 }
 // namespace lve

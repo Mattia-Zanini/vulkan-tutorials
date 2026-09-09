@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 
 // std
+#include <memory>
 #include <vector>
 
 namespace lve {
@@ -19,13 +20,21 @@ namespace lve {
   public:
     // Rappresenta i singoli vertici e i relativi attributi (posizione 3D e colore RGB interleaved).
     struct Vertex {
-      glm::vec3 position; // Posizione nello spazio tridimensionale (x, y, z)
-      glm::vec3 color;
+      glm::vec3 position{}; // Posizione nello spazio tridimensionale (x, y, z)
+      glm::vec3 color{};
+      glm::vec3 normal{}; // Normale del vertice, utilizzata per il calcolo dell'illuminazione
+      glm::vec2 uv{};     // Coordinate texture 2D (spesso chiamate uvs) per mappare immagini sulla geometria
 
       // Descrive il binding (rate di avanzamento nello stream dei dati, stride in byte tra vertici successivi).
       static std::vector<VkVertexInputBindingDescription> getBindingDescriptions();
       // Descrive come interpretare ciascun attributo (location nello shader, binding di origine, formato dati, offset).
       static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();
+
+      // Sovraccarico dell'operatore di uguaglianza. È necessario per l'utilizzo in std::unordered_map
+      // in modo da identificare e scartare vertici duplicati durante il caricamento.
+      bool operator==(const Vertex& other) const {
+        return position == other.position && color == other.color && normal == other.normal && uv == other.uv;
+      }
     };
 
     // Builder è un oggetto temporaneo di supporto utilizzato per memorizzare le informazioni
@@ -35,6 +44,9 @@ namespace lve {
     struct Builder {
       std::vector<Vertex> vertices{};
       std::vector<uint32_t> indices{};
+
+      // Legge un file .obj (Wavefront) e popola vertices e indices utilizzando tinyobjloader.
+      void loadModel(const std::string& filepath);
     };
 
     LveModel(LveDevice& lveDevice, const LveModel::Builder& builder);
@@ -43,6 +55,8 @@ namespace lve {
     // Elimina costruttore di copia e operatore di assegnazione poiché la classe gestisce risorse Vulkan esplicite (buffer e memoria).
     LveModel(const LveModel&) = delete;
     LveModel& operator=(const LveModel&) = delete;
+
+    static std::unique_ptr<LveModel> createModelFromFile(LveDevice& device, const std::string& filepath);
 
     // Registra nel command buffer il binding del vertex buffer.
     void bind(VkCommandBuffer commandBuffer);

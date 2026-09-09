@@ -23,7 +23,7 @@ find_package(fmt CONFIG REQUIRED)
 # Aggiungi il percorso delle directory dei file sorgente
 # Utilizza GLOB per raccogliere automaticamente i file sorgente
 file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
-file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp" "*.h")
 
 add_executable(vulkanengine
 	${SOURCES}
@@ -69,3 +69,13 @@ endforeach()
 
 add_custom_target(CompileShaders ALL DEPENDS ${SPV_OUTPUTS})
 add_dependencies(vulkanengine CompileShaders)
+
+# Sincronizza automaticamente la cartella "models" nella build directory
+# copy_directory_if_different copierà i file solo se sono stati modificati o aggiunti
+add_custom_target(SyncModels ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+    "${CMAKE_CURRENT_SOURCE_DIR}/models"
+    "${CMAKE_CURRENT_BINARY_DIR}/models"
+    COMMENT "Sincronizzazione della cartella models in corso..."
+)
+add_dependencies(vulkanengine SyncModels)
