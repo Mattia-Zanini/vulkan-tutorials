@@ -7,6 +7,7 @@
 #include "lve_frame_info.hpp"
 #include "lve_game_object.hpp"
 #include "lve_model.hpp"
+#include "lve_swap_chain.hpp"
 #include "simple_render_system.hpp"
 #include "vulkan/vulkan_core.h"
 
@@ -38,19 +39,20 @@ namespace lve {
   FirstApp::~FirstApp() {}
 
   void FirstApp::run() {
-    // Crea un buffer uniforme con istanze pari a MAX_FRAMES_IN_FLIGHT per implementare il double buffering.
-    // In questo modo la CPU può scrivere i dati dell'UBO per il frame successivo mentre la GPU legge quelli del frame corrente.
-    // L'allineamento minimo (minUniformBufferOffsetAlignment) garantisce la corretta spaziatura tra istanze consecutive.
-    // Non viene usato HOST_COHERENT per poter eseguire il flush esplicito solo dell'indice di frame corrente.
-    LveBuffer globalUboBuffer{
-      lveDevice,
-      sizeof(GlobalUbo),
-      LveSwapChain::MAX_FRAMES_IN_FLIGHT,
-      VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-      VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
-      lveDevice.properties.limits.minUniformBufferOffsetAlignment
-    };
-    globalUboBuffer.map();
+    // Alloca un buffer UBO separato per ciascun frame in flight (MAX_FRAMES_IN_FLIGHT).
+    // Separare i buffer per ciascun frame (con instanceCount = 1) evita problemi di allineamento
+    // con il limite hardware 'nonCoherentAtomSize' del dispositivo, che altrimenti si verificherebbero
+    // compattando più istanze in un unico buffer ed eseguendo il flush di un singolo indice.
+    std::vector<std::unique_ptr<LveBuffer>> uboBuffers(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
+    for (int i = 0; i < uboBuffers.size(); i++) {
+      uboBuffers[i] = std::make_unique<LveBuffer>(
+        lveDevice,
+        sizeof(GlobalUbo),
+        1,
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
+      uboBuffers[i]->map();
+    }
 
     // Sistema di rendering: incapsula pipeline, layout e logica di disegno per i game object,
     // configurandosi con il render pass fornito dal renderer
@@ -104,9 +106,9 @@ namespace lve {
         // Fase 1: Aggiornamento degli oggetti e della memoria
         GlobalUbo ubo{};
         ubo.projectionView = camera.getProjection() * camera.getView();
-        // Scrive e rilascia selettivamente (flush) la memoria UBO per il frame corrente
-        globalUboBuffer.writeToIndex(&ubo, frameIndex);
-        globalUboBuffer.flushIndex(frameIndex);
+        // Scrive i dati e ne esegue il flush sul buffer UBO dedicato al frame corrente
+        uboBuffers[frameIndex]->writeToBuffer(&ubo);
+        uboBuffers[frameIndex]->flush();
 
         // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
