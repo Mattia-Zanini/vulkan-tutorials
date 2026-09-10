@@ -51,7 +51,7 @@ namespace lve {
     LveGameObject(const LveGameObject&) = delete;
     LveGameObject& operator=(const LveGameObject&) = delete;
     LveGameObject(LveGameObject&&) = default;
-    LveGameObject& operator=(LveGameObject&&) = default;
+    LveGameObject& operator=(LveGameObject&&) = delete;
 
     id_t getId() const { return id; }
 
