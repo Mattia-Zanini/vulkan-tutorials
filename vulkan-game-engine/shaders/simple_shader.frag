@@ -24,6 +24,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo {
   int numLights;
 } ubo;
 
+// Texture diffusa 2D del singolo Game Object accessibile al Set 1 Binding 1
 layout (set = 1, binding = 1) uniform sampler2D diffuseMap;
 
 // Blocco di Push Constants accessibile nel Fragment Shader (stessa definizione e layout di memoria del vertex shader)
@@ -74,7 +75,7 @@ void main() {
     specularLight += intensity * blinnTerm;
   }
 
-  // Combina illuminazione diffusa (modulata dalla texture diffuseMap) e speculare
+  // Campiona la texture diffusa alle coordinate UV del frammento e combina la luce diffusa con la componente speculare
   vec3 color = texture(diffuseMap, fragUv).xyz;
   outColor = vec4(diffuseLight * color + specularLight * fragColor, 1.0);
 }

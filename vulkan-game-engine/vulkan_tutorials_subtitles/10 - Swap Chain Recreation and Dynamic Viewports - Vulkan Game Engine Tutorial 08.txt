@@ -1,0 +1,5085 @@
+1
+00:00:00,240 --> 00:00:02,710
+ 
+unfortunately resizing the window isn't
+
+2
+00:00:02,710 --> 00:00:02,720
+unfortunately resizing the window isn't
+ 
+
+3
+00:00:02,720 --> 00:00:05,110
+unfortunately resizing the window isn't
+quite as simple as setting the glfw
+
+4
+00:00:05,110 --> 00:00:05,120
+quite as simple as setting the glfw
+ 
+
+5
+00:00:05,120 --> 00:00:07,829
+quite as simple as setting the glfw
+window hint resizable to true if you
+
+6
+00:00:07,829 --> 00:00:07,839
+window hint resizable to true if you
+ 
+
+7
+00:00:07,839 --> 00:00:09,589
+window hint resizable to true if you
+have already tried doing so you will
+
+8
+00:00:09,589 --> 00:00:09,599
+have already tried doing so you will
+ 
+
+9
+00:00:09,599 --> 00:00:11,110
+have already tried doing so you will
+find out that when you try to make the
+
+10
+00:00:11,110 --> 00:00:11,120
+find out that when you try to make the
+ 
+
+11
+00:00:11,120 --> 00:00:13,270
+find out that when you try to make the
+windows smaller or larger the program
+
+12
+00:00:13,270 --> 00:00:13,280
+windows smaller or larger the program
+ 
+
+13
+00:00:13,280 --> 00:00:14,629
+windows smaller or larger the program
+will crash
+
+14
+00:00:14,629 --> 00:00:14,639
+will crash
+ 
+
+15
+00:00:14,639 --> 00:00:16,710
+will crash
+this is because the lve swatching class
+
+16
+00:00:16,710 --> 00:00:16,720
+this is because the lve swatching class
+ 
+
+17
+00:00:16,720 --> 00:00:18,550
+this is because the lve swatching class
+encapsulates a vulcan swap chain
+
+18
+00:00:18,550 --> 00:00:18,560
+encapsulates a vulcan swap chain
+ 
+
+19
+00:00:18,560 --> 00:00:20,310
+encapsulates a vulcan swap chain
+frame buffers and color and depth
+
+20
+00:00:20,310 --> 00:00:20,320
+frame buffers and color and depth
+ 
+
+21
+00:00:20,320 --> 00:00:22,630
+frame buffers and color and depth
+attachments all of these objects have a
+
+22
+00:00:22,630 --> 00:00:22,640
+attachments all of these objects have a
+ 
+
+23
+00:00:22,640 --> 00:00:23,109
+attachments all of these objects have a
+fixed
+
+24
+00:00:23,109 --> 00:00:23,119
+fixed
+ 
+
+25
+00:00:23,119 --> 00:00:25,269
+fixed
+size once created equal to the size of
+
+26
+00:00:25,269 --> 00:00:25,279
+size once created equal to the size of
+ 
+
+27
+00:00:25,279 --> 00:00:26,470
+size once created equal to the size of
+the window
+
+28
+00:00:26,470 --> 00:00:26,480
+the window
+ 
+
+29
+00:00:26,480 --> 00:00:28,550
+the window
+therefore whenever we observe that the
+
+30
+00:00:28,550 --> 00:00:28,560
+therefore whenever we observe that the
+ 
+
+31
+00:00:28,560 --> 00:00:30,790
+therefore whenever we observe that the
+windows size has changed we will need to
+
+32
+00:00:30,790 --> 00:00:30,800
+windows size has changed we will need to
+ 
+
+33
+00:00:30,800 --> 00:00:32,709
+windows size has changed we will need to
+recreate a new swap chain using the
+
+34
+00:00:32,709 --> 00:00:32,719
+recreate a new swap chain using the
+ 
+
+35
+00:00:32,719 --> 00:00:34,549
+recreate a new swap chain using the
+updated dimensions
+
+36
+00:00:34,549 --> 00:00:34,559
+updated dimensions
+ 
+
+37
+00:00:34,559 --> 00:00:37,110
+updated dimensions
+additionally if we construct a new swap
+
+38
+00:00:37,110 --> 00:00:37,120
+additionally if we construct a new swap
+ 
+
+39
+00:00:37,120 --> 00:00:39,110
+additionally if we construct a new swap
+chain we might also have to build a new
+
+40
+00:00:39,110 --> 00:00:39,120
+chain we might also have to build a new
+ 
+
+41
+00:00:39,120 --> 00:00:41,190
+chain we might also have to build a new
+pipeline as the graphics pipeline
+
+42
+00:00:41,190 --> 00:00:41,200
+pipeline as the graphics pipeline
+ 
+
+43
+00:00:41,200 --> 00:00:42,709
+pipeline as the graphics pipeline
+currently relies on both the swap
+
+44
+00:00:42,709 --> 00:00:42,719
+currently relies on both the swap
+ 
+
+45
+00:00:42,719 --> 00:00:44,150
+currently relies on both the swap
+chain's width height and
+
+46
+00:00:44,150 --> 00:00:44,160
+chain's width height and
+ 
+
+47
+00:00:44,160 --> 00:00:46,630
+chain's width height and
+render pass this is the dependency we
+
+48
+00:00:46,630 --> 00:00:46,640
+render pass this is the dependency we
+ 
+
+49
+00:00:46,640 --> 00:00:48,549
+render pass this is the dependency we
+can avoid most of the time by using a
+
+50
+00:00:48,549 --> 00:00:48,559
+can avoid most of the time by using a
+ 
+
+51
+00:00:48,559 --> 00:00:50,950
+can avoid most of the time by using a
+dynamic viewport and scissor
+
+52
+00:00:50,950 --> 00:00:50,960
+dynamic viewport and scissor
+ 
+
+53
+00:00:50,960 --> 00:00:52,709
+dynamic viewport and scissor
+finally the command buffers are pretty
+
+54
+00:00:52,709 --> 00:00:52,719
+finally the command buffers are pretty
+ 
+
+55
+00:00:52,719 --> 00:00:54,630
+finally the command buffers are pretty
+dependent on the swap chain
+
+56
+00:00:54,630 --> 00:00:54,640
+dependent on the swap chain
+ 
+
+57
+00:00:54,640 --> 00:00:56,470
+dependent on the swap chain
+we are still using a one-to-one
+
+58
+00:00:56,470 --> 00:00:56,480
+we are still using a one-to-one
+ 
+
+59
+00:00:56,480 --> 00:00:58,389
+we are still using a one-to-one
+relationship between command buffers and
+
+60
+00:00:58,389 --> 00:00:58,399
+relationship between command buffers and
+ 
+
+61
+00:00:58,399 --> 00:00:59,670
+relationship between command buffers and
+swap chain images
+
+62
+00:00:59,670 --> 00:00:59,680
+swap chain images
+ 
+
+63
+00:00:59,680 --> 00:01:01,670
+swap chain images
+and when we record a command buffer we
+
+64
+00:01:01,670 --> 00:01:01,680
+and when we record a command buffer we
+ 
+
+65
+00:01:01,680 --> 00:01:03,910
+and when we record a command buffer we
+use the swap chain's extent render pass
+
+66
+00:01:03,910 --> 00:01:03,920
+use the swap chain's extent render pass
+ 
+
+67
+00:01:03,920 --> 00:01:06,710
+use the swap chain's extent render pass
+and frame buffer but it is pretty common
+
+68
+00:01:06,710 --> 00:01:06,720
+and frame buffer but it is pretty common
+ 
+
+69
+00:01:06,720 --> 00:01:09,030
+and frame buffer but it is pretty common
+to re-record the primary command buffers
+
+70
+00:01:09,030 --> 00:01:09,040
+to re-record the primary command buffers
+ 
+
+71
+00:01:09,040 --> 00:01:11,429
+to re-record the primary command buffers
+every frame so this seems like a good a
+
+72
+00:01:11,429 --> 00:01:11,439
+every frame so this seems like a good a
+ 
+
+73
+00:01:11,439 --> 00:01:12,310
+every frame so this seems like a good a
+time as any
+
+74
+00:01:12,310 --> 00:01:12,320
+time as any
+ 
+
+75
+00:01:12,320 --> 00:01:15,030
+time as any
+to implement that as well first a thank
+
+76
+00:01:15,030 --> 00:01:15,040
+to implement that as well first a thank
+ 
+
+77
+00:01:15,040 --> 00:01:17,030
+to implement that as well first a thank
+you to the viewer who pointed this out
+
+78
+00:01:17,030 --> 00:01:17,040
+you to the viewer who pointed this out
+ 
+
+79
+00:01:17,040 --> 00:01:19,270
+you to the viewer who pointed this out
+in the pipeline class when deleting the
+
+80
+00:01:19,270 --> 00:01:19,280
+in the pipeline class when deleting the
+ 
+
+81
+00:01:19,280 --> 00:01:21,590
+in the pipeline class when deleting the
+copy operator this shouldn't be void
+
+82
+00:01:21,590 --> 00:01:21,600
+copy operator this shouldn't be void
+ 
+
+83
+00:01:21,600 --> 00:01:22,870
+copy operator this shouldn't be void
+operator equals but
+
+84
+00:01:22,870 --> 00:01:22,880
+operator equals but
+ 
+
+85
+00:01:22,880 --> 00:01:26,789
+operator equals but
+lve pipeline reference operator equals
+
+86
+00:01:26,789 --> 00:01:26,799
+lve pipeline reference operator equals
+ 
+
+87
+00:01:26,799 --> 00:01:28,630
+lve pipeline reference operator equals
+i've actually done this in the swap
+
+88
+00:01:28,630 --> 00:01:28,640
+i've actually done this in the swap
+ 
+
+89
+00:01:28,640 --> 00:01:30,710
+i've actually done this in the swap
+chain and device code as well so make
+
+90
+00:01:30,710 --> 00:01:30,720
+chain and device code as well so make
+ 
+
+91
+00:01:30,720 --> 00:01:32,870
+chain and device code as well so make
+sure to update all occurrences of this
+
+92
+00:01:32,870 --> 00:01:32,880
+sure to update all occurrences of this
+ 
+
+93
+00:01:32,880 --> 00:01:35,910
+sure to update all occurrences of this
+mistake okay first things first
+
+94
+00:01:35,910 --> 00:01:35,920
+mistake okay first things first
+ 
+
+95
+00:01:35,920 --> 00:01:37,749
+mistake okay first things first
+since our window will now be able to
+
+96
+00:01:37,749 --> 00:01:37,759
+since our window will now be able to
+ 
+
+97
+00:01:37,759 --> 00:01:38,950
+since our window will now be able to
+change dimensions
+
+98
+00:01:38,950 --> 00:01:38,960
+change dimensions
+ 
+
+99
+00:01:38,960 --> 00:01:41,190
+change dimensions
+remove the const keyword from before the
+
+100
+00:01:41,190 --> 00:01:41,200
+remove the const keyword from before the
+ 
+
+101
+00:01:41,200 --> 00:01:42,950
+remove the const keyword from before the
+width and height variables
+
+102
+00:01:42,950 --> 00:01:42,960
+width and height variables
+ 
+
+103
+00:01:42,960 --> 00:01:45,190
+width and height variables
+next add a new member variable bool
+
+104
+00:01:45,190 --> 00:01:45,200
+next add a new member variable bool
+ 
+
+105
+00:01:45,200 --> 00:01:46,950
+next add a new member variable bool
+frame buffer resized
+
+106
+00:01:46,950 --> 00:01:46,960
+frame buffer resized
+ 
+
+107
+00:01:46,960 --> 00:01:49,350
+frame buffer resized
+this will be used as a flag to signal
+
+108
+00:01:49,350 --> 00:01:49,360
+this will be used as a flag to signal
+ 
+
+109
+00:01:49,360 --> 00:01:51,910
+this will be used as a flag to signal
+that the window size has changed
+
+110
+00:01:51,910 --> 00:01:51,920
+that the window size has changed
+ 
+
+111
+00:01:51,920 --> 00:01:54,389
+that the window size has changed
+at a public function bool was window
+
+112
+00:01:54,389 --> 00:01:54,399
+at a public function bool was window
+ 
+
+113
+00:01:54,399 --> 00:01:55,109
+at a public function bool was window
+resized
+
+114
+00:01:55,109 --> 00:01:55,119
+resized
+ 
+
+115
+00:01:55,119 --> 00:01:58,230
+resized
+and returned frame buffer resized
+
+116
+00:01:58,230 --> 00:01:58,240
+and returned frame buffer resized
+ 
+
+117
+00:01:58,240 --> 00:02:01,270
+and returned frame buffer resized
+next add a void function reset window
+
+118
+00:02:01,270 --> 00:02:01,280
+next add a void function reset window
+ 
+
+119
+00:02:01,280 --> 00:02:02,950
+next add a void function reset window
+resized flag
+
+120
+00:02:02,950 --> 00:02:02,960
+resized flag
+ 
+
+121
+00:02:02,960 --> 00:02:05,350
+resized flag
+which will set frame buffer resized to
+
+122
+00:02:05,350 --> 00:02:05,360
+which will set frame buffer resized to
+ 
+
+123
+00:02:05,360 --> 00:02:06,709
+which will set frame buffer resized to
+false
+
+124
+00:02:06,709 --> 00:02:06,719
+false
+ 
+
+125
+00:02:06,719 --> 00:02:08,949
+false
+finally add a private static function
+
+126
+00:02:08,949 --> 00:02:08,959
+finally add a private static function
+ 
+
+127
+00:02:08,959 --> 00:02:10,710
+finally add a private static function
+called frame buffer resized
+
+128
+00:02:10,710 --> 00:02:10,720
+called frame buffer resized
+ 
+
+129
+00:02:10,720 --> 00:02:14,070
+called frame buffer resized
+callback that takes a glfw
+
+130
+00:02:14,070 --> 00:02:14,080
+callback that takes a glfw
+ 
+
+131
+00:02:14,080 --> 00:02:16,390
+callback that takes a glfw
+window pointer and an int width and in
+
+132
+00:02:16,390 --> 00:02:16,400
+window pointer and an int width and in
+ 
+
+133
+00:02:16,400 --> 00:02:18,630
+window pointer and an int width and in
+tight
+
+134
+00:02:18,630 --> 00:02:18,640
+tight
+ 
+
+135
+00:02:18,640 --> 00:02:21,190
+tight
+now copy the callback function signature
+
+136
+00:02:21,190 --> 00:02:21,200
+now copy the callback function signature
+ 
+
+137
+00:02:21,200 --> 00:02:23,990
+now copy the callback function signature
+and open your window implementation file
+
+138
+00:02:23,990 --> 00:02:24,000
+and open your window implementation file
+ 
+
+139
+00:02:24,000 --> 00:02:26,309
+and open your window implementation file
+paste the function signature in and add
+
+140
+00:02:26,309 --> 00:02:26,319
+paste the function signature in and add
+ 
+
+141
+00:02:26,319 --> 00:02:27,270
+paste the function signature in and add
+your class name
+
+142
+00:02:27,270 --> 00:02:27,280
+your class name
+ 
+
+143
+00:02:27,280 --> 00:02:30,710
+your class name
+scope then within the function
+
+144
+00:02:30,710 --> 00:02:30,720
+scope then within the function
+ 
+
+145
+00:02:30,720 --> 00:02:34,550
+scope then within the function
+create a local variable auto lve window
+
+146
+00:02:34,550 --> 00:02:34,560
+create a local variable auto lve window
+ 
+
+147
+00:02:34,560 --> 00:02:37,589
+create a local variable auto lve window
+equal to reinterpret cast
+
+148
+00:02:37,589 --> 00:02:37,599
+equal to reinterpret cast
+ 
+
+149
+00:02:37,599 --> 00:02:41,030
+equal to reinterpret cast
+lve window pointer glfw get window user
+
+150
+00:02:41,030 --> 00:02:41,040
+lve window pointer glfw get window user
+ 
+
+151
+00:02:41,040 --> 00:02:42,630
+lve window pointer glfw get window user
+pointer
+
+152
+00:02:42,630 --> 00:02:42,640
+pointer
+ 
+
+153
+00:02:42,640 --> 00:02:45,589
+pointer
+with the window pointer as the argument
+
+154
+00:02:45,589 --> 00:02:45,599
+with the window pointer as the argument
+ 
+
+155
+00:02:45,599 --> 00:02:46,070
+with the window pointer as the argument
+next
+
+156
+00:02:46,070 --> 00:02:46,080
+next
+ 
+
+157
+00:02:46,080 --> 00:02:48,710
+next
+set lve window arrow frame buffer
+
+158
+00:02:48,710 --> 00:02:48,720
+set lve window arrow frame buffer
+ 
+
+159
+00:02:48,720 --> 00:02:49,509
+set lve window arrow frame buffer
+resized
+
+160
+00:02:49,509 --> 00:02:49,519
+resized
+ 
+
+161
+00:02:49,519 --> 00:02:52,869
+resized
+to true all the window arrow width
+
+162
+00:02:52,869 --> 00:02:52,879
+to true all the window arrow width
+ 
+
+163
+00:02:52,879 --> 00:02:55,670
+to true all the window arrow width
+equal to width and lve window arrow
+
+164
+00:02:55,670 --> 00:02:55,680
+equal to width and lve window arrow
+ 
+
+165
+00:02:55,680 --> 00:02:57,910
+equal to width and lve window arrow
+height equal to height
+
+166
+00:02:57,910 --> 00:02:57,920
+height equal to height
+ 
+
+167
+00:02:57,920 --> 00:03:00,149
+height equal to height
+and don't forget to remove the static
+
+168
+00:03:00,149 --> 00:03:00,159
+and don't forget to remove the static
+ 
+
+169
+00:03:00,159 --> 00:03:02,070
+and don't forget to remove the static
+keyword
+
+170
+00:03:02,070 --> 00:03:02,080
+keyword
+ 
+
+171
+00:03:02,080 --> 00:03:05,030
+keyword
+okay now previously we've set the glfw
+
+172
+00:03:05,030 --> 00:03:05,040
+okay now previously we've set the glfw
+ 
+
+173
+00:03:05,040 --> 00:03:07,509
+okay now previously we've set the glfw
+window hint resizable to false
+
+174
+00:03:07,509 --> 00:03:07,519
+window hint resizable to false
+ 
+
+175
+00:03:07,519 --> 00:03:11,190
+window hint resizable to false
+change this to glfw underscore true
+
+176
+00:03:11,190 --> 00:03:11,200
+change this to glfw underscore true
+ 
+
+177
+00:03:11,200 --> 00:03:13,430
+change this to glfw underscore true
+and then after we create the window
+
+178
+00:03:13,430 --> 00:03:13,440
+and then after we create the window
+ 
+
+179
+00:03:13,440 --> 00:03:14,710
+and then after we create the window
+called glf w
+
+180
+00:03:14,710 --> 00:03:14,720
+called glf w
+ 
+
+181
+00:03:14,720 --> 00:03:17,030
+called glf w
+set window user pointer with arguments
+
+182
+00:03:17,030 --> 00:03:17,040
+set window user pointer with arguments
+ 
+
+183
+00:03:17,040 --> 00:03:18,790
+set window user pointer with arguments
+window and this
+
+184
+00:03:18,790 --> 00:03:18,800
+window and this
+ 
+
+185
+00:03:18,800 --> 00:03:21,509
+window and this
+then call glfw set frame buffer size
+
+186
+00:03:21,509 --> 00:03:21,519
+then call glfw set frame buffer size
+ 
+
+187
+00:03:21,519 --> 00:03:22,309
+then call glfw set frame buffer size
+callback
+
+188
+00:03:22,309 --> 00:03:22,319
+callback
+ 
+
+189
+00:03:22,319 --> 00:03:24,470
+callback
+with arguments window and frame buffer
+
+190
+00:03:24,470 --> 00:03:24,480
+with arguments window and frame buffer
+ 
+
+191
+00:03:24,480 --> 00:03:26,630
+with arguments window and frame buffer
+resize callback
+
+192
+00:03:26,630 --> 00:03:26,640
+resize callback
+ 
+
+193
+00:03:26,640 --> 00:03:29,430
+resize callback
+essentially the glfw library allows us
+
+194
+00:03:29,430 --> 00:03:29,440
+essentially the glfw library allows us
+ 
+
+195
+00:03:29,440 --> 00:03:31,589
+essentially the glfw library allows us
+to register a callback function
+
+196
+00:03:31,589 --> 00:03:31,599
+to register a callback function
+ 
+
+197
+00:03:31,599 --> 00:03:33,990
+to register a callback function
+that whenever the window is resized the
+
+198
+00:03:33,990 --> 00:03:34,000
+that whenever the window is resized the
+ 
+
+199
+00:03:34,000 --> 00:03:35,350
+that whenever the window is resized the
+function will be called with the
+
+200
+00:03:35,350 --> 00:03:35,360
+function will be called with the
+ 
+
+201
+00:03:35,360 --> 00:03:37,110
+function will be called with the
+arguments being the window pointer and
+
+202
+00:03:37,110 --> 00:03:37,120
+arguments being the window pointer and
+ 
+
+203
+00:03:37,120 --> 00:03:39,110
+arguments being the window pointer and
+the window's new width and height
+
+204
+00:03:39,110 --> 00:03:39,120
+the window's new width and height
+ 
+
+205
+00:03:39,120 --> 00:03:41,910
+the window's new width and height
+additionally the glfw set window user
+
+206
+00:03:41,910 --> 00:03:41,920
+additionally the glfw set window user
+ 
+
+207
+00:03:41,920 --> 00:03:42,789
+additionally the glfw set window user
+pointer function
+
+208
+00:03:42,789 --> 00:03:42,799
+pointer function
+ 
+
+209
+00:03:42,799 --> 00:03:45,589
+pointer function
+allows us to pair a glfw window object
+
+210
+00:03:45,589 --> 00:03:45,599
+allows us to pair a glfw window object
+ 
+
+211
+00:03:45,599 --> 00:03:46,070
+allows us to pair a glfw window object
+with an
+
+212
+00:03:46,070 --> 00:03:46,080
+with an
+ 
+
+213
+00:03:46,080 --> 00:03:48,470
+with an
+arbitrary pointer value which in this
+
+214
+00:03:48,470 --> 00:03:48,480
+arbitrary pointer value which in this
+ 
+
+215
+00:03:48,480 --> 00:03:51,110
+arbitrary pointer value which in this
+case was set to be the parent lve window
+
+216
+00:03:51,110 --> 00:03:51,120
+case was set to be the parent lve window
+ 
+
+217
+00:03:51,120 --> 00:03:52,070
+case was set to be the parent lve window
+object
+
+218
+00:03:52,070 --> 00:03:52,080
+object
+ 
+
+219
+00:03:52,080 --> 00:03:54,390
+object
+now in your first app header file add
+
+220
+00:03:54,390 --> 00:03:54,400
+now in your first app header file add
+ 
+
+221
+00:03:54,400 --> 00:03:56,390
+now in your first app header file add
+two new private functions
+
+222
+00:03:56,390 --> 00:03:56,400
+two new private functions
+ 
+
+223
+00:03:56,400 --> 00:03:59,990
+two new private functions
+void recreate swap chain and void
+
+224
+00:03:59,990 --> 00:04:00,000
+void recreate swap chain and void
+ 
+
+225
+00:04:00,000 --> 00:04:02,070
+void recreate swap chain and void
+record command buffer with a function
+
+226
+00:04:02,070 --> 00:04:02,080
+record command buffer with a function
+ 
+
+227
+00:04:02,080 --> 00:04:06,630
+record command buffer with a function
+parameter into image index
+
+228
+00:04:06,630 --> 00:04:06,640
+
+ 
+
+229
+00:04:06,640 --> 00:04:08,869
+ 
+then change the type of lve swap chain
+
+230
+00:04:08,869 --> 00:04:08,879
+then change the type of lve swap chain
+ 
+
+231
+00:04:08,879 --> 00:04:09,750
+then change the type of lve swap chain
+to be a unique
+
+232
+00:04:09,750 --> 00:04:09,760
+to be a unique
+ 
+
+233
+00:04:09,760 --> 00:04:11,750
+to be a unique
+pointer and remove the initialization
+
+234
+00:04:11,750 --> 00:04:11,760
+pointer and remove the initialization
+ 
+
+235
+00:04:11,760 --> 00:04:13,030
+pointer and remove the initialization
+arguments
+
+236
+00:04:13,030 --> 00:04:13,040
+arguments
+ 
+
+237
+00:04:13,040 --> 00:04:15,270
+arguments
+by using a unique pointer to our swap
+
+238
+00:04:15,270 --> 00:04:15,280
+by using a unique pointer to our swap
+ 
+
+239
+00:04:15,280 --> 00:04:17,189
+by using a unique pointer to our swap
+chain rather than a stack allocated
+
+240
+00:04:17,189 --> 00:04:17,199
+chain rather than a stack allocated
+ 
+
+241
+00:04:17,199 --> 00:04:17,990
+chain rather than a stack allocated
+variable
+
+242
+00:04:17,990 --> 00:04:18,000
+variable
+ 
+
+243
+00:04:18,000 --> 00:04:20,069
+variable
+we can easily create a new swap chain
+
+244
+00:04:20,069 --> 00:04:20,079
+we can easily create a new swap chain
+ 
+
+245
+00:04:20,079 --> 00:04:21,749
+we can easily create a new swap chain
+with an updated width and height
+
+246
+00:04:21,749 --> 00:04:21,759
+with an updated width and height
+ 
+
+247
+00:04:21,759 --> 00:04:24,310
+with an updated width and height
+simply by constructing a new object
+
+248
+00:04:24,310 --> 00:04:24,320
+simply by constructing a new object
+ 
+
+249
+00:04:24,320 --> 00:04:26,230
+simply by constructing a new object
+however using pointers comes with a
+
+250
+00:04:26,230 --> 00:04:26,240
+however using pointers comes with a
+ 
+
+251
+00:04:26,240 --> 00:04:28,310
+however using pointers comes with a
+small performance cost
+
+252
+00:04:28,310 --> 00:04:28,320
+small performance cost
+ 
+
+253
+00:04:28,320 --> 00:04:30,629
+small performance cost
+now because lve swatching is a pointer
+
+254
+00:04:30,629 --> 00:04:30,639
+now because lve swatching is a pointer
+ 
+
+255
+00:04:30,639 --> 00:04:32,710
+now because lve swatching is a pointer
+we need to use the error operator rather
+
+256
+00:04:32,710 --> 00:04:32,720
+we need to use the error operator rather
+ 
+
+257
+00:04:32,720 --> 00:04:34,790
+we need to use the error operator rather
+than the dot operator
+
+258
+00:04:34,790 --> 00:04:34,800
+than the dot operator
+ 
+
+259
+00:04:34,800 --> 00:04:37,110
+than the dot operator
+so in your app implementation file
+
+260
+00:04:37,110 --> 00:04:37,120
+so in your app implementation file
+ 
+
+261
+00:04:37,120 --> 00:04:39,189
+so in your app implementation file
+update each occurrence of this
+
+262
+00:04:39,189 --> 00:04:39,199
+update each occurrence of this
+ 
+
+263
+00:04:39,199 --> 00:04:41,110
+update each occurrence of this
+next update the create command buffers
+
+264
+00:04:41,110 --> 00:04:41,120
+next update the create command buffers
+ 
+
+265
+00:04:41,120 --> 00:04:43,110
+next update the create command buffers
+function to only be responsible for
+
+266
+00:04:43,110 --> 00:04:43,120
+function to only be responsible for
+ 
+
+267
+00:04:43,120 --> 00:04:45,670
+function to only be responsible for
+command buffer allocation
+
+268
+00:04:45,670 --> 00:04:45,680
+command buffer allocation
+ 
+
+269
+00:04:45,680 --> 00:04:47,830
+command buffer allocation
+so within this for loop copy and delete
+
+270
+00:04:47,830 --> 00:04:47,840
+so within this for loop copy and delete
+ 
+
+271
+00:04:47,840 --> 00:04:49,830
+so within this for loop copy and delete
+this chunk of code where we record to
+
+272
+00:04:49,830 --> 00:04:49,840
+this chunk of code where we record to
+ 
+
+273
+00:04:49,840 --> 00:04:51,909
+this chunk of code where we record to
+the command buffers
+
+274
+00:04:51,909 --> 00:04:51,919
+the command buffers
+ 
+
+275
+00:04:51,919 --> 00:04:54,950
+the command buffers
+and remove the for loop
+
+276
+00:04:54,950 --> 00:04:54,960
+and remove the for loop
+ 
+
+277
+00:04:54,960 --> 00:04:57,510
+and remove the for loop
+then add a new function void first app
+
+278
+00:04:57,510 --> 00:04:57,520
+then add a new function void first app
+ 
+
+279
+00:04:57,520 --> 00:05:00,070
+then add a new function void first app
+record command buffer with parameter int
+
+280
+00:05:00,070 --> 00:05:00,080
+record command buffer with parameter int
+ 
+
+281
+00:05:00,080 --> 00:05:02,710
+record command buffer with parameter int
+image index and paste the chunk of code
+
+282
+00:05:02,710 --> 00:05:02,720
+image index and paste the chunk of code
+ 
+
+283
+00:05:02,720 --> 00:05:04,710
+image index and paste the chunk of code
+to record to the command buffer inside
+
+284
+00:05:04,710 --> 00:05:04,720
+to record to the command buffer inside
+ 
+
+285
+00:05:04,720 --> 00:05:06,629
+to record to the command buffer inside
+the function body
+
+286
+00:05:06,629 --> 00:05:06,639
+the function body
+ 
+
+287
+00:05:06,639 --> 00:05:08,629
+the function body
+then find and replace every occurrence
+
+288
+00:05:08,629 --> 00:05:08,639
+then find and replace every occurrence
+ 
+
+289
+00:05:08,639 --> 00:05:10,790
+then find and replace every occurrence
+of index i within the record command
+
+290
+00:05:10,790 --> 00:05:10,800
+of index i within the record command
+ 
+
+291
+00:05:10,800 --> 00:05:11,909
+of index i within the record command
+buffer function
+
+292
+00:05:11,909 --> 00:05:11,919
+buffer function
+ 
+
+293
+00:05:11,919 --> 00:05:15,510
+buffer function
+to use the image index value instead
+
+294
+00:05:15,510 --> 00:05:15,520
+to use the image index value instead
+ 
+
+295
+00:05:15,520 --> 00:05:17,510
+to use the image index value instead
+next we need to implement the recreate
+
+296
+00:05:17,510 --> 00:05:17,520
+next we need to implement the recreate
+ 
+
+297
+00:05:17,520 --> 00:05:19,350
+next we need to implement the recreate
+swap chain function
+
+298
+00:05:19,350 --> 00:05:19,360
+swap chain function
+ 
+
+299
+00:05:19,360 --> 00:05:22,310
+swap chain function
+so right here after the create pipeline
+
+300
+00:05:22,310 --> 00:05:22,320
+so right here after the create pipeline
+ 
+
+301
+00:05:22,320 --> 00:05:23,590
+so right here after the create pipeline
+i'll add a new function
+
+302
+00:05:23,590 --> 00:05:23,600
+i'll add a new function
+ 
+
+303
+00:05:23,600 --> 00:05:27,270
+i'll add a new function
+void first app recreate swap chain
+
+304
+00:05:27,270 --> 00:05:27,280
+void first app recreate swap chain
+ 
+
+305
+00:05:27,280 --> 00:05:29,189
+void first app recreate swap chain
+in the function body i'll add a new
+
+306
+00:05:29,189 --> 00:05:29,199
+in the function body i'll add a new
+ 
+
+307
+00:05:29,199 --> 00:05:30,710
+in the function body i'll add a new
+local variable auto
+
+308
+00:05:30,710 --> 00:05:30,720
+local variable auto
+ 
+
+309
+00:05:30,720 --> 00:05:34,469
+local variable auto
+extend equal to lve window.getextent
+
+310
+00:05:34,469 --> 00:05:34,479
+extend equal to lve window.getextent
+ 
+
+311
+00:05:34,479 --> 00:05:36,469
+extend equal to lve window.getextent
+so this just gets the current window
+
+312
+00:05:36,469 --> 00:05:36,479
+so this just gets the current window
+ 
+
+313
+00:05:36,479 --> 00:05:38,870
+so this just gets the current window
+size then in a loop i'll check that
+
+314
+00:05:38,870 --> 00:05:38,880
+size then in a loop i'll check that
+ 
+
+315
+00:05:38,880 --> 00:05:39,990
+size then in a loop i'll check that
+while the extent
+
+316
+00:05:39,990 --> 00:05:40,000
+while the extent
+ 
+
+317
+00:05:40,000 --> 00:05:42,390
+while the extent
+dot width is equal to zero or extent dot
+
+318
+00:05:42,390 --> 00:05:42,400
+dot width is equal to zero or extent dot
+ 
+
+319
+00:05:42,400 --> 00:05:43,909
+dot width is equal to zero or extent dot
+height is equal to zero
+
+320
+00:05:43,909 --> 00:05:43,919
+height is equal to zero
+ 
+
+321
+00:05:43,919 --> 00:05:46,950
+height is equal to zero
+i'll update my extent so extend equals
+
+322
+00:05:46,950 --> 00:05:46,960
+i'll update my extent so extend equals
+ 
+
+323
+00:05:46,960 --> 00:05:49,909
+i'll update my extent so extend equals
+lve window dot get extend and then call
+
+324
+00:05:49,909 --> 00:05:49,919
+lve window dot get extend and then call
+ 
+
+325
+00:05:49,919 --> 00:05:50,950
+lve window dot get extend and then call
+glfw
+
+326
+00:05:50,950 --> 00:05:50,960
+glfw
+ 
+
+327
+00:05:50,960 --> 00:05:53,430
+glfw
+weight events so this is the fact that
+
+328
+00:05:53,430 --> 00:05:53,440
+weight events so this is the fact that
+ 
+
+329
+00:05:53,440 --> 00:05:54,950
+weight events so this is the fact that
+while the window has at least one
+
+330
+00:05:54,950 --> 00:05:54,960
+while the window has at least one
+ 
+
+331
+00:05:54,960 --> 00:05:56,550
+while the window has at least one
+dimension that is sizeless
+
+332
+00:05:56,550 --> 00:05:56,560
+dimension that is sizeless
+ 
+
+333
+00:05:56,560 --> 00:05:59,430
+dimension that is sizeless
+the program will pause and wait this can
+
+334
+00:05:59,430 --> 00:05:59,440
+the program will pause and wait this can
+ 
+
+335
+00:05:59,440 --> 00:06:02,150
+the program will pause and wait this can
+occur during minimization for example
+
+336
+00:06:02,150 --> 00:06:02,160
+occur during minimization for example
+ 
+
+337
+00:06:02,160 --> 00:06:04,309
+occur during minimization for example
+then following the while loop call vk
+
+338
+00:06:04,309 --> 00:06:04,319
+then following the while loop call vk
+ 
+
+339
+00:06:04,319 --> 00:06:07,070
+then following the while loop call vk
+device weight idle with arguments
+
+340
+00:06:07,070 --> 00:06:07,080
+device weight idle with arguments
+ 
+
+341
+00:06:07,080 --> 00:06:09,189
+device weight idle with arguments
+lvedevice.device
+
+342
+00:06:09,189 --> 00:06:09,199
+lvedevice.device
+ 
+
+343
+00:06:09,199 --> 00:06:11,029
+lvedevice.device
+this is just an easy way that we can
+
+344
+00:06:11,029 --> 00:06:11,039
+this is just an easy way that we can
+ 
+
+345
+00:06:11,039 --> 00:06:13,270
+this is just an easy way that we can
+wait until the current swap chain is no
+
+346
+00:06:13,270 --> 00:06:13,280
+wait until the current swap chain is no
+ 
+
+347
+00:06:13,280 --> 00:06:15,270
+wait until the current swap chain is no
+longer being used before we create the
+
+348
+00:06:15,270 --> 00:06:15,280
+longer being used before we create the
+ 
+
+349
+00:06:15,280 --> 00:06:16,629
+longer being used before we create the
+new swap chain
+
+350
+00:06:16,629 --> 00:06:16,639
+new swap chain
+ 
+
+351
+00:06:16,639 --> 00:06:18,469
+new swap chain
+then after that create the swap chain
+
+352
+00:06:18,469 --> 00:06:18,479
+then after that create the swap chain
+ 
+
+353
+00:06:18,479 --> 00:06:20,870
+then after that create the swap chain
+with lve swap chain equal to std
+
+354
+00:06:20,870 --> 00:06:20,880
+with lve swap chain equal to std
+ 
+
+355
+00:06:20,880 --> 00:06:23,749
+with lve swap chain equal to std
+make unique angle brackets lv swap chain
+
+356
+00:06:23,749 --> 00:06:23,759
+make unique angle brackets lv swap chain
+ 
+
+357
+00:06:23,759 --> 00:06:25,749
+make unique angle brackets lv swap chain
+with arguments lve device and
+
+358
+00:06:25,749 --> 00:06:25,759
+with arguments lve device and
+ 
+
+359
+00:06:25,759 --> 00:06:29,510
+with arguments lve device and
+extend as mentioned earlier the pipeline
+
+360
+00:06:29,510 --> 00:06:29,520
+extend as mentioned earlier the pipeline
+ 
+
+361
+00:06:29,520 --> 00:06:31,749
+extend as mentioned earlier the pipeline
+also depends on the swap chain so we
+
+362
+00:06:31,749 --> 00:06:31,759
+also depends on the swap chain so we
+ 
+
+363
+00:06:31,759 --> 00:06:33,270
+also depends on the swap chain so we
+need to call the create pipeline
+
+364
+00:06:33,270 --> 00:06:33,280
+need to call the create pipeline
+ 
+
+365
+00:06:33,280 --> 00:06:33,830
+need to call the create pipeline
+function
+
+366
+00:06:33,830 --> 00:06:33,840
+function
+ 
+
+367
+00:06:33,840 --> 00:06:36,550
+function
+following swap chain creation in the
+
+368
+00:06:36,550 --> 00:06:36,560
+following swap chain creation in the
+ 
+
+369
+00:06:36,560 --> 00:06:37,990
+following swap chain creation in the
+first app constructor
+
+370
+00:06:37,990 --> 00:06:38,000
+first app constructor
+ 
+
+371
+00:06:38,000 --> 00:06:39,670
+first app constructor
+we can then change the function call
+
+372
+00:06:39,670 --> 00:06:39,680
+we can then change the function call
+ 
+
+373
+00:06:39,680 --> 00:06:41,029
+we can then change the function call
+from create pipeline
+
+374
+00:06:41,029 --> 00:06:41,039
+from create pipeline
+ 
+
+375
+00:06:41,039 --> 00:06:44,230
+from create pipeline
+to recreate swap chain finally
+
+376
+00:06:44,230 --> 00:06:44,240
+to recreate swap chain finally
+ 
+
+377
+00:06:44,240 --> 00:06:46,790
+to recreate swap chain finally
+navigate to the draw frame function it
+
+378
+00:06:46,790 --> 00:06:46,800
+navigate to the draw frame function it
+ 
+
+379
+00:06:46,800 --> 00:06:48,710
+navigate to the draw frame function it
+is here where we can detect if the swap
+
+380
+00:06:48,710 --> 00:06:48,720
+is here where we can detect if the swap
+ 
+
+381
+00:06:48,720 --> 00:06:50,550
+is here where we can detect if the swap
+chain has been resized and decide
+
+382
+00:06:50,550 --> 00:06:50,560
+chain has been resized and decide
+ 
+
+383
+00:06:50,560 --> 00:06:52,950
+chain has been resized and decide
+whether or not it needs to be recreated
+
+384
+00:06:52,950 --> 00:06:52,960
+whether or not it needs to be recreated
+ 
+
+385
+00:06:52,960 --> 00:06:55,350
+whether or not it needs to be recreated
+so under acquire next image add if
+
+386
+00:06:55,350 --> 00:06:55,360
+so under acquire next image add if
+ 
+
+387
+00:06:55,360 --> 00:06:56,550
+so under acquire next image add if
+result is equal to
+
+388
+00:06:56,550 --> 00:06:56,560
+result is equal to
+ 
+
+389
+00:06:56,560 --> 00:06:59,670
+result is equal to
+vk error out of date khr
+
+390
+00:06:59,670 --> 00:06:59,680
+vk error out of date khr
+ 
+
+391
+00:06:59,680 --> 00:07:03,189
+vk error out of date khr
+then recreate swap chain and return
+
+392
+00:07:03,189 --> 00:07:03,199
+then recreate swap chain and return
+ 
+
+393
+00:07:03,199 --> 00:07:05,350
+then recreate swap chain and return
+this error can occur after the window
+
+394
+00:07:05,350 --> 00:07:05,360
+this error can occur after the window
+ 
+
+395
+00:07:05,360 --> 00:07:06,870
+this error can occur after the window
+has been resized
+
+396
+00:07:06,870 --> 00:07:06,880
+has been resized
+ 
+
+397
+00:07:06,880 --> 00:07:08,870
+has been resized
+then just before we submit our command
+
+398
+00:07:08,870 --> 00:07:08,880
+then just before we submit our command
+ 
+
+399
+00:07:08,880 --> 00:07:10,870
+then just before we submit our command
+buffers we need to record them since we
+
+400
+00:07:10,870 --> 00:07:10,880
+buffers we need to record them since we
+ 
+
+401
+00:07:10,880 --> 00:07:12,790
+buffers we need to record them since we
+no longer do this at startup
+
+402
+00:07:12,790 --> 00:07:12,800
+no longer do this at startup
+ 
+
+403
+00:07:12,800 --> 00:07:15,350
+no longer do this at startup
+so call record command buffer and pass
+
+404
+00:07:15,350 --> 00:07:15,360
+so call record command buffer and pass
+ 
+
+405
+00:07:15,360 --> 00:07:16,070
+so call record command buffer and pass
+in image
+
+406
+00:07:16,070 --> 00:07:16,080
+in image
+ 
+
+407
+00:07:16,080 --> 00:07:18,629
+in image
+index next just underneath submit
+
+408
+00:07:18,629 --> 00:07:18,639
+index next just underneath submit
+ 
+
+409
+00:07:18,639 --> 00:07:19,830
+index next just underneath submit
+command buffers add
+
+410
+00:07:19,830 --> 00:07:19,840
+command buffers add
+ 
+
+411
+00:07:19,840 --> 00:07:22,469
+command buffers add
+if result equals vk error out of date
+
+412
+00:07:22,469 --> 00:07:22,479
+if result equals vk error out of date
+ 
+
+413
+00:07:22,479 --> 00:07:23,670
+if result equals vk error out of date
+khr
+
+414
+00:07:23,670 --> 00:07:23,680
+khr
+ 
+
+415
+00:07:23,680 --> 00:07:28,150
+khr
+or result equals vk sub optimal khr
+
+416
+00:07:28,150 --> 00:07:28,160
+or result equals vk sub optimal khr
+ 
+
+417
+00:07:28,160 --> 00:07:32,550
+or result equals vk sub optimal khr
+or lve window dot was resized
+
+418
+00:07:32,550 --> 00:07:32,560
+or lve window dot was resized
+ 
+
+419
+00:07:32,560 --> 00:07:35,189
+or lve window dot was resized
+then lve window dot reset window resize
+
+420
+00:07:35,189 --> 00:07:35,199
+then lve window dot reset window resize
+ 
+
+421
+00:07:35,199 --> 00:07:37,670
+then lve window dot reset window resize
+flag
+
+422
+00:07:37,670 --> 00:07:37,680
+
+ 
+
+423
+00:07:37,680 --> 00:07:41,830
+ 
+recreate swap chain and return
+
+424
+00:07:41,830 --> 00:07:41,840
+
+ 
+
+425
+00:07:41,840 --> 00:07:43,350
+ 
+make sure to save your code and then
+
+426
+00:07:43,350 --> 00:07:43,360
+make sure to save your code and then
+ 
+
+427
+00:07:43,360 --> 00:07:45,270
+make sure to save your code and then
+build and run
+
+428
+00:07:45,270 --> 00:07:45,280
+build and run
+ 
+
+429
+00:07:45,280 --> 00:07:47,350
+build and run
+if you move your cursor to the corner of
+
+430
+00:07:47,350 --> 00:07:47,360
+if you move your cursor to the corner of
+ 
+
+431
+00:07:47,360 --> 00:07:48,950
+if you move your cursor to the corner of
+the window you should now be able to
+
+432
+00:07:48,950 --> 00:07:48,960
+the window you should now be able to
+ 
+
+433
+00:07:48,960 --> 00:07:51,110
+the window you should now be able to
+resize the window to as small or as
+
+434
+00:07:51,110 --> 00:07:51,120
+resize the window to as small or as
+ 
+
+435
+00:07:51,120 --> 00:07:52,550
+resize the window to as small or as
+large as you want
+
+436
+00:07:52,550 --> 00:07:52,560
+large as you want
+ 
+
+437
+00:07:52,560 --> 00:07:54,550
+large as you want
+note that operating systems handle
+
+438
+00:07:54,550 --> 00:07:54,560
+note that operating systems handle
+ 
+
+439
+00:07:54,560 --> 00:07:56,309
+note that operating systems handle
+resizing differently
+
+440
+00:07:56,309 --> 00:07:56,319
+resizing differently
+ 
+
+441
+00:07:56,319 --> 00:07:58,710
+resizing differently
+macos actually does a great job if you
+
+442
+00:07:58,710 --> 00:07:58,720
+macos actually does a great job if you
+ 
+
+443
+00:07:58,720 --> 00:08:00,710
+macos actually does a great job if you
+look at what it's doing it pauses the
+
+444
+00:08:00,710 --> 00:08:00,720
+look at what it's doing it pauses the
+ 
+
+445
+00:08:00,720 --> 00:08:02,629
+look at what it's doing it pauses the
+program and takes the last rendered
+
+446
+00:08:02,629 --> 00:08:02,639
+program and takes the last rendered
+ 
+
+447
+00:08:02,639 --> 00:08:03,270
+program and takes the last rendered
+image
+
+448
+00:08:03,270 --> 00:08:03,280
+image
+ 
+
+449
+00:08:03,280 --> 00:08:05,270
+image
+automatically scaling it to fill the
+
+450
+00:08:05,270 --> 00:08:05,280
+automatically scaling it to fill the
+ 
+
+451
+00:08:05,280 --> 00:08:07,189
+automatically scaling it to fill the
+current window as long as i have the
+
+452
+00:08:07,189 --> 00:08:07,199
+current window as long as i have the
+ 
+
+453
+00:08:07,199 --> 00:08:09,110
+current window as long as i have the
+windows corner selected
+
+454
+00:08:09,110 --> 00:08:09,120
+windows corner selected
+ 
+
+455
+00:08:09,120 --> 00:08:11,430
+windows corner selected
+once i release the corner our program
+
+456
+00:08:11,430 --> 00:08:11,440
+once i release the corner our program
+ 
+
+457
+00:08:11,440 --> 00:08:13,670
+once i release the corner our program
+resumes and the triangles re-rendered at
+
+458
+00:08:13,670 --> 00:08:13,680
+resumes and the triangles re-rendered at
+ 
+
+459
+00:08:13,680 --> 00:08:15,749
+resumes and the triangles re-rendered at
+the windows new resolution
+
+460
+00:08:15,749 --> 00:08:15,759
+the windows new resolution
+ 
+
+461
+00:08:15,759 --> 00:08:18,790
+the windows new resolution
+but for example on ubuntu resizing isn't
+
+462
+00:08:18,790 --> 00:08:18,800
+but for example on ubuntu resizing isn't
+ 
+
+463
+00:08:18,800 --> 00:08:20,070
+but for example on ubuntu resizing isn't
+nearly as smooth
+
+464
+00:08:20,070 --> 00:08:20,080
+nearly as smooth
+ 
+
+465
+00:08:20,080 --> 00:08:21,909
+nearly as smooth
+this is partly due to the operating
+
+466
+00:08:21,909 --> 00:08:21,919
+this is partly due to the operating
+ 
+
+467
+00:08:21,919 --> 00:08:24,230
+this is partly due to the operating
+system but also during resizing our
+
+468
+00:08:24,230 --> 00:08:24,240
+system but also during resizing our
+ 
+
+469
+00:08:24,240 --> 00:08:26,230
+system but also during resizing our
+program will probably block on the call
+
+470
+00:08:26,230 --> 00:08:26,240
+program will probably block on the call
+ 
+
+471
+00:08:26,240 --> 00:08:27,270
+program will probably block on the call
+to glfw
+
+472
+00:08:27,270 --> 00:08:27,280
+to glfw
+ 
+
+473
+00:08:27,280 --> 00:08:29,670
+to glfw
+poll events to get around this you need
+
+474
+00:08:29,670 --> 00:08:29,680
+poll events to get around this you need
+ 
+
+475
+00:08:29,680 --> 00:08:31,189
+poll events to get around this you need
+to come up with a solution that
+
+476
+00:08:31,189 --> 00:08:31,199
+to come up with a solution that
+ 
+
+477
+00:08:31,199 --> 00:08:33,670
+to come up with a solution that
+continues to draw frames while resizing
+
+478
+00:08:33,670 --> 00:08:33,680
+continues to draw frames while resizing
+ 
+
+479
+00:08:33,680 --> 00:08:35,350
+continues to draw frames while resizing
+is occurring
+
+480
+00:08:35,350 --> 00:08:35,360
+is occurring
+ 
+
+481
+00:08:35,360 --> 00:08:37,509
+is occurring
+okay now a dynamic viewport and scissor
+
+482
+00:08:37,509 --> 00:08:37,519
+okay now a dynamic viewport and scissor
+ 
+
+483
+00:08:37,519 --> 00:08:39,350
+okay now a dynamic viewport and scissor
+are pretty much the same as a regular
+
+484
+00:08:39,350 --> 00:08:39,360
+are pretty much the same as a regular
+ 
+
+485
+00:08:39,360 --> 00:08:39,829
+are pretty much the same as a regular
+viewport
+
+486
+00:08:39,829 --> 00:08:39,839
+viewport
+ 
+
+487
+00:08:39,839 --> 00:08:41,990
+viewport
+and scissor except that we specified
+
+488
+00:08:41,990 --> 00:08:42,000
+and scissor except that we specified
+ 
+
+489
+00:08:42,000 --> 00:08:44,149
+and scissor except that we specified
+them in a command buffer rather than at
+
+490
+00:08:44,149 --> 00:08:44,159
+them in a command buffer rather than at
+ 
+
+491
+00:08:44,159 --> 00:08:45,670
+them in a command buffer rather than at
+pipeline creation
+
+492
+00:08:45,670 --> 00:08:45,680
+pipeline creation
+ 
+
+493
+00:08:45,680 --> 00:08:47,430
+pipeline creation
+so first navigate to your pipeline
+
+494
+00:08:47,430 --> 00:08:47,440
+so first navigate to your pipeline
+ 
+
+495
+00:08:47,440 --> 00:08:49,509
+so first navigate to your pipeline
+header file note that your pipeline
+
+496
+00:08:49,509 --> 00:08:49,519
+header file note that your pipeline
+ 
+
+497
+00:08:49,519 --> 00:08:51,509
+header file note that your pipeline
+config info struct may look slightly
+
+498
+00:08:51,509 --> 00:08:51,519
+config info struct may look slightly
+ 
+
+499
+00:08:51,519 --> 00:08:52,790
+config info struct may look slightly
+different to mine
+
+500
+00:08:52,790 --> 00:08:52,800
+different to mine
+ 
+
+501
+00:08:52,800 --> 00:08:54,870
+different to mine
+there's a bug fix that i posted only as
+
+502
+00:08:54,870 --> 00:08:54,880
+there's a bug fix that i posted only as
+ 
+
+503
+00:08:54,880 --> 00:08:57,110
+there's a bug fix that i posted only as
+a pinned comment on tutorial 5.
+
+504
+00:08:57,110 --> 00:08:57,120
+a pinned comment on tutorial 5.
+ 
+
+505
+00:08:57,120 --> 00:08:58,550
+a pinned comment on tutorial 5.
+don't worry about going back to
+
+506
+00:08:58,550 --> 00:08:58,560
+don't worry about going back to
+ 
+
+507
+00:08:58,560 --> 00:09:00,230
+don't worry about going back to
+implement that if you haven't yet
+
+508
+00:09:00,230 --> 00:09:00,240
+implement that if you haven't yet
+ 
+
+509
+00:09:00,240 --> 00:09:02,230
+implement that if you haven't yet
+since we will all get back onto the same
+
+510
+00:09:02,230 --> 00:09:02,240
+since we will all get back onto the same
+ 
+
+511
+00:09:02,240 --> 00:09:03,509
+since we will all get back onto the same
+page now
+
+512
+00:09:03,509 --> 00:09:03,519
+page now
+ 
+
+513
+00:09:03,519 --> 00:09:05,350
+page now
+so first make sure you've deleted the
+
+514
+00:09:05,350 --> 00:09:05,360
+so first make sure you've deleted the
+ 
+
+515
+00:09:05,360 --> 00:09:06,710
+so first make sure you've deleted the
+copy constructors
+
+516
+00:09:06,710 --> 00:09:06,720
+copy constructors
+ 
+
+517
+00:09:06,720 --> 00:09:09,110
+copy constructors
+this will prevent my previous mistake of
+
+518
+00:09:09,110 --> 00:09:09,120
+this will prevent my previous mistake of
+ 
+
+519
+00:09:09,120 --> 00:09:11,430
+this will prevent my previous mistake of
+pointers to bad memory following a copy
+
+520
+00:09:11,430 --> 00:09:11,440
+pointers to bad memory following a copy
+ 
+
+521
+00:09:11,440 --> 00:09:12,310
+pointers to bad memory following a copy
+operation
+
+522
+00:09:12,310 --> 00:09:12,320
+operation
+ 
+
+523
+00:09:12,320 --> 00:09:14,150
+operation
+then remove the viewport and scissor
+
+524
+00:09:14,150 --> 00:09:14,160
+then remove the viewport and scissor
+ 
+
+525
+00:09:14,160 --> 00:09:16,470
+then remove the viewport and scissor
+fields these are no longer needed when
+
+526
+00:09:16,470 --> 00:09:16,480
+fields these are no longer needed when
+ 
+
+527
+00:09:16,480 --> 00:09:18,870
+fields these are no longer needed when
+using a dynamic viewport in scissor
+
+528
+00:09:18,870 --> 00:09:18,880
+using a dynamic viewport in scissor
+ 
+
+529
+00:09:18,880 --> 00:09:21,110
+using a dynamic viewport in scissor
+next make sure that your struct contains
+
+530
+00:09:21,110 --> 00:09:21,120
+next make sure that your struct contains
+ 
+
+531
+00:09:21,120 --> 00:09:22,070
+next make sure that your struct contains
+the viewport info
+
+532
+00:09:22,070 --> 00:09:22,080
+the viewport info
+ 
+
+533
+00:09:22,080 --> 00:09:25,190
+the viewport info
+field then we need to add two new fields
+
+534
+00:09:25,190 --> 00:09:25,200
+field then we need to add two new fields
+ 
+
+535
+00:09:25,200 --> 00:09:28,630
+field then we need to add two new fields
+first an std vector of vk dynamics state
+
+536
+00:09:28,630 --> 00:09:28,640
+first an std vector of vk dynamics state
+ 
+
+537
+00:09:28,640 --> 00:09:31,750
+first an std vector of vk dynamics state
+named dynamic state enables then a field
+
+538
+00:09:31,750 --> 00:09:31,760
+named dynamic state enables then a field
+ 
+
+539
+00:09:31,760 --> 00:09:32,230
+named dynamic state enables then a field
+of type
+
+540
+00:09:32,230 --> 00:09:32,240
+of type
+ 
+
+541
+00:09:32,240 --> 00:09:35,269
+of type
+vk pipeline dynamic state create info
+
+542
+00:09:35,269 --> 00:09:35,279
+vk pipeline dynamic state create info
+ 
+
+543
+00:09:35,279 --> 00:09:38,310
+vk pipeline dynamic state create info
+called dynamic state info okay now
+
+544
+00:09:38,310 --> 00:09:38,320
+called dynamic state info okay now
+ 
+
+545
+00:09:38,320 --> 00:09:39,990
+called dynamic state info okay now
+scroll down to the default pipeline
+
+546
+00:09:39,990 --> 00:09:40,000
+scroll down to the default pipeline
+ 
+
+547
+00:09:40,000 --> 00:09:40,470
+scroll down to the default pipeline
+config
+
+548
+00:09:40,470 --> 00:09:40,480
+config
+ 
+
+549
+00:09:40,480 --> 00:09:42,870
+config
+info function update it so that now
+
+550
+00:09:42,870 --> 00:09:42,880
+info function update it so that now
+ 
+
+551
+00:09:42,880 --> 00:09:43,990
+info function update it so that now
+reads static
+
+552
+00:09:43,990 --> 00:09:44,000
+reads static
+ 
+
+553
+00:09:44,000 --> 00:09:46,710
+reads static
+void default pipeline config info and
+
+554
+00:09:46,710 --> 00:09:46,720
+void default pipeline config info and
+ 
+
+555
+00:09:46,720 --> 00:09:47,990
+void default pipeline config info and
+takes a pipeline config
+
+556
+00:09:47,990 --> 00:09:48,000
+takes a pipeline config
+ 
+
+557
+00:09:48,000 --> 00:09:52,150
+takes a pipeline config
+info reference as the only parameter
+
+558
+00:09:52,150 --> 00:09:52,160
+info reference as the only parameter
+ 
+
+559
+00:09:52,160 --> 00:09:54,870
+info reference as the only parameter
+open your pipeline implementation file
+
+560
+00:09:54,870 --> 00:09:54,880
+open your pipeline implementation file
+ 
+
+561
+00:09:54,880 --> 00:09:57,190
+open your pipeline implementation file
+and let's start by updating the default
+
+562
+00:09:57,190 --> 00:09:57,200
+and let's start by updating the default
+ 
+
+563
+00:09:57,200 --> 00:09:59,590
+and let's start by updating the default
+pipeline config info function signature
+
+564
+00:09:59,590 --> 00:09:59,600
+pipeline config info function signature
+ 
+
+565
+00:09:59,600 --> 00:10:01,509
+pipeline config info function signature
+to match what we just defined in the
+
+566
+00:10:01,509 --> 00:10:01,519
+to match what we just defined in the
+ 
+
+567
+00:10:01,519 --> 00:10:02,230
+to match what we just defined in the
+header
+
+568
+00:10:02,230 --> 00:10:02,240
+header
+ 
+
+569
+00:10:02,240 --> 00:10:03,990
+header
+then make sure to remove the local
+
+570
+00:10:03,990 --> 00:10:04,000
+then make sure to remove the local
+ 
+
+571
+00:10:04,000 --> 00:10:05,350
+then make sure to remove the local
+config info variable
+
+572
+00:10:05,350 --> 00:10:05,360
+config info variable
+ 
+
+573
+00:10:05,360 --> 00:10:07,990
+config info variable
+if you have one declared next remove the
+
+574
+00:10:07,990 --> 00:10:08,000
+if you have one declared next remove the
+ 
+
+575
+00:10:08,000 --> 00:10:10,150
+if you have one declared next remove the
+viewport and configuration code
+
+576
+00:10:10,150 --> 00:10:10,160
+viewport and configuration code
+ 
+
+577
+00:10:10,160 --> 00:10:12,630
+viewport and configuration code
+okay now update the viewport info fields
+
+578
+00:10:12,630 --> 00:10:12,640
+okay now update the viewport info fields
+ 
+
+579
+00:10:12,640 --> 00:10:13,269
+okay now update the viewport info fields
+so that p
+
+580
+00:10:13,269 --> 00:10:13,279
+so that p
+ 
+
+581
+00:10:13,279 --> 00:10:15,670
+so that p
+view ports and piece scissors are both
+
+582
+00:10:15,670 --> 00:10:15,680
+view ports and piece scissors are both
+ 
+
+583
+00:10:15,680 --> 00:10:17,430
+view ports and piece scissors are both
+now null pointers
+
+584
+00:10:17,430 --> 00:10:17,440
+now null pointers
+ 
+
+585
+00:10:17,440 --> 00:10:19,190
+now null pointers
+note that if you only implemented the
+
+586
+00:10:19,190 --> 00:10:19,200
+note that if you only implemented the
+ 
+
+587
+00:10:19,200 --> 00:10:21,269
+note that if you only implemented the
+first fix i showed in video 5
+
+588
+00:10:21,269 --> 00:10:21,279
+first fix i showed in video 5
+ 
+
+589
+00:10:21,279 --> 00:10:23,190
+first fix i showed in video 5
+you'll want to move the viewport info
+
+590
+00:10:23,190 --> 00:10:23,200
+you'll want to move the viewport info
+ 
+
+591
+00:10:23,200 --> 00:10:25,350
+you'll want to move the viewport info
+configuration back down to here
+
+592
+00:10:25,350 --> 00:10:25,360
+configuration back down to here
+ 
+
+593
+00:10:25,360 --> 00:10:27,190
+configuration back down to here
+then at the end of the function i'm
+
+594
+00:10:27,190 --> 00:10:27,200
+then at the end of the function i'm
+ 
+
+595
+00:10:27,200 --> 00:10:29,030
+then at the end of the function i'm
+going to configure the dynamic state
+
+596
+00:10:29,030 --> 00:10:29,040
+going to configure the dynamic state
+ 
+
+597
+00:10:29,040 --> 00:10:31,190
+going to configure the dynamic state
+enables and the dynamic state info
+
+598
+00:10:31,190 --> 00:10:31,200
+enables and the dynamic state info
+ 
+
+599
+00:10:31,200 --> 00:10:32,069
+enables and the dynamic state info
+fields
+
+600
+00:10:32,069 --> 00:10:32,079
+fields
+ 
+
+601
+00:10:32,079 --> 00:10:33,829
+fields
+if you ever feel like avoiding some
+
+602
+00:10:33,829 --> 00:10:33,839
+if you ever feel like avoiding some
+ 
+
+603
+00:10:33,839 --> 00:10:36,310
+if you ever feel like avoiding some
+typing in every tutorial so far i've
+
+604
+00:10:36,310 --> 00:10:36,320
+typing in every tutorial so far i've
+ 
+
+605
+00:10:36,320 --> 00:10:38,389
+typing in every tutorial so far i've
+included in the description a git diff
+
+606
+00:10:38,389 --> 00:10:38,399
+included in the description a git diff
+ 
+
+607
+00:10:38,399 --> 00:10:40,470
+included in the description a git diff
+of the exact changes for the video
+
+608
+00:10:40,470 --> 00:10:40,480
+of the exact changes for the video
+ 
+
+609
+00:10:40,480 --> 00:10:42,389
+of the exact changes for the video
+so you can copy and paste any large
+
+610
+00:10:42,389 --> 00:10:42,399
+so you can copy and paste any large
+ 
+
+611
+00:10:42,399 --> 00:10:43,670
+so you can copy and paste any large
+blocks of code
+
+612
+00:10:43,670 --> 00:10:43,680
+blocks of code
+ 
+
+613
+00:10:43,680 --> 00:10:45,430
+blocks of code
+this code here just configures the
+
+614
+00:10:45,430 --> 00:10:45,440
+this code here just configures the
+ 
+
+615
+00:10:45,440 --> 00:10:47,750
+this code here just configures the
+pipeline to expect a dynamic viewport
+
+616
+00:10:47,750 --> 00:10:47,760
+pipeline to expect a dynamic viewport
+ 
+
+617
+00:10:47,760 --> 00:10:50,470
+pipeline to expect a dynamic viewport
+and dynamic scissor to be provided later
+
+618
+00:10:50,470 --> 00:10:50,480
+and dynamic scissor to be provided later
+ 
+
+619
+00:10:50,480 --> 00:10:52,550
+and dynamic scissor to be provided later
+and finally remove the return statement
+
+620
+00:10:52,550 --> 00:10:52,560
+and finally remove the return statement
+ 
+
+621
+00:10:52,560 --> 00:10:55,030
+and finally remove the return statement
+if you still have one here
+
+622
+00:10:55,030 --> 00:10:55,040
+if you still have one here
+ 
+
+623
+00:10:55,040 --> 00:10:56,790
+if you still have one here
+now scroll up to the create graphics
+
+624
+00:10:56,790 --> 00:10:56,800
+now scroll up to the create graphics
+ 
+
+625
+00:10:56,800 --> 00:10:58,389
+now scroll up to the create graphics
+pipeline function
+
+626
+00:10:58,389 --> 00:10:58,399
+pipeline function
+ 
+
+627
+00:10:58,399 --> 00:11:00,310
+pipeline function
+if you have a local viewport info being
+
+628
+00:11:00,310 --> 00:11:00,320
+if you have a local viewport info being
+ 
+
+629
+00:11:00,320 --> 00:11:02,150
+if you have a local viewport info being
+created you can get rid of that and
+
+630
+00:11:02,150 --> 00:11:02,160
+created you can get rid of that and
+ 
+
+631
+00:11:02,160 --> 00:11:04,470
+created you can get rid of that and
+update this line to use the config info
+
+632
+00:11:04,470 --> 00:11:04,480
+update this line to use the config info
+ 
+
+633
+00:11:04,480 --> 00:11:06,389
+update this line to use the config info
+dot viewport info
+
+634
+00:11:06,389 --> 00:11:06,399
+dot viewport info
+ 
+
+635
+00:11:06,399 --> 00:11:08,389
+dot viewport info
+and then everyone should update p
+
+636
+00:11:08,389 --> 00:11:08,399
+and then everyone should update p
+ 
+
+637
+00:11:08,399 --> 00:11:10,230
+and then everyone should update p
+dynamic state to point to config
+
+638
+00:11:10,230 --> 00:11:10,240
+dynamic state to point to config
+ 
+
+639
+00:11:10,240 --> 00:11:13,590
+dynamic state to point to config
+info dot dynamic state info now in the
+
+640
+00:11:13,590 --> 00:11:13,600
+info dot dynamic state info now in the
+ 
+
+641
+00:11:13,600 --> 00:11:14,230
+info dot dynamic state info now in the
+first app
+
+642
+00:11:14,230 --> 00:11:14,240
+first app
+ 
+
+643
+00:11:14,240 --> 00:11:16,389
+first app
+implementation file go to your create
+
+644
+00:11:16,389 --> 00:11:16,399
+implementation file go to your create
+ 
+
+645
+00:11:16,399 --> 00:11:17,750
+implementation file go to your create
+pipeline function
+
+646
+00:11:17,750 --> 00:11:17,760
+pipeline function
+ 
+
+647
+00:11:17,760 --> 00:11:19,829
+pipeline function
+create a local pipeline config variable
+
+648
+00:11:19,829 --> 00:11:19,839
+create a local pipeline config variable
+ 
+
+649
+00:11:19,839 --> 00:11:21,990
+create a local pipeline config variable
+and then initialize it with the updated
+
+650
+00:11:21,990 --> 00:11:22,000
+and then initialize it with the updated
+ 
+
+651
+00:11:22,000 --> 00:11:24,949
+and then initialize it with the updated
+default pipeline config info function
+
+652
+00:11:24,949 --> 00:11:24,959
+default pipeline config info function
+ 
+
+653
+00:11:24,959 --> 00:11:28,550
+default pipeline config info function
+removing the width and height arguments
+
+654
+00:11:28,550 --> 00:11:28,560
+removing the width and height arguments
+ 
+
+655
+00:11:28,560 --> 00:11:30,389
+removing the width and height arguments
+then in the record command buffer
+
+656
+00:11:30,389 --> 00:11:30,399
+then in the record command buffer
+ 
+
+657
+00:11:30,399 --> 00:11:32,710
+then in the record command buffer
+function just after the begin render
+
+658
+00:11:32,710 --> 00:11:32,720
+function just after the begin render
+ 
+
+659
+00:11:32,720 --> 00:11:33,590
+function just after the begin render
+pass command
+
+660
+00:11:33,590 --> 00:11:33,600
+pass command
+ 
+
+661
+00:11:33,600 --> 00:11:35,829
+pass command
+let's configure the dynamic viewport and
+
+662
+00:11:35,829 --> 00:11:35,839
+let's configure the dynamic viewport and
+ 
+
+663
+00:11:35,839 --> 00:11:36,790
+let's configure the dynamic viewport and
+scissor
+
+664
+00:11:36,790 --> 00:11:36,800
+scissor
+ 
+
+665
+00:11:36,800 --> 00:11:39,190
+scissor
+this is another good opportunity to copy
+
+666
+00:11:39,190 --> 00:11:39,200
+this is another good opportunity to copy
+ 
+
+667
+00:11:39,200 --> 00:11:41,269
+this is another good opportunity to copy
+and paste from the change file
+
+668
+00:11:41,269 --> 00:11:41,279
+and paste from the change file
+ 
+
+669
+00:11:41,279 --> 00:11:43,430
+and paste from the change file
+so we set up a viewport and scissor with
+
+670
+00:11:43,430 --> 00:11:43,440
+so we set up a viewport and scissor with
+ 
+
+671
+00:11:43,440 --> 00:11:45,829
+so we set up a viewport and scissor with
+the swap chain dimensions
+
+672
+00:11:45,829 --> 00:11:45,839
+the swap chain dimensions
+ 
+
+673
+00:11:45,839 --> 00:11:48,630
+the swap chain dimensions
+and then we use vk command set viewport
+
+674
+00:11:48,630 --> 00:11:48,640
+and then we use vk command set viewport
+ 
+
+675
+00:11:48,640 --> 00:11:49,910
+and then we use vk command set viewport
+with the first argument
+
+676
+00:11:49,910 --> 00:11:49,920
+with the first argument
+ 
+
+677
+00:11:49,920 --> 00:11:52,710
+with the first argument
+as the command buffer at image index
+
+678
+00:11:52,710 --> 00:11:52,720
+as the command buffer at image index
+ 
+
+679
+00:11:52,720 --> 00:11:54,949
+as the command buffer at image index
+followed with 0 for the first viewport
+
+680
+00:11:54,949 --> 00:11:54,959
+followed with 0 for the first viewport
+ 
+
+681
+00:11:54,959 --> 00:11:55,590
+followed with 0 for the first viewport
+index
+
+682
+00:11:55,590 --> 00:11:55,600
+index
+ 
+
+683
+00:11:55,600 --> 00:11:57,990
+index
+one for the viewport count and a pointer
+
+684
+00:11:57,990 --> 00:11:58,000
+one for the viewport count and a pointer
+ 
+
+685
+00:11:58,000 --> 00:11:59,750
+one for the viewport count and a pointer
+to the local viewport object
+
+686
+00:11:59,750 --> 00:11:59,760
+to the local viewport object
+ 
+
+687
+00:11:59,760 --> 00:12:02,870
+to the local viewport object
+as the final argument similarly for the
+
+688
+00:12:02,870 --> 00:12:02,880
+as the final argument similarly for the
+ 
+
+689
+00:12:02,880 --> 00:12:04,629
+as the final argument similarly for the
+scissor we use vk command
+
+690
+00:12:04,629 --> 00:12:04,639
+scissor we use vk command
+ 
+
+691
+00:12:04,639 --> 00:12:07,110
+scissor we use vk command
+set scissor with identical arguments
+
+692
+00:12:07,110 --> 00:12:07,120
+set scissor with identical arguments
+ 
+
+693
+00:12:07,120 --> 00:12:09,190
+set scissor with identical arguments
+except for the final argument being a
+
+694
+00:12:09,190 --> 00:12:09,200
+except for the final argument being a
+ 
+
+695
+00:12:09,200 --> 00:12:11,430
+except for the final argument being a
+pointer to the scissor
+
+696
+00:12:11,430 --> 00:12:11,440
+pointer to the scissor
+ 
+
+697
+00:12:11,440 --> 00:12:13,670
+pointer to the scissor
+so every frame now we record a command
+
+698
+00:12:13,670 --> 00:12:13,680
+so every frame now we record a command
+ 
+
+699
+00:12:13,680 --> 00:12:15,910
+so every frame now we record a command
+buffer and dynamically set the viewport
+
+700
+00:12:15,910 --> 00:12:15,920
+buffer and dynamically set the viewport
+ 
+
+701
+00:12:15,920 --> 00:12:17,750
+buffer and dynamically set the viewport
+just before submitting the buffer to be
+
+702
+00:12:17,750 --> 00:12:17,760
+just before submitting the buffer to be
+ 
+
+703
+00:12:17,760 --> 00:12:18,710
+just before submitting the buffer to be
+executed
+
+704
+00:12:18,710 --> 00:12:18,720
+executed
+ 
+
+705
+00:12:18,720 --> 00:12:20,470
+executed
+this way we'll always be using the
+
+706
+00:12:20,470 --> 00:12:20,480
+this way we'll always be using the
+ 
+
+707
+00:12:20,480 --> 00:12:22,550
+this way we'll always be using the
+correct window size even if the swap
+
+708
+00:12:22,550 --> 00:12:22,560
+correct window size even if the swap
+ 
+
+709
+00:12:22,560 --> 00:12:25,110
+correct window size even if the swap
+chain changes
+
+710
+00:12:25,110 --> 00:12:25,120
+chain changes
+ 
+
+711
+00:12:25,120 --> 00:12:27,110
+chain changes
+in the recreate swap chain function we
+
+712
+00:12:27,110 --> 00:12:27,120
+in the recreate swap chain function we
+ 
+
+713
+00:12:27,120 --> 00:12:28,790
+in the recreate swap chain function we
+shouldn't yet remove the call to create
+
+714
+00:12:28,790 --> 00:12:28,800
+shouldn't yet remove the call to create
+ 
+
+715
+00:12:28,800 --> 00:12:29,750
+shouldn't yet remove the call to create
+a new pipeline
+
+716
+00:12:29,750 --> 00:12:29,760
+a new pipeline
+ 
+
+717
+00:12:29,760 --> 00:12:31,750
+a new pipeline
+since technically the pipeline is still
+
+718
+00:12:31,750 --> 00:12:31,760
+since technically the pipeline is still
+ 
+
+719
+00:12:31,760 --> 00:12:33,509
+since technically the pipeline is still
+dependent on the swap chain's render
+
+720
+00:12:33,509 --> 00:12:33,519
+dependent on the swap chain's render
+ 
+
+721
+00:12:33,519 --> 00:12:34,550
+dependent on the swap chain's render
+pass
+
+722
+00:12:34,550 --> 00:12:34,560
+pass
+ 
+
+723
+00:12:34,560 --> 00:12:36,710
+pass
+in tutorial 5 i said a render pass is
+
+724
+00:12:36,710 --> 00:12:36,720
+in tutorial 5 i said a render pass is
+ 
+
+725
+00:12:36,720 --> 00:12:38,550
+in tutorial 5 i said a render pass is
+kind of like a blueprint that tells the
+
+726
+00:12:38,550 --> 00:12:38,560
+kind of like a blueprint that tells the
+ 
+
+727
+00:12:38,560 --> 00:12:40,949
+kind of like a blueprint that tells the
+graphics pipeline what layout to expect
+
+728
+00:12:40,949 --> 00:12:40,959
+graphics pipeline what layout to expect
+ 
+
+729
+00:12:40,959 --> 00:12:42,470
+graphics pipeline what layout to expect
+for an output frame buffer
+
+730
+00:12:42,470 --> 00:12:42,480
+for an output frame buffer
+ 
+
+731
+00:12:42,480 --> 00:12:45,509
+for an output frame buffer
+as well as some other info however even
+
+732
+00:12:45,509 --> 00:12:45,519
+as well as some other info however even
+ 
+
+733
+00:12:45,519 --> 00:12:47,430
+as well as some other info however even
+though the graphics pipeline was created
+
+734
+00:12:47,430 --> 00:12:47,440
+though the graphics pipeline was created
+ 
+
+735
+00:12:47,440 --> 00:12:49,430
+though the graphics pipeline was created
+with one render pass instance
+
+736
+00:12:49,430 --> 00:12:49,440
+with one render pass instance
+ 
+
+737
+00:12:49,440 --> 00:12:51,509
+with one render pass instance
+the same pipeline can potentially work
+
+738
+00:12:51,509 --> 00:12:51,519
+the same pipeline can potentially work
+ 
+
+739
+00:12:51,519 --> 00:12:53,509
+the same pipeline can potentially work
+just fine with a new swap chain and a
+
+740
+00:12:53,509 --> 00:12:53,519
+just fine with a new swap chain and a
+ 
+
+741
+00:12:53,519 --> 00:12:54,710
+just fine with a new swap chain and a
+different render pass
+
+742
+00:12:54,710 --> 00:12:54,720
+different render pass
+ 
+
+743
+00:12:54,720 --> 00:12:56,470
+different render pass
+so long as the render passes are
+
+744
+00:12:56,470 --> 00:12:56,480
+so long as the render passes are
+ 
+
+745
+00:12:56,480 --> 00:12:59,110
+so long as the render passes are
+compatible i've included a link to the
+
+746
+00:12:59,110 --> 00:12:59,120
+compatible i've included a link to the
+ 
+
+747
+00:12:59,120 --> 00:13:01,110
+compatible i've included a link to the
+compatibility documentation in the
+
+748
+00:13:01,110 --> 00:13:01,120
+compatibility documentation in the
+ 
+
+749
+00:13:01,120 --> 00:13:02,230
+compatibility documentation in the
+description
+
+750
+00:13:02,230 --> 00:13:02,240
+description
+ 
+
+751
+00:13:02,240 --> 00:13:04,470
+description
+so a future optimization will be to
+
+752
+00:13:04,470 --> 00:13:04,480
+so a future optimization will be to
+ 
+
+753
+00:13:04,480 --> 00:13:06,069
+so a future optimization will be to
+check if the render passes are
+
+754
+00:13:06,069 --> 00:13:06,079
+check if the render passes are
+ 
+
+755
+00:13:06,079 --> 00:13:09,110
+check if the render passes are
+compatible and if so then the pipeline
+
+756
+00:13:09,110 --> 00:13:09,120
+compatible and if so then the pipeline
+ 
+
+757
+00:13:09,120 --> 00:13:11,110
+compatible and if so then the pipeline
+doesn't need to be recreated
+
+758
+00:13:11,110 --> 00:13:11,120
+doesn't need to be recreated
+ 
+
+759
+00:13:11,120 --> 00:13:12,710
+doesn't need to be recreated
+one last thing we should do when
+
+760
+00:13:12,710 --> 00:13:12,720
+one last thing we should do when
+ 
+
+761
+00:13:12,720 --> 00:13:14,310
+one last thing we should do when
+creating the new swap chain is to
+
+762
+00:13:14,310 --> 00:13:14,320
+creating the new swap chain is to
+ 
+
+763
+00:13:14,320 --> 00:13:16,230
+creating the new swap chain is to
+provide the previous swap chain if it
+
+764
+00:13:16,230 --> 00:13:16,240
+provide the previous swap chain if it
+ 
+
+765
+00:13:16,240 --> 00:13:17,030
+provide the previous swap chain if it
+exists
+
+766
+00:13:17,030 --> 00:13:17,040
+exists
+ 
+
+767
+00:13:17,040 --> 00:13:18,949
+exists
+this can potentially result in better
+
+768
+00:13:18,949 --> 00:13:18,959
+this can potentially result in better
+ 
+
+769
+00:13:18,959 --> 00:13:20,069
+this can potentially result in better
+resizing behavior
+
+770
+00:13:20,069 --> 00:13:20,079
+resizing behavior
+ 
+
+771
+00:13:20,079 --> 00:13:22,790
+resizing behavior
+if any resources can be reused and also
+
+772
+00:13:22,790 --> 00:13:22,800
+if any resources can be reused and also
+ 
+
+773
+00:13:22,800 --> 00:13:24,710
+if any resources can be reused and also
+depending on the platform helps with
+
+774
+00:13:24,710 --> 00:13:24,720
+depending on the platform helps with
+ 
+
+775
+00:13:24,720 --> 00:13:25,509
+depending on the platform helps with
+transitioning
+
+776
+00:13:25,509 --> 00:13:25,519
+transitioning
+ 
+
+777
+00:13:25,519 --> 00:13:28,230
+transitioning
+full screen permissions okay so start by
+
+778
+00:13:28,230 --> 00:13:28,240
+full screen permissions okay so start by
+ 
+
+779
+00:13:28,240 --> 00:13:30,389
+full screen permissions okay so start by
+including memory in the lve swap chain
+
+780
+00:13:30,389 --> 00:13:30,399
+including memory in the lve swap chain
+ 
+
+781
+00:13:30,399 --> 00:13:31,030
+including memory in the lve swap chain
+header
+
+782
+00:13:31,030 --> 00:13:31,040
+header
+ 
+
+783
+00:13:31,040 --> 00:13:33,430
+header
+next copy and paste the constructor to
+
+784
+00:13:33,430 --> 00:13:33,440
+next copy and paste the constructor to
+ 
+
+785
+00:13:33,440 --> 00:13:35,590
+next copy and paste the constructor to
+add a second constructor
+
+786
+00:13:35,590 --> 00:13:35,600
+add a second constructor
+ 
+
+787
+00:13:35,600 --> 00:13:37,590
+add a second constructor
+this constructor will have an additional
+
+788
+00:13:37,590 --> 00:13:37,600
+this constructor will have an additional
+ 
+
+789
+00:13:37,600 --> 00:13:40,069
+this constructor will have an additional
+parameter std shared pointer
+
+790
+00:13:40,069 --> 00:13:40,079
+parameter std shared pointer
+ 
+
+791
+00:13:40,079 --> 00:13:42,550
+parameter std shared pointer
+angle bracket lve swap chain called
+
+792
+00:13:42,550 --> 00:13:42,560
+angle bracket lve swap chain called
+ 
+
+793
+00:13:42,560 --> 00:13:43,829
+angle bracket lve swap chain called
+previous
+
+794
+00:13:43,829 --> 00:13:43,839
+previous
+ 
+
+795
+00:13:43,839 --> 00:13:46,949
+previous
+then add a private function void init
+
+796
+00:13:46,949 --> 00:13:46,959
+then add a private function void init
+ 
+
+797
+00:13:46,959 --> 00:13:49,590
+then add a private function void init
+and add a new member variable std shared
+
+798
+00:13:49,590 --> 00:13:49,600
+and add a new member variable std shared
+ 
+
+799
+00:13:49,600 --> 00:13:50,069
+and add a new member variable std shared
+pointer
+
+800
+00:13:50,069 --> 00:13:50,079
+pointer
+ 
+
+801
+00:13:50,079 --> 00:13:55,110
+pointer
+lve swap chain called old swap chain
+
+802
+00:13:55,110 --> 00:13:55,120
+
+ 
+
+803
+00:13:55,120 --> 00:13:57,030
+ 
+now in the swap chain implementation
+
+804
+00:13:57,030 --> 00:13:57,040
+now in the swap chain implementation
+ 
+
+805
+00:13:57,040 --> 00:13:59,430
+now in the swap chain implementation
+file just under the constructor add a
+
+806
+00:13:59,430 --> 00:13:59,440
+file just under the constructor add a
+ 
+
+807
+00:13:59,440 --> 00:14:00,790
+file just under the constructor add a
+new function
+
+808
+00:14:00,790 --> 00:14:00,800
+new function
+ 
+
+809
+00:14:00,800 --> 00:14:03,590
+new function
+void lve swap chain init and copy and
+
+810
+00:14:03,590 --> 00:14:03,600
+void lve swap chain init and copy and
+ 
+
+811
+00:14:03,600 --> 00:14:05,269
+void lve swap chain init and copy and
+paste the contents of the swap chain
+
+812
+00:14:05,269 --> 00:14:05,279
+paste the contents of the swap chain
+ 
+
+813
+00:14:05,279 --> 00:14:07,910
+paste the contents of the swap chain
+constructor into the init function
+
+814
+00:14:07,910 --> 00:14:07,920
+constructor into the init function
+ 
+
+815
+00:14:07,920 --> 00:14:09,829
+constructor into the init function
+then replace the constructor contents
+
+816
+00:14:09,829 --> 00:14:09,839
+then replace the constructor contents
+ 
+
+817
+00:14:09,839 --> 00:14:11,910
+then replace the constructor contents
+with a call to init
+
+818
+00:14:11,910 --> 00:14:11,920
+with a call to init
+ 
+
+819
+00:14:11,920 --> 00:14:13,990
+with a call to init
+copy and paste the constructor and add a
+
+820
+00:14:13,990 --> 00:14:14,000
+copy and paste the constructor and add a
+ 
+
+821
+00:14:14,000 --> 00:14:14,949
+copy and paste the constructor and add a
+third parameter
+
+822
+00:14:14,949 --> 00:14:14,959
+third parameter
+ 
+
+823
+00:14:14,959 --> 00:14:17,829
+third parameter
+shared pointer lve swap chain previous
+
+824
+00:14:17,829 --> 00:14:17,839
+shared pointer lve swap chain previous
+ 
+
+825
+00:14:17,839 --> 00:14:20,389
+shared pointer lve swap chain previous
+and in the member initialization list
+
+826
+00:14:20,389 --> 00:14:20,399
+and in the member initialization list
+ 
+
+827
+00:14:20,399 --> 00:14:22,949
+and in the member initialization list
+initialize old swap chain curly brace to
+
+828
+00:14:22,949 --> 00:14:22,959
+initialize old swap chain curly brace to
+ 
+
+829
+00:14:22,959 --> 00:14:24,790
+initialize old swap chain curly brace to
+previous
+
+830
+00:14:24,790 --> 00:14:24,800
+previous
+ 
+
+831
+00:14:24,800 --> 00:14:26,870
+previous
+now in the constructor body under the
+
+832
+00:14:26,870 --> 00:14:26,880
+now in the constructor body under the
+ 
+
+833
+00:14:26,880 --> 00:14:28,230
+now in the constructor body under the
+init function call
+
+834
+00:14:28,230 --> 00:14:28,240
+init function call
+ 
+
+835
+00:14:28,240 --> 00:14:31,269
+init function call
+set old swap chain to a null pointer we
+
+836
+00:14:31,269 --> 00:14:31,279
+set old swap chain to a null pointer we
+ 
+
+837
+00:14:31,279 --> 00:14:33,189
+set old swap chain to a null pointer we
+will use the old swap chain only during
+
+838
+00:14:33,189 --> 00:14:33,199
+will use the old swap chain only during
+ 
+
+839
+00:14:33,199 --> 00:14:34,470
+will use the old swap chain only during
+initialization
+
+840
+00:14:34,470 --> 00:14:34,480
+initialization
+ 
+
+841
+00:14:34,480 --> 00:14:36,310
+initialization
+and then by setting it to null signal
+
+842
+00:14:36,310 --> 00:14:36,320
+and then by setting it to null signal
+ 
+
+843
+00:14:36,320 --> 00:14:38,150
+and then by setting it to null signal
+that is no longer needed and can be
+
+844
+00:14:38,150 --> 00:14:38,160
+that is no longer needed and can be
+ 
+
+845
+00:14:38,160 --> 00:14:40,069
+that is no longer needed and can be
+released from memory if nothing else is
+
+846
+00:14:40,069 --> 00:14:40,079
+released from memory if nothing else is
+ 
+
+847
+00:14:40,079 --> 00:14:41,430
+released from memory if nothing else is
+using it
+
+848
+00:14:41,430 --> 00:14:41,440
+using it
+ 
+
+849
+00:14:41,440 --> 00:14:43,269
+using it
+then near the end of the create swap
+
+850
+00:14:43,269 --> 00:14:43,279
+then near the end of the create swap
+ 
+
+851
+00:14:43,279 --> 00:14:45,509
+then near the end of the create swap
+chain function which should be around
+
+852
+00:14:45,509 --> 00:14:45,519
+chain function which should be around
+ 
+
+853
+00:14:45,519 --> 00:14:47,110
+chain function which should be around
+line 176
+
+854
+00:14:47,110 --> 00:14:47,120
+line 176
+ 
+
+855
+00:14:47,120 --> 00:14:48,710
+line 176
+you can see here that we have a create
+
+856
+00:14:48,710 --> 00:14:48,720
+you can see here that we have a create
+ 
+
+857
+00:14:48,720 --> 00:14:50,790
+you can see here that we have a create
+infrastruct that is being used to
+
+858
+00:14:50,790 --> 00:14:50,800
+infrastruct that is being used to
+ 
+
+859
+00:14:50,800 --> 00:14:52,629
+infrastruct that is being used to
+configure a vulcan object
+
+860
+00:14:52,629 --> 00:14:52,639
+configure a vulcan object
+ 
+
+861
+00:14:52,639 --> 00:14:54,470
+configure a vulcan object
+currently for the old swap chain field
+
+862
+00:14:54,470 --> 00:14:54,480
+currently for the old swap chain field
+ 
+
+863
+00:14:54,480 --> 00:14:56,870
+currently for the old swap chain field
+we simply pass a null handle
+
+864
+00:14:56,870 --> 00:14:56,880
+we simply pass a null handle
+ 
+
+865
+00:14:56,880 --> 00:14:58,870
+we simply pass a null handle
+instead let's update this to check that
+
+866
+00:14:58,870 --> 00:14:58,880
+instead let's update this to check that
+ 
+
+867
+00:14:58,880 --> 00:15:00,949
+instead let's update this to check that
+if the old swap chain member is the null
+
+868
+00:15:00,949 --> 00:15:00,959
+if the old swap chain member is the null
+ 
+
+869
+00:15:00,959 --> 00:15:01,590
+if the old swap chain member is the null
+pointer
+
+870
+00:15:01,590 --> 00:15:01,600
+pointer
+ 
+
+871
+00:15:01,600 --> 00:15:04,710
+pointer
+then return the null handle otherwise
+
+872
+00:15:04,710 --> 00:15:04,720
+then return the null handle otherwise
+ 
+
+873
+00:15:04,720 --> 00:15:08,870
+then return the null handle otherwise
+return old swap chain arrow swap chain
+
+874
+00:15:08,870 --> 00:15:08,880
+return old swap chain arrow swap chain
+ 
+
+875
+00:15:08,880 --> 00:15:10,790
+return old swap chain arrow swap chain
+navigate back to the recreate swap chain
+
+876
+00:15:10,790 --> 00:15:10,800
+navigate back to the recreate swap chain
+ 
+
+877
+00:15:10,800 --> 00:15:13,350
+navigate back to the recreate swap chain
+function add an if statement to check if
+
+878
+00:15:13,350 --> 00:15:13,360
+function add an if statement to check if
+ 
+
+879
+00:15:13,360 --> 00:15:15,189
+function add an if statement to check if
+lve swap chain is equal to a null
+
+880
+00:15:15,189 --> 00:15:15,199
+lve swap chain is equal to a null
+ 
+
+881
+00:15:15,199 --> 00:15:15,910
+lve swap chain is equal to a null
+pointer
+
+882
+00:15:15,910 --> 00:15:15,920
+pointer
+ 
+
+883
+00:15:15,920 --> 00:15:17,750
+pointer
+then create our swap chain as we
+
+884
+00:15:17,750 --> 00:15:17,760
+then create our swap chain as we
+ 
+
+885
+00:15:17,760 --> 00:15:20,710
+then create our swap chain as we
+currently are doing
+
+886
+00:15:20,710 --> 00:15:20,720
+
+ 
+
+887
+00:15:20,720 --> 00:15:22,870
+ 
+else the current swap chain is not null
+
+888
+00:15:22,870 --> 00:15:22,880
+else the current swap chain is not null
+ 
+
+889
+00:15:22,880 --> 00:15:25,189
+else the current swap chain is not null
+so therefore create a new swap chain
+
+890
+00:15:25,189 --> 00:15:25,199
+so therefore create a new swap chain
+ 
+
+891
+00:15:25,199 --> 00:15:27,750
+so therefore create a new swap chain
+with the third argument being std move
+
+892
+00:15:27,750 --> 00:15:27,760
+with the third argument being std move
+ 
+
+893
+00:15:27,760 --> 00:15:29,670
+with the third argument being std move
+lve swap chain
+
+894
+00:15:29,670 --> 00:15:29,680
+lve swap chain
+ 
+
+895
+00:15:29,680 --> 00:15:31,509
+lve swap chain
+so if you're not familiar with move
+
+896
+00:15:31,509 --> 00:15:31,519
+so if you're not familiar with move
+ 
+
+897
+00:15:31,519 --> 00:15:33,749
+so if you're not familiar with move
+mechanics and smart pointers i highly
+
+898
+00:15:33,749 --> 00:15:33,759
+mechanics and smart pointers i highly
+ 
+
+899
+00:15:33,759 --> 00:15:35,590
+mechanics and smart pointers i highly
+recommend taking a couple minutes after
+
+900
+00:15:35,590 --> 00:15:35,600
+recommend taking a couple minutes after
+ 
+
+901
+00:15:35,600 --> 00:15:37,590
+recommend taking a couple minutes after
+this video to read about them at learn
+
+902
+00:15:37,590 --> 00:15:37,600
+this video to read about them at learn
+ 
+
+903
+00:15:37,600 --> 00:15:38,790
+this video to read about them at learn
+cpp
+
+904
+00:15:38,790 --> 00:15:38,800
+cpp
+ 
+
+905
+00:15:38,800 --> 00:15:41,269
+cpp
+but essentially you cannot copy a unique
+
+906
+00:15:41,269 --> 00:15:41,279
+but essentially you cannot copy a unique
+ 
+
+907
+00:15:41,279 --> 00:15:41,990
+but essentially you cannot copy a unique
+pointer
+
+908
+00:15:41,990 --> 00:15:42,000
+pointer
+ 
+
+909
+00:15:42,000 --> 00:15:43,990
+pointer
+so what this move function does is it
+
+910
+00:15:43,990 --> 00:15:44,000
+so what this move function does is it
+ 
+
+911
+00:15:44,000 --> 00:15:45,590
+so what this move function does is it
+allows us to create a copy
+
+912
+00:15:45,590 --> 00:15:45,600
+allows us to create a copy
+ 
+
+913
+00:15:45,600 --> 00:15:47,749
+allows us to create a copy
+but in doing so will automatically set
+
+914
+00:15:47,749 --> 00:15:47,759
+but in doing so will automatically set
+ 
+
+915
+00:15:47,759 --> 00:15:50,150
+but in doing so will automatically set
+lve swap chain to be a null pointer so
+
+916
+00:15:50,150 --> 00:15:50,160
+lve swap chain to be a null pointer so
+ 
+
+917
+00:15:50,160 --> 00:15:52,710
+lve swap chain to be a null pointer so
+that memory management isn't broken
+
+918
+00:15:52,710 --> 00:15:52,720
+that memory management isn't broken
+ 
+
+919
+00:15:52,720 --> 00:15:54,870
+that memory management isn't broken
+then in your application header file
+
+920
+00:15:54,870 --> 00:15:54,880
+then in your application header file
+ 
+
+921
+00:15:54,880 --> 00:15:56,870
+then in your application header file
+declare a new function just under create
+
+922
+00:15:56,870 --> 00:15:56,880
+declare a new function just under create
+ 
+
+923
+00:15:56,880 --> 00:15:57,829
+declare a new function just under create
+command buffers
+
+924
+00:15:57,829 --> 00:15:57,839
+command buffers
+ 
+
+925
+00:15:57,839 --> 00:16:03,990
+command buffers
+with void free command buffers
+
+926
+00:16:03,990 --> 00:16:04,000
+
+ 
+
+927
+00:16:04,000 --> 00:16:06,710
+ 
+then in the implementation file i'll add
+
+928
+00:16:06,710 --> 00:16:06,720
+then in the implementation file i'll add
+ 
+
+929
+00:16:06,720 --> 00:16:07,269
+then in the implementation file i'll add
+void
+
+930
+00:16:07,269 --> 00:16:07,279
+void
+ 
+
+931
+00:16:07,279 --> 00:16:10,550
+void
+first app free command buffers
+
+932
+00:16:10,550 --> 00:16:10,560
+first app free command buffers
+ 
+
+933
+00:16:10,560 --> 00:16:12,710
+first app free command buffers
+and in the body i'll call vk free
+
+934
+00:16:12,710 --> 00:16:12,720
+and in the body i'll call vk free
+ 
+
+935
+00:16:12,720 --> 00:16:14,629
+and in the body i'll call vk free
+command buffers
+
+936
+00:16:14,629 --> 00:16:14,639
+command buffers
+ 
+
+937
+00:16:14,639 --> 00:16:19,150
+command buffers
+with lvedevice.device
+
+938
+00:16:19,150 --> 00:16:19,160
+
+ 
+
+939
+00:16:19,160 --> 00:16:21,629
+
+lvdevice.getcommandpool
+
+940
+00:16:21,629 --> 00:16:21,639
+lvdevice.getcommandpool
+ 
+
+941
+00:16:21,639 --> 00:16:24,590
+lvdevice.getcommandpool
+commandbuffers.size and
+
+942
+00:16:24,590 --> 00:16:24,600
+commandbuffers.size and
+ 
+
+943
+00:16:24,600 --> 00:16:26,470
+commandbuffers.size and
+commandbuffers.data
+
+944
+00:16:26,470 --> 00:16:26,480
+commandbuffers.data
+ 
+
+945
+00:16:26,480 --> 00:16:29,590
+commandbuffers.data
+and all cast size to a uint32 type with
+
+946
+00:16:29,590 --> 00:16:29,600
+and all cast size to a uint32 type with
+ 
+
+947
+00:16:29,600 --> 00:16:32,710
+and all cast size to a uint32 type with
+a static cast
+
+948
+00:16:32,710 --> 00:16:32,720
+
+ 
+
+949
+00:16:32,720 --> 00:16:36,790
+ 
+finally call commandbuffers.clear
+
+950
+00:16:36,790 --> 00:16:36,800
+finally call commandbuffers.clear
+ 
+
+951
+00:16:36,800 --> 00:16:38,470
+finally call commandbuffers.clear
+then inside the else block of the
+
+952
+00:16:38,470 --> 00:16:38,480
+then inside the else block of the
+ 
+
+953
+00:16:38,480 --> 00:16:41,269
+then inside the else block of the
+recreate swap chain function
+
+954
+00:16:41,269 --> 00:16:41,279
+recreate swap chain function
+ 
+
+955
+00:16:41,279 --> 00:16:43,030
+recreate swap chain function
+let's check that if the new swap chain
+
+956
+00:16:43,030 --> 00:16:43,040
+let's check that if the new swap chain
+ 
+
+957
+00:16:43,040 --> 00:16:44,829
+let's check that if the new swap chain
+image count is not equal to command
+
+958
+00:16:44,829 --> 00:16:44,839
+image count is not equal to command
+ 
+
+959
+00:16:44,839 --> 00:16:47,590
+image count is not equal to command
+buffers.size
+
+960
+00:16:47,590 --> 00:16:47,600
+buffers.size
+ 
+
+961
+00:16:47,600 --> 00:16:49,030
+buffers.size
+then we'll want to free the command
+
+962
+00:16:49,030 --> 00:16:49,040
+then we'll want to free the command
+ 
+
+963
+00:16:49,040 --> 00:16:53,910
+then we'll want to free the command
+buffers and create new ones
+
+964
+00:16:53,910 --> 00:16:53,920
+
+ 
+
+965
+00:16:53,920 --> 00:16:56,069
+ 
+one last addition i made was to add two
+
+966
+00:16:56,069 --> 00:16:56,079
+one last addition i made was to add two
+ 
+
+967
+00:16:56,079 --> 00:16:57,829
+one last addition i made was to add two
+assertions in the create pipeline
+
+968
+00:16:57,829 --> 00:16:57,839
+assertions in the create pipeline
+ 
+
+969
+00:16:57,839 --> 00:16:58,470
+assertions in the create pipeline
+function
+
+970
+00:16:58,470 --> 00:16:58,480
+function
+ 
+
+971
+00:16:58,480 --> 00:17:00,230
+function
+to check that the pipeline layout and
+
+972
+00:17:00,230 --> 00:17:00,240
+to check that the pipeline layout and
+ 
+
+973
+00:17:00,240 --> 00:17:03,189
+to check that the pipeline layout and
+the swatching have both been initialized
+
+974
+00:17:03,189 --> 00:17:03,199
+the swatching have both been initialized
+ 
+
+975
+00:17:03,199 --> 00:17:04,870
+the swatching have both been initialized
+build and run your project to make sure
+
+976
+00:17:04,870 --> 00:17:04,880
+build and run your project to make sure
+ 
+
+977
+00:17:04,880 --> 00:17:07,189
+build and run your project to make sure
+everything is still working as before
+
+978
+00:17:07,189 --> 00:17:07,199
+everything is still working as before
+ 
+
+979
+00:17:07,199 --> 00:17:08,949
+everything is still working as before
+in summary where you've set up a
+
+980
+00:17:08,949 --> 00:17:08,959
+in summary where you've set up a
+ 
+
+981
+00:17:08,959 --> 00:17:10,789
+in summary where you've set up a
+callback function that listens to
+
+982
+00:17:10,789 --> 00:17:10,799
+callback function that listens to
+ 
+
+983
+00:17:10,799 --> 00:17:13,429
+callback function that listens to
+changes on the glfw window and updates
+
+984
+00:17:13,429 --> 00:17:13,439
+changes on the glfw window and updates
+ 
+
+985
+00:17:13,439 --> 00:17:15,110
+changes on the glfw window and updates
+the dimensions of the window wrapper
+
+986
+00:17:15,110 --> 00:17:15,120
+the dimensions of the window wrapper
+ 
+
+987
+00:17:15,120 --> 00:17:15,990
+the dimensions of the window wrapper
+class
+
+988
+00:17:15,990 --> 00:17:16,000
+class
+ 
+
+989
+00:17:16,000 --> 00:17:17,829
+class
+the drawframe function checks if the
+
+990
+00:17:17,829 --> 00:17:17,839
+the drawframe function checks if the
+ 
+
+991
+00:17:17,839 --> 00:17:19,669
+the drawframe function checks if the
+window has been resized every frame
+
+992
+00:17:19,669 --> 00:17:19,679
+window has been resized every frame
+ 
+
+993
+00:17:19,679 --> 00:17:20,789
+window has been resized every frame
+before drawing
+
+994
+00:17:20,789 --> 00:17:20,799
+before drawing
+ 
+
+995
+00:17:20,799 --> 00:17:22,949
+before drawing
+whenever it detects the swap chain is no
+
+996
+00:17:22,949 --> 00:17:22,959
+whenever it detects the swap chain is no
+ 
+
+997
+00:17:22,959 --> 00:17:25,189
+whenever it detects the swap chain is no
+longer valid it recreates a new swap
+
+998
+00:17:25,189 --> 00:17:25,199
+longer valid it recreates a new swap
+ 
+
+999
+00:17:25,199 --> 00:17:26,069
+longer valid it recreates a new swap
+chain
+
+1000
+00:17:26,069 --> 00:17:26,079
+chain
+ 
+
+1001
+00:17:26,079 --> 00:17:28,549
+chain
+we've changed to use a dynamic viewport
+
+1002
+00:17:28,549 --> 00:17:28,559
+we've changed to use a dynamic viewport
+ 
+
+1003
+00:17:28,559 --> 00:17:30,710
+we've changed to use a dynamic viewport
+so that the graphics pipeline is no
+
+1004
+00:17:30,710 --> 00:17:30,720
+so that the graphics pipeline is no
+ 
+
+1005
+00:17:30,720 --> 00:17:32,630
+so that the graphics pipeline is no
+longer dependent on the swap chain's
+
+1006
+00:17:32,630 --> 00:17:32,640
+longer dependent on the swap chain's
+ 
+
+1007
+00:17:32,640 --> 00:17:33,909
+longer dependent on the swap chain's
+dimensions
+
+1008
+00:17:33,909 --> 00:17:33,919
+dimensions
+ 
+
+1009
+00:17:33,919 --> 00:17:36,310
+dimensions
+however we still create a new pipeline
+
+1010
+00:17:36,310 --> 00:17:36,320
+however we still create a new pipeline
+ 
+
+1011
+00:17:36,320 --> 00:17:37,190
+however we still create a new pipeline
+every time
+
+1012
+00:17:37,190 --> 00:17:37,200
+every time
+ 
+
+1013
+00:17:37,200 --> 00:17:39,350
+every time
+because we are not sure if the old and
+
+1014
+00:17:39,350 --> 00:17:39,360
+because we are not sure if the old and
+ 
+
+1015
+00:17:39,360 --> 00:17:42,549
+because we are not sure if the old and
+new render passes are compatible yet
+
+1016
+00:17:42,549 --> 00:17:42,559
+new render passes are compatible yet
+ 
+
+1017
+00:17:42,559 --> 00:17:47,840
+new render passes are compatible yet
+thanks for watching cheers
+

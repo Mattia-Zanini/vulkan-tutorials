@@ -1,0 +1,3515 @@
+1
+00:00:00,320 --> 00:00:02,710
+ 
+hello coders so this isn't going to be
+
+2
+00:00:02,710 --> 00:00:02,720
+hello coders so this isn't going to be
+ 
+
+3
+00:00:02,720 --> 00:00:04,630
+hello coders so this isn't going to be
+the most exciting tutorial and it's kind
+
+4
+00:00:04,630 --> 00:00:04,640
+the most exciting tutorial and it's kind
+ 
+
+5
+00:00:04,640 --> 00:00:07,430
+the most exciting tutorial and it's kind
+of optional this video is just going to
+
+6
+00:00:07,430 --> 00:00:07,440
+of optional this video is just going to
+ 
+
+7
+00:00:07,440 --> 00:00:09,509
+of optional this video is just going to
+cover the restructuring i've done to the
+
+8
+00:00:09,509 --> 00:00:09,519
+cover the restructuring i've done to the
+ 
+
+9
+00:00:09,519 --> 00:00:12,390
+cover the restructuring i've done to the
+git repository and the implementation of
+
+10
+00:00:12,390 --> 00:00:12,400
+git repository and the implementation of
+ 
+
+11
+00:00:12,400 --> 00:00:15,030
+git repository and the implementation of
+a more cross-platform build system if
+
+12
+00:00:15,030 --> 00:00:15,040
+a more cross-platform build system if
+ 
+
+13
+00:00:15,040 --> 00:00:16,630
+a more cross-platform build system if
+you already have a build process and
+
+14
+00:00:16,630 --> 00:00:16,640
+you already have a build process and
+ 
+
+15
+00:00:16,640 --> 00:00:17,990
+you already have a build process and
+structure for your engine that you
+
+16
+00:00:17,990 --> 00:00:18,000
+structure for your engine that you
+ 
+
+17
+00:00:18,000 --> 00:00:19,990
+structure for your engine that you
+prefer you can stick with that and don't
+
+18
+00:00:19,990 --> 00:00:20,000
+prefer you can stick with that and don't
+ 
+
+19
+00:00:20,000 --> 00:00:22,150
+prefer you can stick with that and don't
+feel the need to reorganize things to
+
+20
+00:00:22,150 --> 00:00:22,160
+feel the need to reorganize things to
+ 
+
+21
+00:00:22,160 --> 00:00:25,029
+feel the need to reorganize things to
+match what i have exactly so i've
+
+22
+00:00:25,029 --> 00:00:25,039
+match what i have exactly so i've
+ 
+
+23
+00:00:25,039 --> 00:00:26,630
+match what i have exactly so i've
+restructured the git repo for the
+
+24
+00:00:26,630 --> 00:00:26,640
+restructured the git repo for the
+ 
+
+25
+00:00:26,640 --> 00:00:29,189
+restructured the git repo for the
+project if i was only doing 30-ish
+
+26
+00:00:29,189 --> 00:00:29,199
+project if i was only doing 30-ish
+ 
+
+27
+00:00:29,199 --> 00:00:31,189
+project if i was only doing 30-ish
+tutorials i think the current structure
+
+28
+00:00:31,189 --> 00:00:31,199
+tutorials i think the current structure
+ 
+
+29
+00:00:31,199 --> 00:00:33,430
+tutorials i think the current structure
+works but as we get into the higher
+
+30
+00:00:33,430 --> 00:00:33,440
+works but as we get into the higher
+ 
+
+31
+00:00:33,440 --> 00:00:35,270
+works but as we get into the higher
+numbers of tutorials putting each
+
+32
+00:00:35,270 --> 00:00:35,280
+numbers of tutorials putting each
+ 
+
+33
+00:00:35,280 --> 00:00:37,190
+numbers of tutorials putting each
+tutorial as its own folder in the
+
+34
+00:00:37,190 --> 00:00:37,200
+tutorial as its own folder in the
+ 
+
+35
+00:00:37,200 --> 00:00:40,310
+tutorial as its own folder in the
+project isn't really sustainable instead
+
+36
+00:00:40,310 --> 00:00:40,320
+project isn't really sustainable instead
+ 
+
+37
+00:00:40,320 --> 00:00:42,389
+project isn't really sustainable instead
+i'm going to switch to a branching
+
+38
+00:00:42,389 --> 00:00:42,399
+i'm going to switch to a branching
+ 
+
+39
+00:00:42,399 --> 00:00:44,709
+i'm going to switch to a branching
+structure the previous tutorials will
+
+40
+00:00:44,709 --> 00:00:44,719
+structure the previous tutorials will
+ 
+
+41
+00:00:44,719 --> 00:00:46,950
+structure the previous tutorials will
+all be preserved in the branch tutorial
+
+42
+00:00:46,950 --> 00:00:46,960
+all be preserved in the branch tutorial
+ 
+
+43
+00:00:46,960 --> 00:00:50,869
+all be preserved in the branch tutorial
+0 to 22 but from now on each subsequent
+
+44
+00:00:50,869 --> 00:00:50,879
+0 to 22 but from now on each subsequent
+ 
+
+45
+00:00:50,879 --> 00:00:53,350
+0 to 22 but from now on each subsequent
+tutorial will be put into its own branch
+
+46
+00:00:53,350 --> 00:00:53,360
+tutorial will be put into its own branch
+ 
+
+47
+00:00:53,360 --> 00:00:55,189
+tutorial will be put into its own branch
+and will be a pull request to update the
+
+48
+00:00:55,189 --> 00:00:55,199
+and will be a pull request to update the
+ 
+
+49
+00:00:55,199 --> 00:00:57,990
+and will be a pull request to update the
+main branch when completed based on a
+
+50
+00:00:57,990 --> 00:00:58,000
+main branch when completed based on a
+ 
+
+51
+00:00:58,000 --> 00:01:00,150
+main branch when completed based on a
+lot of helpful feedback from our discord
+
+52
+00:01:00,150 --> 00:01:00,160
+lot of helpful feedback from our discord
+ 
+
+53
+00:01:00,160 --> 00:01:02,389
+lot of helpful feedback from our discord
+i've chosen to use cmake going forward
+
+54
+00:01:02,389 --> 00:01:02,399
+i've chosen to use cmake going forward
+ 
+
+55
+00:01:02,399 --> 00:01:05,030
+i've chosen to use cmake going forward
+as the build system for the project
+
+56
+00:01:05,030 --> 00:01:05,040
+as the build system for the project
+ 
+
+57
+00:01:05,040 --> 00:01:07,750
+as the build system for the project
+cmake isn't exactly a build system it's
+
+58
+00:01:07,750 --> 00:01:07,760
+cmake isn't exactly a build system it's
+ 
+
+59
+00:01:07,760 --> 00:01:10,550
+cmake isn't exactly a build system it's
+a tool that uses platform and compiler
+
+60
+00:01:10,550 --> 00:01:10,560
+a tool that uses platform and compiler
+ 
+
+61
+00:01:10,560 --> 00:01:12,950
+a tool that uses platform and compiler
+independent configuration files to then
+
+62
+00:01:12,950 --> 00:01:12,960
+independent configuration files to then
+ 
+
+63
+00:01:12,960 --> 00:01:15,030
+independent configuration files to then
+generate files to be able to natively
+
+64
+00:01:15,030 --> 00:01:15,040
+generate files to be able to natively
+ 
+
+65
+00:01:15,040 --> 00:01:17,429
+generate files to be able to natively
+build your project i'm still very much
+
+66
+00:01:17,429 --> 00:01:17,439
+build your project i'm still very much
+ 
+
+67
+00:01:17,439 --> 00:01:19,429
+build your project i'm still very much
+novice when it comes to cmake so just
+
+68
+00:01:19,429 --> 00:01:19,439
+novice when it comes to cmake so just
+ 
+
+69
+00:01:19,439 --> 00:01:21,990
+novice when it comes to cmake so just
+keep that in mind my solution here is
+
+70
+00:01:21,990 --> 00:01:22,000
+keep that in mind my solution here is
+ 
+
+71
+00:01:22,000 --> 00:01:23,910
+keep that in mind my solution here is
+probably going to need some improvement
+
+72
+00:01:23,910 --> 00:01:23,920
+probably going to need some improvement
+ 
+
+73
+00:01:23,920 --> 00:01:25,190
+probably going to need some improvement
+over time
+
+74
+00:01:25,190 --> 00:01:25,200
+over time
+ 
+
+75
+00:01:25,200 --> 00:01:26,950
+over time
+my goal is to make things as simple as
+
+76
+00:01:26,950 --> 00:01:26,960
+my goal is to make things as simple as
+ 
+
+77
+00:01:26,960 --> 00:01:29,350
+my goal is to make things as simple as
+possible to build for a wide range of
+
+78
+00:01:29,350 --> 00:01:29,360
+possible to build for a wide range of
+ 
+
+79
+00:01:29,360 --> 00:01:32,069
+possible to build for a wide range of
+platforms so let's start by downloading
+
+80
+00:01:32,069 --> 00:01:32,079
+platforms so let's start by downloading
+ 
+
+81
+00:01:32,079 --> 00:01:34,789
+platforms so let's start by downloading
+cmake if you don't already have it now
+
+82
+00:01:34,789 --> 00:01:34,799
+cmake if you don't already have it now
+ 
+
+83
+00:01:34,799 --> 00:01:36,630
+cmake if you don't already have it now
+currently in the project the tutorial
+
+84
+00:01:36,630 --> 00:01:36,640
+currently in the project the tutorial
+ 
+
+85
+00:01:36,640 --> 00:01:38,469
+currently in the project the tutorial
+directory has the most up-to-date
+
+86
+00:01:38,469 --> 00:01:38,479
+directory has the most up-to-date
+ 
+
+87
+00:01:38,479 --> 00:01:41,109
+directory has the most up-to-date
+content for the series so i'm going to
+
+88
+00:01:41,109 --> 00:01:41,119
+content for the series so i'm going to
+ 
+
+89
+00:01:41,119 --> 00:01:43,510
+content for the series so i'm going to
+copy the tutorials folder and move it to
+
+90
+00:01:43,510 --> 00:01:43,520
+copy the tutorials folder and move it to
+ 
+
+91
+00:01:43,520 --> 00:01:45,990
+copy the tutorials folder and move it to
+the top level and then rename the folder
+
+92
+00:01:45,990 --> 00:01:46,000
+the top level and then rename the folder
+ 
+
+93
+00:01:46,000 --> 00:01:48,550
+the top level and then rename the folder
+to source this directory will now hold
+
+94
+00:01:48,550 --> 00:01:48,560
+to source this directory will now hold
+ 
+
+95
+00:01:48,560 --> 00:01:51,030
+to source this directory will now hold
+all the source code for the project i'm
+
+96
+00:01:51,030 --> 00:01:51,040
+all the source code for the project i'm
+ 
+
+97
+00:01:51,040 --> 00:01:53,350
+all the source code for the project i'm
+going to remove all the other older code
+
+98
+00:01:53,350 --> 00:01:53,360
+going to remove all the other older code
+ 
+
+99
+00:01:53,360 --> 00:01:55,990
+going to remove all the other older code
+from the directory and delete the m and
+
+100
+00:01:55,990 --> 00:01:56,000
+from the directory and delete the m and
+ 
+
+101
+00:01:56,000 --> 00:01:58,310
+from the directory and delete the m and
+make file since cmake will generate that
+
+102
+00:01:58,310 --> 00:01:58,320
+make file since cmake will generate that
+ 
+
+103
+00:01:58,320 --> 00:02:01,030
+make file since cmake will generate that
+for us from now on i want my shaders and
+
+104
+00:02:01,030 --> 00:02:01,040
+for us from now on i want my shaders and
+ 
+
+105
+00:02:01,040 --> 00:02:03,030
+for us from now on i want my shaders and
+models folder to also be at the top
+
+106
+00:02:03,030 --> 00:02:03,040
+models folder to also be at the top
+ 
+
+107
+00:02:03,040 --> 00:02:05,109
+models folder to also be at the top
+level of the project next to the source
+
+108
+00:02:05,109 --> 00:02:05,119
+level of the project next to the source
+ 
+
+109
+00:02:05,119 --> 00:02:07,270
+level of the project next to the source
+directory so i'll just copy and paste
+
+110
+00:02:07,270 --> 00:02:07,280
+directory so i'll just copy and paste
+ 
+
+111
+00:02:07,280 --> 00:02:09,109
+directory so i'll just copy and paste
+them to the folder higher up and then
+
+112
+00:02:09,109 --> 00:02:09,119
+them to the folder higher up and then
+ 
+
+113
+00:02:09,119 --> 00:02:11,430
+them to the folder higher up and then
+delete them from the source directory we
+
+114
+00:02:11,430 --> 00:02:11,440
+delete them from the source directory we
+ 
+
+115
+00:02:11,440 --> 00:02:14,070
+delete them from the source directory we
+can also remove all the files related to
+
+116
+00:02:14,070 --> 00:02:14,080
+can also remove all the files related to
+ 
+
+117
+00:02:14,080 --> 00:02:16,070
+can also remove all the files related to
+building the project using the old
+
+118
+00:02:16,070 --> 00:02:16,080
+building the project using the old
+ 
+
+119
+00:02:16,080 --> 00:02:18,869
+building the project using the old
+method from the source directory now
+
+120
+00:02:18,869 --> 00:02:18,879
+method from the source directory now
+ 
+
+121
+00:02:18,879 --> 00:02:21,270
+method from the source directory now
+with those changes we have a nice clean
+
+122
+00:02:21,270 --> 00:02:21,280
+with those changes we have a nice clean
+ 
+
+123
+00:02:21,280 --> 00:02:23,190
+with those changes we have a nice clean
+structure to start working from with
+
+124
+00:02:23,190 --> 00:02:23,200
+structure to start working from with
+ 
+
+125
+00:02:23,200 --> 00:02:25,270
+structure to start working from with
+separate top-level folders for our
+
+126
+00:02:25,270 --> 00:02:25,280
+separate top-level folders for our
+ 
+
+127
+00:02:25,280 --> 00:02:28,630
+separate top-level folders for our
+shaders models and source code okay i've
+
+128
+00:02:28,630 --> 00:02:28,640
+shaders models and source code okay i've
+ 
+
+129
+00:02:28,640 --> 00:02:30,309
+shaders models and source code okay i've
+committed these changes to the main
+
+130
+00:02:30,309 --> 00:02:30,319
+committed these changes to the main
+ 
+
+131
+00:02:30,319 --> 00:02:31,910
+committed these changes to the main
+branch of the repo
+
+132
+00:02:31,910 --> 00:02:31,920
+branch of the repo
+ 
+
+133
+00:02:31,920 --> 00:02:33,750
+branch of the repo
+now we can get started with adding the
+
+134
+00:02:33,750 --> 00:02:33,760
+now we can get started with adding the
+ 
+
+135
+00:02:33,760 --> 00:02:36,710
+now we can get started with adding the
+new build structure for tutorial 23. i'm
+
+136
+00:02:36,710 --> 00:02:36,720
+new build structure for tutorial 23. i'm
+ 
+
+137
+00:02:36,720 --> 00:02:38,710
+new build structure for tutorial 23. i'm
+going to make a new directory called
+
+138
+00:02:38,710 --> 00:02:38,720
+going to make a new directory called
+ 
+
+139
+00:02:38,720 --> 00:02:41,190
+going to make a new directory called
+external which will be used to hold some
+
+140
+00:02:41,190 --> 00:02:41,200
+external which will be used to hold some
+ 
+
+141
+00:02:41,200 --> 00:02:43,270
+external which will be used to hold some
+of the external dependencies of the
+
+142
+00:02:43,270 --> 00:02:43,280
+of the external dependencies of the
+ 
+
+143
+00:02:43,280 --> 00:02:45,750
+of the external dependencies of the
+project this is optional but i think
+
+144
+00:02:45,750 --> 00:02:45,760
+project this is optional but i think
+ 
+
+145
+00:02:45,760 --> 00:02:48,070
+project this is optional but i think
+it'll be easier for most people to build
+
+146
+00:02:48,070 --> 00:02:48,080
+it'll be easier for most people to build
+ 
+
+147
+00:02:48,080 --> 00:02:49,990
+it'll be easier for most people to build
+the project if these dependencies are
+
+148
+00:02:49,990 --> 00:02:50,000
+the project if these dependencies are
+ 
+
+149
+00:02:50,000 --> 00:02:52,470
+the project if these dependencies are
+locally stored versus having to download
+
+150
+00:02:52,470 --> 00:02:52,480
+locally stored versus having to download
+ 
+
+151
+00:02:52,480 --> 00:02:54,150
+locally stored versus having to download
+each one separately and set the
+
+152
+00:02:54,150 --> 00:02:54,160
+each one separately and set the
+ 
+
+153
+00:02:54,160 --> 00:02:56,550
+each one separately and set the
+appropriate path to then include it so
+
+154
+00:02:56,550 --> 00:02:56,560
+appropriate path to then include it so
+ 
+
+155
+00:02:56,560 --> 00:02:58,309
+appropriate path to then include it so
+find the location you currently store
+
+156
+00:02:58,309 --> 00:02:58,319
+find the location you currently store
+ 
+
+157
+00:02:58,319 --> 00:02:59,910
+find the location you currently store
+this library and copy it to your
+
+158
+00:02:59,910 --> 00:02:59,920
+this library and copy it to your
+ 
+
+159
+00:02:59,920 --> 00:03:02,869
+this library and copy it to your
+external folder next we need to create a
+
+160
+00:03:02,869 --> 00:03:02,879
+external folder next we need to create a
+ 
+
+161
+00:03:02,879 --> 00:03:06,309
+external folder next we need to create a
+new file called cmakelists.txt
+
+162
+00:03:06,309 --> 00:03:06,319
+new file called cmakelists.txt
+ 
+
+163
+00:03:06,319 --> 00:03:08,390
+new file called cmakelists.txt
+and we put this at the top level of the
+
+164
+00:03:08,390 --> 00:03:08,400
+and we put this at the top level of the
+ 
+
+165
+00:03:08,400 --> 00:03:10,869
+and we put this at the top level of the
+project this is the configuration file
+
+166
+00:03:10,869 --> 00:03:10,879
+project this is the configuration file
+ 
+
+167
+00:03:10,879 --> 00:03:13,830
+project this is the configuration file
+which tells the cmake tool about the
+
+168
+00:03:13,830 --> 00:03:13,840
+which tells the cmake tool about the
+ 
+
+169
+00:03:13,840 --> 00:03:16,790
+which tells the cmake tool about the
+build and structure of our project you
+
+170
+00:03:16,790 --> 00:03:16,800
+build and structure of our project you
+ 
+
+171
+00:03:16,800 --> 00:03:18,710
+build and structure of our project you
+can find a pastebin link with this
+
+172
+00:03:18,710 --> 00:03:18,720
+can find a pastebin link with this
+ 
+
+173
+00:03:18,720 --> 00:03:21,110
+can find a pastebin link with this
+file's content in the description below
+
+174
+00:03:21,110 --> 00:03:21,120
+file's content in the description below
+ 
+
+175
+00:03:21,120 --> 00:03:23,030
+file's content in the description below
+this file is actually a lot simpler than
+
+176
+00:03:23,030 --> 00:03:23,040
+this file is actually a lot simpler than
+ 
+
+177
+00:03:23,040 --> 00:03:25,030
+this file is actually a lot simpler than
+it looks so we'll go through it in just
+
+178
+00:03:25,030 --> 00:03:25,040
+it looks so we'll go through it in just
+ 
+
+179
+00:03:25,040 --> 00:03:26,949
+it looks so we'll go through it in just
+a moment i will also create two
+
+180
+00:03:26,949 --> 00:03:26,959
+a moment i will also create two
+ 
+
+181
+00:03:26,959 --> 00:03:28,470
+a moment i will also create two
+additional files
+
+182
+00:03:28,470 --> 00:03:28,480
+additional files
+ 
+
+183
+00:03:28,480 --> 00:03:31,990
+additional files
+m window example.cmake and munich's
+
+184
+00:03:31,990 --> 00:03:32,000
+m window example.cmake and munich's
+ 
+
+185
+00:03:32,000 --> 00:03:33,509
+m window example.cmake and munich's
+example.cmake
+
+186
+00:03:33,509 --> 00:03:33,519
+example.cmake
+ 
+
+187
+00:03:33,519 --> 00:03:35,830
+example.cmake
+which also both have pastebin links
+
+188
+00:03:35,830 --> 00:03:35,840
+which also both have pastebin links
+ 
+
+189
+00:03:35,840 --> 00:03:37,509
+which also both have pastebin links
+these are just some example template
+
+190
+00:03:37,509 --> 00:03:37,519
+these are just some example template
+ 
+
+191
+00:03:37,519 --> 00:03:39,430
+these are just some example template
+files for how you may want to configure
+
+192
+00:03:39,430 --> 00:03:39,440
+files for how you may want to configure
+ 
+
+193
+00:03:39,440 --> 00:03:41,589
+files for how you may want to configure
+the path variables for your project
+
+194
+00:03:41,589 --> 00:03:41,599
+the path variables for your project
+ 
+
+195
+00:03:41,599 --> 00:03:43,350
+the path variables for your project
+these files are marked optional in the
+
+196
+00:03:43,350 --> 00:03:43,360
+these files are marked optional in the
+ 
+
+197
+00:03:43,360 --> 00:03:45,589
+these files are marked optional in the
+cmake file and for mac os and linux
+
+198
+00:03:45,589 --> 00:03:45,599
+cmake file and for mac os and linux
+ 
+
+199
+00:03:45,599 --> 00:03:47,509
+cmake file and for mac os and linux
+operating systems you probably won't
+
+200
+00:03:47,509 --> 00:03:47,519
+operating systems you probably won't
+ 
+
+201
+00:03:47,519 --> 00:03:49,350
+operating systems you probably won't
+need one at all depending on how you
+
+202
+00:03:49,350 --> 00:03:49,360
+need one at all depending on how you
+ 
+
+203
+00:03:49,360 --> 00:03:52,309
+need one at all depending on how you
+installed the external dependencies on
+
+204
+00:03:52,309 --> 00:03:52,319
+installed the external dependencies on
+ 
+
+205
+00:03:52,319 --> 00:03:54,949
+installed the external dependencies on
+windows though you will likely need to
+
+206
+00:03:54,949 --> 00:03:54,959
+windows though you will likely need to
+ 
+
+207
+00:03:54,959 --> 00:03:58,550
+windows though you will likely need to
+configure a local.m dot cmake file okay
+
+208
+00:03:58,550 --> 00:03:58,560
+configure a local.m dot cmake file okay
+ 
+
+209
+00:03:58,560 --> 00:04:00,869
+configure a local.m dot cmake file okay
+let's briefly walk through this
+
+210
+00:04:00,869 --> 00:04:00,879
+let's briefly walk through this
+ 
+
+211
+00:04:00,879 --> 00:04:03,670
+let's briefly walk through this
+so we create a variable called name
+
+212
+00:04:03,670 --> 00:04:03,680
+so we create a variable called name
+ 
+
+213
+00:04:03,680 --> 00:04:05,670
+so we create a variable called name
+which will be the file name of your
+
+214
+00:04:05,670 --> 00:04:05,680
+which will be the file name of your
+ 
+
+215
+00:04:05,680 --> 00:04:08,949
+which will be the file name of your
+output executable so rename this to be
+
+216
+00:04:08,949 --> 00:04:08,959
+output executable so rename this to be
+ 
+
+217
+00:04:08,959 --> 00:04:10,390
+output executable so rename this to be
+your engine's name
+
+218
+00:04:10,390 --> 00:04:10,400
+your engine's name
+ 
+
+219
+00:04:10,400 --> 00:04:12,630
+your engine's name
+next we check if the generator being
+
+220
+00:04:12,630 --> 00:04:12,640
+next we check if the generator being
+ 
+
+221
+00:04:12,640 --> 00:04:15,750
+next we check if the generator being
+used is for mingw which is a possible
+
+222
+00:04:15,750 --> 00:04:15,760
+used is for mingw which is a possible
+ 
+
+223
+00:04:15,760 --> 00:04:18,229
+used is for mingw which is a possible
+dev environment to use on windows if it
+
+224
+00:04:18,229 --> 00:04:18,239
+dev environment to use on windows if it
+ 
+
+225
+00:04:18,239 --> 00:04:20,150
+dev environment to use on windows if it
+is then we configure the file paths to
+
+226
+00:04:20,150 --> 00:04:20,160
+is then we configure the file paths to
+ 
+
+227
+00:04:20,160 --> 00:04:22,469
+is then we configure the file paths to
+the compilers i'll demonstrate this
+
+228
+00:04:22,469 --> 00:04:22,479
+the compilers i'll demonstrate this
+ 
+
+229
+00:04:22,479 --> 00:04:24,950
+the compilers i'll demonstrate this
+later then we create our project using
+
+230
+00:04:24,950 --> 00:04:24,960
+later then we create our project using
+ 
+
+231
+00:04:24,960 --> 00:04:27,110
+later then we create our project using
+the name set above and i have mine as
+
+232
+00:04:27,110 --> 00:04:27,120
+the name set above and i have mine as
+ 
+
+233
+00:04:27,120 --> 00:04:29,990
+the name set above and i have mine as
+version 23 just because this is tutorial
+
+234
+00:04:29,990 --> 00:04:30,000
+version 23 just because this is tutorial
+ 
+
+235
+00:04:30,000 --> 00:04:33,030
+version 23 just because this is tutorial
+number 23. the next chunk of code is for
+
+236
+00:04:33,030 --> 00:04:33,040
+number 23. the next chunk of code is for
+ 
+
+237
+00:04:33,040 --> 00:04:35,830
+number 23. the next chunk of code is for
+locating vulkan the default behavior is
+
+238
+00:04:35,830 --> 00:04:35,840
+locating vulkan the default behavior is
+ 
+
+239
+00:04:35,840 --> 00:04:38,790
+locating vulkan the default behavior is
+to use the vulcan sdk path variable that
+
+240
+00:04:38,790 --> 00:04:38,800
+to use the vulcan sdk path variable that
+ 
+
+241
+00:04:38,800 --> 00:04:41,510
+to use the vulcan sdk path variable that
+can be optionally specified in the dot m
+
+242
+00:04:41,510 --> 00:04:41,520
+can be optionally specified in the dot m
+ 
+
+243
+00:04:41,520 --> 00:04:44,469
+can be optionally specified in the dot m
+dot cmake file when not provided though
+
+244
+00:04:44,469 --> 00:04:44,479
+dot cmake file when not provided though
+ 
+
+245
+00:04:44,479 --> 00:04:46,390
+dot cmake file when not provided though
+the fallback is to use the find package
+
+246
+00:04:46,390 --> 00:04:46,400
+the fallback is to use the find package
+ 
+
+247
+00:04:46,400 --> 00:04:48,230
+the fallback is to use the find package
+function which will attempt to locate a
+
+248
+00:04:48,230 --> 00:04:48,240
+function which will attempt to locate a
+ 
+
+249
+00:04:48,240 --> 00:04:50,870
+function which will attempt to locate a
+vulcan installation on your system this
+
+250
+00:04:50,870 --> 00:04:50,880
+vulcan installation on your system this
+ 
+
+251
+00:04:50,880 --> 00:04:53,270
+vulcan installation on your system this
+works more reliably on linux and mac i
+
+252
+00:04:53,270 --> 00:04:53,280
+works more reliably on linux and mac i
+ 
+
+253
+00:04:53,280 --> 00:04:55,749
+works more reliably on linux and mac i
+find than on windows so on windows i
+
+254
+00:04:55,749 --> 00:04:55,759
+find than on windows so on windows i
+ 
+
+255
+00:04:55,759 --> 00:04:57,510
+find than on windows so on windows i
+recommend using the first option of
+
+256
+00:04:57,510 --> 00:04:57,520
+recommend using the first option of
+ 
+
+257
+00:04:57,520 --> 00:05:00,950
+recommend using the first option of
+manually specifying the vulkan sdk path
+
+258
+00:05:00,950 --> 00:05:00,960
+manually specifying the vulkan sdk path
+ 
+
+259
+00:05:00,960 --> 00:05:03,590
+manually specifying the vulkan sdk path
+locating the glf w library uses the same
+
+260
+00:05:03,590 --> 00:05:03,600
+locating the glf w library uses the same
+ 
+
+261
+00:05:03,600 --> 00:05:05,670
+locating the glf w library uses the same
+pattern again for windows you need to
+
+262
+00:05:05,670 --> 00:05:05,680
+pattern again for windows you need to
+ 
+
+263
+00:05:05,680 --> 00:05:08,310
+pattern again for windows you need to
+manually specify the file path also if
+
+264
+00:05:08,310 --> 00:05:08,320
+manually specify the file path also if
+ 
+
+265
+00:05:08,320 --> 00:05:10,390
+manually specify the file path also if
+you are using visual studio make sure
+
+266
+00:05:10,390 --> 00:05:10,400
+you are using visual studio make sure
+ 
+
+267
+00:05:10,400 --> 00:05:12,629
+you are using visual studio make sure
+this visual studio version matches what
+
+268
+00:05:12,629 --> 00:05:12,639
+this visual studio version matches what
+ 
+
+269
+00:05:12,639 --> 00:05:13,909
+this visual studio version matches what
+you are using
+
+270
+00:05:13,909 --> 00:05:13,919
+you are using
+ 
+
+271
+00:05:13,919 --> 00:05:16,870
+you are using
+so for example if you're on 2017 change
+
+272
+00:05:16,870 --> 00:05:16,880
+so for example if you're on 2017 change
+ 
+
+273
+00:05:16,880 --> 00:05:21,350
+so for example if you're on 2017 change
+this to use the 2017 glfw binary instead
+
+274
+00:05:21,350 --> 00:05:21,360
+this to use the 2017 glfw binary instead
+ 
+
+275
+00:05:21,360 --> 00:05:23,510
+this to use the 2017 glfw binary instead
+the tiny object loader behavior is that
+
+276
+00:05:23,510 --> 00:05:23,520
+the tiny object loader behavior is that
+ 
+
+277
+00:05:23,520 --> 00:05:25,990
+the tiny object loader behavior is that
+if a file path has been provided in the
+
+278
+00:05:25,990 --> 00:05:26,000
+if a file path has been provided in the
+ 
+
+279
+00:05:26,000 --> 00:05:28,870
+if a file path has been provided in the
+dot m file it will use that but when not
+
+280
+00:05:28,870 --> 00:05:28,880
+dot m file it will use that but when not
+ 
+
+281
+00:05:28,880 --> 00:05:31,510
+dot m file it will use that but when not
+specified it falls back to using the lib
+
+282
+00:05:31,510 --> 00:05:31,520
+specified it falls back to using the lib
+ 
+
+283
+00:05:31,520 --> 00:05:33,909
+specified it falls back to using the lib
+provided by the external folder
+
+284
+00:05:33,909 --> 00:05:33,919
+provided by the external folder
+ 
+
+285
+00:05:33,919 --> 00:05:36,469
+provided by the external folder
+then this glob recurse function is going
+
+286
+00:05:36,469 --> 00:05:36,479
+then this glob recurse function is going
+ 
+
+287
+00:05:36,479 --> 00:05:38,710
+then this glob recurse function is going
+to find all the cpp files within the
+
+288
+00:05:38,710 --> 00:05:38,720
+to find all the cpp files within the
+ 
+
+289
+00:05:38,720 --> 00:05:41,110
+to find all the cpp files within the
+source directory including any files
+
+290
+00:05:41,110 --> 00:05:41,120
+source directory including any files
+ 
+
+291
+00:05:41,120 --> 00:05:43,430
+source directory including any files
+contained by subdirectories so this is
+
+292
+00:05:43,430 --> 00:05:43,440
+contained by subdirectories so this is
+ 
+
+293
+00:05:43,440 --> 00:05:45,670
+contained by subdirectories so this is
+really useful and then it stores
+
+294
+00:05:45,670 --> 00:05:45,680
+really useful and then it stores
+ 
+
+295
+00:05:45,680 --> 00:05:47,990
+really useful and then it stores
+references to them into a variable
+
+296
+00:05:47,990 --> 00:05:48,000
+references to them into a variable
+ 
+
+297
+00:05:48,000 --> 00:05:49,430
+references to them into a variable
+called sources
+
+298
+00:05:49,430 --> 00:05:49,440
+called sources
+ 
+
+299
+00:05:49,440 --> 00:05:52,710
+called sources
+then we use these dot cpp source files
+
+300
+00:05:52,710 --> 00:05:52,720
+then we use these dot cpp source files
+ 
+
+301
+00:05:52,720 --> 00:05:55,510
+then we use these dot cpp source files
+as input for making the executable for
+
+302
+00:05:55,510 --> 00:05:55,520
+as input for making the executable for
+ 
+
+303
+00:05:55,520 --> 00:05:57,670
+as input for making the executable for
+the project note the project name
+
+304
+00:05:57,670 --> 00:05:57,680
+the project note the project name
+ 
+
+305
+00:05:57,680 --> 00:06:00,070
+the project note the project name
+variable was automatically set by cmake
+
+306
+00:06:00,070 --> 00:06:00,080
+variable was automatically set by cmake
+ 
+
+307
+00:06:00,080 --> 00:06:02,390
+variable was automatically set by cmake
+when we created the project above and so
+
+308
+00:06:02,390 --> 00:06:02,400
+when we created the project above and so
+ 
+
+309
+00:06:02,400 --> 00:06:04,150
+when we created the project above and so
+this will just be equal to the name
+
+310
+00:06:04,150 --> 00:06:04,160
+this will just be equal to the name
+ 
+
+311
+00:06:04,160 --> 00:06:07,270
+this will just be equal to the name
+variable that we also set okay then here
+
+312
+00:06:07,270 --> 00:06:07,280
+variable that we also set okay then here
+ 
+
+313
+00:06:07,280 --> 00:06:09,590
+variable that we also set okay then here
+we just set the compiler to use the c
+
+314
+00:06:09,590 --> 00:06:09,600
+we just set the compiler to use the c
+ 
+
+315
+00:06:09,600 --> 00:06:12,469
+we just set the compiler to use the c
+plus 17 standard
+
+316
+00:06:12,469 --> 00:06:12,479
+plus 17 standard
+ 
+
+317
+00:06:12,479 --> 00:06:14,950
+plus 17 standard
+for all of our external dependencies we
+
+318
+00:06:14,950 --> 00:06:14,960
+for all of our external dependencies we
+ 
+
+319
+00:06:14,960 --> 00:06:16,790
+for all of our external dependencies we
+need to include their header directories
+
+320
+00:06:16,790 --> 00:06:16,800
+need to include their header directories
+ 
+
+321
+00:06:16,800 --> 00:06:18,710
+need to include their header directories
+and say where the link libraries are
+
+322
+00:06:18,710 --> 00:06:18,720
+and say where the link libraries are
+ 
+
+323
+00:06:18,720 --> 00:06:21,029
+and say where the link libraries are
+located some of this depends on which
+
+324
+00:06:21,029 --> 00:06:21,039
+located some of this depends on which
+ 
+
+325
+00:06:21,039 --> 00:06:23,029
+located some of this depends on which
+platform we are using that's why we have
+
+326
+00:06:23,029 --> 00:06:23,039
+platform we are using that's why we have
+ 
+
+327
+00:06:23,039 --> 00:06:25,110
+platform we are using that's why we have
+all these if statements and else checks
+
+328
+00:06:25,110 --> 00:06:25,120
+all these if statements and else checks
+ 
+
+329
+00:06:25,120 --> 00:06:27,670
+all these if statements and else checks
+and so on i also specify the project
+
+330
+00:06:27,670 --> 00:06:27,680
+and so on i also specify the project
+ 
+
+331
+00:06:27,680 --> 00:06:30,469
+and so on i also specify the project
+source as a include directory because
+
+332
+00:06:30,469 --> 00:06:30,479
+source as a include directory because
+ 
+
+333
+00:06:30,479 --> 00:06:31,990
+source as a include directory because
+that's where our header files are
+
+334
+00:06:31,990 --> 00:06:32,000
+that's where our header files are
+ 
+
+335
+00:06:32,000 --> 00:06:35,110
+that's where our header files are
+located and as a last step we say to
+
+336
+00:06:35,110 --> 00:06:35,120
+located and as a last step we say to
+ 
+
+337
+00:06:35,120 --> 00:06:37,430
+located and as a last step we say to
+link the glfw and vulcan libraries to
+
+338
+00:06:37,430 --> 00:06:37,440
+link the glfw and vulcan libraries to
+ 
+
+339
+00:06:37,440 --> 00:06:38,870
+link the glfw and vulcan libraries to
+our project
+
+340
+00:06:38,870 --> 00:06:38,880
+our project
+ 
+
+341
+00:06:38,880 --> 00:06:40,710
+our project
+so sorry i went through that kind of
+
+342
+00:06:40,710 --> 00:06:40,720
+so sorry i went through that kind of
+ 
+
+343
+00:06:40,720 --> 00:06:43,749
+so sorry i went through that kind of
+fast but i found that these videos here
+
+344
+00:06:43,749 --> 00:06:43,759
+fast but i found that these videos here
+ 
+
+345
+00:06:43,759 --> 00:06:45,270
+fast but i found that these videos here
+were helpful for me at least when
+
+346
+00:06:45,270 --> 00:06:45,280
+were helpful for me at least when
+ 
+
+347
+00:06:45,280 --> 00:06:47,510
+were helpful for me at least when
+getting started with cmake so if you're
+
+348
+00:06:47,510 --> 00:06:47,520
+getting started with cmake so if you're
+ 
+
+349
+00:06:47,520 --> 00:06:49,589
+getting started with cmake so if you're
+looking to gain a deeper understanding
+
+350
+00:06:49,589 --> 00:06:49,599
+looking to gain a deeper understanding
+ 
+
+351
+00:06:49,599 --> 00:06:51,189
+looking to gain a deeper understanding
+of what's going on i recommend checking
+
+352
+00:06:51,189 --> 00:06:51,199
+of what's going on i recommend checking
+ 
+
+353
+00:06:51,199 --> 00:06:53,430
+of what's going on i recommend checking
+them out and then the last bit of this
+
+354
+00:06:53,430 --> 00:06:53,440
+them out and then the last bit of this
+ 
+
+355
+00:06:53,440 --> 00:06:55,270
+them out and then the last bit of this
+file just specifies a second build
+
+356
+00:06:55,270 --> 00:06:55,280
+file just specifies a second build
+ 
+
+357
+00:06:55,280 --> 00:06:57,670
+file just specifies a second build
+target which essentially just finds a
+
+358
+00:06:57,670 --> 00:06:57,680
+target which essentially just finds a
+ 
+
+359
+00:06:57,680 --> 00:06:59,990
+target which essentially just finds a
+glsl compiler provided by the vulkan
+
+360
+00:06:59,990 --> 00:07:00,000
+glsl compiler provided by the vulkan
+ 
+
+361
+00:07:00,000 --> 00:07:02,230
+glsl compiler provided by the vulkan
+library and then locates all the vertex
+
+362
+00:07:02,230 --> 00:07:02,240
+library and then locates all the vertex
+ 
+
+363
+00:07:02,240 --> 00:07:03,670
+library and then locates all the vertex
+and fragment files in the shaders
+
+364
+00:07:03,670 --> 00:07:03,680
+and fragment files in the shaders
+ 
+
+365
+00:07:03,680 --> 00:07:05,749
+and fragment files in the shaders
+directory and finally each of these
+
+366
+00:07:05,749 --> 00:07:05,759
+directory and finally each of these
+ 
+
+367
+00:07:05,759 --> 00:07:07,909
+directory and finally each of these
+shader files will be built to their
+
+368
+00:07:07,909 --> 00:07:07,919
+shader files will be built to their
+ 
+
+369
+00:07:07,919 --> 00:07:10,710
+shader files will be built to their
+corresponding spv file to be used within
+
+370
+00:07:10,710 --> 00:07:10,720
+corresponding spv file to be used within
+ 
+
+371
+00:07:10,720 --> 00:07:12,309
+corresponding spv file to be used within
+the engine
+
+372
+00:07:12,309 --> 00:07:12,319
+the engine
+ 
+
+373
+00:07:12,319 --> 00:07:14,550
+the engine
+okay one notable change with how cmake
+
+374
+00:07:14,550 --> 00:07:14,560
+okay one notable change with how cmake
+ 
+
+375
+00:07:14,560 --> 00:07:16,790
+okay one notable change with how cmake
+works is that our executable will now be
+
+376
+00:07:16,790 --> 00:07:16,800
+works is that our executable will now be
+ 
+
+377
+00:07:16,800 --> 00:07:18,950
+works is that our executable will now be
+stored in a top level folder called
+
+378
+00:07:18,950 --> 00:07:18,960
+stored in a top level folder called
+ 
+
+379
+00:07:18,960 --> 00:07:21,350
+stored in a top level folder called
+build and should be executed only from
+
+380
+00:07:21,350 --> 00:07:21,360
+build and should be executed only from
+ 
+
+381
+00:07:21,360 --> 00:07:23,670
+build and should be executed only from
+that location so when trying to locate
+
+382
+00:07:23,670 --> 00:07:23,680
+that location so when trying to locate
+ 
+
+383
+00:07:23,680 --> 00:07:25,990
+that location so when trying to locate
+resources relative file paths should be
+
+384
+00:07:25,990 --> 00:07:26,000
+resources relative file paths should be
+ 
+
+385
+00:07:26,000 --> 00:07:28,790
+resources relative file paths should be
+specified as if we are located in the
+
+386
+00:07:28,790 --> 00:07:28,800
+specified as if we are located in the
+ 
+
+387
+00:07:28,800 --> 00:07:31,430
+specified as if we are located in the
+build directory for example to find a
+
+388
+00:07:31,430 --> 00:07:31,440
+build directory for example to find a
+ 
+
+389
+00:07:31,440 --> 00:07:34,070
+build directory for example to find a
+shader we need to go one directory up
+
+390
+00:07:34,070 --> 00:07:34,080
+shader we need to go one directory up
+ 
+
+391
+00:07:34,080 --> 00:07:35,990
+shader we need to go one directory up
+from the build to get to the top level
+
+392
+00:07:35,990 --> 00:07:36,000
+from the build to get to the top level
+ 
+
+393
+00:07:36,000 --> 00:07:38,390
+from the build to get to the top level
+of the project and then into the shaders
+
+394
+00:07:38,390 --> 00:07:38,400
+of the project and then into the shaders
+ 
+
+395
+00:07:38,400 --> 00:07:40,790
+of the project and then into the shaders
+directory to find a shader file so we
+
+396
+00:07:40,790 --> 00:07:40,800
+directory to find a shader file so we
+ 
+
+397
+00:07:40,800 --> 00:07:43,110
+directory to find a shader file so we
+need to update the file path for each
+
+398
+00:07:43,110 --> 00:07:43,120
+need to update the file path for each
+ 
+
+399
+00:07:43,120 --> 00:07:45,430
+need to update the file path for each
+resource to do this i'm going to open
+
+400
+00:07:45,430 --> 00:07:45,440
+resource to do this i'm going to open
+ 
+
+401
+00:07:45,440 --> 00:07:47,270
+resource to do this i'm going to open
+the pipeline implementation file and
+
+402
+00:07:47,270 --> 00:07:47,280
+the pipeline implementation file and
+ 
+
+403
+00:07:47,280 --> 00:07:49,270
+the pipeline implementation file and
+declare a new constant called engine
+
+404
+00:07:49,270 --> 00:07:49,280
+declare a new constant called engine
+ 
+
+405
+00:07:49,280 --> 00:07:53,110
+declare a new constant called engine
+deer equal to one directory up so when
+
+406
+00:07:53,110 --> 00:07:53,120
+deer equal to one directory up so when
+ 
+
+407
+00:07:53,120 --> 00:07:55,189
+deer equal to one directory up so when
+executing the project from the build
+
+408
+00:07:55,189 --> 00:07:55,199
+executing the project from the build
+ 
+
+409
+00:07:55,199 --> 00:07:57,430
+executing the project from the build
+here this will be the top level of the
+
+410
+00:07:57,430 --> 00:07:57,440
+here this will be the top level of the
+ 
+
+411
+00:07:57,440 --> 00:07:59,430
+here this will be the top level of the
+project
+
+412
+00:07:59,430 --> 00:07:59,440
+project
+ 
+
+413
+00:07:59,440 --> 00:08:01,110
+project
+i'll then have my read file function
+
+414
+00:08:01,110 --> 00:08:01,120
+i'll then have my read file function
+ 
+
+415
+00:08:01,120 --> 00:08:03,350
+i'll then have my read file function
+concatenate this directory to my file
+
+416
+00:08:03,350 --> 00:08:03,360
+concatenate this directory to my file
+ 
+
+417
+00:08:03,360 --> 00:08:04,790
+concatenate this directory to my file
+path
+
+418
+00:08:04,790 --> 00:08:04,800
+path
+ 
+
+419
+00:08:04,800 --> 00:08:07,350
+path
+and use this new value to locate my
+
+420
+00:08:07,350 --> 00:08:07,360
+and use this new value to locate my
+ 
+
+421
+00:08:07,360 --> 00:08:10,150
+and use this new value to locate my
+shader resources
+
+422
+00:08:10,150 --> 00:08:10,160
+shader resources
+ 
+
+423
+00:08:10,160 --> 00:08:12,550
+shader resources
+and okay now we need to do the same for
+
+424
+00:08:12,550 --> 00:08:12,560
+and okay now we need to do the same for
+ 
+
+425
+00:08:12,560 --> 00:08:13,990
+and okay now we need to do the same for
+loading models
+
+426
+00:08:13,990 --> 00:08:14,000
+loading models
+ 
+
+427
+00:08:14,000 --> 00:08:16,629
+loading models
+i'll copy this definition here to paste
+
+428
+00:08:16,629 --> 00:08:16,639
+i'll copy this definition here to paste
+ 
+
+429
+00:08:16,639 --> 00:08:19,350
+i'll copy this definition here to paste
+into my model implementation file and
+
+430
+00:08:19,350 --> 00:08:19,360
+into my model implementation file and
+ 
+
+431
+00:08:19,360 --> 00:08:22,070
+into my model implementation file and
+then update the create model from file
+
+432
+00:08:22,070 --> 00:08:22,080
+then update the create model from file
+ 
+
+433
+00:08:22,080 --> 00:08:24,309
+then update the create model from file
+function to use the engineer plus file
+
+434
+00:08:24,309 --> 00:08:24,319
+function to use the engineer plus file
+ 
+
+435
+00:08:24,319 --> 00:08:29,749
+function to use the engineer plus file
+path
+
+436
+00:08:29,749 --> 00:08:29,759
+
+ 
+
+437
+00:08:29,759 --> 00:08:31,670
+ 
+now building the project for linux and
+
+438
+00:08:31,670 --> 00:08:31,680
+now building the project for linux and
+ 
+
+439
+00:08:31,680 --> 00:08:34,149
+now building the project for linux and
+mac os is very straightforward i'll
+
+440
+00:08:34,149 --> 00:08:34,159
+mac os is very straightforward i'll
+ 
+
+441
+00:08:34,159 --> 00:08:36,469
+mac os is very straightforward i'll
+create a new batch scripting file called
+
+442
+00:08:36,469 --> 00:08:36,479
+create a new batch scripting file called
+ 
+
+443
+00:08:36,479 --> 00:08:39,990
+create a new batch scripting file called
+unix build.sh so that we can repeat this
+
+444
+00:08:39,990 --> 00:08:40,000
+unix build.sh so that we can repeat this
+ 
+
+445
+00:08:40,000 --> 00:08:42,149
+unix build.sh so that we can repeat this
+process easily and then note that this
+
+446
+00:08:42,149 --> 00:08:42,159
+process easily and then note that this
+ 
+
+447
+00:08:42,159 --> 00:08:44,149
+process easily and then note that this
+should only be executed from the top
+
+448
+00:08:44,149 --> 00:08:44,159
+should only be executed from the top
+ 
+
+449
+00:08:44,159 --> 00:08:46,949
+should only be executed from the top
+level directory of the project so first
+
+450
+00:08:46,949 --> 00:08:46,959
+level directory of the project so first
+ 
+
+451
+00:08:46,959 --> 00:08:49,110
+level directory of the project so first
+we create a directory called build if
+
+452
+00:08:49,110 --> 00:08:49,120
+we create a directory called build if
+ 
+
+453
+00:08:49,120 --> 00:08:51,350
+we create a directory called build if
+one does not already exist
+
+454
+00:08:51,350 --> 00:08:51,360
+one does not already exist
+ 
+
+455
+00:08:51,360 --> 00:08:53,430
+one does not already exist
+we navigate into the build directory and
+
+456
+00:08:53,430 --> 00:08:53,440
+we navigate into the build directory and
+ 
+
+457
+00:08:53,440 --> 00:08:55,590
+we navigate into the build directory and
+called the cmake function
+
+458
+00:08:55,590 --> 00:08:55,600
+called the cmake function
+ 
+
+459
+00:08:55,600 --> 00:08:58,389
+called the cmake function
+the dash s option specifies the source
+
+460
+00:08:58,389 --> 00:08:58,399
+the dash s option specifies the source
+ 
+
+461
+00:08:58,399 --> 00:09:00,470
+the dash s option specifies the source
+directory which is the top level of the
+
+462
+00:09:00,470 --> 00:09:00,480
+directory which is the top level of the
+ 
+
+463
+00:09:00,480 --> 00:09:03,350
+directory which is the top level of the
+project and then the dash b option
+
+464
+00:09:03,350 --> 00:09:03,360
+project and then the dash b option
+ 
+
+465
+00:09:03,360 --> 00:09:05,590
+project and then the dash b option
+specifies the build directory which is
+
+466
+00:09:05,590 --> 00:09:05,600
+specifies the build directory which is
+ 
+
+467
+00:09:05,600 --> 00:09:08,230
+specifies the build directory which is
+what we should be currently in next i
+
+468
+00:09:08,230 --> 00:09:08,240
+what we should be currently in next i
+ 
+
+469
+00:09:08,240 --> 00:09:10,389
+what we should be currently in next i
+call make to build the project and make
+
+470
+00:09:10,389 --> 00:09:10,399
+call make to build the project and make
+ 
+
+471
+00:09:10,399 --> 00:09:12,790
+call make to build the project and make
+shaders to build our shaders and then
+
+472
+00:09:12,790 --> 00:09:12,800
+shaders to build our shaders and then
+ 
+
+473
+00:09:12,800 --> 00:09:15,350
+shaders to build our shaders and then
+finally run the engine's executable
+
+474
+00:09:15,350 --> 00:09:15,360
+finally run the engine's executable
+ 
+
+475
+00:09:15,360 --> 00:09:17,430
+finally run the engine's executable
+and then as the actual final step i'll
+
+476
+00:09:17,430 --> 00:09:17,440
+and then as the actual final step i'll
+ 
+
+477
+00:09:17,440 --> 00:09:19,829
+and then as the actual final step i'll
+navigate back up one directory to the
+
+478
+00:09:19,829 --> 00:09:19,839
+navigate back up one directory to the
+ 
+
+479
+00:09:19,839 --> 00:09:22,310
+navigate back up one directory to the
+top level of the project you might need
+
+480
+00:09:22,310 --> 00:09:22,320
+top level of the project you might need
+ 
+
+481
+00:09:22,320 --> 00:09:24,949
+top level of the project you might need
+to run the chmod command first in order
+
+482
+00:09:24,949 --> 00:09:24,959
+to run the chmod command first in order
+ 
+
+483
+00:09:24,959 --> 00:09:27,509
+to run the chmod command first in order
+to make this script executable and then
+
+484
+00:09:27,509 --> 00:09:27,519
+to make this script executable and then
+ 
+
+485
+00:09:27,519 --> 00:09:29,670
+to make this script executable and then
+if we run the script we can see the
+
+486
+00:09:29,670 --> 00:09:29,680
+if we run the script we can see the
+ 
+
+487
+00:09:29,680 --> 00:09:32,550
+if we run the script we can see the
+output from the c make lists file it
+
+488
+00:09:32,550 --> 00:09:32,560
+output from the c make lists file it
+ 
+
+489
+00:09:32,560 --> 00:09:34,630
+output from the c make lists file it
+then builds each of our source files
+
+490
+00:09:34,630 --> 00:09:34,640
+then builds each of our source files
+ 
+
+491
+00:09:34,640 --> 00:09:37,190
+then builds each of our source files
+links them together builds every shader
+
+492
+00:09:37,190 --> 00:09:37,200
+links them together builds every shader
+ 
+
+493
+00:09:37,200 --> 00:09:39,910
+links them together builds every shader
+and starts the engine one advantage to
+
+494
+00:09:39,910 --> 00:09:39,920
+and starts the engine one advantage to
+ 
+
+495
+00:09:39,920 --> 00:09:41,829
+and starts the engine one advantage to
+the makefile that cmake generates is
+
+496
+00:09:41,829 --> 00:09:41,839
+the makefile that cmake generates is
+ 
+
+497
+00:09:41,839 --> 00:09:43,829
+the makefile that cmake generates is
+that it keeps track of which files need
+
+498
+00:09:43,829 --> 00:09:43,839
+that it keeps track of which files need
+ 
+
+499
+00:09:43,839 --> 00:09:46,550
+that it keeps track of which files need
+to be recompiled so if you make a small
+
+500
+00:09:46,550 --> 00:09:46,560
+to be recompiled so if you make a small
+ 
+
+501
+00:09:46,560 --> 00:09:49,030
+to be recompiled so if you make a small
+change only that part of the project
+
+502
+00:09:49,030 --> 00:09:49,040
+change only that part of the project
+ 
+
+503
+00:09:49,040 --> 00:09:51,350
+change only that part of the project
+will need to be recompiled this means
+
+504
+00:09:51,350 --> 00:09:51,360
+will need to be recompiled this means
+ 
+
+505
+00:09:51,360 --> 00:09:53,350
+will need to be recompiled this means
+that if we execute the build script
+
+506
+00:09:53,350 --> 00:09:53,360
+that if we execute the build script
+ 
+
+507
+00:09:53,360 --> 00:09:54,230
+that if we execute the build script
+again
+
+508
+00:09:54,230 --> 00:09:54,240
+again
+ 
+
+509
+00:09:54,240 --> 00:09:55,910
+again
+our program compiles nearly
+
+510
+00:09:55,910 --> 00:09:55,920
+our program compiles nearly
+ 
+
+511
+00:09:55,920 --> 00:09:58,310
+our program compiles nearly
+instantaneously because no changes have
+
+512
+00:09:58,310 --> 00:09:58,320
+instantaneously because no changes have
+ 
+
+513
+00:09:58,320 --> 00:09:59,590
+instantaneously because no changes have
+been detected
+
+514
+00:09:59,590 --> 00:09:59,600
+been detected
+ 
+
+515
+00:09:59,600 --> 00:10:01,590
+been detected
+if we open the build directory we can
+
+516
+00:10:01,590 --> 00:10:01,600
+if we open the build directory we can
+ 
+
+517
+00:10:01,600 --> 00:10:03,670
+if we open the build directory we can
+see all the files the cmake tool has
+
+518
+00:10:03,670 --> 00:10:03,680
+see all the files the cmake tool has
+ 
+
+519
+00:10:03,680 --> 00:10:05,350
+see all the files the cmake tool has
+generated for us
+
+520
+00:10:05,350 --> 00:10:05,360
+generated for us
+ 
+
+521
+00:10:05,360 --> 00:10:06,870
+generated for us
+one last thing to note is that you
+
+522
+00:10:06,870 --> 00:10:06,880
+one last thing to note is that you
+ 
+
+523
+00:10:06,880 --> 00:10:08,470
+one last thing to note is that you
+shouldn't run your engine from anywhere
+
+524
+00:10:08,470 --> 00:10:08,480
+shouldn't run your engine from anywhere
+ 
+
+525
+00:10:08,480 --> 00:10:11,269
+shouldn't run your engine from anywhere
+other than the build directory if i try
+
+526
+00:10:11,269 --> 00:10:11,279
+other than the build directory if i try
+ 
+
+527
+00:10:11,279 --> 00:10:13,750
+other than the build directory if i try
+so from here so at the top level you can
+
+528
+00:10:13,750 --> 00:10:13,760
+so from here so at the top level you can
+ 
+
+529
+00:10:13,760 --> 00:10:17,030
+so from here so at the top level you can
+see it breaks my relative file paths i
+
+530
+00:10:17,030 --> 00:10:17,040
+see it breaks my relative file paths i
+ 
+
+531
+00:10:17,040 --> 00:10:19,030
+see it breaks my relative file paths i
+have to first navigate into the build
+
+532
+00:10:19,030 --> 00:10:19,040
+have to first navigate into the build
+ 
+
+533
+00:10:19,040 --> 00:10:21,509
+have to first navigate into the build
+folder and then run the project for
+
+534
+00:10:21,509 --> 00:10:21,519
+folder and then run the project for
+ 
+
+535
+00:10:21,519 --> 00:10:24,069
+folder and then run the project for
+things to work correctly
+
+536
+00:10:24,069 --> 00:10:24,079
+things to work correctly
+ 
+
+537
+00:10:24,079 --> 00:10:26,389
+things to work correctly
+okay now building for windows is only
+
+538
+00:10:26,389 --> 00:10:26,399
+okay now building for windows is only
+ 
+
+539
+00:10:26,399 --> 00:10:28,949
+okay now building for windows is only
+slightly more complicated the first
+
+540
+00:10:28,949 --> 00:10:28,959
+slightly more complicated the first
+ 
+
+541
+00:10:28,959 --> 00:10:31,030
+slightly more complicated the first
+thing we need to do is to create the dot
+
+542
+00:10:31,030 --> 00:10:31,040
+thing we need to do is to create the dot
+ 
+
+543
+00:10:31,040 --> 00:10:33,990
+thing we need to do is to create the dot
+m c make file so duplicate the windows
+
+544
+00:10:33,990 --> 00:10:34,000
+m c make file so duplicate the windows
+ 
+
+545
+00:10:34,000 --> 00:10:37,190
+m c make file so duplicate the windows
+example file and rename it to dot m dot
+
+546
+00:10:37,190 --> 00:10:37,200
+example file and rename it to dot m dot
+ 
+
+547
+00:10:37,200 --> 00:10:39,829
+example file and rename it to dot m dot
+c make you need to set the absolute file
+
+548
+00:10:39,829 --> 00:10:39,839
+c make you need to set the absolute file
+ 
+
+549
+00:10:39,839 --> 00:10:42,630
+c make you need to set the absolute file
+path to your glf w glm and vulkan
+
+550
+00:10:42,630 --> 00:10:42,640
+path to your glf w glm and vulkan
+ 
+
+551
+00:10:42,640 --> 00:10:44,470
+path to your glf w glm and vulkan
+installation locations
+
+552
+00:10:44,470 --> 00:10:44,480
+installation locations
+ 
+
+553
+00:10:44,480 --> 00:10:46,790
+installation locations
+next if you are using mingw rather than
+
+554
+00:10:46,790 --> 00:10:46,800
+next if you are using mingw rather than
+ 
+
+555
+00:10:46,800 --> 00:10:49,190
+next if you are using mingw rather than
+visual studio you will also need to set
+
+556
+00:10:49,190 --> 00:10:49,200
+visual studio you will also need to set
+ 
+
+557
+00:10:49,200 --> 00:10:51,829
+visual studio you will also need to set
+its file path to build for windows using
+
+558
+00:10:51,829 --> 00:10:51,839
+its file path to build for windows using
+ 
+
+559
+00:10:51,839 --> 00:10:55,030
+its file path to build for windows using
+mingw we can use a bat file
+
+560
+00:10:55,030 --> 00:10:55,040
+mingw we can use a bat file
+ 
+
+561
+00:10:55,040 --> 00:10:57,430
+mingw we can use a bat file
+this should also only be executed from
+
+562
+00:10:57,430 --> 00:10:57,440
+this should also only be executed from
+ 
+
+563
+00:10:57,440 --> 00:11:00,389
+this should also only be executed from
+your top level directory
+
+564
+00:11:00,389 --> 00:11:00,399
+your top level directory
+ 
+
+565
+00:11:00,399 --> 00:11:03,350
+your top level directory
+we create a build folder if one does not
+
+566
+00:11:03,350 --> 00:11:03,360
+we create a build folder if one does not
+ 
+
+567
+00:11:03,360 --> 00:11:05,750
+we create a build folder if one does not
+already exist
+
+568
+00:11:05,750 --> 00:11:05,760
+already exist
+ 
+
+569
+00:11:05,760 --> 00:11:08,710
+already exist
+and navigate into it and call cmake with
+
+570
+00:11:08,710 --> 00:11:08,720
+and navigate into it and call cmake with
+ 
+
+571
+00:11:08,720 --> 00:11:11,990
+and navigate into it and call cmake with
+the dash s option specifying the source
+
+572
+00:11:11,990 --> 00:11:12,000
+the dash s option specifying the source
+ 
+
+573
+00:11:12,000 --> 00:11:14,550
+the dash s option specifying the source
+directory which should be the top level
+
+574
+00:11:14,550 --> 00:11:14,560
+directory which should be the top level
+ 
+
+575
+00:11:14,560 --> 00:11:16,470
+directory which should be the top level
+directory of our project
+
+576
+00:11:16,470 --> 00:11:16,480
+directory of our project
+ 
+
+577
+00:11:16,480 --> 00:11:18,790
+directory of our project
+and the dash b option specifying the
+
+578
+00:11:18,790 --> 00:11:18,800
+and the dash b option specifying the
+ 
+
+579
+00:11:18,800 --> 00:11:21,430
+and the dash b option specifying the
+build directory which is the directory
+
+580
+00:11:21,430 --> 00:11:21,440
+build directory which is the directory
+ 
+
+581
+00:11:21,440 --> 00:11:24,550
+build directory which is the directory
+we currently are in the last option is
+
+582
+00:11:24,550 --> 00:11:24,560
+we currently are in the last option is
+ 
+
+583
+00:11:24,560 --> 00:11:25,910
+we currently are in the last option is
+dash g
+
+584
+00:11:25,910 --> 00:11:25,920
+dash g
+ 
+
+585
+00:11:25,920 --> 00:11:28,470
+dash g
+and this tells cmake to use the mingw
+
+586
+00:11:28,470 --> 00:11:28,480
+and this tells cmake to use the mingw
+ 
+
+587
+00:11:28,480 --> 00:11:29,990
+and this tells cmake to use the mingw
+build generator
+
+588
+00:11:29,990 --> 00:11:30,000
+build generator
+ 
+
+589
+00:11:30,000 --> 00:11:32,389
+build generator
+next i call make to build the project
+
+590
+00:11:32,389 --> 00:11:32,399
+next i call make to build the project
+ 
+
+591
+00:11:32,399 --> 00:11:34,790
+next i call make to build the project
+and make shaders to build the shaders
+
+592
+00:11:34,790 --> 00:11:34,800
+and make shaders to build the shaders
+ 
+
+593
+00:11:34,800 --> 00:11:36,949
+and make shaders to build the shaders
+and as the final step i navigate back up
+
+594
+00:11:36,949 --> 00:11:36,959
+and as the final step i navigate back up
+ 
+
+595
+00:11:36,959 --> 00:11:39,269
+and as the final step i navigate back up
+one directory to the top level of the
+
+596
+00:11:39,269 --> 00:11:39,279
+one directory to the top level of the
+ 
+
+597
+00:11:39,279 --> 00:11:41,110
+one directory to the top level of the
+project
+
+598
+00:11:41,110 --> 00:11:41,120
+project
+ 
+
+599
+00:11:41,120 --> 00:11:43,509
+project
+for using mingw you need to make sure
+
+600
+00:11:43,509 --> 00:11:43,519
+for using mingw you need to make sure
+ 
+
+601
+00:11:43,519 --> 00:11:46,150
+for using mingw you need to make sure
+you're using the 64-bit build
+
+602
+00:11:46,150 --> 00:11:46,160
+you're using the 64-bit build
+ 
+
+603
+00:11:46,160 --> 00:11:48,470
+you're using the 64-bit build
+which can be found here to download
+
+604
+00:11:48,470 --> 00:11:48,480
+which can be found here to download
+ 
+
+605
+00:11:48,480 --> 00:11:50,069
+which can be found here to download
+make sure to update your system
+
+606
+00:11:50,069 --> 00:11:50,079
+make sure to update your system
+ 
+
+607
+00:11:50,079 --> 00:11:52,550
+make sure to update your system
+environment path so it can be found
+
+608
+00:11:52,550 --> 00:11:52,560
+environment path so it can be found
+ 
+
+609
+00:11:52,560 --> 00:11:54,389
+environment path so it can be found
+you can use the where command to check
+
+610
+00:11:54,389 --> 00:11:54,399
+you can use the where command to check
+ 
+
+611
+00:11:54,399 --> 00:11:58,230
+you can use the where command to check
+that things are being located correctly
+
+612
+00:11:58,230 --> 00:11:58,240
+that things are being located correctly
+ 
+
+613
+00:11:58,240 --> 00:12:00,389
+that things are being located correctly
+okay now in the top level directory of
+
+614
+00:12:00,389 --> 00:12:00,399
+okay now in the top level directory of
+ 
+
+615
+00:12:00,399 --> 00:12:01,750
+okay now in the top level directory of
+our project
+
+616
+00:12:01,750 --> 00:12:01,760
+our project
+ 
+
+617
+00:12:01,760 --> 00:12:03,670
+our project
+if we run the bat file we can view the
+
+618
+00:12:03,670 --> 00:12:03,680
+if we run the bat file we can view the
+ 
+
+619
+00:12:03,680 --> 00:12:05,910
+if we run the bat file we can view the
+cmake output and each of our source
+
+620
+00:12:05,910 --> 00:12:05,920
+cmake output and each of our source
+ 
+
+621
+00:12:05,920 --> 00:12:07,350
+cmake output and each of our source
+files to be built
+
+622
+00:12:07,350 --> 00:12:07,360
+files to be built
+ 
+
+623
+00:12:07,360 --> 00:12:10,069
+files to be built
+cmake generates the build directory with
+
+624
+00:12:10,069 --> 00:12:10,079
+cmake generates the build directory with
+ 
+
+625
+00:12:10,079 --> 00:12:12,629
+cmake generates the build directory with
+all the necessary build files and we
+
+626
+00:12:12,629 --> 00:12:12,639
+all the necessary build files and we
+ 
+
+627
+00:12:12,639 --> 00:12:15,030
+all the necessary build files and we
+have also compiled our engine unlike the
+
+628
+00:12:15,030 --> 00:12:15,040
+have also compiled our engine unlike the
+ 
+
+629
+00:12:15,040 --> 00:12:17,269
+have also compiled our engine unlike the
+unix scripting file i wasn't able to
+
+630
+00:12:17,269 --> 00:12:17,279
+unix scripting file i wasn't able to
+ 
+
+631
+00:12:17,279 --> 00:12:19,190
+unix scripting file i wasn't able to
+figure out how to properly launch the
+
+632
+00:12:19,190 --> 00:12:19,200
+figure out how to properly launch the
+ 
+
+633
+00:12:19,200 --> 00:12:22,310
+figure out how to properly launch the
+engine automatically on windows
+
+634
+00:12:22,310 --> 00:12:22,320
+engine automatically on windows
+ 
+
+635
+00:12:22,320 --> 00:12:24,550
+engine automatically on windows
+so to run the engine you need to open
+
+636
+00:12:24,550 --> 00:12:24,560
+so to run the engine you need to open
+ 
+
+637
+00:12:24,560 --> 00:12:26,550
+so to run the engine you need to open
+the build directory and double-click to
+
+638
+00:12:26,550 --> 00:12:26,560
+the build directory and double-click to
+ 
+
+639
+00:12:26,560 --> 00:12:30,470
+the build directory and double-click to
+launch the executable
+
+640
+00:12:30,470 --> 00:12:30,480
+
+ 
+
+641
+00:12:30,480 --> 00:12:33,030
+ 
+if you prefer to use visual studio that
+
+642
+00:12:33,030 --> 00:12:33,040
+if you prefer to use visual studio that
+ 
+
+643
+00:12:33,040 --> 00:12:35,269
+if you prefer to use visual studio that
+is also still possible
+
+644
+00:12:35,269 --> 00:12:35,279
+is also still possible
+ 
+
+645
+00:12:35,279 --> 00:12:37,350
+is also still possible
+update your paths and then in powershell
+
+646
+00:12:37,350 --> 00:12:37,360
+update your paths and then in powershell
+ 
+
+647
+00:12:37,360 --> 00:12:39,670
+update your paths and then in powershell
+i will create a build directory
+
+648
+00:12:39,670 --> 00:12:39,680
+i will create a build directory
+ 
+
+649
+00:12:39,680 --> 00:12:41,990
+i will create a build directory
+navigate into it and then run the cma
+
+650
+00:12:41,990 --> 00:12:42,000
+navigate into it and then run the cma
+ 
+
+651
+00:12:42,000 --> 00:12:43,990
+navigate into it and then run the cma
+command specifying the source and build
+
+652
+00:12:43,990 --> 00:12:44,000
+command specifying the source and build
+ 
+
+653
+00:12:44,000 --> 00:12:45,829
+command specifying the source and build
+directories
+
+654
+00:12:45,829 --> 00:12:45,839
+directories
+ 
+
+655
+00:12:45,839 --> 00:12:47,829
+directories
+this will generate a solution file for
+
+656
+00:12:47,829 --> 00:12:47,839
+this will generate a solution file for
+ 
+
+657
+00:12:47,839 --> 00:12:51,990
+this will generate a solution file for
+us which we can open in visual studio
+
+658
+00:12:51,990 --> 00:12:52,000
+us which we can open in visual studio
+ 
+
+659
+00:12:52,000 --> 00:12:53,910
+us which we can open in visual studio
+in here there's just a couple small
+
+660
+00:12:53,910 --> 00:12:53,920
+in here there's just a couple small
+ 
+
+661
+00:12:53,920 --> 00:12:56,870
+in here there's just a couple small
+steps we need to do to build the project
+
+662
+00:12:56,870 --> 00:12:56,880
+steps we need to do to build the project
+ 
+
+663
+00:12:56,880 --> 00:12:58,470
+steps we need to do to build the project
+right click on the shaders target and
+
+664
+00:12:58,470 --> 00:12:58,480
+right click on the shaders target and
+ 
+
+665
+00:12:58,480 --> 00:13:00,790
+right click on the shaders target and
+select build to build your shaders
+
+666
+00:13:00,790 --> 00:13:00,800
+select build to build your shaders
+ 
+
+667
+00:13:00,800 --> 00:13:02,870
+select build to build your shaders
+right click on the engine and set it as
+
+668
+00:13:02,870 --> 00:13:02,880
+right click on the engine and set it as
+ 
+
+669
+00:13:02,880 --> 00:13:04,870
+right click on the engine and set it as
+the startup project
+
+670
+00:13:04,870 --> 00:13:04,880
+the startup project
+ 
+
+671
+00:13:04,880 --> 00:13:07,269
+the startup project
+and then select the release build option
+
+672
+00:13:07,269 --> 00:13:07,279
+and then select the release build option
+ 
+
+673
+00:13:07,279 --> 00:13:09,509
+and then select the release build option
+and build your project
+
+674
+00:13:09,509 --> 00:13:09,519
+and build your project
+ 
+
+675
+00:13:09,519 --> 00:13:12,629
+and build your project
+a voila our engine in visual studio
+
+676
+00:13:12,629 --> 00:13:12,639
+a voila our engine in visual studio
+ 
+
+677
+00:13:12,639 --> 00:13:14,389
+a voila our engine in visual studio
+note that the relative paths to our
+
+678
+00:13:14,389 --> 00:13:14,399
+note that the relative paths to our
+ 
+
+679
+00:13:14,399 --> 00:13:16,310
+note that the relative paths to our
+shaders and model resources will still
+
+680
+00:13:16,310 --> 00:13:16,320
+shaders and model resources will still
+ 
+
+681
+00:13:16,320 --> 00:13:18,629
+shaders and model resources will still
+work in visual studio because of this
+
+682
+00:13:18,629 --> 00:13:18,639
+work in visual studio because of this
+ 
+
+683
+00:13:18,639 --> 00:13:20,629
+work in visual studio because of this
+line here in rc make
+
+684
+00:13:20,629 --> 00:13:20,639
+line here in rc make
+ 
+
+685
+00:13:20,639 --> 00:13:23,110
+line here in rc make
+this tells the visual studio debugger to
+
+686
+00:13:23,110 --> 00:13:23,120
+this tells the visual studio debugger to
+ 
+
+687
+00:13:23,120 --> 00:13:25,350
+this tells the visual studio debugger to
+set its location to the build directory
+
+688
+00:13:25,350 --> 00:13:25,360
+set its location to the build directory
+ 
+
+689
+00:13:25,360 --> 00:13:27,910
+set its location to the build directory
+for when it runs the engine this way the
+
+690
+00:13:27,910 --> 00:13:27,920
+for when it runs the engine this way the
+ 
+
+691
+00:13:27,920 --> 00:13:29,590
+for when it runs the engine this way the
+relative file paths will still be
+
+692
+00:13:29,590 --> 00:13:29,600
+relative file paths will still be
+ 
+
+693
+00:13:29,600 --> 00:13:32,389
+relative file paths will still be
+correct if you have any trouble getting
+
+694
+00:13:32,389 --> 00:13:32,399
+correct if you have any trouble getting
+ 
+
+695
+00:13:32,399 --> 00:13:34,069
+correct if you have any trouble getting
+the build system to work correctly on
+
+696
+00:13:34,069 --> 00:13:34,079
+the build system to work correctly on
+ 
+
+697
+00:13:34,079 --> 00:13:35,990
+the build system to work correctly on
+your platform please let me know in the
+
+698
+00:13:35,990 --> 00:13:36,000
+your platform please let me know in the
+ 
+
+699
+00:13:36,000 --> 00:13:38,949
+your platform please let me know in the
+comments below or on our discord anyway
+
+700
+00:13:38,949 --> 00:13:38,959
+comments below or on our discord anyway
+ 
+
+701
+00:13:38,959 --> 00:13:40,629
+comments below or on our discord anyway
+that's it for this one thank you for
+
+702
+00:13:40,629 --> 00:13:40,639
+that's it for this one thank you for
+ 
+
+703
+00:13:40,639 --> 00:13:45,320
+that's it for this one thank you for
+watching and keep on coding cheers
+

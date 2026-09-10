@@ -1,0 +1,3945 @@
+1
+00:00:00,799 --> 00:00:03,510
+ 
+welcome back to another vulcan tutorial
+
+2
+00:00:03,510 --> 00:00:03,520
+welcome back to another vulcan tutorial
+ 
+
+3
+00:00:03,520 --> 00:00:05,349
+welcome back to another vulcan tutorial
+last time we went over the graphics
+
+4
+00:00:05,349 --> 00:00:05,359
+last time we went over the graphics
+ 
+
+5
+00:00:05,359 --> 00:00:07,510
+last time we went over the graphics
+pipeline and created our shader programs
+
+6
+00:00:07,510 --> 00:00:07,520
+pipeline and created our shader programs
+ 
+
+7
+00:00:07,520 --> 00:00:10,070
+pipeline and created our shader programs
+for our vertex and fragment stages
+
+8
+00:00:10,070 --> 00:00:10,080
+for our vertex and fragment stages
+ 
+
+9
+00:00:10,080 --> 00:00:12,150
+for our vertex and fragment stages
+what is left to be done is configuring
+
+10
+00:00:12,150 --> 00:00:12,160
+what is left to be done is configuring
+ 
+
+11
+00:00:12,160 --> 00:00:14,230
+what is left to be done is configuring
+the fixed function pipeline stages
+
+12
+00:00:14,230 --> 00:00:14,240
+the fixed function pipeline stages
+ 
+
+13
+00:00:14,240 --> 00:00:15,749
+the fixed function pipeline stages
+and creating our vulcan graphics
+
+14
+00:00:15,749 --> 00:00:15,759
+and creating our vulcan graphics
+ 
+
+15
+00:00:15,759 --> 00:00:17,349
+and creating our vulcan graphics
+pipeline object
+
+16
+00:00:17,349 --> 00:00:17,359
+pipeline object
+ 
+
+17
+00:00:17,359 --> 00:00:19,349
+pipeline object
+as the next step we're going to download
+
+18
+00:00:19,349 --> 00:00:19,359
+as the next step we're going to download
+ 
+
+19
+00:00:19,359 --> 00:00:20,710
+as the next step we're going to download
+some code that i've written
+
+20
+00:00:20,710 --> 00:00:20,720
+some code that i've written
+ 
+
+21
+00:00:20,720 --> 00:00:23,910
+some code that i've written
+that encapsulates our vulcan device stop
+
+22
+00:00:23,910 --> 00:00:23,920
+that encapsulates our vulcan device stop
+ 
+
+23
+00:00:23,920 --> 00:00:26,150
+that encapsulates our vulcan device stop
+please don't run away just yet now
+
+24
+00:00:26,150 --> 00:00:26,160
+please don't run away just yet now
+ 
+
+25
+00:00:26,160 --> 00:00:28,230
+please don't run away just yet now
+personally i really dislike tutorials
+
+26
+00:00:28,230 --> 00:00:28,240
+personally i really dislike tutorials
+ 
+
+27
+00:00:28,240 --> 00:00:30,630
+personally i really dislike tutorials
+that make me download code it completely
+
+28
+00:00:30,630 --> 00:00:30,640
+that make me download code it completely
+ 
+
+29
+00:00:30,640 --> 00:00:32,790
+that make me download code it completely
+goes against why i follow tutorials in
+
+30
+00:00:32,790 --> 00:00:32,800
+goes against why i follow tutorials in
+ 
+
+31
+00:00:32,800 --> 00:00:33,830
+goes against why i follow tutorials in
+the first place
+
+32
+00:00:33,830 --> 00:00:33,840
+the first place
+ 
+
+33
+00:00:33,840 --> 00:00:35,910
+the first place
+but i think in this rare case it might
+
+34
+00:00:35,910 --> 00:00:35,920
+but i think in this rare case it might
+ 
+
+35
+00:00:35,920 --> 00:00:37,750
+but i think in this rare case it might
+be a better way to learn vulkan
+
+36
+00:00:37,750 --> 00:00:37,760
+be a better way to learn vulkan
+ 
+
+37
+00:00:37,760 --> 00:00:39,510
+be a better way to learn vulkan
+i'm trying something different here and
+
+38
+00:00:39,510 --> 00:00:39,520
+i'm trying something different here and
+ 
+
+39
+00:00:39,520 --> 00:00:41,590
+i'm trying something different here and
+can't promise it will be any better than
+
+40
+00:00:41,590 --> 00:00:41,600
+can't promise it will be any better than
+ 
+
+41
+00:00:41,600 --> 00:00:44,069
+can't promise it will be any better than
+the other vulcan tutorials out there but
+
+42
+00:00:44,069 --> 00:00:44,079
+the other vulcan tutorials out there but
+ 
+
+43
+00:00:44,079 --> 00:00:45,750
+the other vulcan tutorials out there but
+my intent is to make things more
+
+44
+00:00:45,750 --> 00:00:45,760
+my intent is to make things more
+ 
+
+45
+00:00:45,760 --> 00:00:46,709
+my intent is to make things more
+approachable
+
+46
+00:00:46,709 --> 00:00:46,719
+approachable
+ 
+
+47
+00:00:46,719 --> 00:00:48,709
+approachable
+by flattening out the steepness of
+
+48
+00:00:48,709 --> 00:00:48,719
+by flattening out the steepness of
+ 
+
+49
+00:00:48,719 --> 00:00:50,069
+by flattening out the steepness of
+vulcan's learning curve
+
+50
+00:00:50,069 --> 00:00:50,079
+vulcan's learning curve
+ 
+
+51
+00:00:50,079 --> 00:00:51,830
+vulcan's learning curve
+all of the code provided will eventually
+
+52
+00:00:51,830 --> 00:00:51,840
+all of the code provided will eventually
+ 
+
+53
+00:00:51,840 --> 00:00:54,150
+all of the code provided will eventually
+be examined rewritten or extended
+
+54
+00:00:54,150 --> 00:00:54,160
+be examined rewritten or extended
+ 
+
+55
+00:00:54,160 --> 00:00:55,910
+be examined rewritten or extended
+so the end result is that you've gotten
+
+56
+00:00:55,910 --> 00:00:55,920
+so the end result is that you've gotten
+ 
+
+57
+00:00:55,920 --> 00:00:58,229
+so the end result is that you've gotten
+to the same destination learning wise
+
+58
+00:00:58,229 --> 00:00:58,239
+to the same destination learning wise
+ 
+
+59
+00:00:58,239 --> 00:00:59,830
+to the same destination learning wise
+but did so by taking a much more
+
+60
+00:00:59,830 --> 00:00:59,840
+but did so by taking a much more
+ 
+
+61
+00:00:59,840 --> 00:01:02,069
+but did so by taking a much more
+enjoyable route rather than making you
+
+62
+00:01:02,069 --> 00:01:02,079
+enjoyable route rather than making you
+ 
+
+63
+00:01:02,079 --> 00:01:02,630
+enjoyable route rather than making you
+slog
+
+64
+00:01:02,630 --> 00:01:02,640
+slog
+ 
+
+65
+00:01:02,640 --> 00:01:04,390
+slog
+through all of this code now we can do
+
+66
+00:01:04,390 --> 00:01:04,400
+through all of this code now we can do
+ 
+
+67
+00:01:04,400 --> 00:01:05,670
+through all of this code now we can do
+so bit by bit
+
+68
+00:01:05,670 --> 00:01:05,680
+so bit by bit
+ 
+
+69
+00:01:05,680 --> 00:01:07,910
+so bit by bit
+with the context of when it makes sense
+
+70
+00:01:07,910 --> 00:01:07,920
+with the context of when it makes sense
+ 
+
+71
+00:01:07,920 --> 00:01:09,670
+with the context of when it makes sense
+to do so
+
+72
+00:01:09,670 --> 00:01:09,680
+to do so
+ 
+
+73
+00:01:09,680 --> 00:01:11,830
+to do so
+finally my goal with this series is that
+
+74
+00:01:11,830 --> 00:01:11,840
+finally my goal with this series is that
+ 
+
+75
+00:01:11,840 --> 00:01:14,070
+finally my goal with this series is that
+it can be used as a standalone resource
+
+76
+00:01:14,070 --> 00:01:14,080
+it can be used as a standalone resource
+ 
+
+77
+00:01:14,080 --> 00:01:15,830
+it can be used as a standalone resource
+appropriate for newcomers
+
+78
+00:01:15,830 --> 00:01:15,840
+appropriate for newcomers
+ 
+
+79
+00:01:15,840 --> 00:01:18,149
+appropriate for newcomers
+but also will work well as a next step
+
+80
+00:01:18,149 --> 00:01:18,159
+but also will work well as a next step
+ 
+
+81
+00:01:18,159 --> 00:01:19,749
+but also will work well as a next step
+for someone who completed the vulcan
+
+82
+00:01:19,749 --> 00:01:19,759
+for someone who completed the vulcan
+ 
+
+83
+00:01:19,759 --> 00:01:22,469
+for someone who completed the vulcan
+tutorial and wants to continue learning
+
+84
+00:01:22,469 --> 00:01:22,479
+tutorial and wants to continue learning
+ 
+
+85
+00:01:22,479 --> 00:01:24,870
+tutorial and wants to continue learning
+so if you wish to gain a line-by-line
+
+86
+00:01:24,870 --> 00:01:24,880
+so if you wish to gain a line-by-line
+ 
+
+87
+00:01:24,880 --> 00:01:26,469
+so if you wish to gain a line-by-line
+understanding of this code
+
+88
+00:01:26,469 --> 00:01:26,479
+understanding of this code
+ 
+
+89
+00:01:26,479 --> 00:01:28,630
+understanding of this code
+it is mostly just a combination of four
+
+90
+00:01:28,630 --> 00:01:28,640
+it is mostly just a combination of four
+ 
+
+91
+00:01:28,640 --> 00:01:31,109
+it is mostly just a combination of four
+sections from vulkantutorial.com
+
+92
+00:01:31,109 --> 00:01:31,119
+sections from vulkantutorial.com
+ 
+
+93
+00:01:31,119 --> 00:01:33,109
+sections from vulkantutorial.com
+i've provided links in the description
+
+94
+00:01:33,109 --> 00:01:33,119
+i've provided links in the description
+ 
+
+95
+00:01:33,119 --> 00:01:35,109
+i've provided links in the description
+below as optional reading
+
+96
+00:01:35,109 --> 00:01:35,119
+below as optional reading
+ 
+
+97
+00:01:35,119 --> 00:01:37,190
+below as optional reading
+alright so if you're still with me let's
+
+98
+00:01:37,190 --> 00:01:37,200
+alright so if you're still with me let's
+ 
+
+99
+00:01:37,200 --> 00:01:39,429
+alright so if you're still with me let's
+download the header and cpp file and put
+
+100
+00:01:39,429 --> 00:01:39,439
+download the header and cpp file and put
+ 
+
+101
+00:01:39,439 --> 00:01:40,069
+download the header and cpp file and put
+them with your
+
+102
+00:01:40,069 --> 00:01:40,079
+them with your
+ 
+
+103
+00:01:40,079 --> 00:01:41,990
+them with your
+other code follow the link in the
+
+104
+00:01:41,990 --> 00:01:42,000
+other code follow the link in the
+ 
+
+105
+00:01:42,000 --> 00:01:43,910
+other code follow the link in the
+description below to the google drive
+
+106
+00:01:43,910 --> 00:01:43,920
+description below to the google drive
+ 
+
+107
+00:01:43,920 --> 00:01:45,109
+description below to the google drive
+and download the header and
+
+108
+00:01:45,109 --> 00:01:45,119
+and download the header and
+ 
+
+109
+00:01:45,119 --> 00:01:47,350
+and download the header and
+implementation files
+
+110
+00:01:47,350 --> 00:01:47,360
+implementation files
+ 
+
+111
+00:01:47,360 --> 00:01:49,590
+implementation files
+now drag both files you downloaded into
+
+112
+00:01:49,590 --> 00:01:49,600
+now drag both files you downloaded into
+ 
+
+113
+00:01:49,600 --> 00:01:51,270
+now drag both files you downloaded into
+your project and open the my
+
+114
+00:01:51,270 --> 00:01:51,280
+your project and open the my
+ 
+
+115
+00:01:51,280 --> 00:01:54,550
+your project and open the my
+engine device header file at the top of
+
+116
+00:01:54,550 --> 00:01:54,560
+engine device header file at the top of
+ 
+
+117
+00:01:54,560 --> 00:01:55,190
+engine device header file at the top of
+the file
+
+118
+00:01:55,190 --> 00:01:55,200
+the file
+ 
+
+119
+00:01:55,200 --> 00:01:57,190
+the file
+change this include to be for your
+
+120
+00:01:57,190 --> 00:01:57,200
+change this include to be for your
+ 
+
+121
+00:01:57,200 --> 00:01:58,789
+change this include to be for your
+window class
+
+122
+00:01:58,789 --> 00:01:58,799
+window class
+ 
+
+123
+00:01:58,799 --> 00:02:00,789
+window class
+update the namespace to match the rest
+
+124
+00:02:00,789 --> 00:02:00,799
+update the namespace to match the rest
+ 
+
+125
+00:02:00,799 --> 00:02:02,709
+update the namespace to match the rest
+of your project
+
+126
+00:02:02,709 --> 00:02:02,719
+of your project
+ 
+
+127
+00:02:02,719 --> 00:02:05,109
+of your project
+then do a find and replace to change the
+
+128
+00:02:05,109 --> 00:02:05,119
+then do a find and replace to change the
+ 
+
+129
+00:02:05,119 --> 00:02:06,550
+then do a find and replace to change the
+my engine prefix
+
+130
+00:02:06,550 --> 00:02:06,560
+my engine prefix
+ 
+
+131
+00:02:06,560 --> 00:02:09,589
+my engine prefix
+to whatever you'd like so in my case i'm
+
+132
+00:02:09,589 --> 00:02:09,599
+to whatever you'd like so in my case i'm
+ 
+
+133
+00:02:09,599 --> 00:02:11,990
+to whatever you'd like so in my case i'm
+replacing all occurrences of my engine
+
+134
+00:02:11,990 --> 00:02:12,000
+replacing all occurrences of my engine
+ 
+
+135
+00:02:12,000 --> 00:02:14,390
+replacing all occurrences of my engine
+to lve in both my header and
+
+136
+00:02:14,390 --> 00:02:14,400
+to lve in both my header and
+ 
+
+137
+00:02:14,400 --> 00:02:15,830
+to lve in both my header and
+implementation files
+
+138
+00:02:15,830 --> 00:02:15,840
+implementation files
+ 
+
+139
+00:02:15,840 --> 00:02:18,869
+implementation files
+let's update the file names as well so
+
+140
+00:02:18,869 --> 00:02:18,879
+let's update the file names as well so
+ 
+
+141
+00:02:18,879 --> 00:02:25,190
+let's update the file names as well so
+first we update our device cpp file name
+
+142
+00:02:25,190 --> 00:02:25,200
+
+ 
+
+143
+00:02:25,200 --> 00:02:28,150
+ 
+and then our device header file name
+
+144
+00:02:28,150 --> 00:02:28,160
+and then our device header file name
+ 
+
+145
+00:02:28,160 --> 00:02:30,309
+and then our device header file name
+then in your device implementation file
+
+146
+00:02:30,309 --> 00:02:30,319
+then in your device implementation file
+ 
+
+147
+00:02:30,319 --> 00:02:32,309
+then in your device implementation file
+update the include at the top of the
+
+148
+00:02:32,309 --> 00:02:32,319
+update the include at the top of the
+ 
+
+149
+00:02:32,319 --> 00:02:32,790
+update the include at the top of the
+file
+
+150
+00:02:32,790 --> 00:02:32,800
+file
+ 
+
+151
+00:02:32,800 --> 00:02:34,470
+file
+to match what you just renamed your
+
+152
+00:02:34,470 --> 00:02:34,480
+to match what you just renamed your
+ 
+
+153
+00:02:34,480 --> 00:02:36,470
+to match what you just renamed your
+header to
+
+154
+00:02:36,470 --> 00:02:36,480
+header to
+ 
+
+155
+00:02:36,480 --> 00:02:38,869
+header to
+all right now if you scroll down to line
+
+156
+00:02:38,869 --> 00:02:38,879
+all right now if you scroll down to line
+ 
+
+157
+00:02:38,879 --> 00:02:39,830
+all right now if you scroll down to line
+196
+
+158
+00:02:39,830 --> 00:02:39,840
+196
+ 
+
+159
+00:02:39,840 --> 00:02:41,910
+196
+you should be getting a compiler warning
+
+160
+00:02:41,910 --> 00:02:41,920
+you should be getting a compiler warning
+ 
+
+161
+00:02:41,920 --> 00:02:43,110
+you should be getting a compiler warning
+that our window has no
+
+162
+00:02:43,110 --> 00:02:43,120
+that our window has no
+ 
+
+163
+00:02:43,120 --> 00:02:45,030
+that our window has no
+create windows surface member function
+
+164
+00:02:45,030 --> 00:02:45,040
+create windows surface member function
+ 
+
+165
+00:02:45,040 --> 00:02:47,110
+create windows surface member function
+yet and that's because it doesn't
+
+166
+00:02:47,110 --> 00:02:47,120
+yet and that's because it doesn't
+ 
+
+167
+00:02:47,120 --> 00:02:49,830
+yet and that's because it doesn't
+so navigate to your window header and
+
+168
+00:02:49,830 --> 00:02:49,840
+so navigate to your window header and
+ 
+
+169
+00:02:49,840 --> 00:02:51,830
+so navigate to your window header and
+just below your should close method
+
+170
+00:02:51,830 --> 00:02:51,840
+just below your should close method
+ 
+
+171
+00:02:51,840 --> 00:02:54,390
+just below your should close method
+let's add a new public method void
+
+172
+00:02:54,390 --> 00:02:54,400
+let's add a new public method void
+ 
+
+173
+00:02:54,400 --> 00:02:54,869
+let's add a new public method void
+create
+
+174
+00:02:54,869 --> 00:02:54,879
+create
+ 
+
+175
+00:02:54,879 --> 00:02:58,070
+create
+window surface which takes a vk
+
+176
+00:02:58,070 --> 00:02:58,080
+window surface which takes a vk
+ 
+
+177
+00:02:58,080 --> 00:03:02,830
+window surface which takes a vk
+instance and a vk surface khr
+
+178
+00:03:02,830 --> 00:03:02,840
+instance and a vk surface khr
+ 
+
+179
+00:03:02,840 --> 00:03:06,869
+instance and a vk surface khr
+pointer
+
+180
+00:03:06,869 --> 00:03:06,879
+
+ 
+
+181
+00:03:06,879 --> 00:03:08,790
+ 
+grab this function and go to your
+
+182
+00:03:08,790 --> 00:03:08,800
+grab this function and go to your
+ 
+
+183
+00:03:08,800 --> 00:03:10,470
+grab this function and go to your
+windows implementation and
+
+184
+00:03:10,470 --> 00:03:10,480
+windows implementation and
+ 
+
+185
+00:03:10,480 --> 00:03:14,470
+windows implementation and
+paste it in i'll add the class name
+
+186
+00:03:14,470 --> 00:03:14,480
+paste it in i'll add the class name
+ 
+
+187
+00:03:14,480 --> 00:03:19,110
+paste it in i'll add the class name
+and then in an if statement call glfw
+
+188
+00:03:19,110 --> 00:03:19,120
+and then in an if statement call glfw
+ 
+
+189
+00:03:19,120 --> 00:03:22,630
+and then in an if statement call glfw
+create windows surface and pass in the
+
+190
+00:03:22,630 --> 00:03:22,640
+create windows surface and pass in the
+ 
+
+191
+00:03:22,640 --> 00:03:24,550
+create windows surface and pass in the
+instance
+
+192
+00:03:24,550 --> 00:03:24,560
+instance
+ 
+
+193
+00:03:24,560 --> 00:03:27,589
+instance
+the window a null pointer for the
+
+194
+00:03:27,589 --> 00:03:27,599
+the window a null pointer for the
+ 
+
+195
+00:03:27,599 --> 00:03:28,869
+the window a null pointer for the
+allocator callback
+
+196
+00:03:28,869 --> 00:03:28,879
+allocator callback
+ 
+
+197
+00:03:28,879 --> 00:03:31,990
+allocator callback
+and the pointer to our surface variable
+
+198
+00:03:31,990 --> 00:03:32,000
+and the pointer to our surface variable
+ 
+
+199
+00:03:32,000 --> 00:03:34,229
+and the pointer to our surface variable
+check that its return value is not equal
+
+200
+00:03:34,229 --> 00:03:34,239
+check that its return value is not equal
+ 
+
+201
+00:03:34,239 --> 00:03:35,910
+check that its return value is not equal
+to vk success
+
+202
+00:03:35,910 --> 00:03:35,920
+to vk success
+ 
+
+203
+00:03:35,920 --> 00:03:39,509
+to vk success
+otherwise throw a runtime error fail to
+
+204
+00:03:39,509 --> 00:03:39,519
+otherwise throw a runtime error fail to
+ 
+
+205
+00:03:39,519 --> 00:03:41,509
+otherwise throw a runtime error fail to
+create windows surface and then
+
+206
+00:03:41,509 --> 00:03:41,519
+create windows surface and then
+ 
+
+207
+00:03:41,519 --> 00:03:43,589
+create windows surface and then
+i'll include standard accept at the top
+
+208
+00:03:43,589 --> 00:03:43,599
+i'll include standard accept at the top
+ 
+
+209
+00:03:43,599 --> 00:03:51,030
+i'll include standard accept at the top
+of the file
+
+210
+00:03:51,030 --> 00:03:51,040
+
+ 
+
+211
+00:03:51,040 --> 00:03:53,670
+ 
+now if we go back to line 196 of our
+
+212
+00:03:53,670 --> 00:03:53,680
+now if we go back to line 196 of our
+ 
+
+213
+00:03:53,680 --> 00:03:54,869
+now if we go back to line 196 of our
+device file
+
+214
+00:03:54,869 --> 00:03:54,879
+device file
+ 
+
+215
+00:03:54,879 --> 00:03:57,910
+device file
+we should have no more errors now when
+
+216
+00:03:57,910 --> 00:03:57,920
+we should have no more errors now when
+ 
+
+217
+00:03:57,920 --> 00:03:59,509
+we should have no more errors now when
+you copy and paste files into your
+
+218
+00:03:59,509 --> 00:03:59,519
+you copy and paste files into your
+ 
+
+219
+00:03:59,519 --> 00:04:00,149
+you copy and paste files into your
+project
+
+220
+00:04:00,149 --> 00:04:00,159
+project
+ 
+
+221
+00:04:00,159 --> 00:04:02,229
+project
+sometimes your ide doesn't add them to
+
+222
+00:04:02,229 --> 00:04:02,239
+sometimes your ide doesn't add them to
+ 
+
+223
+00:04:02,239 --> 00:04:03,589
+sometimes your ide doesn't add them to
+your build system
+
+224
+00:04:03,589 --> 00:04:03,599
+your build system
+ 
+
+225
+00:04:03,599 --> 00:04:05,589
+your build system
+i've had this problem when using xcode
+
+226
+00:04:05,589 --> 00:04:05,599
+i've had this problem when using xcode
+ 
+
+227
+00:04:05,599 --> 00:04:07,830
+i've had this problem when using xcode
+before so whatever build system you are
+
+228
+00:04:07,830 --> 00:04:07,840
+before so whatever build system you are
+ 
+
+229
+00:04:07,840 --> 00:04:09,750
+before so whatever build system you are
+using it's good to double check to make
+
+230
+00:04:09,750 --> 00:04:09,760
+using it's good to double check to make
+ 
+
+231
+00:04:09,760 --> 00:04:11,750
+using it's good to double check to make
+sure that your device file is actually
+
+232
+00:04:11,750 --> 00:04:11,760
+sure that your device file is actually
+ 
+
+233
+00:04:11,760 --> 00:04:12,949
+sure that your device file is actually
+being compiled
+
+234
+00:04:12,949 --> 00:04:12,959
+being compiled
+ 
+
+235
+00:04:12,959 --> 00:04:14,550
+being compiled
+now if you build and run your code
+
+236
+00:04:14,550 --> 00:04:14,560
+now if you build and run your code
+ 
+
+237
+00:04:14,560 --> 00:04:16,390
+now if you build and run your code
+everything should still work as it did
+
+238
+00:04:16,390 --> 00:04:16,400
+everything should still work as it did
+ 
+
+239
+00:04:16,400 --> 00:04:17,990
+everything should still work as it did
+before
+
+240
+00:04:17,990 --> 00:04:18,000
+before
+ 
+
+241
+00:04:18,000 --> 00:04:19,670
+before
+here's a brief overview of what this
+
+242
+00:04:19,670 --> 00:04:19,680
+here's a brief overview of what this
+ 
+
+243
+00:04:19,680 --> 00:04:21,749
+here's a brief overview of what this
+device class does for us
+
+244
+00:04:21,749 --> 00:04:21,759
+device class does for us
+ 
+
+245
+00:04:21,759 --> 00:04:24,070
+device class does for us
+in its constructor the first thing we do
+
+246
+00:04:24,070 --> 00:04:24,080
+in its constructor the first thing we do
+ 
+
+247
+00:04:24,080 --> 00:04:26,150
+in its constructor the first thing we do
+is create a vulcan instance
+
+248
+00:04:26,150 --> 00:04:26,160
+is create a vulcan instance
+ 
+
+249
+00:04:26,160 --> 00:04:28,469
+is create a vulcan instance
+this initializes the vulcan library and
+
+250
+00:04:28,469 --> 00:04:28,479
+this initializes the vulcan library and
+ 
+
+251
+00:04:28,479 --> 00:04:29,590
+this initializes the vulcan library and
+is the connection between
+
+252
+00:04:29,590 --> 00:04:29,600
+is the connection between
+ 
+
+253
+00:04:29,600 --> 00:04:32,469
+is the connection between
+our application and vulkan next we set
+
+254
+00:04:32,469 --> 00:04:32,479
+our application and vulkan next we set
+ 
+
+255
+00:04:32,479 --> 00:04:34,310
+our application and vulkan next we set
+up validation layers
+
+256
+00:04:34,310 --> 00:04:34,320
+up validation layers
+ 
+
+257
+00:04:34,320 --> 00:04:37,189
+up validation layers
+by default the vulkan api does extremely
+
+258
+00:04:37,189 --> 00:04:37,199
+by default the vulkan api does extremely
+ 
+
+259
+00:04:37,199 --> 00:04:38,550
+by default the vulkan api does extremely
+little error checking during
+
+260
+00:04:38,550 --> 00:04:38,560
+little error checking during
+ 
+
+261
+00:04:38,560 --> 00:04:41,590
+little error checking during
+operation meaning that even small errors
+
+262
+00:04:41,590 --> 00:04:41,600
+operation meaning that even small errors
+ 
+
+263
+00:04:41,600 --> 00:04:41,990
+operation meaning that even small errors
+won't be
+
+264
+00:04:41,990 --> 00:04:42,000
+won't be
+ 
+
+265
+00:04:42,000 --> 00:04:44,150
+won't be
+caught and can result in a crash or
+
+266
+00:04:44,150 --> 00:04:44,160
+caught and can result in a crash or
+ 
+
+267
+00:04:44,160 --> 00:04:45,510
+caught and can result in a crash or
+undefined behavior
+
+268
+00:04:45,510 --> 00:04:45,520
+undefined behavior
+ 
+
+269
+00:04:45,520 --> 00:04:47,510
+undefined behavior
+so when debugging we should enable
+
+270
+00:04:47,510 --> 00:04:47,520
+so when debugging we should enable
+ 
+
+271
+00:04:47,520 --> 00:04:49,830
+so when debugging we should enable
+validation layers to check for errors
+
+272
+00:04:49,830 --> 00:04:49,840
+validation layers to check for errors
+ 
+
+273
+00:04:49,840 --> 00:04:51,990
+validation layers to check for errors
+and then disable them for release builds
+
+274
+00:04:51,990 --> 00:04:52,000
+and then disable them for release builds
+ 
+
+275
+00:04:52,000 --> 00:04:53,749
+and then disable them for release builds
+when performance is critical
+
+276
+00:04:53,749 --> 00:04:53,759
+when performance is critical
+ 
+
+277
+00:04:53,759 --> 00:04:55,990
+when performance is critical
+next we create our surface which relies
+
+278
+00:04:55,990 --> 00:04:56,000
+next we create our surface which relies
+ 
+
+279
+00:04:56,000 --> 00:04:57,510
+next we create our surface which relies
+on glfw
+
+280
+00:04:57,510 --> 00:04:57,520
+on glfw
+ 
+
+281
+00:04:57,520 --> 00:04:59,270
+on glfw
+and is the connection between the window
+
+282
+00:04:59,270 --> 00:04:59,280
+and is the connection between the window
+ 
+
+283
+00:04:59,280 --> 00:05:01,270
+and is the connection between the window
+we've set up in the previous lessons
+
+284
+00:05:01,270 --> 00:05:01,280
+we've set up in the previous lessons
+ 
+
+285
+00:05:01,280 --> 00:05:04,070
+we've set up in the previous lessons
+and vulcan's ability to display results
+
+286
+00:05:04,070 --> 00:05:04,080
+and vulcan's ability to display results
+ 
+
+287
+00:05:04,080 --> 00:05:05,029
+and vulcan's ability to display results
+following that
+
+288
+00:05:05,029 --> 00:05:05,039
+following that
+ 
+
+289
+00:05:05,039 --> 00:05:07,029
+following that
+we pick the physical device our
+
+290
+00:05:07,029 --> 00:05:07,039
+we pick the physical device our
+ 
+
+291
+00:05:07,039 --> 00:05:09,029
+we pick the physical device our
+application will be using
+
+292
+00:05:09,029 --> 00:05:09,039
+application will be using
+ 
+
+293
+00:05:09,039 --> 00:05:11,510
+application will be using
+so the physical device is the graphics
+
+294
+00:05:11,510 --> 00:05:11,520
+so the physical device is the graphics
+ 
+
+295
+00:05:11,520 --> 00:05:13,029
+so the physical device is the graphics
+device in your system
+
+296
+00:05:13,029 --> 00:05:13,039
+device in your system
+ 
+
+297
+00:05:13,039 --> 00:05:15,830
+device in your system
+capable of working with the vulkan api
+
+298
+00:05:15,830 --> 00:05:15,840
+capable of working with the vulkan api
+ 
+
+299
+00:05:15,840 --> 00:05:18,150
+capable of working with the vulkan api
+this can be a discrete gpu like a
+
+300
+00:05:18,150 --> 00:05:18,160
+this can be a discrete gpu like a
+ 
+
+301
+00:05:18,160 --> 00:05:21,510
+this can be a discrete gpu like a
+2080 ti or an integrated gpu in either
+
+302
+00:05:21,510 --> 00:05:21,520
+2080 ti or an integrated gpu in either
+ 
+
+303
+00:05:21,520 --> 00:05:23,749
+2080 ti or an integrated gpu in either
+case we need to pick the physical device
+
+304
+00:05:23,749 --> 00:05:23,759
+case we need to pick the physical device
+ 
+
+305
+00:05:23,759 --> 00:05:25,270
+case we need to pick the physical device
+that we will be using to run
+
+306
+00:05:25,270 --> 00:05:25,280
+that we will be using to run
+ 
+
+307
+00:05:25,280 --> 00:05:27,670
+that we will be using to run
+our program it's even possible to have
+
+308
+00:05:27,670 --> 00:05:27,680
+our program it's even possible to have
+ 
+
+309
+00:05:27,680 --> 00:05:29,670
+our program it's even possible to have
+your program use multiple devices
+
+310
+00:05:29,670 --> 00:05:29,680
+your program use multiple devices
+ 
+
+311
+00:05:29,680 --> 00:05:32,070
+your program use multiple devices
+at the same time but this makes handling
+
+312
+00:05:32,070 --> 00:05:32,080
+at the same time but this makes handling
+ 
+
+313
+00:05:32,080 --> 00:05:32,790
+at the same time but this makes handling
+resources
+
+314
+00:05:32,790 --> 00:05:32,800
+resources
+ 
+
+315
+00:05:32,800 --> 00:05:35,029
+resources
+way more complicated and not something
+
+316
+00:05:35,029 --> 00:05:35,039
+way more complicated and not something
+ 
+
+317
+00:05:35,039 --> 00:05:36,230
+way more complicated and not something
+we'll be doing
+
+318
+00:05:36,230 --> 00:05:36,240
+we'll be doing
+ 
+
+319
+00:05:36,240 --> 00:05:38,870
+we'll be doing
+next we have logical device creation
+
+320
+00:05:38,870 --> 00:05:38,880
+next we have logical device creation
+ 
+
+321
+00:05:38,880 --> 00:05:41,110
+next we have logical device creation
+which describes what features of our
+
+322
+00:05:41,110 --> 00:05:41,120
+which describes what features of our
+ 
+
+323
+00:05:41,120 --> 00:05:43,350
+which describes what features of our
+physical device we want to use
+
+324
+00:05:43,350 --> 00:05:43,360
+physical device we want to use
+ 
+
+325
+00:05:43,360 --> 00:05:45,350
+physical device we want to use
+and finally it's convenient here to set
+
+326
+00:05:45,350 --> 00:05:45,360
+and finally it's convenient here to set
+ 
+
+327
+00:05:45,360 --> 00:05:47,510
+and finally it's convenient here to set
+up a command pool for later use
+
+328
+00:05:47,510 --> 00:05:47,520
+up a command pool for later use
+ 
+
+329
+00:05:47,520 --> 00:05:49,350
+up a command pool for later use
+this will help us with command buffer
+
+330
+00:05:49,350 --> 00:05:49,360
+this will help us with command buffer
+ 
+
+331
+00:05:49,360 --> 00:05:51,670
+this will help us with command buffer
+allocation in an upcoming video
+
+332
+00:05:51,670 --> 00:05:51,680
+allocation in an upcoming video
+ 
+
+333
+00:05:51,680 --> 00:05:53,909
+allocation in an upcoming video
+so just to reiterate you're not supposed
+
+334
+00:05:53,909 --> 00:05:53,919
+so just to reiterate you're not supposed
+ 
+
+335
+00:05:53,919 --> 00:05:55,430
+so just to reiterate you're not supposed
+to understand all of this yet
+
+336
+00:05:55,430 --> 00:05:55,440
+to understand all of this yet
+ 
+
+337
+00:05:55,440 --> 00:05:57,749
+to understand all of this yet
+for now the only takeaways are is one
+
+338
+00:05:57,749 --> 00:05:57,759
+for now the only takeaways are is one
+ 
+
+339
+00:05:57,759 --> 00:05:59,350
+for now the only takeaways are is one
+we're setting up our connection with
+
+340
+00:05:59,350 --> 00:05:59,360
+we're setting up our connection with
+ 
+
+341
+00:05:59,360 --> 00:06:01,430
+we're setting up our connection with
+vulcan and picking a physical device in
+
+342
+00:06:01,430 --> 00:06:01,440
+vulcan and picking a physical device in
+ 
+
+343
+00:06:01,440 --> 00:06:03,430
+vulcan and picking a physical device in
+our system that is capable of working
+
+344
+00:06:03,430 --> 00:06:03,440
+our system that is capable of working
+ 
+
+345
+00:06:03,440 --> 00:06:05,029
+our system that is capable of working
+with the vulkan api
+
+346
+00:06:05,029 --> 00:06:05,039
+with the vulkan api
+ 
+
+347
+00:06:05,039 --> 00:06:07,510
+with the vulkan api
+and two we create validation layers that
+
+348
+00:06:07,510 --> 00:06:07,520
+and two we create validation layers that
+ 
+
+349
+00:06:07,520 --> 00:06:09,189
+and two we create validation layers that
+will help us catch errors
+
+350
+00:06:09,189 --> 00:06:09,199
+will help us catch errors
+ 
+
+351
+00:06:09,199 --> 00:06:11,189
+will help us catch errors
+now navigate to your pipeline header
+
+352
+00:06:11,189 --> 00:06:11,199
+now navigate to your pipeline header
+ 
+
+353
+00:06:11,199 --> 00:06:15,350
+now navigate to your pipeline header
+file and then include your device class
+
+354
+00:06:15,350 --> 00:06:15,360
+file and then include your device class
+ 
+
+355
+00:06:15,360 --> 00:06:17,029
+file and then include your device class
+next we're going to create a struct to
+
+356
+00:06:17,029 --> 00:06:17,039
+next we're going to create a struct to
+ 
+
+357
+00:06:17,039 --> 00:06:19,029
+next we're going to create a struct to
+help us organize some data we will use
+
+358
+00:06:19,029 --> 00:06:19,039
+help us organize some data we will use
+ 
+
+359
+00:06:19,039 --> 00:06:21,350
+help us organize some data we will use
+to configure our pipeline
+
+360
+00:06:21,350 --> 00:06:21,360
+to configure our pipeline
+ 
+
+361
+00:06:21,360 --> 00:06:23,909
+to configure our pipeline
+so in your namespace but outside of the
+
+362
+00:06:23,909 --> 00:06:23,919
+so in your namespace but outside of the
+ 
+
+363
+00:06:23,919 --> 00:06:24,629
+so in your namespace but outside of the
+class
+
+364
+00:06:24,629 --> 00:06:24,639
+class
+ 
+
+365
+00:06:24,639 --> 00:06:28,309
+class
+add a struct called pipeline config info
+
+366
+00:06:28,309 --> 00:06:28,319
+add a struct called pipeline config info
+ 
+
+367
+00:06:28,319 --> 00:06:30,070
+add a struct called pipeline config info
+this is going to contain the data
+
+368
+00:06:30,070 --> 00:06:30,080
+this is going to contain the data
+ 
+
+369
+00:06:30,080 --> 00:06:32,830
+this is going to contain the data
+specifying how we want to configure our
+
+370
+00:06:32,830 --> 00:06:32,840
+specifying how we want to configure our
+ 
+
+371
+00:06:32,840 --> 00:06:33,990
+specifying how we want to configure our
+pipeline
+
+372
+00:06:33,990 --> 00:06:34,000
+pipeline
+ 
+
+373
+00:06:34,000 --> 00:06:35,350
+pipeline
+the reason we're pulling this
+
+374
+00:06:35,350 --> 00:06:35,360
+the reason we're pulling this
+ 
+
+375
+00:06:35,360 --> 00:06:37,590
+the reason we're pulling this
+information out of the pipeline class
+
+376
+00:06:37,590 --> 00:06:37,600
+information out of the pipeline class
+ 
+
+377
+00:06:37,600 --> 00:06:39,590
+information out of the pipeline class
+is that we want our application layer
+
+378
+00:06:39,590 --> 00:06:39,600
+is that we want our application layer
+ 
+
+379
+00:06:39,600 --> 00:06:42,150
+is that we want our application layer
+code to be easily able to configure our
+
+380
+00:06:42,150 --> 00:06:42,160
+code to be easily able to configure our
+ 
+
+381
+00:06:42,160 --> 00:06:43,830
+code to be easily able to configure our
+pipeline completely
+
+382
+00:06:43,830 --> 00:06:43,840
+pipeline completely
+ 
+
+383
+00:06:43,840 --> 00:06:46,230
+pipeline completely
+as well as to share that configuration
+
+384
+00:06:46,230 --> 00:06:46,240
+as well as to share that configuration
+ 
+
+385
+00:06:46,240 --> 00:06:48,550
+as well as to share that configuration
+between multiple pipelines
+
+386
+00:06:48,550 --> 00:06:48,560
+between multiple pipelines
+ 
+
+387
+00:06:48,560 --> 00:06:50,870
+between multiple pipelines
+so just leave this struct empty for now
+
+388
+00:06:50,870 --> 00:06:50,880
+so just leave this struct empty for now
+ 
+
+389
+00:06:50,880 --> 00:06:52,950
+so just leave this struct empty for now
+and we'll come back to it later
+
+390
+00:06:52,950 --> 00:06:52,960
+and we'll come back to it later
+ 
+
+391
+00:06:52,960 --> 00:06:55,510
+and we'll come back to it later
+next change your pipeline constructor to
+
+392
+00:06:55,510 --> 00:06:55,520
+next change your pipeline constructor to
+ 
+
+393
+00:06:55,520 --> 00:06:57,830
+next change your pipeline constructor to
+take a device passed by reference
+
+394
+00:06:57,830 --> 00:06:57,840
+take a device passed by reference
+ 
+
+395
+00:06:57,840 --> 00:07:01,830
+take a device passed by reference
+and a const pipeline config info
+
+396
+00:07:01,830 --> 00:07:01,840
+and a const pipeline config info
+ 
+
+397
+00:07:01,840 --> 00:07:03,749
+and a const pipeline config info
+the ordering of your parameters doesn't
+
+398
+00:07:03,749 --> 00:07:03,759
+the ordering of your parameters doesn't
+ 
+
+399
+00:07:03,759 --> 00:07:05,830
+the ordering of your parameters doesn't
+matter i'm just putting the device at
+
+400
+00:07:05,830 --> 00:07:05,840
+matter i'm just putting the device at
+ 
+
+401
+00:07:05,840 --> 00:07:07,990
+matter i'm just putting the device at
+the start and the config info at the end
+
+402
+00:07:07,990 --> 00:07:08,000
+the start and the config info at the end
+ 
+
+403
+00:07:08,000 --> 00:07:10,710
+the start and the config info at the end
+because i like how it looks better also
+
+404
+00:07:10,710 --> 00:07:10,720
+because i like how it looks better also
+ 
+
+405
+00:07:10,720 --> 00:07:12,550
+because i like how it looks better also
+update your create graphics pipeline
+
+406
+00:07:12,550 --> 00:07:12,560
+update your create graphics pipeline
+ 
+
+407
+00:07:12,560 --> 00:07:13,830
+update your create graphics pipeline
+function signature
+
+408
+00:07:13,830 --> 00:07:13,840
+function signature
+ 
+
+409
+00:07:13,840 --> 00:07:17,189
+function signature
+to take the pipeline config info
+
+410
+00:07:17,189 --> 00:07:17,199
+to take the pipeline config info
+ 
+
+411
+00:07:17,199 --> 00:07:19,350
+to take the pipeline config info
+next i'll add a private member variable
+
+412
+00:07:19,350 --> 00:07:19,360
+next i'll add a private member variable
+ 
+
+413
+00:07:19,360 --> 00:07:21,749
+next i'll add a private member variable
+storing our device reference
+
+414
+00:07:21,749 --> 00:07:21,759
+storing our device reference
+ 
+
+415
+00:07:21,759 --> 00:07:24,469
+storing our device reference
+this could potentially be memory unsafe
+
+416
+00:07:24,469 --> 00:07:24,479
+this could potentially be memory unsafe
+ 
+
+417
+00:07:24,479 --> 00:07:26,469
+this could potentially be memory unsafe
+if our device is released from memory
+
+418
+00:07:26,469 --> 00:07:26,479
+if our device is released from memory
+ 
+
+419
+00:07:26,479 --> 00:07:27,830
+if our device is released from memory
+before our pipeline
+
+420
+00:07:27,830 --> 00:07:27,840
+before our pipeline
+ 
+
+421
+00:07:27,840 --> 00:07:29,749
+before our pipeline
+we could attempt to de-reference this
+
+422
+00:07:29,749 --> 00:07:29,759
+we could attempt to de-reference this
+ 
+
+423
+00:07:29,759 --> 00:07:31,110
+we could attempt to de-reference this
+dangling pointer
+
+424
+00:07:31,110 --> 00:07:31,120
+dangling pointer
+ 
+
+425
+00:07:31,120 --> 00:07:33,510
+dangling pointer
+which would crash our program so the
+
+426
+00:07:33,510 --> 00:07:33,520
+which would crash our program so the
+ 
+
+427
+00:07:33,520 --> 00:07:35,029
+which would crash our program so the
+only time you'll see me using a
+
+428
+00:07:35,029 --> 00:07:35,039
+only time you'll see me using a
+ 
+
+429
+00:07:35,039 --> 00:07:35,909
+only time you'll see me using a
+reference type
+
+430
+00:07:35,909 --> 00:07:35,919
+reference type
+ 
+
+431
+00:07:35,919 --> 00:07:38,230
+reference type
+member variable in this manner is when
+
+432
+00:07:38,230 --> 00:07:38,240
+member variable in this manner is when
+ 
+
+433
+00:07:38,240 --> 00:07:40,150
+member variable in this manner is when
+we have an implicit relationship that
+
+434
+00:07:40,150 --> 00:07:40,160
+we have an implicit relationship that
+ 
+
+435
+00:07:40,160 --> 00:07:41,589
+we have an implicit relationship that
+our member variable
+
+436
+00:07:41,589 --> 00:07:41,599
+our member variable
+ 
+
+437
+00:07:41,599 --> 00:07:44,390
+our member variable
+in this case the device will outlive any
+
+438
+00:07:44,390 --> 00:07:44,400
+in this case the device will outlive any
+ 
+
+439
+00:07:44,400 --> 00:07:46,390
+in this case the device will outlive any
+instances of the containing class that
+
+440
+00:07:46,390 --> 00:07:46,400
+instances of the containing class that
+ 
+
+441
+00:07:46,400 --> 00:07:47,270
+instances of the containing class that
+depend on it
+
+442
+00:07:47,270 --> 00:07:47,280
+depend on it
+ 
+
+443
+00:07:47,280 --> 00:07:49,029
+depend on it
+which makes sense because a pipeline
+
+444
+00:07:49,029 --> 00:07:49,039
+which makes sense because a pipeline
+ 
+
+445
+00:07:49,039 --> 00:07:52,150
+which makes sense because a pipeline
+fundamentally needs a device to exist
+
+446
+00:07:52,150 --> 00:07:52,160
+fundamentally needs a device to exist
+ 
+
+447
+00:07:52,160 --> 00:07:54,790
+fundamentally needs a device to exist
+in uml this type of relationship would
+
+448
+00:07:54,790 --> 00:07:54,800
+in uml this type of relationship would
+ 
+
+449
+00:07:54,800 --> 00:07:56,710
+in uml this type of relationship would
+be known as aggregation
+
+450
+00:07:56,710 --> 00:07:56,720
+be known as aggregation
+ 
+
+451
+00:07:56,720 --> 00:07:59,270
+be known as aggregation
+now underneath add a vk pipeline
+
+452
+00:07:59,270 --> 00:07:59,280
+now underneath add a vk pipeline
+ 
+
+453
+00:07:59,280 --> 00:08:01,589
+now underneath add a vk pipeline
+graphics pipeline variable
+
+454
+00:08:01,589 --> 00:08:01,599
+graphics pipeline variable
+ 
+
+455
+00:08:01,599 --> 00:08:03,430
+graphics pipeline variable
+this is the handle to our vulcan
+
+456
+00:08:03,430 --> 00:08:03,440
+this is the handle to our vulcan
+ 
+
+457
+00:08:03,440 --> 00:08:04,950
+this is the handle to our vulcan
+pipeline object
+
+458
+00:08:04,950 --> 00:08:04,960
+pipeline object
+ 
+
+459
+00:08:04,960 --> 00:08:08,070
+pipeline object
+then a vk shader module variable vert
+
+460
+00:08:08,070 --> 00:08:08,080
+then a vk shader module variable vert
+ 
+
+461
+00:08:08,080 --> 00:08:10,550
+then a vk shader module variable vert
+shader module for our vertex shader
+
+462
+00:08:10,550 --> 00:08:10,560
+shader module for our vertex shader
+ 
+
+463
+00:08:10,560 --> 00:08:13,110
+shader module for our vertex shader
+and another vk shader module for our
+
+464
+00:08:13,110 --> 00:08:13,120
+and another vk shader module for our
+ 
+
+465
+00:08:13,120 --> 00:08:14,950
+and another vk shader module for our
+fragment shader
+
+466
+00:08:14,950 --> 00:08:14,960
+fragment shader
+ 
+
+467
+00:08:14,960 --> 00:08:17,189
+fragment shader
+note that these vulcan object types are
+
+468
+00:08:17,189 --> 00:08:17,199
+note that these vulcan object types are
+ 
+
+469
+00:08:17,199 --> 00:08:17,990
+note that these vulcan object types are
+tight deft
+
+470
+00:08:17,990 --> 00:08:18,000
+tight deft
+ 
+
+471
+00:08:18,000 --> 00:08:20,390
+tight deft
+pointers in this case it is a good
+
+472
+00:08:20,390 --> 00:08:20,400
+pointers in this case it is a good
+ 
+
+473
+00:08:20,400 --> 00:08:22,230
+pointers in this case it is a good
+practice to check what these vulcan
+
+474
+00:08:22,230 --> 00:08:22,240
+practice to check what these vulcan
+ 
+
+475
+00:08:22,240 --> 00:08:23,670
+practice to check what these vulcan
+object types are
+
+476
+00:08:23,670 --> 00:08:23,680
+object types are
+ 
+
+477
+00:08:23,680 --> 00:08:26,390
+object types are
+sometimes it will be a pod struct at
+
+478
+00:08:26,390 --> 00:08:26,400
+sometimes it will be a pod struct at
+ 
+
+479
+00:08:26,400 --> 00:08:28,230
+sometimes it will be a pod struct at
+other times it will be a tight def
+
+480
+00:08:28,230 --> 00:08:28,240
+other times it will be a tight def
+ 
+
+481
+00:08:28,240 --> 00:08:31,189
+other times it will be a tight def
+pointer to a struct then underneath our
+
+482
+00:08:31,189 --> 00:08:31,199
+pointer to a struct then underneath our
+ 
+
+483
+00:08:31,199 --> 00:08:33,269
+pointer to a struct then underneath our
+create graphics pipeline function
+
+484
+00:08:33,269 --> 00:08:33,279
+create graphics pipeline function
+ 
+
+485
+00:08:33,279 --> 00:08:36,310
+create graphics pipeline function
+add void create shader module
+
+486
+00:08:36,310 --> 00:08:36,320
+add void create shader module
+ 
+
+487
+00:08:36,320 --> 00:08:38,070
+add void create shader module
+that takes in the shader code in the
+
+488
+00:08:38,070 --> 00:08:38,080
+that takes in the shader code in the
+ 
+
+489
+00:08:38,080 --> 00:08:40,149
+that takes in the shader code in the
+form of a vector of characters
+
+490
+00:08:40,149 --> 00:08:40,159
+form of a vector of characters
+ 
+
+491
+00:08:40,159 --> 00:08:42,949
+form of a vector of characters
+and a pointer to a shader module like
+
+492
+00:08:42,949 --> 00:08:42,959
+and a pointer to a shader module like
+ 
+
+493
+00:08:42,959 --> 00:08:45,910
+and a pointer to a shader module like
+with our vk pipeline vk shader module
+
+494
+00:08:45,910 --> 00:08:45,920
+with our vk pipeline vk shader module
+ 
+
+495
+00:08:45,920 --> 00:08:49,110
+with our vk pipeline vk shader module
+is also a pointer so this is in fact a
+
+496
+00:08:49,110 --> 00:08:49,120
+is also a pointer so this is in fact a
+ 
+
+497
+00:08:49,120 --> 00:08:50,550
+is also a pointer so this is in fact a
+pointer to a pointer
+
+498
+00:08:50,550 --> 00:08:50,560
+pointer to a pointer
+ 
+
+499
+00:08:50,560 --> 00:08:52,790
+pointer to a pointer
+which is what we want in this case
+
+500
+00:08:52,790 --> 00:08:52,800
+which is what we want in this case
+ 
+
+501
+00:08:52,800 --> 00:08:54,790
+which is what we want in this case
+because this function will be used to
+
+502
+00:08:54,790 --> 00:08:54,800
+because this function will be used to
+ 
+
+503
+00:08:54,800 --> 00:08:55,829
+because this function will be used to
+create the module
+
+504
+00:08:55,829 --> 00:08:55,839
+create the module
+ 
+
+505
+00:08:55,839 --> 00:08:58,310
+create the module
+and initialize the variable now since
+
+506
+00:08:58,310 --> 00:08:58,320
+and initialize the variable now since
+ 
+
+507
+00:08:58,320 --> 00:09:00,630
+and initialize the variable now since
+our pipeline class is responsible for
+
+508
+00:09:00,630 --> 00:09:00,640
+our pipeline class is responsible for
+ 
+
+509
+00:09:00,640 --> 00:09:03,670
+our pipeline class is responsible for
+managing the lifetime of these resources
+
+510
+00:09:03,670 --> 00:09:03,680
+managing the lifetime of these resources
+ 
+
+511
+00:09:03,680 --> 00:09:06,070
+managing the lifetime of these resources
+let's add a destructor with an empty
+
+512
+00:09:06,070 --> 00:09:06,080
+let's add a destructor with an empty
+ 
+
+513
+00:09:06,080 --> 00:09:07,350
+let's add a destructor with an empty
+implementation here
+
+514
+00:09:07,350 --> 00:09:07,360
+implementation here
+ 
+
+515
+00:09:07,360 --> 00:09:09,829
+implementation here
+just for now and this is also a good
+
+516
+00:09:09,829 --> 00:09:09,839
+just for now and this is also a good
+ 
+
+517
+00:09:09,839 --> 00:09:10,949
+just for now and this is also a good
+time to delete or
+
+518
+00:09:10,949 --> 00:09:10,959
+time to delete or
+ 
+
+519
+00:09:10,959 --> 00:09:13,430
+time to delete or
+copy constructors because we want to
+
+520
+00:09:13,430 --> 00:09:13,440
+copy constructors because we want to
+ 
+
+521
+00:09:13,440 --> 00:09:15,590
+copy constructors because we want to
+avoid accidentally duplicating the
+
+522
+00:09:15,590 --> 00:09:15,600
+avoid accidentally duplicating the
+ 
+
+523
+00:09:15,600 --> 00:09:19,190
+avoid accidentally duplicating the
+pointers to our vulcan objects
+
+524
+00:09:19,190 --> 00:09:19,200
+pointers to our vulcan objects
+ 
+
+525
+00:09:19,200 --> 00:09:21,670
+pointers to our vulcan objects
+and finally let's add a public static
+
+526
+00:09:21,670 --> 00:09:21,680
+and finally let's add a public static
+ 
+
+527
+00:09:21,680 --> 00:09:22,310
+and finally let's add a public static
+function
+
+528
+00:09:22,310 --> 00:09:22,320
+function
+ 
+
+529
+00:09:22,320 --> 00:09:24,389
+function
+for creating a default pipeline
+
+530
+00:09:24,389 --> 00:09:24,399
+for creating a default pipeline
+ 
+
+531
+00:09:24,399 --> 00:09:25,990
+for creating a default pipeline
+configuration
+
+532
+00:09:25,990 --> 00:09:26,000
+configuration
+ 
+
+533
+00:09:26,000 --> 00:09:29,030
+configuration
+so static pipeline config info as the
+
+534
+00:09:29,030 --> 00:09:29,040
+so static pipeline config info as the
+ 
+
+535
+00:09:29,040 --> 00:09:30,070
+so static pipeline config info as the
+return type
+
+536
+00:09:30,070 --> 00:09:30,080
+return type
+ 
+
+537
+00:09:30,080 --> 00:09:32,230
+return type
+and we'll use default pipeline config
+
+538
+00:09:32,230 --> 00:09:32,240
+and we'll use default pipeline config
+ 
+
+539
+00:09:32,240 --> 00:09:34,710
+and we'll use default pipeline config
+info for the function name
+
+540
+00:09:34,710 --> 00:09:34,720
+info for the function name
+ 
+
+541
+00:09:34,720 --> 00:09:37,990
+info for the function name
+as parameters we'll take a unin 32 type
+
+542
+00:09:37,990 --> 00:09:38,000
+as parameters we'll take a unin 32 type
+ 
+
+543
+00:09:38,000 --> 00:09:39,990
+as parameters we'll take a unin 32 type
+for both the width and the same for
+
+544
+00:09:39,990 --> 00:09:40,000
+for both the width and the same for
+ 
+
+545
+00:09:40,000 --> 00:09:41,990
+for both the width and the same for
+height all right now let's get to
+
+546
+00:09:41,990 --> 00:09:42,000
+height all right now let's get to
+ 
+
+547
+00:09:42,000 --> 00:09:43,190
+height all right now let's get to
+implementing
+
+548
+00:09:43,190 --> 00:09:43,200
+implementing
+ 
+
+549
+00:09:43,200 --> 00:09:45,990
+implementing
+copy our new constructor parameters but
+
+550
+00:09:45,990 --> 00:09:46,000
+copy our new constructor parameters but
+ 
+
+551
+00:09:46,000 --> 00:09:48,389
+copy our new constructor parameters but
+first i just realized the mistake i made
+
+552
+00:09:48,389 --> 00:09:48,399
+first i just realized the mistake i made
+ 
+
+553
+00:09:48,399 --> 00:09:51,269
+first i just realized the mistake i made
+this const shouldn't be here so remove
+
+554
+00:09:51,269 --> 00:09:51,279
+this const shouldn't be here so remove
+ 
+
+555
+00:09:51,279 --> 00:09:53,670
+this const shouldn't be here so remove
+the const before your device parameter
+
+556
+00:09:53,670 --> 00:09:53,680
+the const before your device parameter
+ 
+
+557
+00:09:53,680 --> 00:09:56,070
+the const before your device parameter
+and now copy our constructor and go to
+
+558
+00:09:56,070 --> 00:09:56,080
+and now copy our constructor and go to
+ 
+
+559
+00:09:56,080 --> 00:09:57,910
+and now copy our constructor and go to
+your implementation file
+
+560
+00:09:57,910 --> 00:09:57,920
+your implementation file
+ 
+
+561
+00:09:57,920 --> 00:10:00,389
+your implementation file
+and paste over your parameters
+
+562
+00:10:00,389 --> 00:10:00,399
+and paste over your parameters
+ 
+
+563
+00:10:00,399 --> 00:10:02,630
+and paste over your parameters
+initialize our device in a member
+
+564
+00:10:02,630 --> 00:10:02,640
+initialize our device in a member
+ 
+
+565
+00:10:02,640 --> 00:10:04,150
+initialize our device in a member
+initializer list
+
+566
+00:10:04,150 --> 00:10:04,160
+initializer list
+ 
+
+567
+00:10:04,160 --> 00:10:08,230
+initializer list
+so lve device device
+
+568
+00:10:08,230 --> 00:10:08,240
+so lve device device
+ 
+
+569
+00:10:08,240 --> 00:10:10,389
+so lve device device
+and then pass through your config info
+
+570
+00:10:10,389 --> 00:10:10,399
+and then pass through your config info
+ 
+
+571
+00:10:10,399 --> 00:10:14,310
+and then pass through your config info
+to the create graphics pipeline function
+
+572
+00:10:14,310 --> 00:10:14,320
+to the create graphics pipeline function
+ 
+
+573
+00:10:14,320 --> 00:10:16,470
+to the create graphics pipeline function
+and then also update the parameters for
+
+574
+00:10:16,470 --> 00:10:16,480
+and then also update the parameters for
+ 
+
+575
+00:10:16,480 --> 00:10:17,990
+and then also update the parameters for
+our create graphics pipeline
+
+576
+00:10:17,990 --> 00:10:18,000
+our create graphics pipeline
+ 
+
+577
+00:10:18,000 --> 00:10:23,509
+our create graphics pipeline
+as well
+
+578
+00:10:23,509 --> 00:10:23,519
+
+ 
+
+579
+00:10:23,519 --> 00:10:25,110
+ 
+all right now grab your function
+
+580
+00:10:25,110 --> 00:10:25,120
+all right now grab your function
+ 
+
+581
+00:10:25,120 --> 00:10:27,350
+all right now grab your function
+signature from our pipeline header
+
+582
+00:10:27,350 --> 00:10:27,360
+signature from our pipeline header
+ 
+
+583
+00:10:27,360 --> 00:10:30,150
+signature from our pipeline header
+paste it in and add our engine's
+
+584
+00:10:30,150 --> 00:10:30,160
+paste it in and add our engine's
+ 
+
+585
+00:10:30,160 --> 00:10:32,949
+paste it in and add our engine's
+pipeline class name
+
+586
+00:10:32,949 --> 00:10:32,959
+pipeline class name
+ 
+
+587
+00:10:32,959 --> 00:10:35,430
+pipeline class name
+we're going to create a local vk shader
+
+588
+00:10:35,430 --> 00:10:35,440
+we're going to create a local vk shader
+ 
+
+589
+00:10:35,440 --> 00:10:36,389
+we're going to create a local vk shader
+module create
+
+590
+00:10:36,389 --> 00:10:36,399
+module create
+ 
+
+591
+00:10:36,399 --> 00:10:38,710
+module create
+info variable and we'll call it create
+
+592
+00:10:38,710 --> 00:10:38,720
+info variable and we'll call it create
+ 
+
+593
+00:10:38,720 --> 00:10:39,990
+info variable and we'll call it create
+info
+
+594
+00:10:39,990 --> 00:10:40,000
+info
+ 
+
+595
+00:10:40,000 --> 00:10:41,750
+info
+this is going to be a common pattern
+
+596
+00:10:41,750 --> 00:10:41,760
+this is going to be a common pattern
+ 
+
+597
+00:10:41,760 --> 00:10:43,430
+this is going to be a common pattern
+you'll see throughout using the vulkan
+
+598
+00:10:43,430 --> 00:10:43,440
+you'll see throughout using the vulkan
+ 
+
+599
+00:10:43,440 --> 00:10:44,389
+you'll see throughout using the vulkan
+api
+
+600
+00:10:44,389 --> 00:10:44,399
+api
+ 
+
+601
+00:10:44,399 --> 00:10:46,150
+api
+where rather than calling a function
+
+602
+00:10:46,150 --> 00:10:46,160
+where rather than calling a function
+ 
+
+603
+00:10:46,160 --> 00:10:47,829
+where rather than calling a function
+with a bunch of parameters
+
+604
+00:10:47,829 --> 00:10:47,839
+with a bunch of parameters
+ 
+
+605
+00:10:47,839 --> 00:10:50,150
+with a bunch of parameters
+we instead configure a struct and call a
+
+606
+00:10:50,150 --> 00:10:50,160
+we instead configure a struct and call a
+ 
+
+607
+00:10:50,160 --> 00:10:52,310
+we instead configure a struct and call a
+function with a pointer to it
+
+608
+00:10:52,310 --> 00:10:52,320
+function with a pointer to it
+ 
+
+609
+00:10:52,320 --> 00:10:54,150
+function with a pointer to it
+so in this case there are three values
+
+610
+00:10:54,150 --> 00:10:54,160
+so in this case there are three values
+ 
+
+611
+00:10:54,160 --> 00:10:55,350
+so in this case there are three values
+we need to set
+
+612
+00:10:55,350 --> 00:10:55,360
+we need to set
+ 
+
+613
+00:10:55,360 --> 00:10:57,750
+we need to set
+the s type which is equal to vk
+
+614
+00:10:57,750 --> 00:10:57,760
+the s type which is equal to vk
+ 
+
+615
+00:10:57,760 --> 00:10:59,030
+the s type which is equal to vk
+structure type
+
+616
+00:10:59,030 --> 00:10:59,040
+structure type
+ 
+
+617
+00:10:59,040 --> 00:11:02,630
+structure type
+shader module create info the code size
+
+618
+00:11:02,630 --> 00:11:02,640
+shader module create info the code size
+ 
+
+619
+00:11:02,640 --> 00:11:04,790
+shader module create info the code size
+which is just the size of our vector
+
+620
+00:11:04,790 --> 00:11:04,800
+which is just the size of our vector
+ 
+
+621
+00:11:04,800 --> 00:11:05,990
+which is just the size of our vector
+array
+
+622
+00:11:05,990 --> 00:11:06,000
+array
+ 
+
+623
+00:11:06,000 --> 00:11:09,350
+array
+and lastly a pointer to our code
+
+624
+00:11:09,350 --> 00:11:09,360
+and lastly a pointer to our code
+ 
+
+625
+00:11:09,360 --> 00:11:11,990
+and lastly a pointer to our code
+we need to use a reinterpret cast on our
+
+626
+00:11:11,990 --> 00:11:12,000
+we need to use a reinterpret cast on our
+ 
+
+627
+00:11:12,000 --> 00:11:12,389
+we need to use a reinterpret cast on our
+data
+
+628
+00:11:12,389 --> 00:11:12,399
+data
+ 
+
+629
+00:11:12,399 --> 00:11:15,269
+data
+since vulcan expects a unin 32 type
+
+630
+00:11:15,269 --> 00:11:15,279
+since vulcan expects a unin 32 type
+ 
+
+631
+00:11:15,279 --> 00:11:16,310
+since vulcan expects a unin 32 type
+rather than a car
+
+632
+00:11:16,310 --> 00:11:16,320
+rather than a car
+ 
+
+633
+00:11:16,320 --> 00:11:18,550
+rather than a car
+array this is something to be careful
+
+634
+00:11:18,550 --> 00:11:18,560
+array this is something to be careful
+ 
+
+635
+00:11:18,560 --> 00:11:20,389
+array this is something to be careful
+with since you may have realized that an
+
+636
+00:11:20,389 --> 00:11:20,399
+with since you may have realized that an
+ 
+
+637
+00:11:20,399 --> 00:11:22,710
+with since you may have realized that an
+n32 and a character are not the same
+
+638
+00:11:22,710 --> 00:11:22,720
+n32 and a character are not the same
+ 
+
+639
+00:11:22,720 --> 00:11:23,670
+n32 and a character are not the same
+size
+
+640
+00:11:23,670 --> 00:11:23,680
+size
+ 
+
+641
+00:11:23,680 --> 00:11:25,990
+size
+however since our data is stored in a
+
+642
+00:11:25,990 --> 00:11:26,000
+however since our data is stored in a
+ 
+
+643
+00:11:26,000 --> 00:11:28,230
+however since our data is stored in a
+vector the default allocator already
+
+644
+00:11:28,230 --> 00:11:28,240
+vector the default allocator already
+ 
+
+645
+00:11:28,240 --> 00:11:29,030
+vector the default allocator already
+ensures
+
+646
+00:11:29,030 --> 00:11:29,040
+ensures
+ 
+
+647
+00:11:29,040 --> 00:11:31,350
+ensures
+that the data satisfies the worst case
+
+648
+00:11:31,350 --> 00:11:31,360
+that the data satisfies the worst case
+ 
+
+649
+00:11:31,360 --> 00:11:33,190
+that the data satisfies the worst case
+alignment requirement
+
+650
+00:11:33,190 --> 00:11:33,200
+alignment requirement
+ 
+
+651
+00:11:33,200 --> 00:11:35,350
+alignment requirement
+but if we were using a c style character
+
+652
+00:11:35,350 --> 00:11:35,360
+but if we were using a c style character
+ 
+
+653
+00:11:35,360 --> 00:11:36,310
+but if we were using a c style character
+array instead
+
+654
+00:11:36,310 --> 00:11:36,320
+array instead
+ 
+
+655
+00:11:36,320 --> 00:11:39,030
+array instead
+this cast wouldn't be valid in an if
+
+656
+00:11:39,030 --> 00:11:39,040
+this cast wouldn't be valid in an if
+ 
+
+657
+00:11:39,040 --> 00:11:40,310
+this cast wouldn't be valid in an if
+statement we call vk
+
+658
+00:11:40,310 --> 00:11:40,320
+statement we call vk
+ 
+
+659
+00:11:40,320 --> 00:11:43,150
+statement we call vk
+create shader module we use
+
+660
+00:11:43,150 --> 00:11:43,160
+create shader module we use
+ 
+
+661
+00:11:43,160 --> 00:11:44,310
+create shader module we use
+lvdevice.device
+
+662
+00:11:44,310 --> 00:11:44,320
+lvdevice.device
+ 
+
+663
+00:11:44,320 --> 00:11:46,230
+lvdevice.device
+which is a getter to the vulcan device
+
+664
+00:11:46,230 --> 00:11:46,240
+which is a getter to the vulcan device
+ 
+
+665
+00:11:46,240 --> 00:11:47,910
+which is a getter to the vulcan device
+handle that our device class
+
+666
+00:11:47,910 --> 00:11:47,920
+handle that our device class
+ 
+
+667
+00:11:47,920 --> 00:11:49,430
+handle that our device class
+encapsulates
+
+668
+00:11:49,430 --> 00:11:49,440
+encapsulates
+ 
+
+669
+00:11:49,440 --> 00:11:52,069
+encapsulates
+then a pointer to our create info a null
+
+670
+00:11:52,069 --> 00:11:52,079
+then a pointer to our create info a null
+ 
+
+671
+00:11:52,079 --> 00:11:53,590
+then a pointer to our create info a null
+pointer since we're not using any
+
+672
+00:11:53,590 --> 00:11:53,600
+pointer since we're not using any
+ 
+
+673
+00:11:53,600 --> 00:11:55,190
+pointer since we're not using any
+allocation callbacks
+
+674
+00:11:55,190 --> 00:11:55,200
+allocation callbacks
+ 
+
+675
+00:11:55,200 --> 00:11:58,310
+allocation callbacks
+and finally our shader module check that
+
+676
+00:11:58,310 --> 00:11:58,320
+and finally our shader module check that
+ 
+
+677
+00:11:58,320 --> 00:12:00,629
+and finally our shader module check that
+this is not equal to vk success
+
+678
+00:12:00,629 --> 00:12:00,639
+this is not equal to vk success
+ 
+
+679
+00:12:00,639 --> 00:12:03,590
+this is not equal to vk success
+otherwise throw some runtime error like
+
+680
+00:12:03,590 --> 00:12:03,600
+otherwise throw some runtime error like
+ 
+
+681
+00:12:03,600 --> 00:12:11,030
+otherwise throw some runtime error like
+fail to create shader module
+
+682
+00:12:11,030 --> 00:12:11,040
+fail to create shader module
+ 
+
+683
+00:12:11,040 --> 00:12:13,030
+fail to create shader module
+next let's grab our default pipeline
+
+684
+00:12:13,030 --> 00:12:13,040
+next let's grab our default pipeline
+ 
+
+685
+00:12:13,040 --> 00:12:15,430
+next let's grab our default pipeline
+config info function
+
+686
+00:12:15,430 --> 00:12:15,440
+config info function
+ 
+
+687
+00:12:15,440 --> 00:12:18,069
+config info function
+remove static and add your class name
+
+688
+00:12:18,069 --> 00:12:18,079
+remove static and add your class name
+ 
+
+689
+00:12:18,079 --> 00:12:19,750
+remove static and add your class name
+and start by making a config
+
+690
+00:12:19,750 --> 00:12:19,760
+and start by making a config
+ 
+
+691
+00:12:19,760 --> 00:12:22,230
+and start by making a config
+info local variable and then simply
+
+692
+00:12:22,230 --> 00:12:22,240
+info local variable and then simply
+ 
+
+693
+00:12:22,240 --> 00:12:24,150
+info local variable and then simply
+return it for now
+
+694
+00:12:24,150 --> 00:12:24,160
+return it for now
+ 
+
+695
+00:12:24,160 --> 00:12:25,829
+return it for now
+we will come back to this in just a
+
+696
+00:12:25,829 --> 00:12:25,839
+we will come back to this in just a
+ 
+
+697
+00:12:25,839 --> 00:12:27,590
+we will come back to this in just a
+moment but it will be nice to get our
+
+698
+00:12:27,590 --> 00:12:27,600
+moment but it will be nice to get our
+ 
+
+699
+00:12:27,600 --> 00:12:30,870
+moment but it will be nice to get our
+code back into state that it compiles
+
+700
+00:12:30,870 --> 00:12:30,880
+code back into state that it compiles
+ 
+
+701
+00:12:30,880 --> 00:12:33,110
+code back into state that it compiles
+so in your first app header include your
+
+702
+00:12:33,110 --> 00:12:33,120
+so in your first app header include your
+ 
+
+703
+00:12:33,120 --> 00:12:35,269
+so in your first app header include your
+device class
+
+704
+00:12:35,269 --> 00:12:35,279
+device class
+ 
+
+705
+00:12:35,279 --> 00:12:37,590
+device class
+and create a new member variable lve
+
+706
+00:12:37,590 --> 00:12:37,600
+and create a new member variable lve
+ 
+
+707
+00:12:37,600 --> 00:12:39,269
+and create a new member variable lve
+device
+
+708
+00:12:39,269 --> 00:12:39,279
+device
+ 
+
+709
+00:12:39,279 --> 00:12:41,269
+device
+and it takes our window as a constructor
+
+710
+00:12:41,269 --> 00:12:41,279
+and it takes our window as a constructor
+ 
+
+711
+00:12:41,279 --> 00:12:43,829
+and it takes our window as a constructor
+argument
+
+712
+00:12:43,829 --> 00:12:43,839
+
+ 
+
+713
+00:12:43,839 --> 00:12:45,990
+ 
+then for our pipeline constructor add
+
+714
+00:12:45,990 --> 00:12:46,000
+then for our pipeline constructor add
+ 
+
+715
+00:12:46,000 --> 00:12:48,629
+then for our pipeline constructor add
+the device as your first argument
+
+716
+00:12:48,629 --> 00:12:48,639
+the device as your first argument
+ 
+
+717
+00:12:48,639 --> 00:12:50,870
+the device as your first argument
+and as the last a call to our lve
+
+718
+00:12:50,870 --> 00:12:50,880
+and as the last a call to our lve
+ 
+
+719
+00:12:50,880 --> 00:12:51,990
+and as the last a call to our lve
+pipeline default
+
+720
+00:12:51,990 --> 00:12:52,000
+pipeline default
+ 
+
+721
+00:12:52,000 --> 00:12:55,829
+pipeline default
+pipeline config info function
+
+722
+00:12:55,829 --> 00:12:55,839
+
+ 
+
+723
+00:12:55,839 --> 00:12:57,670
+ 
+with our width and our heights as
+
+724
+00:12:57,670 --> 00:12:57,680
+with our width and our heights as
+ 
+
+725
+00:12:57,680 --> 00:12:59,910
+with our width and our heights as
+arguments
+
+726
+00:12:59,910 --> 00:12:59,920
+arguments
+ 
+
+727
+00:12:59,920 --> 00:13:01,750
+arguments
+and now if you build and run your
+
+728
+00:13:01,750 --> 00:13:01,760
+and now if you build and run your
+ 
+
+729
+00:13:01,760 --> 00:13:04,230
+and now if you build and run your
+program when we instantiate our lve
+
+730
+00:13:04,230 --> 00:13:04,240
+program when we instantiate our lve
+ 
+
+731
+00:13:04,240 --> 00:13:05,110
+program when we instantiate our lve
+device we
+
+732
+00:13:05,110 --> 00:13:05,120
+device we
+ 
+
+733
+00:13:05,120 --> 00:13:07,030
+device we
+output to the console what device
+
+734
+00:13:07,030 --> 00:13:07,040
+output to the console what device
+ 
+
+735
+00:13:07,040 --> 00:13:08,550
+output to the console what device
+extensions are available
+
+736
+00:13:08,550 --> 00:13:08,560
+extensions are available
+ 
+
+737
+00:13:08,560 --> 00:13:10,629
+extensions are available
+what extensions are required as well as
+
+738
+00:13:10,629 --> 00:13:10,639
+what extensions are required as well as
+ 
+
+739
+00:13:10,639 --> 00:13:11,910
+what extensions are required as well as
+which physical device
+
+740
+00:13:11,910 --> 00:13:11,920
+which physical device
+ 
+
+741
+00:13:11,920 --> 00:13:14,870
+which physical device
+was picked the required extensions are
+
+742
+00:13:14,870 --> 00:13:14,880
+was picked the required extensions are
+ 
+
+743
+00:13:14,880 --> 00:13:17,110
+was picked the required extensions are
+determined for us by glfw
+
+744
+00:13:17,110 --> 00:13:17,120
+determined for us by glfw
+ 
+
+745
+00:13:17,120 --> 00:13:18,870
+determined for us by glfw
+and are the extensions that it needs in
+
+746
+00:13:18,870 --> 00:13:18,880
+and are the extensions that it needs in
+ 
+
+747
+00:13:18,880 --> 00:13:20,949
+and are the extensions that it needs in
+order to display content to the window
+
+748
+00:13:20,949 --> 00:13:20,959
+order to display content to the window
+ 
+
+749
+00:13:20,959 --> 00:13:23,910
+order to display content to the window
+it creates
+
+750
+00:13:23,910 --> 00:13:23,920
+
+ 
+
+751
+00:13:23,920 --> 00:13:26,069
+ 
+if we take a look into our device class
+
+752
+00:13:26,069 --> 00:13:26,079
+if we take a look into our device class
+ 
+
+753
+00:13:26,079 --> 00:13:27,670
+if we take a look into our device class
+you can find where we output this
+
+754
+00:13:27,670 --> 00:13:27,680
+you can find where we output this
+ 
+
+755
+00:13:27,680 --> 00:13:28,710
+you can find where we output this
+information
+
+756
+00:13:28,710 --> 00:13:28,720
+information
+ 
+
+757
+00:13:28,720 --> 00:13:30,949
+information
+and optionally remove it if you'd prefer
+
+758
+00:13:30,949 --> 00:13:30,959
+and optionally remove it if you'd prefer
+ 
+
+759
+00:13:30,959 --> 00:13:32,710
+and optionally remove it if you'd prefer
+not seeing it every time your program
+
+760
+00:13:32,710 --> 00:13:32,720
+not seeing it every time your program
+ 
+
+761
+00:13:32,720 --> 00:13:33,509
+not seeing it every time your program
+runs
+
+762
+00:13:33,509 --> 00:13:33,519
+runs
+ 
+
+763
+00:13:33,519 --> 00:13:36,069
+runs
+okay so i've decided to split this video
+
+764
+00:13:36,069 --> 00:13:36,079
+okay so i've decided to split this video
+ 
+
+765
+00:13:36,079 --> 00:13:36,629
+okay so i've decided to split this video
+in two
+
+766
+00:13:36,629 --> 00:13:36,639
+in two
+ 
+
+767
+00:13:36,639 --> 00:13:39,030
+in two
+as it's already getting a bit long and
+
+768
+00:13:39,030 --> 00:13:39,040
+as it's already getting a bit long and
+ 
+
+769
+00:13:39,040 --> 00:13:41,030
+as it's already getting a bit long and
+it's been delayed enough as it is
+
+770
+00:13:41,030 --> 00:13:41,040
+it's been delayed enough as it is
+ 
+
+771
+00:13:41,040 --> 00:13:42,790
+it's been delayed enough as it is
+we'll finish configuring our pipeline in
+
+772
+00:13:42,790 --> 00:13:42,800
+we'll finish configuring our pipeline in
+ 
+
+773
+00:13:42,800 --> 00:13:44,949
+we'll finish configuring our pipeline in
+the next video which will be out soon
+
+774
+00:13:44,949 --> 00:13:44,959
+the next video which will be out soon
+ 
+
+775
+00:13:44,959 --> 00:13:46,629
+the next video which will be out soon
+and if you would like a step-by-step
+
+776
+00:13:46,629 --> 00:13:46,639
+and if you would like a step-by-step
+ 
+
+777
+00:13:46,639 --> 00:13:48,790
+and if you would like a step-by-step
+video going through this device code
+
+778
+00:13:48,790 --> 00:13:48,800
+video going through this device code
+ 
+
+779
+00:13:48,800 --> 00:13:50,870
+video going through this device code
+please leave a comment below and maybe i
+
+780
+00:13:50,870 --> 00:13:50,880
+please leave a comment below and maybe i
+ 
+
+781
+00:13:50,880 --> 00:13:52,710
+please leave a comment below and maybe i
+could make something like appendix a
+
+782
+00:13:52,710 --> 00:13:52,720
+could make something like appendix a
+ 
+
+783
+00:13:52,720 --> 00:13:55,189
+could make something like appendix a
+device setup for this tutorial series
+
+784
+00:13:55,189 --> 00:13:55,199
+device setup for this tutorial series
+ 
+
+785
+00:13:55,199 --> 00:14:02,120
+device setup for this tutorial series
+sometime in the future
+
+786
+00:14:02,120 --> 00:14:02,130
+sometime in the future
+ 
+
+787
+00:14:02,130 --> 00:14:05,829
+sometime in the future
+[Music]
+
+788
+00:14:05,829 --> 00:14:05,839
+[Music]
+ 
+
+789
+00:14:05,839 --> 00:14:07,920
+[Music]
+you
+

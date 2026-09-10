@@ -1,0 +1,855 @@
+1
+00:00:01,120 --> 00:00:03,030
+ 
+so there's an issue with my
+
+2
+00:00:03,030 --> 00:00:03,040
+so there's an issue with my
+ 
+
+3
+00:00:03,040 --> 00:00:05,749
+so there's an issue with my
+implementation from last week's tutorial
+
+4
+00:00:05,749 --> 00:00:05,759
+implementation from last week's tutorial
+ 
+
+5
+00:00:05,759 --> 00:00:07,909
+implementation from last week's tutorial
+and that's when flushing a single index
+
+6
+00:00:07,909 --> 00:00:07,919
+and that's when flushing a single index
+ 
+
+7
+00:00:07,919 --> 00:00:09,750
+and that's when flushing a single index
+i didn't take the device limit
+
+8
+00:00:09,750 --> 00:00:09,760
+i didn't take the device limit
+ 
+
+9
+00:00:09,760 --> 00:00:12,789
+i didn't take the device limit
+non-coherent atom size into account the
+
+10
+00:00:12,789 --> 00:00:12,799
+non-coherent atom size into account the
+ 
+
+11
+00:00:12,799 --> 00:00:15,190
+non-coherent atom size into account the
+non-coherent atom size is basically the
+
+12
+00:00:15,190 --> 00:00:15,200
+non-coherent atom size is basically the
+ 
+
+13
+00:00:15,200 --> 00:00:17,269
+non-coherent atom size is basically the
+smallest memory range your device allows
+
+14
+00:00:17,269 --> 00:00:17,279
+smallest memory range your device allows
+ 
+
+15
+00:00:17,279 --> 00:00:19,590
+smallest memory range your device allows
+when syncing between the host and device
+
+16
+00:00:19,590 --> 00:00:19,600
+when syncing between the host and device
+ 
+
+17
+00:00:19,600 --> 00:00:20,950
+when syncing between the host and device
+memory
+
+18
+00:00:20,950 --> 00:00:20,960
+memory
+ 
+
+19
+00:00:20,960 --> 00:00:23,109
+memory
+this means that when we call flush index
+
+20
+00:00:23,109 --> 00:00:23,119
+this means that when we call flush index
+ 
+
+21
+00:00:23,119 --> 00:00:25,029
+this means that when we call flush index
+you may have gotten an error because the
+
+22
+00:00:25,029 --> 00:00:25,039
+you may have gotten an error because the
+ 
+
+23
+00:00:25,039 --> 00:00:27,109
+you may have gotten an error because the
+memory range of a single instance didn't
+
+24
+00:00:27,109 --> 00:00:27,119
+memory range of a single instance didn't
+ 
+
+25
+00:00:27,119 --> 00:00:29,750
+memory range of a single instance didn't
+align with the non-coherent atom size
+
+26
+00:00:29,750 --> 00:00:29,760
+align with the non-coherent atom size
+ 
+
+27
+00:00:29,760 --> 00:00:31,589
+align with the non-coherent atom size
+i'm actually not really sure why this
+
+28
+00:00:31,589 --> 00:00:31,599
+i'm actually not really sure why this
+ 
+
+29
+00:00:31,599 --> 00:00:33,350
+i'm actually not really sure why this
+didn't cause a problem on any of my
+
+30
+00:00:33,350 --> 00:00:33,360
+didn't cause a problem on any of my
+ 
+
+31
+00:00:33,360 --> 00:00:35,750
+didn't cause a problem on any of my
+machines since the previous min offset
+
+32
+00:00:35,750 --> 00:00:35,760
+machines since the previous min offset
+ 
+
+33
+00:00:35,760 --> 00:00:38,470
+machines since the previous min offset
+alignment i was using of 32 bytes
+
+34
+00:00:38,470 --> 00:00:38,480
+alignment i was using of 32 bytes
+ 
+
+35
+00:00:38,480 --> 00:00:40,709
+alignment i was using of 32 bytes
+should have caused an issue but perhaps
+
+36
+00:00:40,709 --> 00:00:40,719
+should have caused an issue but perhaps
+ 
+
+37
+00:00:40,719 --> 00:00:42,630
+should have caused an issue but perhaps
+my graphics driver was doing something
+
+38
+00:00:42,630 --> 00:00:42,640
+my graphics driver was doing something
+ 
+
+39
+00:00:42,640 --> 00:00:44,549
+my graphics driver was doing something
+behind the scenes to hide this
+
+40
+00:00:44,549 --> 00:00:44,559
+behind the scenes to hide this
+ 
+
+41
+00:00:44,559 --> 00:00:46,869
+behind the scenes to hide this
+as a band-aid fix we could include
+
+42
+00:00:46,869 --> 00:00:46,879
+as a band-aid fix we could include
+ 
+
+43
+00:00:46,879 --> 00:00:48,630
+as a band-aid fix we could include
+numeric and then calculate the min
+
+44
+00:00:48,630 --> 00:00:48,640
+numeric and then calculate the min
+ 
+
+45
+00:00:48,640 --> 00:00:50,869
+numeric and then calculate the min
+offset alignment as the lowest common
+
+46
+00:00:50,869 --> 00:00:50,879
+offset alignment as the lowest common
+ 
+
+47
+00:00:50,879 --> 00:00:53,270
+offset alignment as the lowest common
+multiple of the min uniform buffer
+
+48
+00:00:53,270 --> 00:00:53,280
+multiple of the min uniform buffer
+ 
+
+49
+00:00:53,280 --> 00:00:55,590
+multiple of the min uniform buffer
+offset alignment and the non-coherent
+
+50
+00:00:55,590 --> 00:00:55,600
+offset alignment and the non-coherent
+ 
+
+51
+00:00:55,600 --> 00:00:57,270
+offset alignment and the non-coherent
+atom size
+
+52
+00:00:57,270 --> 00:00:57,280
+atom size
+ 
+
+53
+00:00:57,280 --> 00:00:59,029
+atom size
+however i don't really like this
+
+54
+00:00:59,029 --> 00:00:59,039
+however i don't really like this
+ 
+
+55
+00:00:59,039 --> 00:01:01,590
+however i don't really like this
+implementation i was trying to be fancy
+
+56
+00:01:01,590 --> 00:01:01,600
+implementation i was trying to be fancy
+ 
+
+57
+00:01:01,600 --> 00:01:03,910
+implementation i was trying to be fancy
+by combining the uniform data from
+
+58
+00:01:03,910 --> 00:01:03,920
+by combining the uniform data from
+ 
+
+59
+00:01:03,920 --> 00:01:05,910
+by combining the uniform data from
+separate frames into a single buffer
+
+60
+00:01:05,910 --> 00:01:05,920
+separate frames into a single buffer
+ 
+
+61
+00:01:05,920 --> 00:01:08,149
+separate frames into a single buffer
+object but in hindsight i think this
+
+62
+00:01:08,149 --> 00:01:08,159
+object but in hindsight i think this
+ 
+
+63
+00:01:08,159 --> 00:01:10,230
+object but in hindsight i think this
+only makes things confusing and harder
+
+64
+00:01:10,230 --> 00:01:10,240
+only makes things confusing and harder
+ 
+
+65
+00:01:10,240 --> 00:01:12,789
+only makes things confusing and harder
+to follow it can also cause potential
+
+66
+00:01:12,789 --> 00:01:12,799
+to follow it can also cause potential
+ 
+
+67
+00:01:12,799 --> 00:01:14,550
+to follow it can also cause potential
+problems such as the one here where
+
+68
+00:01:14,550 --> 00:01:14,560
+problems such as the one here where
+ 
+
+69
+00:01:14,560 --> 00:01:16,390
+problems such as the one here where
+flushing the desired memory range
+
+70
+00:01:16,390 --> 00:01:16,400
+flushing the desired memory range
+ 
+
+71
+00:01:16,400 --> 00:01:18,149
+flushing the desired memory range
+becomes difficult
+
+72
+00:01:18,149 --> 00:01:18,159
+becomes difficult
+ 
+
+73
+00:01:18,159 --> 00:01:20,630
+becomes difficult
+so for now let's split this into two
+
+74
+00:01:20,630 --> 00:01:20,640
+so for now let's split this into two
+ 
+
+75
+00:01:20,640 --> 00:01:23,030
+so for now let's split this into two
+separate buffers i'm going to undo what
+
+76
+00:01:23,030 --> 00:01:23,040
+separate buffers i'm going to undo what
+ 
+
+77
+00:01:23,040 --> 00:01:25,590
+separate buffers i'm going to undo what
+i just added and instead create a vector
+
+78
+00:01:25,590 --> 00:01:25,600
+i just added and instead create a vector
+ 
+
+79
+00:01:25,600 --> 00:01:28,550
+i just added and instead create a vector
+of pointers to our buffer objects
+
+80
+00:01:28,550 --> 00:01:28,560
+of pointers to our buffer objects
+ 
+
+81
+00:01:28,560 --> 00:01:30,950
+of pointers to our buffer objects
+we will use a buffer object for each
+
+82
+00:01:30,950 --> 00:01:30,960
+we will use a buffer object for each
+ 
+
+83
+00:01:30,960 --> 00:01:32,149
+we will use a buffer object for each
+frame
+
+84
+00:01:32,149 --> 00:01:32,159
+frame
+ 
+
+85
+00:01:32,159 --> 00:01:34,310
+frame
+to initialize the vector of pointers we
+
+86
+00:01:34,310 --> 00:01:34,320
+to initialize the vector of pointers we
+ 
+
+87
+00:01:34,320 --> 00:01:36,310
+to initialize the vector of pointers we
+need to loop over each index and call
+
+88
+00:01:36,310 --> 00:01:36,320
+need to loop over each index and call
+ 
+
+89
+00:01:36,320 --> 00:01:38,390
+need to loop over each index and call
+make unique
+
+90
+00:01:38,390 --> 00:01:38,400
+make unique
+ 
+
+91
+00:01:38,400 --> 00:01:40,310
+make unique
+and then our arguments for creating the
+
+92
+00:01:40,310 --> 00:01:40,320
+and then our arguments for creating the
+ 
+
+93
+00:01:40,320 --> 00:01:43,030
+and then our arguments for creating the
+buffer are pretty much the same
+
+94
+00:01:43,030 --> 00:01:43,040
+buffer are pretty much the same
+ 
+
+95
+00:01:43,040 --> 00:01:45,270
+buffer are pretty much the same
+except for now we only use an instance
+
+96
+00:01:45,270 --> 00:01:45,280
+except for now we only use an instance
+ 
+
+97
+00:01:45,280 --> 00:01:49,910
+except for now we only use an instance
+count of one per buffer
+
+98
+00:01:49,910 --> 00:01:49,920
+
+ 
+
+99
+00:01:49,920 --> 00:01:51,910
+ 
+we could also now add the coherent
+
+100
+00:01:51,910 --> 00:01:51,920
+we could also now add the coherent
+ 
+
+101
+00:01:51,920 --> 00:01:53,990
+we could also now add the coherent
+memory bit and therefore would not have
+
+102
+00:01:53,990 --> 00:01:54,000
+memory bit and therefore would not have
+ 
+
+103
+00:01:54,000 --> 00:01:55,830
+memory bit and therefore would not have
+to worry about manually flushing the
+
+104
+00:01:55,830 --> 00:01:55,840
+to worry about manually flushing the
+ 
+
+105
+00:01:55,840 --> 00:01:58,550
+to worry about manually flushing the
+memory but i'm going to choose to leave
+
+106
+00:01:58,550 --> 00:01:58,560
+memory but i'm going to choose to leave
+ 
+
+107
+00:01:58,560 --> 00:02:00,550
+memory but i'm going to choose to leave
+that out for now because i would like to
+
+108
+00:02:00,550 --> 00:02:00,560
+that out for now because i would like to
+ 
+
+109
+00:02:00,560 --> 00:02:03,510
+that out for now because i would like to
+still demonstrate the flush function
+
+110
+00:02:03,510 --> 00:02:03,520
+still demonstrate the flush function
+ 
+
+111
+00:02:03,520 --> 00:02:05,670
+still demonstrate the flush function
+and then still within the for loop we
+
+112
+00:02:05,670 --> 00:02:05,680
+and then still within the for loop we
+ 
+
+113
+00:02:05,680 --> 00:02:07,910
+and then still within the for loop we
+need to call the map function on each
+
+114
+00:02:07,910 --> 00:02:07,920
+need to call the map function on each
+ 
+
+115
+00:02:07,920 --> 00:02:09,510
+need to call the map function on each
+buffer instance
+
+116
+00:02:09,510 --> 00:02:09,520
+buffer instance
+ 
+
+117
+00:02:09,520 --> 00:02:12,229
+buffer instance
+next let's update the two usages we
+
+118
+00:02:12,229 --> 00:02:12,239
+next let's update the two usages we
+ 
+
+119
+00:02:12,239 --> 00:02:13,830
+next let's update the two usages we
+won't be using the index variants
+
+120
+00:02:13,830 --> 00:02:13,840
+won't be using the index variants
+ 
+
+121
+00:02:13,840 --> 00:02:16,309
+won't be using the index variants
+anymore since each uniform data will be
+
+122
+00:02:16,309 --> 00:02:16,319
+anymore since each uniform data will be
+ 
+
+123
+00:02:16,319 --> 00:02:18,710
+anymore since each uniform data will be
+stored in a different frame to get the
+
+124
+00:02:18,710 --> 00:02:18,720
+stored in a different frame to get the
+ 
+
+125
+00:02:18,720 --> 00:02:20,550
+stored in a different frame to get the
+correct buffer for each frame we use the
+
+126
+00:02:20,550 --> 00:02:20,560
+correct buffer for each frame we use the
+ 
+
+127
+00:02:20,560 --> 00:02:22,790
+correct buffer for each frame we use the
+frame index and then we can call the
+
+128
+00:02:22,790 --> 00:02:22,800
+frame index and then we can call the
+ 
+
+129
+00:02:22,800 --> 00:02:25,270
+frame index and then we can call the
+write to buffer and flush functions
+
+130
+00:02:25,270 --> 00:02:25,280
+write to buffer and flush functions
+ 
+
+131
+00:02:25,280 --> 00:02:27,190
+write to buffer and flush functions
+and that's really it for the changes
+
+132
+00:02:27,190 --> 00:02:27,200
+and that's really it for the changes
+ 
+
+133
+00:02:27,200 --> 00:02:28,869
+and that's really it for the changes
+build and run and if you're getting
+
+134
+00:02:28,869 --> 00:02:28,879
+build and run and if you're getting
+ 
+
+135
+00:02:28,879 --> 00:02:31,030
+build and run and if you're getting
+those previous validation messages they
+
+136
+00:02:31,030 --> 00:02:31,040
+those previous validation messages they
+ 
+
+137
+00:02:31,040 --> 00:02:33,830
+those previous validation messages they
+should now be gone the previous method i
+
+138
+00:02:33,830 --> 00:02:33,840
+should now be gone the previous method i
+ 
+
+139
+00:02:33,840 --> 00:02:36,630
+should now be gone the previous method i
+first showed is also fine so long as you
+
+140
+00:02:36,630 --> 00:02:36,640
+first showed is also fine so long as you
+ 
+
+141
+00:02:36,640 --> 00:02:38,949
+first showed is also fine so long as you
+fix the alignment issues feel free to
+
+142
+00:02:38,949 --> 00:02:38,959
+fix the alignment issues feel free to
+ 
+
+143
+00:02:38,959 --> 00:02:41,110
+fix the alignment issues feel free to
+use whatever method you prefer
+
+144
+00:02:41,110 --> 00:02:41,120
+use whatever method you prefer
+ 
+
+145
+00:02:41,120 --> 00:02:43,270
+use whatever method you prefer
+both are correct but with the former
+
+146
+00:02:43,270 --> 00:02:43,280
+both are correct but with the former
+ 
+
+147
+00:02:43,280 --> 00:02:45,670
+both are correct but with the former
+method it's up to you to set the proper
+
+148
+00:02:45,670 --> 00:02:45,680
+method it's up to you to set the proper
+ 
+
+149
+00:02:45,680 --> 00:02:47,670
+method it's up to you to set the proper
+alignment and flush the correct memory
+
+150
+00:02:47,670 --> 00:02:47,680
+alignment and flush the correct memory
+ 
+
+151
+00:02:47,680 --> 00:02:49,110
+alignment and flush the correct memory
+ranges
+
+152
+00:02:49,110 --> 00:02:49,120
+ranges
+ 
+
+153
+00:02:49,120 --> 00:02:51,270
+ranges
+also note this change doesn't mean we
+
+154
+00:02:51,270 --> 00:02:51,280
+also note this change doesn't mean we
+ 
+
+155
+00:02:51,280 --> 00:02:53,509
+also note this change doesn't mean we
+won't ever be using the index buffer
+
+156
+00:02:53,509 --> 00:02:53,519
+won't ever be using the index buffer
+ 
+
+157
+00:02:53,519 --> 00:02:55,750
+won't ever be using the index buffer
+functions they'll still be useful for
+
+158
+00:02:55,750 --> 00:02:55,760
+functions they'll still be useful for
+ 
+
+159
+00:02:55,760 --> 00:02:58,390
+functions they'll still be useful for
+when we have multiple instances of data
+
+160
+00:02:58,390 --> 00:02:58,400
+when we have multiple instances of data
+ 
+
+161
+00:02:58,400 --> 00:03:01,350
+when we have multiple instances of data
+per frame so we'd still use a buffer per
+
+162
+00:03:01,350 --> 00:03:01,360
+per frame so we'd still use a buffer per
+ 
+
+163
+00:03:01,360 --> 00:03:03,830
+per frame so we'd still use a buffer per
+frame in that case and each buffer would
+
+164
+00:03:03,830 --> 00:03:03,840
+frame in that case and each buffer would
+ 
+
+165
+00:03:03,840 --> 00:03:06,390
+frame in that case and each buffer would
+have a copy per instance
+
+166
+00:03:06,390 --> 00:03:06,400
+have a copy per instance
+ 
+
+167
+00:03:06,400 --> 00:03:08,390
+have a copy per instance
+anyway thank you for watching and sorry
+
+168
+00:03:08,390 --> 00:03:08,400
+anyway thank you for watching and sorry
+ 
+
+169
+00:03:08,400 --> 00:03:10,630
+anyway thank you for watching and sorry
+about this small mistake keep on coding
+
+170
+00:03:10,630 --> 00:03:10,640
+about this small mistake keep on coding
+ 
+
+171
+00:03:10,640 --> 00:03:13,640
+about this small mistake keep on coding
+cheers
+

@@ -1,0 +1,5435 @@
+1
+00:00:00,399 --> 00:00:02,710
+ 
+welcome back in this video we are going
+
+2
+00:00:02,710 --> 00:00:02,720
+welcome back in this video we are going
+ 
+
+3
+00:00:02,720 --> 00:00:05,269
+welcome back in this video we are going
+to move past the simple 3d cube and
+
+4
+00:00:05,269 --> 00:00:05,279
+to move past the simple 3d cube and
+ 
+
+5
+00:00:05,279 --> 00:00:07,349
+to move past the simple 3d cube and
+extend the model class to be able to
+
+6
+00:00:07,349 --> 00:00:07,359
+extend the model class to be able to
+ 
+
+7
+00:00:07,359 --> 00:00:09,750
+extend the model class to be able to
+read and model data using the wavefront
+
+8
+00:00:09,750 --> 00:00:09,760
+read and model data using the wavefront
+ 
+
+9
+00:00:09,760 --> 00:00:12,310
+read and model data using the wavefront
+object file format
+
+10
+00:00:12,310 --> 00:00:12,320
+object file format
+ 
+
+11
+00:00:12,320 --> 00:00:14,709
+object file format
+up until this point we've hard coded our
+
+12
+00:00:14,709 --> 00:00:14,719
+up until this point we've hard coded our
+ 
+
+13
+00:00:14,719 --> 00:00:17,750
+up until this point we've hard coded our
+model data directly into our code this
+
+14
+00:00:17,750 --> 00:00:17,760
+model data directly into our code this
+ 
+
+15
+00:00:17,760 --> 00:00:20,630
+model data directly into our code this
+is time consuming inflexible and prone
+
+16
+00:00:20,630 --> 00:00:20,640
+is time consuming inflexible and prone
+ 
+
+17
+00:00:20,640 --> 00:00:21,990
+is time consuming inflexible and prone
+to errors
+
+18
+00:00:21,990 --> 00:00:22,000
+to errors
+ 
+
+19
+00:00:22,000 --> 00:00:23,910
+to errors
+it would be much better if we could
+
+20
+00:00:23,910 --> 00:00:23,920
+it would be much better if we could
+ 
+
+21
+00:00:23,920 --> 00:00:26,630
+it would be much better if we could
+specify all model data in a separate
+
+22
+00:00:26,630 --> 00:00:26,640
+specify all model data in a separate
+ 
+
+23
+00:00:26,640 --> 00:00:29,509
+specify all model data in a separate
+file that could be loaded in at runtime
+
+24
+00:00:29,509 --> 00:00:29,519
+file that could be loaded in at runtime
+ 
+
+25
+00:00:29,519 --> 00:00:31,990
+file that could be loaded in at runtime
+the wavefront object file format is an
+
+26
+00:00:31,990 --> 00:00:32,000
+the wavefront object file format is an
+ 
+
+27
+00:00:32,000 --> 00:00:34,709
+the wavefront object file format is an
+open geometry definition file supported
+
+28
+00:00:34,709 --> 00:00:34,719
+open geometry definition file supported
+ 
+
+29
+00:00:34,719 --> 00:00:37,910
+open geometry definition file supported
+by most 3d modeling programs a v
+
+30
+00:00:37,910 --> 00:00:37,920
+by most 3d modeling programs a v
+ 
+
+31
+00:00:37,920 --> 00:00:40,470
+by most 3d modeling programs a v
+indicates a vertex position v n
+
+32
+00:00:40,470 --> 00:00:40,480
+indicates a vertex position v n
+ 
+
+33
+00:00:40,480 --> 00:00:43,110
+indicates a vertex position v n
+indicates a vertex normal and v t a
+
+34
+00:00:43,110 --> 00:00:43,120
+indicates a vertex normal and v t a
+ 
+
+35
+00:00:43,120 --> 00:00:45,430
+indicates a vertex normal and v t a
+texture coordinate with the subsequent
+
+36
+00:00:45,430 --> 00:00:45,440
+texture coordinate with the subsequent
+ 
+
+37
+00:00:45,440 --> 00:00:47,830
+texture coordinate with the subsequent
+values being the x y and z component
+
+38
+00:00:47,830 --> 00:00:47,840
+values being the x y and z component
+ 
+
+39
+00:00:47,840 --> 00:00:49,029
+values being the x y and z component
+values
+
+40
+00:00:49,029 --> 00:00:49,039
+values
+ 
+
+41
+00:00:49,039 --> 00:00:51,750
+values
+so for example the wavefront object file
+
+42
+00:00:51,750 --> 00:00:51,760
+so for example the wavefront object file
+ 
+
+43
+00:00:51,760 --> 00:00:53,750
+so for example the wavefront object file
+for the cube we've been rendering in the
+
+44
+00:00:53,750 --> 00:00:53,760
+for the cube we've been rendering in the
+ 
+
+45
+00:00:53,760 --> 00:00:56,069
+for the cube we've been rendering in the
+previous tutorials may look something
+
+46
+00:00:56,069 --> 00:00:56,079
+previous tutorials may look something
+ 
+
+47
+00:00:56,079 --> 00:00:58,709
+previous tutorials may look something
+like this the first eight values specify
+
+48
+00:00:58,709 --> 00:00:58,719
+like this the first eight values specify
+ 
+
+49
+00:00:58,719 --> 00:01:01,349
+like this the first eight values specify
+the eight vertex positions one for each
+
+50
+00:01:01,349 --> 00:01:01,359
+the eight vertex positions one for each
+ 
+
+51
+00:01:01,359 --> 00:01:04,229
+the eight vertex positions one for each
+corner of the cube then we have 14
+
+52
+00:01:04,229 --> 00:01:04,239
+corner of the cube then we have 14
+ 
+
+53
+00:01:04,239 --> 00:01:06,870
+corner of the cube then we have 14
+texture coordinate values these indicate
+
+54
+00:01:06,870 --> 00:01:06,880
+texture coordinate values these indicate
+ 
+
+55
+00:01:06,880 --> 00:01:09,590
+texture coordinate values these indicate
+how a 2d image would get mapped to cover
+
+56
+00:01:09,590 --> 00:01:09,600
+how a 2d image would get mapped to cover
+ 
+
+57
+00:01:09,600 --> 00:01:12,390
+how a 2d image would get mapped to cover
+the surface geometry of the model
+
+58
+00:01:12,390 --> 00:01:12,400
+the surface geometry of the model
+ 
+
+59
+00:01:12,400 --> 00:01:15,109
+the surface geometry of the model
+and finally six normal values one for
+
+60
+00:01:15,109 --> 00:01:15,119
+and finally six normal values one for
+ 
+
+61
+00:01:15,119 --> 00:01:17,270
+and finally six normal values one for
+each face of the cube
+
+62
+00:01:17,270 --> 00:01:17,280
+each face of the cube
+ 
+
+63
+00:01:17,280 --> 00:01:19,429
+each face of the cube
+i will explain in more detail in the
+
+64
+00:01:19,429 --> 00:01:19,439
+i will explain in more detail in the
+ 
+
+65
+00:01:19,439 --> 00:01:21,830
+i will explain in more detail in the
+upcoming tutorials the purpose and use
+
+66
+00:01:21,830 --> 00:01:21,840
+upcoming tutorials the purpose and use
+ 
+
+67
+00:01:21,840 --> 00:01:23,670
+upcoming tutorials the purpose and use
+of vertex normals and texture
+
+68
+00:01:23,670 --> 00:01:23,680
+of vertex normals and texture
+ 
+
+69
+00:01:23,680 --> 00:01:24,870
+of vertex normals and texture
+coordinates
+
+70
+00:01:24,870 --> 00:01:24,880
+coordinates
+ 
+
+71
+00:01:24,880 --> 00:01:26,870
+coordinates
+the final portion of this file format
+
+72
+00:01:26,870 --> 00:01:26,880
+the final portion of this file format
+ 
+
+73
+00:01:26,880 --> 00:01:28,630
+the final portion of this file format
+that we care about lists how to
+
+74
+00:01:28,630 --> 00:01:28,640
+that we care about lists how to
+ 
+
+75
+00:01:28,640 --> 00:01:31,590
+that we care about lists how to
+construct each individual face which for
+
+76
+00:01:31,590 --> 00:01:31,600
+construct each individual face which for
+ 
+
+77
+00:01:31,600 --> 00:01:33,350
+construct each individual face which for
+our rendering pipeline will all be
+
+78
+00:01:33,350 --> 00:01:33,360
+our rendering pipeline will all be
+ 
+
+79
+00:01:33,360 --> 00:01:34,950
+our rendering pipeline will all be
+triangles
+
+80
+00:01:34,950 --> 00:01:34,960
+triangles
+ 
+
+81
+00:01:34,960 --> 00:01:37,510
+triangles
+each face of the model will be listed on
+
+82
+00:01:37,510 --> 00:01:37,520
+each face of the model will be listed on
+ 
+
+83
+00:01:37,520 --> 00:01:39,429
+each face of the model will be listed on
+a separate line that starts with the
+
+84
+00:01:39,429 --> 00:01:39,439
+a separate line that starts with the
+ 
+
+85
+00:01:39,439 --> 00:01:41,990
+a separate line that starts with the
+letter f and will consist of three face
+
+86
+00:01:41,990 --> 00:01:42,000
+letter f and will consist of three face
+ 
+
+87
+00:01:42,000 --> 00:01:44,230
+letter f and will consist of three face
+elements one for each vertex of the
+
+88
+00:01:44,230 --> 00:01:44,240
+elements one for each vertex of the
+ 
+
+89
+00:01:44,240 --> 00:01:45,590
+elements one for each vertex of the
+triangle
+
+90
+00:01:45,590 --> 00:01:45,600
+triangle
+ 
+
+91
+00:01:45,600 --> 00:01:47,990
+triangle
+a face element is made up of index
+
+92
+00:01:47,990 --> 00:01:48,000
+a face element is made up of index
+ 
+
+93
+00:01:48,000 --> 00:01:50,630
+a face element is made up of index
+values the first value is an index into
+
+94
+00:01:50,630 --> 00:01:50,640
+values the first value is an index into
+ 
+
+95
+00:01:50,640 --> 00:01:53,270
+values the first value is an index into
+the list of vertex positions so for the
+
+96
+00:01:53,270 --> 00:01:53,280
+the list of vertex positions so for the
+ 
+
+97
+00:01:53,280 --> 00:01:55,270
+the list of vertex positions so for the
+first triangle we want to use the fifth
+
+98
+00:01:55,270 --> 00:01:55,280
+first triangle we want to use the fifth
+ 
+
+99
+00:01:55,280 --> 00:01:57,429
+first triangle we want to use the fifth
+vertex position value
+
+100
+00:01:57,429 --> 00:01:57,439
+vertex position value
+ 
+
+101
+00:01:57,439 --> 00:01:59,350
+vertex position value
+then following the forward slash the
+
+102
+00:01:59,350 --> 00:01:59,360
+then following the forward slash the
+ 
+
+103
+00:01:59,360 --> 00:02:01,910
+then following the forward slash the
+next value is an index into the texture
+
+104
+00:02:01,910 --> 00:02:01,920
+next value is an index into the texture
+ 
+
+105
+00:02:01,920 --> 00:02:04,310
+next value is an index into the texture
+coordinate list so the first texture
+
+106
+00:02:04,310 --> 00:02:04,320
+coordinate list so the first texture
+ 
+
+107
+00:02:04,320 --> 00:02:06,550
+coordinate list so the first texture
+coordinate value and then as you can
+
+108
+00:02:06,550 --> 00:02:06,560
+coordinate value and then as you can
+ 
+
+109
+00:02:06,560 --> 00:02:08,229
+coordinate value and then as you can
+probably guess that leaves the last
+
+110
+00:02:08,229 --> 00:02:08,239
+probably guess that leaves the last
+ 
+
+111
+00:02:08,239 --> 00:02:10,389
+probably guess that leaves the last
+value of the base element as the index
+
+112
+00:02:10,389 --> 00:02:10,399
+value of the base element as the index
+ 
+
+113
+00:02:10,399 --> 00:02:13,030
+value of the base element as the index
+into the list of normal vectors
+
+114
+00:02:13,030 --> 00:02:13,040
+into the list of normal vectors
+ 
+
+115
+00:02:13,040 --> 00:02:14,630
+into the list of normal vectors
+therefore the first vertex of our
+
+116
+00:02:14,630 --> 00:02:14,640
+therefore the first vertex of our
+ 
+
+117
+00:02:14,640 --> 00:02:17,430
+therefore the first vertex of our
+triangle is given by one negative one
+
+118
+00:02:17,430 --> 00:02:17,440
+triangle is given by one negative one
+ 
+
+119
+00:02:17,440 --> 00:02:20,390
+triangle is given by one negative one
+point eight seven five point five
+
+120
+00:02:20,390 --> 00:02:20,400
+point eight seven five point five
+ 
+
+121
+00:02:20,400 --> 00:02:23,190
+point eight seven five point five
+and zero negative 1 and 0.
+
+122
+00:02:23,190 --> 00:02:23,200
+and zero negative 1 and 0.
+ 
+
+123
+00:02:23,200 --> 00:02:25,190
+and zero negative 1 and 0.
+to construct the rest of the triangle we
+
+124
+00:02:25,190 --> 00:02:25,200
+to construct the rest of the triangle we
+ 
+
+125
+00:02:25,200 --> 00:02:27,030
+to construct the rest of the triangle we
+do the same for the other two face
+
+126
+00:02:27,030 --> 00:02:27,040
+do the same for the other two face
+ 
+
+127
+00:02:27,040 --> 00:02:28,630
+do the same for the other two face
+elements
+
+128
+00:02:28,630 --> 00:02:28,640
+elements
+ 
+
+129
+00:02:28,640 --> 00:02:31,030
+elements
+so the explanation i have provided here
+
+130
+00:02:31,030 --> 00:02:31,040
+so the explanation i have provided here
+ 
+
+131
+00:02:31,040 --> 00:02:33,350
+so the explanation i have provided here
+is a simplification of the full file
+
+132
+00:02:33,350 --> 00:02:33,360
+is a simplification of the full file
+ 
+
+133
+00:02:33,360 --> 00:02:35,270
+is a simplification of the full file
+format specification
+
+134
+00:02:35,270 --> 00:02:35,280
+format specification
+ 
+
+135
+00:02:35,280 --> 00:02:37,750
+format specification
+i've ignored materials as well as some
+
+136
+00:02:37,750 --> 00:02:37,760
+i've ignored materials as well as some
+ 
+
+137
+00:02:37,760 --> 00:02:39,430
+i've ignored materials as well as some
+other details
+
+138
+00:02:39,430 --> 00:02:39,440
+other details
+ 
+
+139
+00:02:39,440 --> 00:02:41,030
+other details
+for more information check out the
+
+140
+00:02:41,030 --> 00:02:41,040
+for more information check out the
+ 
+
+141
+00:02:41,040 --> 00:02:43,990
+for more information check out the
+wikipedia article on the topic
+
+142
+00:02:43,990 --> 00:02:44,000
+wikipedia article on the topic
+ 
+
+143
+00:02:44,000 --> 00:02:45,990
+wikipedia article on the topic
+rather than write our own code to read
+
+144
+00:02:45,990 --> 00:02:46,000
+rather than write our own code to read
+ 
+
+145
+00:02:46,000 --> 00:02:48,070
+rather than write our own code to read
+in this file format we will make use of
+
+146
+00:02:48,070 --> 00:02:48,080
+in this file format we will make use of
+ 
+
+147
+00:02:48,080 --> 00:02:50,550
+in this file format we will make use of
+tiny object loader a single file
+
+148
+00:02:50,550 --> 00:02:50,560
+tiny object loader a single file
+ 
+
+149
+00:02:50,560 --> 00:02:52,869
+tiny object loader a single file
+wavefront object loader written in c
+
+150
+00:02:52,869 --> 00:02:52,879
+wavefront object loader written in c
+ 
+
+151
+00:02:52,879 --> 00:02:53,670
+wavefront object loader written in c
+plus
+
+152
+00:02:53,670 --> 00:02:53,680
+plus
+ 
+
+153
+00:02:53,680 --> 00:02:56,150
+plus
+so let's start by adding tiny object
+
+154
+00:02:56,150 --> 00:02:56,160
+so let's start by adding tiny object
+ 
+
+155
+00:02:56,160 --> 00:02:58,070
+so let's start by adding tiny object
+loader to the project
+
+156
+00:02:58,070 --> 00:02:58,080
+loader to the project
+ 
+
+157
+00:02:58,080 --> 00:03:00,149
+loader to the project
+follow the link in the description below
+
+158
+00:03:00,149 --> 00:03:00,159
+follow the link in the description below
+ 
+
+159
+00:03:00,159 --> 00:03:02,390
+follow the link in the description below
+to navigate to the git repo for tiny
+
+160
+00:03:02,390 --> 00:03:02,400
+to navigate to the git repo for tiny
+ 
+
+161
+00:03:02,400 --> 00:03:04,390
+to navigate to the git repo for tiny
+object loader you can download the
+
+162
+00:03:04,390 --> 00:03:04,400
+object loader you can download the
+ 
+
+163
+00:03:04,400 --> 00:03:06,949
+object loader you can download the
+entire master branch but really all we
+
+164
+00:03:06,949 --> 00:03:06,959
+entire master branch but really all we
+ 
+
+165
+00:03:06,959 --> 00:03:09,670
+entire master branch but really all we
+need is this single header file
+
+166
+00:03:09,670 --> 00:03:09,680
+need is this single header file
+ 
+
+167
+00:03:09,680 --> 00:03:11,430
+need is this single header file
+in my development folder i have a
+
+168
+00:03:11,430 --> 00:03:11,440
+in my development folder i have a
+ 
+
+169
+00:03:11,440 --> 00:03:14,070
+in my development folder i have a
+directory called libs and i will create
+
+170
+00:03:14,070 --> 00:03:14,080
+directory called libs and i will create
+ 
+
+171
+00:03:14,080 --> 00:03:17,430
+directory called libs and i will create
+a new folder called tiny object loader
+
+172
+00:03:17,430 --> 00:03:17,440
+a new folder called tiny object loader
+ 
+
+173
+00:03:17,440 --> 00:03:19,750
+a new folder called tiny object loader
+then back on github i'll open the raw
+
+174
+00:03:19,750 --> 00:03:19,760
+then back on github i'll open the raw
+ 
+
+175
+00:03:19,760 --> 00:03:21,750
+then back on github i'll open the raw
+version of the file and save it to the
+
+176
+00:03:21,750 --> 00:03:21,760
+version of the file and save it to the
+ 
+
+177
+00:03:21,760 --> 00:03:23,830
+version of the file and save it to the
+tiny object loader directory i just
+
+178
+00:03:23,830 --> 00:03:23,840
+tiny object loader directory i just
+ 
+
+179
+00:03:23,840 --> 00:03:25,270
+tiny object loader directory i just
+created
+
+180
+00:03:25,270 --> 00:03:25,280
+created
+ 
+
+181
+00:03:25,280 --> 00:03:27,270
+created
+when saving the file make sure you don't
+
+182
+00:03:27,270 --> 00:03:27,280
+when saving the file make sure you don't
+ 
+
+183
+00:03:27,280 --> 00:03:29,430
+when saving the file make sure you don't
+accidentally include an extra file
+
+184
+00:03:29,430 --> 00:03:29,440
+accidentally include an extra file
+ 
+
+185
+00:03:29,440 --> 00:03:32,390
+accidentally include an extra file
+extension such as txt
+
+186
+00:03:32,390 --> 00:03:32,400
+extension such as txt
+ 
+
+187
+00:03:32,400 --> 00:03:34,470
+extension such as txt
+next we need to include tiny object
+
+188
+00:03:34,470 --> 00:03:34,480
+next we need to include tiny object
+ 
+
+189
+00:03:34,480 --> 00:03:36,390
+next we need to include tiny object
+loader to be built with the rest of our
+
+190
+00:03:36,390 --> 00:03:36,400
+loader to be built with the rest of our
+ 
+
+191
+00:03:36,400 --> 00:03:37,910
+loader to be built with the rest of our
+project
+
+192
+00:03:37,910 --> 00:03:37,920
+project
+ 
+
+193
+00:03:37,920 --> 00:03:39,910
+project
+how you do this will differ depending on
+
+194
+00:03:39,910 --> 00:03:39,920
+how you do this will differ depending on
+ 
+
+195
+00:03:39,920 --> 00:03:41,910
+how you do this will differ depending on
+how you build your project
+
+196
+00:03:41,910 --> 00:03:41,920
+how you build your project
+ 
+
+197
+00:03:41,920 --> 00:03:44,470
+how you build your project
+i am using a makefile so i first need to
+
+198
+00:03:44,470 --> 00:03:44,480
+i am using a makefile so i first need to
+ 
+
+199
+00:03:44,480 --> 00:03:46,470
+i am using a makefile so i first need to
+add the path to the directory i just
+
+200
+00:03:46,470 --> 00:03:46,480
+add the path to the directory i just
+ 
+
+201
+00:03:46,480 --> 00:03:49,509
+add the path to the directory i just
+created into my dot m file
+
+202
+00:03:49,509 --> 00:03:49,519
+created into my dot m file
+ 
+
+203
+00:03:49,519 --> 00:03:52,789
+created into my dot m file
+so tiny object path is equal to users
+
+204
+00:03:52,789 --> 00:03:52,799
+so tiny object path is equal to users
+ 
+
+205
+00:03:52,799 --> 00:03:58,710
+so tiny object path is equal to users
+brendan dev libs tiny object loader
+
+206
+00:03:58,710 --> 00:03:58,720
+
+ 
+
+207
+00:03:58,720 --> 00:04:01,110
+ 
+then in my make file i will add the tiny
+
+208
+00:04:01,110 --> 00:04:01,120
+then in my make file i will add the tiny
+ 
+
+209
+00:04:01,120 --> 00:04:03,589
+then in my make file i will add the tiny
+object path to be included in with the c
+
+210
+00:04:03,589 --> 00:04:03,599
+object path to be included in with the c
+ 
+
+211
+00:04:03,599 --> 00:04:05,990
+object path to be included in with the c
+flags and that's it
+
+212
+00:04:05,990 --> 00:04:06,000
+flags and that's it
+ 
+
+213
+00:04:06,000 --> 00:04:08,309
+flags and that's it
+one other thing you might want to do is
+
+214
+00:04:08,309 --> 00:04:08,319
+one other thing you might want to do is
+ 
+
+215
+00:04:08,319 --> 00:04:10,869
+one other thing you might want to do is
+if you are using vs code is add this to
+
+216
+00:04:10,869 --> 00:04:10,879
+if you are using vs code is add this to
+ 
+
+217
+00:04:10,879 --> 00:04:14,550
+if you are using vs code is add this to
+the include path of your ccpp properties
+
+218
+00:04:14,550 --> 00:04:14,560
+the include path of your ccpp properties
+ 
+
+219
+00:04:14,560 --> 00:04:15,670
+the include path of your ccpp properties
+file
+
+220
+00:04:15,670 --> 00:04:15,680
+file
+ 
+
+221
+00:04:15,680 --> 00:04:17,670
+file
+this way the code completion will work
+
+222
+00:04:17,670 --> 00:04:17,680
+this way the code completion will work
+ 
+
+223
+00:04:17,680 --> 00:04:21,990
+this way the code completion will work
+correctly within the vs code editor
+
+224
+00:04:21,990 --> 00:04:22,000
+
+ 
+
+225
+00:04:22,000 --> 00:04:24,550
+ 
+setup for visual studio on windows is
+
+226
+00:04:24,550 --> 00:04:24,560
+setup for visual studio on windows is
+ 
+
+227
+00:04:24,560 --> 00:04:26,310
+setup for visual studio on windows is
+pretty similar
+
+228
+00:04:26,310 --> 00:04:26,320
+pretty similar
+ 
+
+229
+00:04:26,320 --> 00:04:28,070
+pretty similar
+create a folder in your library's
+
+230
+00:04:28,070 --> 00:04:28,080
+create a folder in your library's
+ 
+
+231
+00:04:28,080 --> 00:04:31,830
+create a folder in your library's
+directory called tiny object loader
+
+232
+00:04:31,830 --> 00:04:31,840
+directory called tiny object loader
+ 
+
+233
+00:04:31,840 --> 00:04:33,870
+directory called tiny object loader
+and then save in it the
+
+234
+00:04:33,870 --> 00:04:33,880
+and then save in it the
+ 
+
+235
+00:04:33,880 --> 00:04:37,189
+and then save in it the
+tinyobjectloader.h file
+
+236
+00:04:37,189 --> 00:04:37,199
+tinyobjectloader.h file
+ 
+
+237
+00:04:37,199 --> 00:04:39,430
+tinyobjectloader.h file
+then in visual studio navigate to
+
+238
+00:04:39,430 --> 00:04:39,440
+then in visual studio navigate to
+ 
+
+239
+00:04:39,440 --> 00:04:42,230
+then in visual studio navigate to
+project project properties and in the c
+
+240
+00:04:42,230 --> 00:04:42,240
+project project properties and in the c
+ 
+
+241
+00:04:42,240 --> 00:04:44,469
+project project properties and in the c
+c plus settings underneath in the
+
+242
+00:04:44,469 --> 00:04:44,479
+c plus settings underneath in the
+ 
+
+243
+00:04:44,479 --> 00:04:46,950
+c plus settings underneath in the
+general heading we can add the path to
+
+244
+00:04:46,950 --> 00:04:46,960
+general heading we can add the path to
+ 
+
+245
+00:04:46,960 --> 00:04:49,909
+general heading we can add the path to
+tiny object loader to additional include
+
+246
+00:04:49,909 --> 00:04:49,919
+tiny object loader to additional include
+ 
+
+247
+00:04:49,919 --> 00:04:51,670
+tiny object loader to additional include
+directories
+
+248
+00:04:51,670 --> 00:04:51,680
+directories
+ 
+
+249
+00:04:51,680 --> 00:04:54,230
+directories
+so click edit and add a new entry
+
+250
+00:04:54,230 --> 00:04:54,240
+so click edit and add a new entry
+ 
+
+251
+00:04:54,240 --> 00:04:58,150
+so click edit and add a new entry
+inputting the folder's path
+
+252
+00:04:58,150 --> 00:04:58,160
+
+ 
+
+253
+00:04:58,160 --> 00:04:59,830
+ 
+now let's quickly test that we've
+
+254
+00:04:59,830 --> 00:04:59,840
+now let's quickly test that we've
+ 
+
+255
+00:04:59,840 --> 00:05:02,150
+now let's quickly test that we've
+included tiny object loader correctly
+
+256
+00:05:02,150 --> 00:05:02,160
+included tiny object loader correctly
+ 
+
+257
+00:05:02,160 --> 00:05:03,990
+included tiny object loader correctly
+before progressing with the rest of the
+
+258
+00:05:03,990 --> 00:05:04,000
+before progressing with the rest of the
+ 
+
+259
+00:05:04,000 --> 00:05:05,590
+before progressing with the rest of the
+tutorial
+
+260
+00:05:05,590 --> 00:05:05,600
+tutorial
+ 
+
+261
+00:05:05,600 --> 00:05:08,070
+tutorial
+open the model implementation file and
+
+262
+00:05:08,070 --> 00:05:08,080
+open the model implementation file and
+ 
+
+263
+00:05:08,080 --> 00:05:10,790
+open the model implementation file and
+near the top first define tiny object
+
+264
+00:05:10,790 --> 00:05:10,800
+near the top first define tiny object
+ 
+
+265
+00:05:10,800 --> 00:05:13,189
+near the top first define tiny object
+loader underscore implementation you
+
+266
+00:05:13,189 --> 00:05:13,199
+loader underscore implementation you
+ 
+
+267
+00:05:13,199 --> 00:05:14,870
+loader underscore implementation you
+only want to have this defined in a
+
+268
+00:05:14,870 --> 00:05:14,880
+only want to have this defined in a
+ 
+
+269
+00:05:14,880 --> 00:05:17,110
+only want to have this defined in a
+single cpp file within the entire
+
+270
+00:05:17,110 --> 00:05:17,120
+single cpp file within the entire
+ 
+
+271
+00:05:17,120 --> 00:05:19,350
+single cpp file within the entire
+project the define signals to the
+
+272
+00:05:19,350 --> 00:05:19,360
+project the define signals to the
+ 
+
+273
+00:05:19,360 --> 00:05:21,510
+project the define signals to the
+preprocessor that this file in the
+
+274
+00:05:21,510 --> 00:05:21,520
+preprocessor that this file in the
+ 
+
+275
+00:05:21,520 --> 00:05:23,510
+preprocessor that this file in the
+project will contain the implementation
+
+276
+00:05:23,510 --> 00:05:23,520
+project will contain the implementation
+ 
+
+277
+00:05:23,520 --> 00:05:26,749
+project will contain the implementation
+for tiny object loader then include
+
+278
+00:05:26,749 --> 00:05:26,759
+for tiny object loader then include
+ 
+
+279
+00:05:26,759 --> 00:05:30,310
+for tiny object loader then include
+tinyobjectloader.h in angle brackets
+
+280
+00:05:30,310 --> 00:05:30,320
+tinyobjectloader.h in angle brackets
+ 
+
+281
+00:05:30,320 --> 00:05:32,790
+tinyobjectloader.h in angle brackets
+and you can build and run your code
+
+282
+00:05:32,790 --> 00:05:32,800
+and you can build and run your code
+ 
+
+283
+00:05:32,800 --> 00:05:34,629
+and you can build and run your code
+if things are still working that means
+
+284
+00:05:34,629 --> 00:05:34,639
+if things are still working that means
+ 
+
+285
+00:05:34,639 --> 00:05:37,029
+if things are still working that means
+tiny object loader has been successfully
+
+286
+00:05:37,029 --> 00:05:37,039
+tiny object loader has been successfully
+ 
+
+287
+00:05:37,039 --> 00:05:38,390
+tiny object loader has been successfully
+added
+
+288
+00:05:38,390 --> 00:05:38,400
+added
+ 
+
+289
+00:05:38,400 --> 00:05:40,950
+added
+finally i've provided some model files
+
+290
+00:05:40,950 --> 00:05:40,960
+finally i've provided some model files
+ 
+
+291
+00:05:40,960 --> 00:05:42,870
+finally i've provided some model files
+to get started with
+
+292
+00:05:42,870 --> 00:05:42,880
+to get started with
+ 
+
+293
+00:05:42,880 --> 00:05:45,350
+to get started with
+follow the link to my google drive open
+
+294
+00:05:45,350 --> 00:05:45,360
+follow the link to my google drive open
+ 
+
+295
+00:05:45,360 --> 00:05:49,110
+follow the link to my google drive open
+the models folder and click download all
+
+296
+00:05:49,110 --> 00:05:49,120
+the models folder and click download all
+ 
+
+297
+00:05:49,120 --> 00:05:50,710
+the models folder and click download all
+unzip the folder
+
+298
+00:05:50,710 --> 00:05:50,720
+unzip the folder
+ 
+
+299
+00:05:50,720 --> 00:05:55,510
+unzip the folder
+and copy it to your project directory
+
+300
+00:05:55,510 --> 00:05:55,520
+
+ 
+
+301
+00:05:55,520 --> 00:05:57,990
+ 
+okay let's get to coding
+
+302
+00:05:57,990 --> 00:05:58,000
+okay let's get to coding
+ 
+
+303
+00:05:58,000 --> 00:06:00,150
+okay let's get to coding
+open your model header and extend the
+
+304
+00:06:00,150 --> 00:06:00,160
+open your model header and extend the
+ 
+
+305
+00:06:00,160 --> 00:06:02,550
+open your model header and extend the
+vertex struct to also support normals
+
+306
+00:06:02,550 --> 00:06:02,560
+vertex struct to also support normals
+ 
+
+307
+00:06:02,560 --> 00:06:04,629
+vertex struct to also support normals
+and texture coordinates
+
+308
+00:06:04,629 --> 00:06:04,639
+and texture coordinates
+ 
+
+309
+00:06:04,639 --> 00:06:07,270
+and texture coordinates
+add a field of type glm vect3 called
+
+310
+00:06:07,270 --> 00:06:07,280
+add a field of type glm vect3 called
+ 
+
+311
+00:06:07,280 --> 00:06:08,550
+add a field of type glm vect3 called
+normal
+
+312
+00:06:08,550 --> 00:06:08,560
+normal
+ 
+
+313
+00:06:08,560 --> 00:06:12,309
+normal
+followed by a glm vect2 called uv uvs is
+
+314
+00:06:12,309 --> 00:06:12,319
+followed by a glm vect2 called uv uvs is
+ 
+
+315
+00:06:12,319 --> 00:06:14,790
+followed by a glm vect2 called uv uvs is
+just another commonly used shorthand for
+
+316
+00:06:14,790 --> 00:06:14,800
+just another commonly used shorthand for
+ 
+
+317
+00:06:14,800 --> 00:06:17,430
+just another commonly used shorthand for
+two-dimensional texture coordinates
+
+318
+00:06:17,430 --> 00:06:17,440
+two-dimensional texture coordinates
+ 
+
+319
+00:06:17,440 --> 00:06:19,350
+two-dimensional texture coordinates
+then inside the builder struct i'm going
+
+320
+00:06:19,350 --> 00:06:19,360
+then inside the builder struct i'm going
+ 
+
+321
+00:06:19,360 --> 00:06:21,990
+then inside the builder struct i'm going
+to declare a void load models function
+
+322
+00:06:21,990 --> 00:06:22,000
+to declare a void load models function
+ 
+
+323
+00:06:22,000 --> 00:06:24,870
+to declare a void load models function
+that takes a const std string reference
+
+324
+00:06:24,870 --> 00:06:24,880
+that takes a const std string reference
+ 
+
+325
+00:06:24,880 --> 00:06:27,830
+that takes a const std string reference
+called file name as the argument
+
+326
+00:06:27,830 --> 00:06:27,840
+called file name as the argument
+ 
+
+327
+00:06:27,840 --> 00:06:29,749
+called file name as the argument
+following that let's create a helper
+
+328
+00:06:29,749 --> 00:06:29,759
+following that let's create a helper
+ 
+
+329
+00:06:29,759 --> 00:06:31,830
+following that let's create a helper
+function to create a unique pointer
+
+330
+00:06:31,830 --> 00:06:31,840
+function to create a unique pointer
+ 
+
+331
+00:06:31,840 --> 00:06:34,870
+function to create a unique pointer
+model object so first include the memory
+
+332
+00:06:34,870 --> 00:06:34,880
+model object so first include the memory
+ 
+
+333
+00:06:34,880 --> 00:06:37,350
+model object so first include the memory
+header then inside the model class
+
+334
+00:06:37,350 --> 00:06:37,360
+header then inside the model class
+ 
+
+335
+00:06:37,360 --> 00:06:39,510
+header then inside the model class
+declare a static function that returns
+
+336
+00:06:39,510 --> 00:06:39,520
+declare a static function that returns
+ 
+
+337
+00:06:39,520 --> 00:06:43,029
+declare a static function that returns
+an std unique pointer
+
+338
+00:06:43,029 --> 00:06:43,039
+an std unique pointer
+ 
+
+339
+00:06:43,039 --> 00:06:45,830
+an std unique pointer
+of lve model type
+
+340
+00:06:45,830 --> 00:06:45,840
+of lve model type
+ 
+
+341
+00:06:45,840 --> 00:06:48,710
+of lve model type
+called create model from file
+
+342
+00:06:48,710 --> 00:06:48,720
+called create model from file
+ 
+
+343
+00:06:48,720 --> 00:06:50,550
+called create model from file
+and this will take an lve device
+
+344
+00:06:50,550 --> 00:06:50,560
+and this will take an lve device
+ 
+
+345
+00:06:50,560 --> 00:06:52,790
+and this will take an lve device
+reference called device
+
+346
+00:06:52,790 --> 00:06:52,800
+reference called device
+ 
+
+347
+00:06:52,800 --> 00:06:55,510
+reference called device
+and a const std string reference called
+
+348
+00:06:55,510 --> 00:06:55,520
+and a const std string reference called
+ 
+
+349
+00:06:55,520 --> 00:06:59,029
+and a const std string reference called
+file path
+
+350
+00:06:59,029 --> 00:06:59,039
+
+ 
+
+351
+00:06:59,039 --> 00:07:01,909
+ 
+let's copy this function declaration and
+
+352
+00:07:01,909 --> 00:07:01,919
+let's copy this function declaration and
+ 
+
+353
+00:07:01,919 --> 00:07:04,230
+let's copy this function declaration and
+head on over to the model implementation
+
+354
+00:07:04,230 --> 00:07:04,240
+head on over to the model implementation
+ 
+
+355
+00:07:04,240 --> 00:07:05,589
+head on over to the model implementation
+file
+
+356
+00:07:05,589 --> 00:07:05,599
+file
+ 
+
+357
+00:07:05,599 --> 00:07:08,469
+file
+i will paste the function in
+
+358
+00:07:08,469 --> 00:07:08,479
+i will paste the function in
+ 
+
+359
+00:07:08,479 --> 00:07:11,749
+i will paste the function in
+add my classnamescope
+
+360
+00:07:11,749 --> 00:07:11,759
+add my classnamescope
+ 
+
+361
+00:07:11,759 --> 00:07:15,990
+add my classnamescope
+and remove the static keyword
+
+362
+00:07:15,990 --> 00:07:16,000
+and remove the static keyword
+ 
+
+363
+00:07:16,000 --> 00:07:18,070
+and remove the static keyword
+then inside i'll initialize a variable
+
+364
+00:07:18,070 --> 00:07:18,080
+then inside i'll initialize a variable
+ 
+
+365
+00:07:18,080 --> 00:07:21,029
+then inside i'll initialize a variable
+of type builder called builder
+
+366
+00:07:21,029 --> 00:07:21,039
+of type builder called builder
+ 
+
+367
+00:07:21,039 --> 00:07:22,350
+of type builder called builder
+next call the
+
+368
+00:07:22,350 --> 00:07:22,360
+next call the
+ 
+
+369
+00:07:22,360 --> 00:07:24,390
+next call the
+builder.loadmodel function
+
+370
+00:07:24,390 --> 00:07:24,400
+builder.loadmodel function
+ 
+
+371
+00:07:24,400 --> 00:07:27,670
+builder.loadmodel function
+passing through the filepath argument
+
+372
+00:07:27,670 --> 00:07:27,680
+passing through the filepath argument
+ 
+
+373
+00:07:27,680 --> 00:07:31,830
+passing through the filepath argument
+and then return std make unique
+
+374
+00:07:31,830 --> 00:07:31,840
+and then return std make unique
+ 
+
+375
+00:07:31,840 --> 00:07:35,110
+and then return std make unique
+of type lve model
+
+376
+00:07:35,110 --> 00:07:35,120
+of type lve model
+ 
+
+377
+00:07:35,120 --> 00:07:39,430
+of type lve model
+with arguments device and builder
+
+378
+00:07:39,430 --> 00:07:39,440
+
+ 
+
+379
+00:07:39,440 --> 00:07:44,309
+ 
+i'm going to include iostream
+
+380
+00:07:44,309 --> 00:07:44,319
+
+ 
+
+381
+00:07:44,319 --> 00:07:46,469
+ 
+and then add a print statement that logs
+
+382
+00:07:46,469 --> 00:07:46,479
+and then add a print statement that logs
+ 
+
+383
+00:07:46,479 --> 00:07:49,350
+and then add a print statement that logs
+builder.vertices.size
+
+384
+00:07:49,350 --> 00:07:49,360
+builder.vertices.size
+ 
+
+385
+00:07:49,360 --> 00:07:51,589
+builder.vertices.size
+this way for now we will be able to see
+
+386
+00:07:51,589 --> 00:07:51,599
+this way for now we will be able to see
+ 
+
+387
+00:07:51,599 --> 00:07:53,670
+this way for now we will be able to see
+how many vertices a loaded model
+
+388
+00:07:53,670 --> 00:07:53,680
+how many vertices a loaded model
+ 
+
+389
+00:07:53,680 --> 00:07:55,830
+how many vertices a loaded model
+contains
+
+390
+00:07:55,830 --> 00:07:55,840
+contains
+ 
+
+391
+00:07:55,840 --> 00:07:57,909
+contains
+next we need to implement the load model
+
+392
+00:07:57,909 --> 00:07:57,919
+next we need to implement the load model
+ 
+
+393
+00:07:57,919 --> 00:08:00,629
+next we need to implement the load model
+function so at the bottom of my file but
+
+394
+00:08:00,629 --> 00:08:00,639
+function so at the bottom of my file but
+ 
+
+395
+00:08:00,639 --> 00:08:03,029
+function so at the bottom of my file but
+still within the namespace i will add
+
+396
+00:08:03,029 --> 00:08:03,039
+still within the namespace i will add
+ 
+
+397
+00:08:03,039 --> 00:08:05,510
+still within the namespace i will add
+void lve model builder
+
+398
+00:08:05,510 --> 00:08:05,520
+void lve model builder
+ 
+
+399
+00:08:05,520 --> 00:08:07,510
+void lve model builder
+load model
+
+400
+00:08:07,510 --> 00:08:07,520
+load model
+ 
+
+401
+00:08:07,520 --> 00:08:09,749
+load model
+with the argument const std string
+
+402
+00:08:09,749 --> 00:08:09,759
+with the argument const std string
+ 
+
+403
+00:08:09,759 --> 00:08:13,029
+with the argument const std string
+reference file path then declare a local
+
+404
+00:08:13,029 --> 00:08:13,039
+reference file path then declare a local
+ 
+
+405
+00:08:13,039 --> 00:08:15,589
+reference file path then declare a local
+variable with type tiny object colon
+
+406
+00:08:15,589 --> 00:08:15,599
+variable with type tiny object colon
+ 
+
+407
+00:08:15,599 --> 00:08:18,710
+variable with type tiny object colon
+colon a trip t called a trip
+
+408
+00:08:18,710 --> 00:08:18,720
+colon a trip t called a trip
+ 
+
+409
+00:08:18,720 --> 00:08:21,270
+colon a trip t called a trip
+next an std vector would type tiny
+
+410
+00:08:21,270 --> 00:08:21,280
+next an std vector would type tiny
+ 
+
+411
+00:08:21,280 --> 00:08:26,390
+next an std vector would type tiny
+object shape t called shapes
+
+412
+00:08:26,390 --> 00:08:26,400
+
+ 
+
+413
+00:08:26,400 --> 00:08:28,150
+ 
+then another vector but with type
+
+414
+00:08:28,150 --> 00:08:28,160
+then another vector but with type
+ 
+
+415
+00:08:28,160 --> 00:08:31,589
+then another vector but with type
+material t called materials
+
+416
+00:08:31,589 --> 00:08:31,599
+material t called materials
+ 
+
+417
+00:08:31,599 --> 00:08:33,990
+material t called materials
+and finally declare two std strings
+
+418
+00:08:33,990 --> 00:08:34,000
+and finally declare two std strings
+ 
+
+419
+00:08:34,000 --> 00:08:36,389
+and finally declare two std strings
+called warn and error
+
+420
+00:08:36,389 --> 00:08:36,399
+called warn and error
+ 
+
+421
+00:08:36,399 --> 00:08:38,550
+called warn and error
+all of these values will be set by tiny
+
+422
+00:08:38,550 --> 00:08:38,560
+all of these values will be set by tiny
+ 
+
+423
+00:08:38,560 --> 00:08:40,709
+all of these values will be set by tiny
+object loader and will store the results
+
+424
+00:08:40,709 --> 00:08:40,719
+object loader and will store the results
+ 
+
+425
+00:08:40,719 --> 00:08:43,350
+object loader and will store the results
+of reading a wavefront object file
+
+426
+00:08:43,350 --> 00:08:43,360
+of reading a wavefront object file
+ 
+
+427
+00:08:43,360 --> 00:08:46,870
+of reading a wavefront object file
+so in an if statement we will have not
+
+428
+00:08:46,870 --> 00:08:46,880
+so in an if statement we will have not
+ 
+
+429
+00:08:46,880 --> 00:08:49,670
+so in an if statement we will have not
+tiny object load object
+
+430
+00:08:49,670 --> 00:08:49,680
+tiny object load object
+ 
+
+431
+00:08:49,680 --> 00:08:52,070
+tiny object load object
+with the arguments reference to a trib
+
+432
+00:08:52,070 --> 00:08:52,080
+with the arguments reference to a trib
+ 
+
+433
+00:08:52,080 --> 00:08:54,550
+with the arguments reference to a trib
+reference to shapes reference to
+
+434
+00:08:54,550 --> 00:08:54,560
+reference to shapes reference to
+ 
+
+435
+00:08:54,560 --> 00:08:57,750
+reference to shapes reference to
+materials reference to warn and error
+
+436
+00:08:57,750 --> 00:08:57,760
+materials reference to warn and error
+ 
+
+437
+00:08:57,760 --> 00:09:01,030
+materials reference to warn and error
+and finally file path dot c string
+
+438
+00:09:01,030 --> 00:09:01,040
+and finally file path dot c string
+ 
+
+439
+00:09:01,040 --> 00:09:02,630
+and finally file path dot c string
+which provides a car pointer
+
+440
+00:09:02,630 --> 00:09:02,640
+which provides a car pointer
+ 
+
+441
+00:09:02,640 --> 00:09:05,750
+which provides a car pointer
+representation of the string variable
+
+442
+00:09:05,750 --> 00:09:05,760
+representation of the string variable
+ 
+
+443
+00:09:05,760 --> 00:09:07,829
+representation of the string variable
+if we fail to load the object we'll
+
+444
+00:09:07,829 --> 00:09:07,839
+if we fail to load the object we'll
+ 
+
+445
+00:09:07,839 --> 00:09:10,790
+if we fail to load the object we'll
+throw an std runtime error with warn
+
+446
+00:09:10,790 --> 00:09:10,800
+throw an std runtime error with warn
+ 
+
+447
+00:09:10,800 --> 00:09:13,030
+throw an std runtime error with warn
+plus error as the output
+
+448
+00:09:13,030 --> 00:09:13,040
+plus error as the output
+ 
+
+449
+00:09:13,040 --> 00:09:15,269
+plus error as the output
+so following this load object function
+
+450
+00:09:15,269 --> 00:09:15,279
+so following this load object function
+ 
+
+451
+00:09:15,279 --> 00:09:17,670
+so following this load object function
+call succeeding these local variables we
+
+452
+00:09:17,670 --> 00:09:17,680
+call succeeding these local variables we
+ 
+
+453
+00:09:17,680 --> 00:09:19,829
+call succeeding these local variables we
+declared should now be initialized with
+
+454
+00:09:19,829 --> 00:09:19,839
+declared should now be initialized with
+ 
+
+455
+00:09:19,839 --> 00:09:23,829
+declared should now be initialized with
+the data from the dot obj file the trip
+
+456
+00:09:23,829 --> 00:09:23,839
+the data from the dot obj file the trip
+ 
+
+457
+00:09:23,839 --> 00:09:25,910
+the data from the dot obj file the trip
+variable stores the position color
+
+458
+00:09:25,910 --> 00:09:25,920
+variable stores the position color
+ 
+
+459
+00:09:25,920 --> 00:09:28,389
+variable stores the position color
+normal and texture coordinate data the
+
+460
+00:09:28,389 --> 00:09:28,399
+normal and texture coordinate data the
+ 
+
+461
+00:09:28,399 --> 00:09:30,470
+normal and texture coordinate data the
+shapes variable contains the index
+
+462
+00:09:30,470 --> 00:09:30,480
+shapes variable contains the index
+ 
+
+463
+00:09:30,480 --> 00:09:33,269
+shapes variable contains the index
+values for each face element and the
+
+464
+00:09:33,269 --> 00:09:33,279
+values for each face element and the
+ 
+
+465
+00:09:33,279 --> 00:09:35,430
+values for each face element and the
+materials we will ignore for now and
+
+466
+00:09:35,430 --> 00:09:35,440
+materials we will ignore for now and
+ 
+
+467
+00:09:35,440 --> 00:09:38,230
+materials we will ignore for now and
+leave to a future tutorial
+
+468
+00:09:38,230 --> 00:09:38,240
+leave to a future tutorial
+ 
+
+469
+00:09:38,240 --> 00:09:41,110
+leave to a future tutorial
+okay so we've got our data first let's
+
+470
+00:09:41,110 --> 00:09:41,120
+okay so we've got our data first let's
+ 
+
+471
+00:09:41,120 --> 00:09:44,230
+okay so we've got our data first let's
+call vertices.clear and indices.clear to
+
+472
+00:09:44,230 --> 00:09:44,240
+call vertices.clear and indices.clear to
+ 
+
+473
+00:09:44,240 --> 00:09:46,870
+call vertices.clear and indices.clear to
+start from a fresh builder state
+
+474
+00:09:46,870 --> 00:09:46,880
+start from a fresh builder state
+ 
+
+475
+00:09:46,880 --> 00:09:49,670
+start from a fresh builder state
+then add four const auto reference shape
+
+476
+00:09:49,670 --> 00:09:49,680
+then add four const auto reference shape
+ 
+
+477
+00:09:49,680 --> 00:09:54,949
+then add four const auto reference shape
+and shapes
+
+478
+00:09:54,949 --> 00:09:54,959
+
+ 
+
+479
+00:09:54,959 --> 00:09:57,269
+ 
+followed by a second for loop with const
+
+480
+00:09:57,269 --> 00:09:57,279
+followed by a second for loop with const
+ 
+
+481
+00:09:57,279 --> 00:10:00,550
+followed by a second for loop with const
+autoreference index in shape.mesh dot
+
+482
+00:10:00,550 --> 00:10:00,560
+autoreference index in shape.mesh dot
+ 
+
+483
+00:10:00,560 --> 00:10:02,069
+autoreference index in shape.mesh dot
+indices
+
+484
+00:10:02,069 --> 00:10:02,079
+indices
+ 
+
+485
+00:10:02,079 --> 00:10:04,230
+indices
+this loops through each face element in
+
+486
+00:10:04,230 --> 00:10:04,240
+this loops through each face element in
+ 
+
+487
+00:10:04,240 --> 00:10:07,430
+this loops through each face element in
+the model getting the index values
+
+488
+00:10:07,430 --> 00:10:07,440
+the model getting the index values
+ 
+
+489
+00:10:07,440 --> 00:10:09,590
+the model getting the index values
+inside the for loops declare and
+
+490
+00:10:09,590 --> 00:10:09,600
+inside the for loops declare and
+ 
+
+491
+00:10:09,600 --> 00:10:12,389
+inside the for loops declare and
+initialize a vertex local variable let's
+
+492
+00:10:12,389 --> 00:10:12,399
+initialize a vertex local variable let's
+ 
+
+493
+00:10:12,399 --> 00:10:15,269
+initialize a vertex local variable let's
+start by setting the vertex's position
+
+494
+00:10:15,269 --> 00:10:15,279
+start by setting the vertex's position
+ 
+
+495
+00:10:15,279 --> 00:10:18,150
+start by setting the vertex's position
+field to do so we should first check if
+
+496
+00:10:18,150 --> 00:10:18,160
+field to do so we should first check if
+ 
+
+497
+00:10:18,160 --> 00:10:21,430
+field to do so we should first check if
+index.vertex index is greater than or
+
+498
+00:10:21,430 --> 00:10:21,440
+index.vertex index is greater than or
+ 
+
+499
+00:10:21,440 --> 00:10:22,870
+index.vertex index is greater than or
+equal to zero
+
+500
+00:10:22,870 --> 00:10:22,880
+equal to zero
+ 
+
+501
+00:10:22,880 --> 00:10:25,590
+equal to zero
+the vertex index is the first value of
+
+502
+00:10:25,590 --> 00:10:25,600
+the vertex index is the first value of
+ 
+
+503
+00:10:25,600 --> 00:10:28,310
+the vertex index is the first value of
+the face element and says what position
+
+504
+00:10:28,310 --> 00:10:28,320
+the face element and says what position
+ 
+
+505
+00:10:28,320 --> 00:10:29,990
+the face element and says what position
+value to use
+
+506
+00:10:29,990 --> 00:10:30,000
+value to use
+ 
+
+507
+00:10:30,000 --> 00:10:32,470
+value to use
+index values are optional and a negative
+
+508
+00:10:32,470 --> 00:10:32,480
+index values are optional and a negative
+ 
+
+509
+00:10:32,480 --> 00:10:34,550
+index values are optional and a negative
+value indicates that no index was
+
+510
+00:10:34,550 --> 00:10:34,560
+value indicates that no index was
+ 
+
+511
+00:10:34,560 --> 00:10:35,990
+value indicates that no index was
+provided
+
+512
+00:10:35,990 --> 00:10:36,000
+provided
+ 
+
+513
+00:10:36,000 --> 00:10:38,069
+provided
+if a vertex index is provided then we
+
+514
+00:10:38,069 --> 00:10:38,079
+if a vertex index is provided then we
+ 
+
+515
+00:10:38,079 --> 00:10:41,030
+if a vertex index is provided then we
+can set the vertex dot position equal to
+
+516
+00:10:41,030 --> 00:10:41,040
+can set the vertex dot position equal to
+ 
+
+517
+00:10:41,040 --> 00:10:43,750
+can set the vertex dot position equal to
+curly brackets attrib.vertices at an
+
+518
+00:10:43,750 --> 00:10:43,760
+curly brackets attrib.vertices at an
+ 
+
+519
+00:10:43,760 --> 00:10:46,150
+curly brackets attrib.vertices at an
+index of three times index dot vertex
+
+520
+00:10:46,150 --> 00:10:46,160
+index of three times index dot vertex
+ 
+
+521
+00:10:46,160 --> 00:10:49,750
+index of three times index dot vertex
+index plus zero each vertex has three
+
+522
+00:10:49,750 --> 00:10:49,760
+index plus zero each vertex has three
+ 
+
+523
+00:10:49,760 --> 00:10:51,990
+index plus zero each vertex has three
+values that are tightly packed into the
+
+524
+00:10:51,990 --> 00:10:52,000
+values that are tightly packed into the
+ 
+
+525
+00:10:52,000 --> 00:10:55,269
+values that are tightly packed into the
+trib dot vertices array so to read the
+
+526
+00:10:55,269 --> 00:10:55,279
+trib dot vertices array so to read the
+ 
+
+527
+00:10:55,279 --> 00:10:57,670
+trib dot vertices array so to read the
+corresponding position we need to
+
+528
+00:10:57,670 --> 00:10:57,680
+corresponding position we need to
+ 
+
+529
+00:10:57,680 --> 00:11:00,389
+corresponding position we need to
+multiply by three and then add zero for
+
+530
+00:11:00,389 --> 00:11:00,399
+multiply by three and then add zero for
+ 
+
+531
+00:11:00,399 --> 00:11:02,150
+multiply by three and then add zero for
+the initial component
+
+532
+00:11:02,150 --> 00:11:02,160
+the initial component
+ 
+
+533
+00:11:02,160 --> 00:11:05,030
+the initial component
+then duplicate this line twice updating
+
+534
+00:11:05,030 --> 00:11:05,040
+then duplicate this line twice updating
+ 
+
+535
+00:11:05,040 --> 00:11:08,069
+then duplicate this line twice updating
+plus zero to plus one and plus zero to
+
+536
+00:11:08,069 --> 00:11:08,079
+plus zero to plus one and plus zero to
+ 
+
+537
+00:11:08,079 --> 00:11:10,470
+plus zero to plus one and plus zero to
+plus two for the positions y and z
+
+538
+00:11:10,470 --> 00:11:10,480
+plus two for the positions y and z
+ 
+
+539
+00:11:10,480 --> 00:11:12,630
+plus two for the positions y and z
+components respectively
+
+540
+00:11:12,630 --> 00:11:12,640
+components respectively
+ 
+
+541
+00:11:12,640 --> 00:11:14,470
+components respectively
+now reading the normals and texture
+
+542
+00:11:14,470 --> 00:11:14,480
+now reading the normals and texture
+ 
+
+543
+00:11:14,480 --> 00:11:16,949
+now reading the normals and texture
+coordinates is all very similar
+
+544
+00:11:16,949 --> 00:11:16,959
+coordinates is all very similar
+ 
+
+545
+00:11:16,959 --> 00:11:19,829
+coordinates is all very similar
+so i'll duplicate this entire if block
+
+546
+00:11:19,829 --> 00:11:19,839
+so i'll duplicate this entire if block
+ 
+
+547
+00:11:19,839 --> 00:11:22,310
+so i'll duplicate this entire if block
+and paste it just below
+
+548
+00:11:22,310 --> 00:11:22,320
+and paste it just below
+ 
+
+549
+00:11:22,320 --> 00:11:24,790
+and paste it just below
+change each occurrence from vertex index
+
+550
+00:11:24,790 --> 00:11:24,800
+change each occurrence from vertex index
+ 
+
+551
+00:11:24,800 --> 00:11:26,509
+change each occurrence from vertex index
+to normal index
+
+552
+00:11:26,509 --> 00:11:26,519
+to normal index
+ 
+
+553
+00:11:26,519 --> 00:11:29,829
+to normal index
+vertex.position to vertex dot normal
+
+554
+00:11:29,829 --> 00:11:29,839
+vertex.position to vertex dot normal
+ 
+
+555
+00:11:29,839 --> 00:11:30,910
+vertex.position to vertex dot normal
+and
+
+556
+00:11:30,910 --> 00:11:30,920
+and
+ 
+
+557
+00:11:30,920 --> 00:11:34,710
+and
+attrib.vertices to attrib.normals
+
+558
+00:11:34,710 --> 00:11:34,720
+attrib.vertices to attrib.normals
+ 
+
+559
+00:11:34,720 --> 00:11:36,630
+attrib.vertices to attrib.normals
+and repeat this one more time for the
+
+560
+00:11:36,630 --> 00:11:36,640
+and repeat this one more time for the
+ 
+
+561
+00:11:36,640 --> 00:11:38,949
+and repeat this one more time for the
+texture coordinates change each
+
+562
+00:11:38,949 --> 00:11:38,959
+texture coordinates change each
+ 
+
+563
+00:11:38,959 --> 00:11:41,190
+texture coordinates change each
+occurrence of normal index to
+
+564
+00:11:41,190 --> 00:11:41,200
+occurrence of normal index to
+ 
+
+565
+00:11:41,200 --> 00:11:42,470
+occurrence of normal index to
+chord index
+
+566
+00:11:42,470 --> 00:11:42,480
+chord index
+ 
+
+567
+00:11:42,480 --> 00:11:45,030
+chord index
+a trib dot normals to a trip dot text
+
+568
+00:11:45,030 --> 00:11:45,040
+a trib dot normals to a trip dot text
+ 
+
+569
+00:11:45,040 --> 00:11:48,389
+a trib dot normals to a trip dot text
+chords and vertex dot normal to vertex
+
+570
+00:11:48,389 --> 00:11:48,399
+chords and vertex dot normal to vertex
+ 
+
+571
+00:11:48,399 --> 00:11:51,590
+chords and vertex dot normal to vertex
+dot uv the only other notable difference
+
+572
+00:11:51,590 --> 00:11:51,600
+dot uv the only other notable difference
+ 
+
+573
+00:11:51,600 --> 00:11:53,670
+dot uv the only other notable difference
+is that the uvs are two components
+
+574
+00:11:53,670 --> 00:11:53,680
+is that the uvs are two components
+ 
+
+575
+00:11:53,680 --> 00:11:56,310
+is that the uvs are two components
+rather than three so remove the last
+
+576
+00:11:56,310 --> 00:11:56,320
+rather than three so remove the last
+ 
+
+577
+00:11:56,320 --> 00:11:58,949
+rather than three so remove the last
+component and change to using two times
+
+578
+00:11:58,949 --> 00:11:58,959
+component and change to using two times
+ 
+
+579
+00:11:58,959 --> 00:12:02,150
+component and change to using two times
+index dot text chord index
+
+580
+00:12:02,150 --> 00:12:02,160
+index dot text chord index
+ 
+
+581
+00:12:02,160 --> 00:12:04,150
+index dot text chord index
+and then we can add this vertex to the
+
+582
+00:12:04,150 --> 00:12:04,160
+and then we can add this vertex to the
+ 
+
+583
+00:12:04,160 --> 00:12:06,350
+and then we can add this vertex to the
+builder's list of vertices with
+
+584
+00:12:06,350 --> 00:12:06,360
+builder's list of vertices with
+ 
+
+585
+00:12:06,360 --> 00:12:09,030
+builder's list of vertices with
+vertices.pushback vertex
+
+586
+00:12:09,030 --> 00:12:09,040
+vertices.pushback vertex
+ 
+
+587
+00:12:09,040 --> 00:12:11,430
+vertices.pushback vertex
+and that would be pretty much it except
+
+588
+00:12:11,430 --> 00:12:11,440
+and that would be pretty much it except
+ 
+
+589
+00:12:11,440 --> 00:12:13,670
+and that would be pretty much it except
+we haven't handled colors yet and that
+
+590
+00:12:13,670 --> 00:12:13,680
+we haven't handled colors yet and that
+ 
+
+591
+00:12:13,680 --> 00:12:15,590
+we haven't handled colors yet and that
+is because the wavefront object file
+
+592
+00:12:15,590 --> 00:12:15,600
+is because the wavefront object file
+ 
+
+593
+00:12:15,600 --> 00:12:18,870
+is because the wavefront object file
+format doesn't actually support them
+
+594
+00:12:18,870 --> 00:12:18,880
+format doesn't actually support them
+ 
+
+595
+00:12:18,880 --> 00:12:21,430
+format doesn't actually support them
+however there does exist an unofficial
+
+596
+00:12:21,430 --> 00:12:21,440
+however there does exist an unofficial
+ 
+
+597
+00:12:21,440 --> 00:12:23,750
+however there does exist an unofficial
+extension that is supported by tiny
+
+598
+00:12:23,750 --> 00:12:23,760
+extension that is supported by tiny
+ 
+
+599
+00:12:23,760 --> 00:12:25,110
+extension that is supported by tiny
+object loader
+
+600
+00:12:25,110 --> 00:12:25,120
+object loader
+ 
+
+601
+00:12:25,120 --> 00:12:27,750
+object loader
+some applications support vertex colors
+
+602
+00:12:27,750 --> 00:12:27,760
+some applications support vertex colors
+ 
+
+603
+00:12:27,760 --> 00:12:29,990
+some applications support vertex colors
+by putting red green and blue values
+
+604
+00:12:29,990 --> 00:12:30,000
+by putting red green and blue values
+ 
+
+605
+00:12:30,000 --> 00:12:32,629
+by putting red green and blue values
+after the x y and z vertex position
+
+606
+00:12:32,629 --> 00:12:32,639
+after the x y and z vertex position
+ 
+
+607
+00:12:32,639 --> 00:12:35,590
+after the x y and z vertex position
+components i've included a colored cube
+
+608
+00:12:35,590 --> 00:12:35,600
+components i've included a colored cube
+ 
+
+609
+00:12:35,600 --> 00:12:39,269
+components i've included a colored cube
+object file to demonstrate this feature
+
+610
+00:12:39,269 --> 00:12:39,279
+object file to demonstrate this feature
+ 
+
+611
+00:12:39,279 --> 00:12:42,949
+object file to demonstrate this feature
+so inside the if block for vertex index
+
+612
+00:12:42,949 --> 00:12:42,959
+so inside the if block for vertex index
+ 
+
+613
+00:12:42,959 --> 00:12:46,150
+so inside the if block for vertex index
+we can extend it to add color support
+
+614
+00:12:46,150 --> 00:12:46,160
+we can extend it to add color support
+ 
+
+615
+00:12:46,160 --> 00:12:47,990
+we can extend it to add color support
+first i'm going to calculate the last
+
+616
+00:12:47,990 --> 00:12:48,000
+first i'm going to calculate the last
+ 
+
+617
+00:12:48,000 --> 00:12:50,310
+first i'm going to calculate the last
+color component's index value and store
+
+618
+00:12:50,310 --> 00:12:50,320
+color component's index value and store
+ 
+
+619
+00:12:50,320 --> 00:12:53,590
+color component's index value and store
+it in auto color index is equal to three
+
+620
+00:12:53,590 --> 00:12:53,600
+it in auto color index is equal to three
+ 
+
+621
+00:12:53,600 --> 00:12:57,750
+it in auto color index is equal to three
+times index dot vertex index plus two
+
+622
+00:12:57,750 --> 00:12:57,760
+times index dot vertex index plus two
+ 
+
+623
+00:12:57,760 --> 00:13:00,150
+times index dot vertex index plus two
+then check if color index is less than a
+
+624
+00:13:00,150 --> 00:13:00,160
+then check if color index is less than a
+ 
+
+625
+00:13:00,160 --> 00:13:03,509
+then check if color index is less than a
+trib dot colors dot size we use the last
+
+626
+00:13:03,509 --> 00:13:03,519
+trib dot colors dot size we use the last
+ 
+
+627
+00:13:03,519 --> 00:13:05,430
+trib dot colors dot size we use the last
+index because color attributes are
+
+628
+00:13:05,430 --> 00:13:05,440
+index because color attributes are
+ 
+
+629
+00:13:05,440 --> 00:13:06,389
+index because color attributes are
+optional
+
+630
+00:13:06,389 --> 00:13:06,399
+optional
+ 
+
+631
+00:13:06,399 --> 00:13:07,990
+optional
+and this is a convenient way to check
+
+632
+00:13:07,990 --> 00:13:08,000
+and this is a convenient way to check
+ 
+
+633
+00:13:08,000 --> 00:13:10,310
+and this is a convenient way to check
+that a color has been provided and the
+
+634
+00:13:10,310 --> 00:13:10,320
+that a color has been provided and the
+ 
+
+635
+00:13:10,320 --> 00:13:12,629
+that a color has been provided and the
+index is in bounds
+
+636
+00:13:12,629 --> 00:13:12,639
+index is in bounds
+ 
+
+637
+00:13:12,639 --> 00:13:14,710
+index is in bounds
+if this is true then we can initialize
+
+638
+00:13:14,710 --> 00:13:14,720
+if this is true then we can initialize
+ 
+
+639
+00:13:14,720 --> 00:13:17,030
+if this is true then we can initialize
+the vertex.color field
+
+640
+00:13:17,030 --> 00:13:17,040
+the vertex.color field
+ 
+
+641
+00:13:17,040 --> 00:13:18,949
+the vertex.color field
+this is pretty much what we had before
+
+642
+00:13:18,949 --> 00:13:18,959
+this is pretty much what we had before
+ 
+
+643
+00:13:18,959 --> 00:13:21,430
+this is pretty much what we had before
+except each component is equal to a trip
+
+644
+00:13:21,430 --> 00:13:21,440
+except each component is equal to a trip
+ 
+
+645
+00:13:21,440 --> 00:13:23,110
+except each component is equal to a trip
+dot colors rather than a trip dot
+
+646
+00:13:23,110 --> 00:13:23,120
+dot colors rather than a trip dot
+ 
+
+647
+00:13:23,120 --> 00:13:26,389
+dot colors rather than a trip dot
+vertices and rather than plus zero one
+
+648
+00:13:26,389 --> 00:13:26,399
+vertices and rather than plus zero one
+ 
+
+649
+00:13:26,399 --> 00:13:28,949
+vertices and rather than plus zero one
+and two we instead have color index
+
+650
+00:13:28,949 --> 00:13:28,959
+and two we instead have color index
+ 
+
+651
+00:13:28,959 --> 00:13:35,110
+and two we instead have color index
+minus two minus one and minus zero
+
+652
+00:13:35,110 --> 00:13:35,120
+
+ 
+
+653
+00:13:35,120 --> 00:13:37,350
+ 
+finally add an else statement setting
+
+654
+00:13:37,350 --> 00:13:37,360
+finally add an else statement setting
+ 
+
+655
+00:13:37,360 --> 00:13:39,670
+finally add an else statement setting
+the vertex color to some default value
+
+656
+00:13:39,670 --> 00:13:39,680
+the vertex color to some default value
+ 
+
+657
+00:13:39,680 --> 00:13:43,030
+the vertex color to some default value
+if no color has been provided
+
+658
+00:13:43,030 --> 00:13:43,040
+if no color has been provided
+ 
+
+659
+00:13:43,040 --> 00:13:45,350
+if no color has been provided
+okay now all that's left to do is load
+
+660
+00:13:45,350 --> 00:13:45,360
+okay now all that's left to do is load
+ 
+
+661
+00:13:45,360 --> 00:13:47,990
+okay now all that's left to do is load
+in a model and render it open the app
+
+662
+00:13:47,990 --> 00:13:48,000
+in a model and render it open the app
+ 
+
+663
+00:13:48,000 --> 00:13:50,470
+in a model and render it open the app
+implementation file and we can get rid
+
+664
+00:13:50,470 --> 00:13:50,480
+implementation file and we can get rid
+ 
+
+665
+00:13:50,480 --> 00:13:55,750
+implementation file and we can get rid
+of the create cube model function
+
+666
+00:13:55,750 --> 00:13:55,760
+
+ 
+
+667
+00:13:55,760 --> 00:13:58,150
+ 
+then in load game objects change create
+
+668
+00:13:58,150 --> 00:13:58,160
+then in load game objects change create
+ 
+
+669
+00:13:58,160 --> 00:13:59,750
+then in load game objects change create
+cube model to
+
+670
+00:13:59,750 --> 00:13:59,760
+cube model to
+ 
+
+671
+00:13:59,760 --> 00:14:03,189
+cube model to
+lve model create model from file passing
+
+672
+00:14:03,189 --> 00:14:03,199
+lve model create model from file passing
+ 
+
+673
+00:14:03,199 --> 00:14:09,430
+lve model create model from file passing
+in the device and models coloredcube.obj
+
+674
+00:14:09,430 --> 00:14:09,440
+
+ 
+
+675
+00:14:09,440 --> 00:14:12,069
+ 
+note that this is a relative path if you
+
+676
+00:14:12,069 --> 00:14:12,079
+note that this is a relative path if you
+ 
+
+677
+00:14:12,079 --> 00:14:14,470
+note that this is a relative path if you
+run into an error try using an absolute
+
+678
+00:14:14,470 --> 00:14:14,480
+run into an error try using an absolute
+ 
+
+679
+00:14:14,480 --> 00:14:17,030
+run into an error try using an absolute
+file path instead for example this is
+
+680
+00:14:17,030 --> 00:14:17,040
+file path instead for example this is
+ 
+
+681
+00:14:17,040 --> 00:14:19,350
+file path instead for example this is
+what i use on my windows machine
+
+682
+00:14:19,350 --> 00:14:19,360
+what i use on my windows machine
+ 
+
+683
+00:14:19,360 --> 00:14:21,030
+what i use on my windows machine
+build and run your code and we get a
+
+684
+00:14:21,030 --> 00:14:21,040
+build and run your code and we get a
+ 
+
+685
+00:14:21,040 --> 00:14:23,350
+build and run your code and we get a
+rainbow colored cube that's because each
+
+686
+00:14:23,350 --> 00:14:23,360
+rainbow colored cube that's because each
+ 
+
+687
+00:14:23,360 --> 00:14:26,069
+rainbow colored cube that's because each
+vertex only specifies one color and then
+
+688
+00:14:26,069 --> 00:14:26,079
+vertex only specifies one color and then
+ 
+
+689
+00:14:26,079 --> 00:14:28,069
+vertex only specifies one color and then
+the fragment color is interpolated
+
+690
+00:14:28,069 --> 00:14:28,079
+the fragment color is interpolated
+ 
+
+691
+00:14:28,079 --> 00:14:30,310
+the fragment color is interpolated
+across the face of each triangle just
+
+692
+00:14:30,310 --> 00:14:30,320
+across the face of each triangle just
+ 
+
+693
+00:14:30,320 --> 00:14:32,870
+across the face of each triangle just
+like in tutorial seven if we wanted a
+
+694
+00:14:32,870 --> 00:14:32,880
+like in tutorial seven if we wanted a
+ 
+
+695
+00:14:32,880 --> 00:14:34,790
+like in tutorial seven if we wanted a
+model to look like the previous six
+
+696
+00:14:34,790 --> 00:14:34,800
+model to look like the previous six
+ 
+
+697
+00:14:34,800 --> 00:14:37,030
+model to look like the previous six
+colored cube we had we would need to
+
+698
+00:14:37,030 --> 00:14:37,040
+colored cube we had we would need to
+ 
+
+699
+00:14:37,040 --> 00:14:39,829
+colored cube we had we would need to
+duplicate each vertex position twice so
+
+700
+00:14:39,829 --> 00:14:39,839
+duplicate each vertex position twice so
+ 
+
+701
+00:14:39,839 --> 00:14:42,069
+duplicate each vertex position twice so
+that we could specify a different color
+
+702
+00:14:42,069 --> 00:14:42,079
+that we could specify a different color
+ 
+
+703
+00:14:42,079 --> 00:14:43,670
+that we could specify a different color
+per face
+
+704
+00:14:43,670 --> 00:14:43,680
+per face
+ 
+
+705
+00:14:43,680 --> 00:14:46,230
+per face
+now let's try a more complex model
+
+706
+00:14:46,230 --> 00:14:46,240
+now let's try a more complex model
+ 
+
+707
+00:14:46,240 --> 00:14:48,550
+now let's try a more complex model
+update the file path to load the smooth
+
+708
+00:14:48,550 --> 00:14:48,560
+update the file path to load the smooth
+ 
+
+709
+00:14:48,560 --> 00:14:50,790
+update the file path to load the smooth
+vase object file
+
+710
+00:14:50,790 --> 00:14:50,800
+vase object file
+ 
+
+711
+00:14:50,800 --> 00:14:52,629
+vase object file
+if you build and run this appears kind
+
+712
+00:14:52,629 --> 00:14:52,639
+if you build and run this appears kind
+ 
+
+713
+00:14:52,639 --> 00:14:54,670
+if you build and run this appears kind
+of small so i'm going to change the
+
+714
+00:14:54,670 --> 00:14:54,680
+of small so i'm going to change the
+ 
+
+715
+00:14:54,680 --> 00:14:58,150
+of small so i'm going to change the
+transform.scale to equal glm back 3 with
+
+716
+00:14:58,150 --> 00:14:58,160
+transform.scale to equal glm back 3 with
+ 
+
+717
+00:14:58,160 --> 00:15:00,470
+transform.scale to equal glm back 3 with
+a multiplier of 3
+
+718
+00:15:00,470 --> 00:15:00,480
+a multiplier of 3
+ 
+
+719
+00:15:00,480 --> 00:15:02,790
+a multiplier of 3
+and i will also rename the cube local
+
+720
+00:15:02,790 --> 00:15:02,800
+and i will also rename the cube local
+ 
+
+721
+00:15:02,800 --> 00:15:05,189
+and i will also rename the cube local
+variable to be game object as that's a
+
+722
+00:15:05,189 --> 00:15:05,199
+variable to be game object as that's a
+ 
+
+723
+00:15:05,199 --> 00:15:07,350
+variable to be game object as that's a
+bit more applicable now
+
+724
+00:15:07,350 --> 00:15:07,360
+bit more applicable now
+ 
+
+725
+00:15:07,360 --> 00:15:09,110
+bit more applicable now
+and there we go we have a nice white
+
+726
+00:15:09,110 --> 00:15:09,120
+and there we go we have a nice white
+ 
+
+727
+00:15:09,120 --> 00:15:12,590
+and there we go we have a nice white
+vase with a vertex count of 30
+
+728
+00:15:12,590 --> 00:15:12,600
+vase with a vertex count of 30
+ 
+
+729
+00:15:12,600 --> 00:15:17,030
+vase with a vertex count of 30
+888 however even with so many vertices
+
+730
+00:15:17,030 --> 00:15:17,040
+888 however even with so many vertices
+ 
+
+731
+00:15:17,040 --> 00:15:18,870
+888 however even with so many vertices
+you can't really see anything because
+
+732
+00:15:18,870 --> 00:15:18,880
+you can't really see anything because
+ 
+
+733
+00:15:18,880 --> 00:15:21,670
+you can't really see anything because
+the entire object is just painted white
+
+734
+00:15:21,670 --> 00:15:21,680
+the entire object is just painted white
+ 
+
+735
+00:15:21,680 --> 00:15:23,829
+the entire object is just painted white
+to get something with visible detail we
+
+736
+00:15:23,829 --> 00:15:23,839
+to get something with visible detail we
+ 
+
+737
+00:15:23,839 --> 00:15:26,150
+to get something with visible detail we
+need to apply lighting which will do so
+
+738
+00:15:26,150 --> 00:15:26,160
+need to apply lighting which will do so
+ 
+
+739
+00:15:26,160 --> 00:15:28,389
+need to apply lighting which will do so
+in next week's tutorial
+
+740
+00:15:28,389 --> 00:15:28,399
+in next week's tutorial
+ 
+
+741
+00:15:28,399 --> 00:15:30,550
+in next week's tutorial
+so we've successfully loaded in a model
+
+742
+00:15:30,550 --> 00:15:30,560
+so we've successfully loaded in a model
+ 
+
+743
+00:15:30,560 --> 00:15:32,949
+so we've successfully loaded in a model
+using just vertices but we didn't make
+
+744
+00:15:32,949 --> 00:15:32,959
+using just vertices but we didn't make
+ 
+
+745
+00:15:32,959 --> 00:15:35,030
+using just vertices but we didn't make
+use of the index buffer that we added
+
+746
+00:15:35,030 --> 00:15:35,040
+use of the index buffer that we added
+ 
+
+747
+00:15:35,040 --> 00:15:37,590
+use of the index buffer that we added
+just back in the previous tutorial index
+
+748
+00:15:37,590 --> 00:15:37,600
+just back in the previous tutorial index
+ 
+
+749
+00:15:37,600 --> 00:15:39,749
+just back in the previous tutorial index
+buffers are a great optimization for
+
+750
+00:15:39,749 --> 00:15:39,759
+buffers are a great optimization for
+ 
+
+751
+00:15:39,759 --> 00:15:42,629
+buffers are a great optimization for
+reducing the memory required to store
+
+752
+00:15:42,629 --> 00:15:42,639
+reducing the memory required to store
+ 
+
+753
+00:15:42,639 --> 00:15:46,069
+reducing the memory required to store
+complex 3d models so we definitely want
+
+754
+00:15:46,069 --> 00:15:46,079
+complex 3d models so we definitely want
+ 
+
+755
+00:15:46,079 --> 00:15:48,310
+complex 3d models so we definitely want
+to be able to use them when loading
+
+756
+00:15:48,310 --> 00:15:48,320
+to be able to use them when loading
+ 
+
+757
+00:15:48,320 --> 00:15:50,629
+to be able to use them when loading
+objects from a file but one thing you've
+
+758
+00:15:50,629 --> 00:15:50,639
+objects from a file but one thing you've
+ 
+
+759
+00:15:50,639 --> 00:15:52,790
+objects from a file but one thing you've
+probably noticed is that each face
+
+760
+00:15:52,790 --> 00:15:52,800
+probably noticed is that each face
+ 
+
+761
+00:15:52,800 --> 00:15:54,949
+probably noticed is that each face
+element definition can use a different
+
+762
+00:15:54,949 --> 00:15:54,959
+element definition can use a different
+ 
+
+763
+00:15:54,959 --> 00:15:57,269
+element definition can use a different
+index value for the position texture
+
+764
+00:15:57,269 --> 00:15:57,279
+index value for the position texture
+ 
+
+765
+00:15:57,279 --> 00:15:59,990
+index value for the position texture
+coordinate and normal but in vulcan we
+
+766
+00:15:59,990 --> 00:16:00,000
+coordinate and normal but in vulcan we
+ 
+
+767
+00:16:00,000 --> 00:16:02,550
+coordinate and normal but in vulcan we
+can't do this we can only have a single
+
+768
+00:16:02,550 --> 00:16:02,560
+can't do this we can only have a single
+ 
+
+769
+00:16:02,560 --> 00:16:04,870
+can't do this we can only have a single
+index buffer and we need all the values
+
+770
+00:16:04,870 --> 00:16:04,880
+index buffer and we need all the values
+ 
+
+771
+00:16:04,880 --> 00:16:06,949
+index buffer and we need all the values
+that make up each vertex to be grouped
+
+772
+00:16:06,949 --> 00:16:06,959
+that make up each vertex to be grouped
+ 
+
+773
+00:16:06,959 --> 00:16:09,430
+that make up each vertex to be grouped
+together so creating an index buffer
+
+774
+00:16:09,430 --> 00:16:09,440
+together so creating an index buffer
+ 
+
+775
+00:16:09,440 --> 00:16:11,670
+together so creating an index buffer
+isn't quite as straightforward as just
+
+776
+00:16:11,670 --> 00:16:11,680
+isn't quite as straightforward as just
+ 
+
+777
+00:16:11,680 --> 00:16:13,829
+isn't quite as straightforward as just
+reading in the face elements index
+
+778
+00:16:13,829 --> 00:16:13,839
+reading in the face elements index
+ 
+
+779
+00:16:13,839 --> 00:16:16,310
+reading in the face elements index
+values the purpose of an index buffer is
+
+780
+00:16:16,310 --> 00:16:16,320
+values the purpose of an index buffer is
+ 
+
+781
+00:16:16,320 --> 00:16:18,629
+values the purpose of an index buffer is
+to avoid having any duplicate vertices
+
+782
+00:16:18,629 --> 00:16:18,639
+to avoid having any duplicate vertices
+ 
+
+783
+00:16:18,639 --> 00:16:21,030
+to avoid having any duplicate vertices
+within the vertex buffer as each face
+
+784
+00:16:21,030 --> 00:16:21,040
+within the vertex buffer as each face
+ 
+
+785
+00:16:21,040 --> 00:16:23,509
+within the vertex buffer as each face
+element is processed we need to come up
+
+786
+00:16:23,509 --> 00:16:23,519
+element is processed we need to come up
+ 
+
+787
+00:16:23,519 --> 00:16:25,189
+element is processed we need to come up
+with a way to detect if we've
+
+788
+00:16:25,189 --> 00:16:25,199
+with a way to detect if we've
+ 
+
+789
+00:16:25,199 --> 00:16:28,230
+with a way to detect if we've
+encountered this vertex value before
+
+790
+00:16:28,230 --> 00:16:28,240
+encountered this vertex value before
+ 
+
+791
+00:16:28,240 --> 00:16:30,310
+encountered this vertex value before
+if the vertex is new we add it to the
+
+792
+00:16:30,310 --> 00:16:30,320
+if the vertex is new we add it to the
+ 
+
+793
+00:16:30,320 --> 00:16:32,550
+if the vertex is new we add it to the
+vertex buffer and add its position in
+
+794
+00:16:32,550 --> 00:16:32,560
+vertex buffer and add its position in
+ 
+
+795
+00:16:32,560 --> 00:16:35,030
+vertex buffer and add its position in
+the list to the index buffer if the
+
+796
+00:16:35,030 --> 00:16:35,040
+the list to the index buffer if the
+ 
+
+797
+00:16:35,040 --> 00:16:37,269
+the list to the index buffer if the
+vertex already exists then we can
+
+798
+00:16:37,269 --> 00:16:37,279
+vertex already exists then we can
+ 
+
+799
+00:16:37,279 --> 00:16:39,110
+vertex already exists then we can
+discard it and add the index of the
+
+800
+00:16:39,110 --> 00:16:39,120
+discard it and add the index of the
+ 
+
+801
+00:16:39,120 --> 00:16:42,230
+discard it and add the index of the
+existing vertex into the index buffer
+
+802
+00:16:42,230 --> 00:16:42,240
+existing vertex into the index buffer
+ 
+
+803
+00:16:42,240 --> 00:16:44,710
+existing vertex into the index buffer
+once every face element has been visited
+
+804
+00:16:44,710 --> 00:16:44,720
+once every face element has been visited
+ 
+
+805
+00:16:44,720 --> 00:16:46,949
+once every face element has been visited
+we will be left with a list of unique
+
+806
+00:16:46,949 --> 00:16:46,959
+we will be left with a list of unique
+ 
+
+807
+00:16:46,959 --> 00:16:49,829
+we will be left with a list of unique
+vertices and a list of index values
+
+808
+00:16:49,829 --> 00:16:49,839
+vertices and a list of index values
+ 
+
+809
+00:16:49,839 --> 00:16:52,470
+vertices and a list of index values
+pointing into the vertex list indicating
+
+810
+00:16:52,470 --> 00:16:52,480
+pointing into the vertex list indicating
+ 
+
+811
+00:16:52,480 --> 00:16:54,790
+pointing into the vertex list indicating
+how to construct each triangle that
+
+812
+00:16:54,790 --> 00:16:54,800
+how to construct each triangle that
+ 
+
+813
+00:16:54,800 --> 00:16:57,189
+how to construct each triangle that
+makes up our object this method i have
+
+814
+00:16:57,189 --> 00:16:57,199
+makes up our object this method i have
+ 
+
+815
+00:16:57,199 --> 00:16:59,430
+makes up our object this method i have
+just explained is the exact method
+
+816
+00:16:59,430 --> 00:16:59,440
+just explained is the exact method
+ 
+
+817
+00:16:59,440 --> 00:17:01,069
+just explained is the exact method
+provided by
+
+818
+00:17:01,069 --> 00:17:01,079
+provided by
+ 
+
+819
+00:17:01,079 --> 00:17:03,269
+provided by
+vulcantutorials.com so if you found my
+
+820
+00:17:03,269 --> 00:17:03,279
+vulcantutorials.com so if you found my
+ 
+
+821
+00:17:03,279 --> 00:17:05,590
+vulcantutorials.com so if you found my
+explanation hard to follow check out the
+
+822
+00:17:05,590 --> 00:17:05,600
+explanation hard to follow check out the
+ 
+
+823
+00:17:05,600 --> 00:17:07,829
+explanation hard to follow check out the
+loading models tutorial linked in the
+
+824
+00:17:07,829 --> 00:17:07,839
+loading models tutorial linked in the
+ 
+
+825
+00:17:07,839 --> 00:17:10,390
+loading models tutorial linked in the
+description below to quickly be able to
+
+826
+00:17:10,390 --> 00:17:10,400
+description below to quickly be able to
+ 
+
+827
+00:17:10,400 --> 00:17:12,630
+description below to quickly be able to
+check if a vertex is new or has been
+
+828
+00:17:12,630 --> 00:17:12,640
+check if a vertex is new or has been
+ 
+
+829
+00:17:12,640 --> 00:17:15,669
+check if a vertex is new or has been
+seen before we will use an std unordered
+
+830
+00:17:15,669 --> 00:17:15,679
+seen before we will use an std unordered
+ 
+
+831
+00:17:15,679 --> 00:17:18,150
+seen before we will use an std unordered
+map which requires we provide a hash
+
+832
+00:17:18,150 --> 00:17:18,160
+map which requires we provide a hash
+ 
+
+833
+00:17:18,160 --> 00:17:20,309
+map which requires we provide a hash
+function that can take all the data in
+
+834
+00:17:20,309 --> 00:17:20,319
+function that can take all the data in
+ 
+
+835
+00:17:20,319 --> 00:17:22,870
+function that can take all the data in
+our vertex struct and map it to a single
+
+836
+00:17:22,870 --> 00:17:22,880
+our vertex struct and map it to a single
+ 
+
+837
+00:17:22,880 --> 00:17:25,669
+our vertex struct and map it to a single
+fixed sized value the unordered map can
+
+838
+00:17:25,669 --> 00:17:25,679
+fixed sized value the unordered map can
+ 
+
+839
+00:17:25,679 --> 00:17:28,230
+fixed sized value the unordered map can
+then use this hash value as the key to
+
+840
+00:17:28,230 --> 00:17:28,240
+then use this hash value as the key to
+ 
+
+841
+00:17:28,240 --> 00:17:30,630
+then use this hash value as the key to
+look up the vertex's position in the
+
+842
+00:17:30,630 --> 00:17:30,640
+look up the vertex's position in the
+ 
+
+843
+00:17:30,640 --> 00:17:33,190
+look up the vertex's position in the
+list of vertices so first let's create a
+
+844
+00:17:33,190 --> 00:17:33,200
+list of vertices so first let's create a
+ 
+
+845
+00:17:33,200 --> 00:17:37,430
+list of vertices so first let's create a
+new file called lve utils.hpp
+
+846
+00:17:37,430 --> 00:17:37,440
+new file called lve utils.hpp
+ 
+
+847
+00:17:37,440 --> 00:17:39,350
+new file called lve utils.hpp
+i've included this function in a paste
+
+848
+00:17:39,350 --> 00:17:39,360
+i've included this function in a paste
+ 
+
+849
+00:17:39,360 --> 00:17:41,590
+i've included this function in a paste
+bin link below this is a function that
+
+850
+00:17:41,590 --> 00:17:41,600
+bin link below this is a function that
+ 
+
+851
+00:17:41,600 --> 00:17:43,669
+bin link below this is a function that
+can combine an arbitrary number of hash
+
+852
+00:17:43,669 --> 00:17:43,679
+can combine an arbitrary number of hash
+ 
+
+853
+00:17:43,679 --> 00:17:46,070
+can combine an arbitrary number of hash
+values together hash functions are kind
+
+854
+00:17:46,070 --> 00:17:46,080
+values together hash functions are kind
+ 
+
+855
+00:17:46,080 --> 00:17:48,630
+values together hash functions are kind
+of a complex topic and i assume most of
+
+856
+00:17:48,630 --> 00:17:48,640
+of a complex topic and i assume most of
+ 
+
+857
+00:17:48,640 --> 00:17:50,789
+of a complex topic and i assume most of
+you guys are already familiar with how
+
+858
+00:17:50,789 --> 00:17:50,799
+you guys are already familiar with how
+ 
+
+859
+00:17:50,799 --> 00:17:52,950
+you guys are already familiar with how
+unordered maps work so i'm not going to
+
+860
+00:17:52,950 --> 00:17:52,960
+unordered maps work so i'm not going to
+ 
+
+861
+00:17:52,960 --> 00:17:55,669
+unordered maps work so i'm not going to
+delve into the details of why this will
+
+862
+00:17:55,669 --> 00:17:55,679
+delve into the details of why this will
+ 
+
+863
+00:17:55,679 --> 00:17:58,390
+delve into the details of why this will
+work well it's based on a stack overflow
+
+864
+00:17:58,390 --> 00:17:58,400
+work well it's based on a stack overflow
+ 
+
+865
+00:17:58,400 --> 00:18:01,110
+work well it's based on a stack overflow
+answer in the link provided note that it
+
+866
+00:18:01,110 --> 00:18:01,120
+answer in the link provided note that it
+ 
+
+867
+00:18:01,120 --> 00:18:03,190
+answer in the link provided note that it
+makes use of fold expressions which is a
+
+868
+00:18:03,190 --> 00:18:03,200
+makes use of fold expressions which is a
+ 
+
+869
+00:18:03,200 --> 00:18:06,630
+makes use of fold expressions which is a
+c plus plus 17 feature okay now in the
+
+870
+00:18:06,630 --> 00:18:06,640
+c plus plus 17 feature okay now in the
+ 
+
+871
+00:18:06,640 --> 00:18:08,950
+c plus plus 17 feature okay now in the
+model header we need to overload the
+
+872
+00:18:08,950 --> 00:18:08,960
+model header we need to overload the
+ 
+
+873
+00:18:08,960 --> 00:18:12,310
+model header we need to overload the
+equality operator for the vertex struct
+
+874
+00:18:12,310 --> 00:18:12,320
+equality operator for the vertex struct
+ 
+
+875
+00:18:12,320 --> 00:18:15,590
+equality operator for the vertex struct
+so add bool operator equal sign equal
+
+876
+00:18:15,590 --> 00:18:15,600
+so add bool operator equal sign equal
+ 
+
+877
+00:18:15,600 --> 00:18:16,470
+so add bool operator equal sign equal
+sign
+
+878
+00:18:16,470 --> 00:18:16,480
+sign
+ 
+
+879
+00:18:16,480 --> 00:18:19,430
+sign
+const vertex reference called other mark
+
+880
+00:18:19,430 --> 00:18:19,440
+const vertex reference called other mark
+ 
+
+881
+00:18:19,440 --> 00:18:21,750
+const vertex reference called other mark
+the function const and then we simply
+
+882
+00:18:21,750 --> 00:18:21,760
+the function const and then we simply
+ 
+
+883
+00:18:21,760 --> 00:18:23,669
+the function const and then we simply
+check that all the struct fields are
+
+884
+00:18:23,669 --> 00:18:23,679
+check that all the struct fields are
+ 
+
+885
+00:18:23,679 --> 00:18:24,950
+check that all the struct fields are
+equal
+
+886
+00:18:24,950 --> 00:18:24,960
+equal
+ 
+
+887
+00:18:24,960 --> 00:18:28,549
+equal
+so position equals other dot position
+
+888
+00:18:28,549 --> 00:18:28,559
+so position equals other dot position
+ 
+
+889
+00:18:28,559 --> 00:18:31,029
+so position equals other dot position
+color equals other dot color
+
+890
+00:18:31,029 --> 00:18:31,039
+color equals other dot color
+ 
+
+891
+00:18:31,039 --> 00:18:34,150
+color equals other dot color
+normal equals other dot normal and uv
+
+892
+00:18:34,150 --> 00:18:34,160
+normal equals other dot normal and uv
+ 
+
+893
+00:18:34,160 --> 00:18:37,990
+normal equals other dot normal and uv
+equals other dot uv
+
+894
+00:18:37,990 --> 00:18:38,000
+
+ 
+
+895
+00:18:38,000 --> 00:18:40,310
+ 
+then in the model implementation scroll
+
+896
+00:18:40,310 --> 00:18:40,320
+then in the model implementation scroll
+ 
+
+897
+00:18:40,320 --> 00:18:44,630
+then in the model implementation scroll
+to the top and include lveutils.hpp
+
+898
+00:18:44,630 --> 00:18:44,640
+to the top and include lveutils.hpp
+ 
+
+899
+00:18:44,640 --> 00:18:46,950
+to the top and include lveutils.hpp
+in addition to the equality operator we
+
+900
+00:18:46,950 --> 00:18:46,960
+in addition to the equality operator we
+ 
+
+901
+00:18:46,960 --> 00:18:48,870
+in addition to the equality operator we
+need to implement a hash function for
+
+902
+00:18:48,870 --> 00:18:48,880
+need to implement a hash function for
+ 
+
+903
+00:18:48,880 --> 00:18:51,270
+need to implement a hash function for
+the vertex struct which will make use of
+
+904
+00:18:51,270 --> 00:18:51,280
+the vertex struct which will make use of
+ 
+
+905
+00:18:51,280 --> 00:18:53,590
+the vertex struct which will make use of
+the hash combined function we just wrote
+
+906
+00:18:53,590 --> 00:18:53,600
+the hash combined function we just wrote
+ 
+
+907
+00:18:53,600 --> 00:18:55,909
+the hash combined function we just wrote
+but to hash the individual glm vet
+
+908
+00:18:55,909 --> 00:18:55,919
+but to hash the individual glm vet
+ 
+
+909
+00:18:55,919 --> 00:18:58,310
+but to hash the individual glm vet
+components we need to include the glm
+
+910
+00:18:58,310 --> 00:18:58,320
+components we need to include the glm
+ 
+
+911
+00:18:58,320 --> 00:19:00,789
+components we need to include the glm
+hash functionality this functionality is
+
+912
+00:19:00,789 --> 00:19:00,799
+hash functionality this functionality is
+ 
+
+913
+00:19:00,799 --> 00:19:03,029
+hash functionality this functionality is
+technically experimental and subject to
+
+914
+00:19:03,029 --> 00:19:03,039
+technically experimental and subject to
+ 
+
+915
+00:19:03,039 --> 00:19:06,310
+technically experimental and subject to
+change so we first need to define glm
+
+916
+00:19:06,310 --> 00:19:06,320
+change so we first need to define glm
+ 
+
+917
+00:19:06,320 --> 00:19:09,029
+change so we first need to define glm
+enable experimental but in practice the
+
+918
+00:19:09,029 --> 00:19:09,039
+enable experimental but in practice the
+ 
+
+919
+00:19:09,039 --> 00:19:11,590
+enable experimental but in practice the
+glm library is very stable so i don't
+
+920
+00:19:11,590 --> 00:19:11,600
+glm library is very stable so i don't
+ 
+
+921
+00:19:11,600 --> 00:19:13,110
+glm library is very stable so i don't
+think this is something to really worry
+
+922
+00:19:13,110 --> 00:19:13,120
+think this is something to really worry
+ 
+
+923
+00:19:13,120 --> 00:19:16,549
+think this is something to really worry
+about then include glm gtx
+
+924
+00:19:16,549 --> 00:19:16,559
+about then include glm gtx
+ 
+
+925
+00:19:16,559 --> 00:19:18,070
+about then include glm gtx
+hpp
+
+926
+00:19:18,070 --> 00:19:18,080
+hpp
+ 
+
+927
+00:19:18,080 --> 00:19:20,310
+hpp
+finally we also need to include
+
+928
+00:19:20,310 --> 00:19:20,320
+finally we also need to include
+ 
+
+929
+00:19:20,320 --> 00:19:22,150
+finally we also need to include
+unordered map
+
+930
+00:19:22,150 --> 00:19:22,160
+unordered map
+ 
+
+931
+00:19:22,160 --> 00:19:24,390
+unordered map
+i am going to inject a hash function for
+
+932
+00:19:24,390 --> 00:19:24,400
+i am going to inject a hash function for
+ 
+
+933
+00:19:24,400 --> 00:19:27,750
+i am going to inject a hash function for
+the vertex struct into the std namespace
+
+934
+00:19:27,750 --> 00:19:27,760
+the vertex struct into the std namespace
+ 
+
+935
+00:19:27,760 --> 00:19:30,070
+the vertex struct into the std namespace
+so just following the include statements
+
+936
+00:19:30,070 --> 00:19:30,080
+so just following the include statements
+ 
+
+937
+00:19:30,080 --> 00:19:33,510
+so just following the include statements
+but outside the lve namespace i will add
+
+938
+00:19:33,510 --> 00:19:33,520
+but outside the lve namespace i will add
+ 
+
+939
+00:19:33,520 --> 00:19:36,789
+but outside the lve namespace i will add
+namespace std followed by template angle
+
+940
+00:19:36,789 --> 00:19:36,799
+namespace std followed by template angle
+ 
+
+941
+00:19:36,799 --> 00:19:39,350
+namespace std followed by template angle
+brackets next we declare a struct called
+
+942
+00:19:39,350 --> 00:19:39,360
+brackets next we declare a struct called
+ 
+
+943
+00:19:39,360 --> 00:19:46,070
+brackets next we declare a struct called
+hash with type lve lve model vertex
+
+944
+00:19:46,070 --> 00:19:46,080
+
+ 
+
+945
+00:19:46,080 --> 00:19:48,070
+ 
+inside we need to overload the function
+
+946
+00:19:48,070 --> 00:19:48,080
+inside we need to overload the function
+ 
+
+947
+00:19:48,080 --> 00:19:50,789
+inside we need to overload the function
+call operator so we have return type
+
+948
+00:19:50,789 --> 00:19:50,799
+call operator so we have return type
+ 
+
+949
+00:19:50,799 --> 00:19:53,110
+call operator so we have return type
+size t
+
+950
+00:19:53,110 --> 00:19:53,120
+size t
+ 
+
+951
+00:19:53,120 --> 00:19:55,990
+size t
+then operator brackets
+
+952
+00:19:55,990 --> 00:19:56,000
+then operator brackets
+ 
+
+953
+00:19:56,000 --> 00:19:57,909
+then operator brackets
+and as the operator function calls
+
+954
+00:19:57,909 --> 00:19:57,919
+and as the operator function calls
+ 
+
+955
+00:19:57,919 --> 00:20:01,430
+and as the operator function calls
+argument we have an lve lve model vertex
+
+956
+00:20:01,430 --> 00:20:01,440
+argument we have an lve lve model vertex
+ 
+
+957
+00:20:01,440 --> 00:20:04,549
+argument we have an lve lve model vertex
+const reference called vertex
+
+958
+00:20:04,549 --> 00:20:04,559
+const reference called vertex
+ 
+
+959
+00:20:04,559 --> 00:20:07,909
+const reference called vertex
+and also mark the function as const
+
+960
+00:20:07,909 --> 00:20:07,919
+and also mark the function as const
+ 
+
+961
+00:20:07,919 --> 00:20:10,230
+and also mark the function as const
+initialize a variable of type size t
+
+962
+00:20:10,230 --> 00:20:10,240
+initialize a variable of type size t
+ 
+
+963
+00:20:10,240 --> 00:20:13,029
+initialize a variable of type size t
+called seed equal to zero
+
+964
+00:20:13,029 --> 00:20:13,039
+called seed equal to zero
+ 
+
+965
+00:20:13,039 --> 00:20:15,750
+called seed equal to zero
+this will store the final hash value
+
+966
+00:20:15,750 --> 00:20:15,760
+this will store the final hash value
+ 
+
+967
+00:20:15,760 --> 00:20:19,590
+this will store the final hash value
+then call lve combine with the arguments
+
+968
+00:20:19,590 --> 00:20:19,600
+then call lve combine with the arguments
+ 
+
+969
+00:20:19,600 --> 00:20:22,149
+then call lve combine with the arguments
+seed vertex dot position vertex dot
+
+970
+00:20:22,149 --> 00:20:22,159
+seed vertex dot position vertex dot
+ 
+
+971
+00:20:22,159 --> 00:20:25,350
+seed vertex dot position vertex dot
+color vertex dot normal and vertex dot
+
+972
+00:20:25,350 --> 00:20:25,360
+color vertex dot normal and vertex dot
+ 
+
+973
+00:20:25,360 --> 00:20:26,390
+color vertex dot normal and vertex dot
+uv
+
+974
+00:20:26,390 --> 00:20:26,400
+uv
+ 
+
+975
+00:20:26,400 --> 00:20:29,029
+uv
+and then finally return seed
+
+976
+00:20:29,029 --> 00:20:29,039
+and then finally return seed
+ 
+
+977
+00:20:29,039 --> 00:20:31,190
+and then finally return seed
+with this we can now take an instance of
+
+978
+00:20:31,190 --> 00:20:31,200
+with this we can now take an instance of
+ 
+
+979
+00:20:31,200 --> 00:20:33,110
+with this we can now take an instance of
+the vertex struct and hash it to a
+
+980
+00:20:33,110 --> 00:20:33,120
+the vertex struct and hash it to a
+ 
+
+981
+00:20:33,120 --> 00:20:35,590
+the vertex struct and hash it to a
+single value of type size t which can
+
+982
+00:20:35,590 --> 00:20:35,600
+single value of type size t which can
+ 
+
+983
+00:20:35,600 --> 00:20:37,909
+single value of type size t which can
+then be used by an unordered map as the
+
+984
+00:20:37,909 --> 00:20:37,919
+then be used by an unordered map as the
+ 
+
+985
+00:20:37,919 --> 00:20:39,110
+then be used by an unordered map as the
+key
+
+986
+00:20:39,110 --> 00:20:39,120
+key
+ 
+
+987
+00:20:39,120 --> 00:20:41,830
+key
+okay scroll down and in the load model
+
+988
+00:20:41,830 --> 00:20:41,840
+okay scroll down and in the load model
+ 
+
+989
+00:20:41,840 --> 00:20:44,630
+okay scroll down and in the load model
+function let's initialize an empty std
+
+990
+00:20:44,630 --> 00:20:44,640
+function let's initialize an empty std
+ 
+
+991
+00:20:44,640 --> 00:20:45,990
+function let's initialize an empty std
+unordered map
+
+992
+00:20:45,990 --> 00:20:46,000
+unordered map
+ 
+
+993
+00:20:46,000 --> 00:20:48,710
+unordered map
+using vertex as the key type and a unin
+
+994
+00:20:48,710 --> 00:20:48,720
+using vertex as the key type and a unin
+ 
+
+995
+00:20:48,720 --> 00:20:51,510
+using vertex as the key type and a unin
+32t as the value type
+
+996
+00:20:51,510 --> 00:20:51,520
+32t as the value type
+ 
+
+997
+00:20:51,520 --> 00:20:54,630
+32t as the value type
+and i'll call it unique vertices
+
+998
+00:20:54,630 --> 00:20:54,640
+and i'll call it unique vertices
+ 
+
+999
+00:20:54,640 --> 00:20:56,710
+and i'll call it unique vertices
+this map will keep track of the vertices
+
+1000
+00:20:56,710 --> 00:20:56,720
+this map will keep track of the vertices
+ 
+
+1001
+00:20:56,720 --> 00:20:58,590
+this map will keep track of the vertices
+which have already been added to the
+
+1002
+00:20:58,590 --> 00:20:58,600
+which have already been added to the
+ 
+
+1003
+00:20:58,600 --> 00:21:01,190
+which have already been added to the
+builder.vertices vector and store the
+
+1004
+00:21:01,190 --> 00:21:01,200
+builder.vertices vector and store the
+ 
+
+1005
+00:21:01,200 --> 00:21:02,870
+builder.vertices vector and store the
+position at which the vertex was
+
+1006
+00:21:02,870 --> 00:21:02,880
+position at which the vertex was
+ 
+
+1007
+00:21:02,880 --> 00:21:04,789
+position at which the vertex was
+originally added
+
+1008
+00:21:04,789 --> 00:21:04,799
+originally added
+ 
+
+1009
+00:21:04,799 --> 00:21:06,470
+originally added
+then scroll down to the end of the
+
+1010
+00:21:06,470 --> 00:21:06,480
+then scroll down to the end of the
+ 
+
+1011
+00:21:06,480 --> 00:21:09,430
+then scroll down to the end of the
+function but still inside the for loops
+
+1012
+00:21:09,430 --> 00:21:09,440
+function but still inside the for loops
+ 
+
+1013
+00:21:09,440 --> 00:21:11,909
+function but still inside the for loops
+and replace vertices.pushback
+
+1014
+00:21:11,909 --> 00:21:11,919
+and replace vertices.pushback
+ 
+
+1015
+00:21:11,919 --> 00:21:13,310
+and replace vertices.pushback
+with if
+
+1016
+00:21:13,310 --> 00:21:13,320
+with if
+ 
+
+1017
+00:21:13,320 --> 00:21:15,510
+with if
+uniquevertices.count of vertex is equal
+
+1018
+00:21:15,510 --> 00:21:15,520
+uniquevertices.count of vertex is equal
+ 
+
+1019
+00:21:15,520 --> 00:21:18,710
+uniquevertices.count of vertex is equal
+to zero
+
+1020
+00:21:18,710 --> 00:21:18,720
+
+ 
+
+1021
+00:21:18,720 --> 00:21:22,149
+ 
+then unique vertices at vertex
+
+1022
+00:21:22,149 --> 00:21:22,159
+then unique vertices at vertex
+ 
+
+1023
+00:21:22,159 --> 00:21:25,430
+then unique vertices at vertex
+is equal to static cast uint32 type of
+
+1024
+00:21:25,430 --> 00:21:25,440
+is equal to static cast uint32 type of
+ 
+
+1025
+00:21:25,440 --> 00:21:28,710
+is equal to static cast uint32 type of
+vertices.size
+
+1026
+00:21:28,710 --> 00:21:28,720
+
+ 
+
+1027
+00:21:28,720 --> 00:21:30,430
+ 
+then also call
+
+1028
+00:21:30,430 --> 00:21:30,440
+then also call
+ 
+
+1029
+00:21:30,440 --> 00:21:33,270
+then also call
+vertices.pushback vertex so what this
+
+1030
+00:21:33,270 --> 00:21:33,280
+vertices.pushback vertex so what this
+ 
+
+1031
+00:21:33,280 --> 00:21:36,230
+vertices.pushback vertex so what this
+does is if the vertex is new we add it
+
+1032
+00:21:36,230 --> 00:21:36,240
+does is if the vertex is new we add it
+ 
+
+1033
+00:21:36,240 --> 00:21:38,789
+does is if the vertex is new we add it
+to the unique vertices map its position
+
+1034
+00:21:38,789 --> 00:21:38,799
+to the unique vertices map its position
+ 
+
+1035
+00:21:38,799 --> 00:21:40,950
+to the unique vertices map its position
+within the builder's vertices vector is
+
+1036
+00:21:40,950 --> 00:21:40,960
+within the builder's vertices vector is
+ 
+
+1037
+00:21:40,960 --> 00:21:43,110
+within the builder's vertices vector is
+given by the vertices vector's current
+
+1038
+00:21:43,110 --> 00:21:43,120
+given by the vertices vector's current
+ 
+
+1039
+00:21:43,120 --> 00:21:46,830
+given by the vertices vector's current
+size finally after the if block call
+
+1040
+00:21:46,830 --> 00:21:46,840
+size finally after the if block call
+ 
+
+1041
+00:21:46,840 --> 00:21:49,029
+size finally after the if block call
+indices.pushback unique vertices at
+
+1042
+00:21:49,029 --> 00:21:49,039
+indices.pushback unique vertices at
+ 
+
+1043
+00:21:49,039 --> 00:21:51,590
+indices.pushback unique vertices at
+vertex with this we add the position of
+
+1044
+00:21:51,590 --> 00:21:51,600
+vertex with this we add the position of
+ 
+
+1045
+00:21:51,600 --> 00:21:53,510
+vertex with this we add the position of
+the vertex to the builder's indices
+
+1046
+00:21:53,510 --> 00:21:53,520
+the vertex to the builder's indices
+ 
+
+1047
+00:21:53,520 --> 00:21:54,789
+the vertex to the builder's indices
+vector
+
+1048
+00:21:54,789 --> 00:21:54,799
+vector
+ 
+
+1049
+00:21:54,799 --> 00:21:56,710
+vector
+and that's it we can build run and see
+
+1050
+00:21:56,710 --> 00:21:56,720
+and that's it we can build run and see
+ 
+
+1051
+00:21:56,720 --> 00:21:59,110
+and that's it we can build run and see
+our vase object once more the big
+
+1052
+00:21:59,110 --> 00:21:59,120
+our vase object once more the big
+ 
+
+1053
+00:21:59,120 --> 00:22:01,190
+our vase object once more the big
+difference is that the vertex count has
+
+1054
+00:22:01,190 --> 00:22:01,200
+difference is that the vertex count has
+ 
+
+1055
+00:22:01,200 --> 00:22:03,230
+difference is that the vertex count has
+been reduced from 30
+
+1056
+00:22:03,230 --> 00:22:03,240
+been reduced from 30
+ 
+
+1057
+00:22:03,240 --> 00:22:07,590
+been reduced from 30
+888 to just 5545
+
+1058
+00:22:07,590 --> 00:22:07,600
+888 to just 5545
+ 
+
+1059
+00:22:07,600 --> 00:22:09,909
+888 to just 5545
+by using an index buffer we're saving a
+
+1060
+00:22:09,909 --> 00:22:09,919
+by using an index buffer we're saving a
+ 
+
+1061
+00:22:09,919 --> 00:22:13,510
+by using an index buffer we're saving a
+lot of gpu memory as a final step let's
+
+1062
+00:22:13,510 --> 00:22:13,520
+lot of gpu memory as a final step let's
+ 
+
+1063
+00:22:13,520 --> 00:22:15,430
+lot of gpu memory as a final step let's
+clean up i o stream
+
+1064
+00:22:15,430 --> 00:22:15,440
+clean up i o stream
+ 
+
+1065
+00:22:15,440 --> 00:22:18,390
+clean up i o stream
+and remove the print statement
+
+1066
+00:22:18,390 --> 00:22:18,400
+and remove the print statement
+ 
+
+1067
+00:22:18,400 --> 00:22:20,470
+and remove the print statement
+before you go i would like to mention
+
+1068
+00:22:20,470 --> 00:22:20,480
+before you go i would like to mention
+ 
+
+1069
+00:22:20,480 --> 00:22:22,470
+before you go i would like to mention
+that we have a discord it's a great
+
+1070
+00:22:22,470 --> 00:22:22,480
+that we have a discord it's a great
+ 
+
+1071
+00:22:22,480 --> 00:22:25,029
+that we have a discord it's a great
+place to share code get feedback and
+
+1072
+00:22:25,029 --> 00:22:25,039
+place to share code get feedback and
+ 
+
+1073
+00:22:25,039 --> 00:22:27,190
+place to share code get feedback and
+meet like-minded people who are also
+
+1074
+00:22:27,190 --> 00:22:27,200
+meet like-minded people who are also
+ 
+
+1075
+00:22:27,200 --> 00:22:28,870
+meet like-minded people who are also
+crazy enough to try and make their own
+
+1076
+00:22:28,870 --> 00:22:28,880
+crazy enough to try and make their own
+ 
+
+1077
+00:22:28,880 --> 00:22:30,230
+crazy enough to try and make their own
+game engine
+
+1078
+00:22:30,230 --> 00:22:30,240
+game engine
+ 
+
+1079
+00:22:30,240 --> 00:22:31,750
+game engine
+so if that is something you would like
+
+1080
+00:22:31,750 --> 00:22:31,760
+so if that is something you would like
+ 
+
+1081
+00:22:31,760 --> 00:22:34,710
+so if that is something you would like
+to join links in the description below
+
+1082
+00:22:34,710 --> 00:22:34,720
+to join links in the description below
+ 
+
+1083
+00:22:34,720 --> 00:22:36,390
+to join links in the description below
+thank you for watching and keep on
+
+1084
+00:22:36,390 --> 00:22:36,400
+thank you for watching and keep on
+ 
+
+1085
+00:22:36,400 --> 00:22:46,950
+thank you for watching and keep on
+coding cheers
+
+1086
+00:22:46,950 --> 00:22:46,960
+
+ 
+
+1087
+00:22:46,960 --> 00:22:49,039
+
+you
+

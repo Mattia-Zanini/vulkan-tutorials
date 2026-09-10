@@ -1,0 +1,785 @@
+1
+00:00:00,440 --> 00:00:02,170
+Hello coders,
+
+2
+00:00:02,170 --> 00:00:07,560
+Back in this video I first showed the light
+transport equation and explained how we often
+
+3
+00:00:07,560 --> 00:00:12,619
+rely on lighting models which only approximate
+the light transport equation but are simpler
+
+4
+00:00:12,619 --> 00:00:15,929
+to calculate and map well to graphics hardware.
+
+5
+00:00:15,929 --> 00:00:20,020
+So far we’ve covered the lambertian model
+also known as diffuse shading.
+
+6
+00:00:20,020 --> 00:00:26,220
+It makes the assumption that the surface reflects
+incoming light equally in all directions.
+
+7
+00:00:26,220 --> 00:00:31,450
+This is a very basic model that works well
+for non-metallic, matte surfaces.
+
+8
+00:00:31,450 --> 00:00:37,559
+The blinn phong model builds upon the diffuse
+shading model by also supporting shiny materials.
+
+9
+00:00:37,559 --> 00:00:42,350
+Shiny materials tend to reflect light more
+strongly in the direction opposite the angle
+
+10
+00:00:42,350 --> 00:00:44,270
+of incidence.
+
+11
+00:00:44,270 --> 00:00:46,069
+This is known as specular reflection.
+
+12
+00:00:46,069 --> 00:00:52,280
+A mirror would be a perfect specular reflector,
+while smooth surfaces like metal and plastic
+
+13
+00:00:52,280 --> 00:00:57,639
+are less perfect, but specular lighting still
+has a noticeable effect on their appearance.
+
+14
+00:00:57,639 --> 00:01:03,089
+One reason for these differences are microfacets
+on the surface of the material.
+
+15
+00:01:03,089 --> 00:01:07,230
+These microscopic bumps and grooves cause
+slight deflections in the reflected light
+
+16
+00:01:07,230 --> 00:01:09,260
+rays.
+
+17
+00:01:09,260 --> 00:01:14,210
+Smooth surfaces will reflect the light more
+ideally, with the reflected light being strongly
+
+18
+00:01:14,210 --> 00:01:17,690
+concentrated around the theoretical ray of
+reflection.
+
+19
+00:01:17,690 --> 00:01:22,410
+With rougher surfaces, the reflected light
+can be scattered in more possible directions,
+
+20
+00:01:22,410 --> 00:01:25,490
+resulting in a less concentrated cone of reflection.
+
+21
+00:01:25,490 --> 00:01:30,310
+The key difference between this and the lambertian
+model is now the position of the viewer actually
+
+22
+00:01:30,310 --> 00:01:31,350
+matters.
+
+23
+00:01:31,350 --> 00:01:36,560
+With the Lambertian model we assume light
+is scattered equally in all directions, meaning
+
+24
+00:01:36,560 --> 00:01:41,760
+that regardless of camera position, the point
+on the material will look the same.
+
+25
+00:01:41,760 --> 00:01:46,880
+With the blinn phong model, the light intensity
+is greatest, the closer the viewer is to the
+
+26
+00:01:46,880 --> 00:01:50,660
+theoretical ray of reflection for each fragment.
+
+27
+00:01:50,660 --> 00:01:54,490
+In many cases, none of the reflected light
+will reach the viewer.
+
+28
+00:01:54,490 --> 00:01:58,200
+You should already have a natural intuition
+about this, it’s the reason why when looking
+
+29
+00:01:58,200 --> 00:02:03,420
+at a shiny material the location of the highlight
+changes as you move.
+
+30
+00:02:03,420 --> 00:02:08,220
+There are a handful of models that try to
+approximate specular lighting, each with their
+
+31
+00:02:08,220 --> 00:02:09,770
+own pros and cons.
+
+32
+00:02:09,770 --> 00:02:14,680
+I’m not going to delve into too much detail
+as to their differences, for a detailed look
+
+33
+00:02:14,680 --> 00:02:16,390
+checkout this resource here.
+
+34
+00:02:16,390 --> 00:02:21,780
+A gaussian model can more accurately approximate
+the microfacet distributions different materials
+
+35
+00:02:21,780 --> 00:02:22,890
+may have.
+
+36
+00:02:22,890 --> 00:02:27,920
+Both phong and blinn phong models don’t
+use a real statistical distribution, and kind
+
+37
+00:02:27,920 --> 00:02:29,780
+of just make things up.
+
+38
+00:02:29,780 --> 00:02:34,620
+This means they violate things like conservation
+of energy, however they require less computation
+
+39
+00:02:34,620 --> 00:02:37,640
+and look good enough for our purposes.
+
+40
+00:02:37,640 --> 00:02:43,000
+Also, we will implement physically based lighting
+for rendering materials more realistically
+
+41
+00:02:43,000 --> 00:02:48,300
+in the future, so the gaussian model just
+isn’t necessary right now.
+
+42
+00:02:48,300 --> 00:02:51,600
+So how exactly do these models work?
+
+43
+00:02:51,600 --> 00:02:56,250
+Well the main idea behind the phong model
+is we calculate the dot product between the
+
+44
+00:02:56,250 --> 00:02:59,819
+ray of reflection, and the direction to the
+viewer.
+
+45
+00:02:59,819 --> 00:03:03,620
+The dot product is a nice function for this
+because it is a measure of the angle between
+
+46
+00:03:03,620 --> 00:03:05,790
+two vectors when normalized.
+
+47
+00:03:05,790 --> 00:03:10,830
+The dot product result varies from 0 when
+perpendicular to 1 when parallel.
+
+48
+00:03:10,830 --> 00:03:12,920
+Negative values will be ignored.
+
+49
+00:03:12,920 --> 00:03:15,990
+Next we take this result and raise it to some
+power.
+
+50
+00:03:15,990 --> 00:03:19,390
+The parameter here affects the sharpness of
+the highlight.
+
+51
+00:03:19,390 --> 00:03:24,670
+For example a brushed metallic material may
+use a value of 32, while a very smooth metallic
+
+52
+00:03:24,670 --> 00:03:28,569
+material would have a much higher value of
+like 512.
+
+53
+00:03:28,569 --> 00:03:32,970
+These values are somewhat arbitrary since
+they don’t correspond to any physically
+
+54
+00:03:32,970 --> 00:03:34,569
+based model.
+
+55
+00:03:34,569 --> 00:03:39,520
+Our inputs to the power function will always
+be between 0 and 1, meaning that the output
+
+56
+00:03:39,520 --> 00:03:42,230
+range will be between 0 and 1 as well.
+
+57
+00:03:42,230 --> 00:03:47,730
+A higher exponent more quickly crushes lower
+values to 0, resulting in a smaller region
+
+58
+00:03:47,730 --> 00:03:52,300
+where the specular component is bright, hence
+the sharper highlight.
+
+59
+00:03:52,300 --> 00:03:56,590
+As the final step we combine the diffuse and
+specular components together to determine
+
+60
+00:03:56,590 --> 00:03:59,430
+the final color for each fragment.
+
+61
+00:03:59,430 --> 00:04:04,099
+The phong model has some limitations, most
+notably is that the angle between the direction
+
+62
+00:04:04,099 --> 00:04:09,580
+to the viewer and ray of reflection must be
+less than 90 degrees for the specular component
+
+63
+00:04:09,580 --> 00:04:11,610
+to be non-zero.
+
+64
+00:04:11,610 --> 00:04:15,940
+For smooth materials with a sharp highlight
+and a high exponent this isn’t much of an
+
+65
+00:04:15,940 --> 00:04:20,520
+issue, since the specular light should be
+very concentrated.
+
+66
+00:04:20,520 --> 00:04:25,430
+However for rougher materials, it should be
+possible that a non-insignificant amount of
+
+67
+00:04:25,430 --> 00:04:30,960
+specular light is being reflected to the viewer
+at angles surpassing 90 degrees, which the
+
+68
+00:04:30,960 --> 00:04:33,970
+phong model alone doesn’t really account
+for.
+
+69
+00:04:33,970 --> 00:04:39,970
+The blinn phong model overcomes this limitation
+by first calculating the vector directly between
+
+70
+00:04:39,970 --> 00:04:43,720
+the direction to the light source, and the
+direction to the viewer.
+
+71
+00:04:43,720 --> 00:04:48,350
+This is known as the half angle vector, which
+can then be compared with the surface normal
+
+72
+00:04:48,350 --> 00:04:51,150
+to determine the specular intensity.
+
+73
+00:04:51,150 --> 00:04:55,630
+When the direction to the viewer is perfectly
+aligned with the ray of reflection, the half
+
+74
+00:04:55,630 --> 00:05:00,090
+angle will be perfectly aligned with the surface
+normal, which is the same behavior as the
+
+75
+00:05:00,090 --> 00:05:01,310
+phong model.
+
+76
+00:05:01,310 --> 00:05:04,860
+But the angle between the half angle and the
+normal will always be less than 90 degrees,
+
+77
+00:05:04,860 --> 00:05:07,630
+which avoids the main limitation of the phong
+model which avoids the main limitation of
+
+78
+00:05:07,630 --> 00:05:13,150
+the phong model where it can’t account for
+angles larger than 90 degrees.
+
+79
+00:05:13,150 --> 00:05:17,699
+One last addition that is commonly made is
+to add a control term to configure the strength
+
+80
+00:05:17,699 --> 00:05:21,130
+and color of the highlight based on the material.
+
+81
+00:05:21,130 --> 00:05:25,790
+This is an RGB term that is multiplied by
+the light color and specular light intensity
+
+82
+00:05:25,790 --> 00:05:28,800
+prior to combining with the diffuse component.
+
+83
+00:05:28,800 --> 00:05:34,110
+Most often it is useful to make this a neutral
+value less than one, however for some materials
+
+84
+00:05:34,110 --> 00:05:39,440
+such as gold and other metals, this term can
+be set to the material color because highlights
+
+85
+00:05:39,440 --> 00:05:42,120
+on metal can take on the surface color.
+
+86
+00:05:42,120 --> 00:05:44,550
+Anyway, let's get to coding
+
+87
+00:05:44,550 --> 00:05:48,800
+The first thing we’re going to do is update
+the global ubo struct within the frame info
+
+88
+00:05:48,800 --> 00:05:52,680
+header, as now we will need access to the
+camera's position.
+
+89
+00:05:52,680 --> 00:05:56,419
+Rather than directly pass in the camera’s
+position, I’m actually going to provide
+
+90
+00:05:56,419 --> 00:05:59,100
+the inverse view matrix.
+
+91
+00:05:59,100 --> 00:06:02,800
+Using the inverse view matrix the camera’s
+position can easily be extracted from the
+
+92
+00:06:02,800 --> 00:06:04,000
+last column.
+
+93
+00:06:04,000 --> 00:06:08,130
+Additionally, if ever in the future we need
+to transform a value from camera to world
+
+94
+00:06:08,130 --> 00:06:11,910
+space we will have that functionality ready
+to go.
+
+95
+00:06:11,910 --> 00:06:16,270
+Next we need to add the inverse view matrix
+calculation to the camera class.
+
+96
+00:06:16,270 --> 00:06:21,020
+In the camera header, I’ll declare and initialize
+a 4 by 4 inverse view matrix field to store
+
+97
+00:06:21,020 --> 00:06:22,850
+the result.
+
+98
+00:06:22,850 --> 00:06:27,920
+Then in the camera’s implementation we currently
+have two functions which update the view matrix.
+
+99
+00:06:27,920 --> 00:06:32,130
+The idea being that whenever the view matrix
+is updated, the inverse view matrix should
+
+100
+00:06:32,130 --> 00:06:33,820
+be updated as well.
+
+101
+00:06:33,820 --> 00:06:39,130
+And because their construction is so similar,
+no extra calculations need to be done.
+
+102
+00:06:39,130 --> 00:06:42,880
+I’ve provided a paste bin link in the description
+below.
+
+103
+00:06:42,880 --> 00:06:48,470
+The only differences are the upper 3 by 3
+position is transposed, and the final column
+
+104
+00:06:48,470 --> 00:06:50,830
+is now simply just the position.
+
+105
+00:06:50,830 --> 00:06:54,280
+This should make sense, since another way
+to think about the inverse view matrix is
+
+106
+00:06:54,280 --> 00:07:00,560
+as the equivalent to the model matrix for
+the viewer game object, really we could have
+
+107
+00:07:00,560 --> 00:07:04,139
+just used that instead.
+
+108
+00:07:04,139 --> 00:07:09,860
+Next in the setViewYXZ function, we also need
+to paste in the code to set the inverse view
+
+109
+00:07:09,860 --> 00:07:11,600
+matrix.
+
+110
+00:07:11,600 --> 00:07:16,110
+And if you’ve added any of your own functions
+to set the camera matrix, make sure to update
+
+111
+00:07:16,110 --> 00:07:19,660
+the inverse view matrix in those functions
+as well.
+
+112
+00:07:19,660 --> 00:07:24,000
+Before moving on, we need to go back to the
+camera header as I forgot to create a getter
+
+113
+00:07:24,000 --> 00:07:27,770
+function for the inverse view matrix.
+
+114
+00:07:27,770 --> 00:07:31,880
+This will be just like the other getter functions,
+returning a const reference to the cameras
+
+115
+00:07:31,880 --> 00:07:40,690
+inverse view field
+
+116
+00:07:40,690 --> 00:07:46,410
+Now in the first app implementation all there’s
+to do is to set the ubo’s inverse view field
+
+117
+00:07:46,410 --> 00:07:51,870
+to the cameras inverse view matrix.
+
+118
+00:07:51,870 --> 00:07:56,160
+And just like last week, since we updated
+the global ubo definition, we’re going to
+
+119
+00:07:56,160 --> 00:07:59,150
+need to update all the shader definitions
+as well.
+
+120
+00:07:59,150 --> 00:08:04,410
+So open any one of your shader files, add
+the mat4 inv view field in the same position
+
+121
+00:08:04,410 --> 00:08:11,590
+as the defintion in the frame info header,
+and then copy the global ubo uniform to your
+
+122
+00:08:11,590 --> 00:08:15,790
+remaining 3 shaders.
+
+123
+00:08:15,790 --> 00:08:20,370
+Now as a quick sanity check, if you build
+and run everything should still be working
+
+124
+00:08:20,370 --> 00:08:23,319
+as before.
+
+125
+00:08:23,319 --> 00:08:28,009
+Ok now we can actually get on to implementing
+the specular lighting model.
+
+126
+00:08:28,009 --> 00:08:31,910
+Head to the simple fragment shader, and by
+the top of the main function I’m declaring
+
+127
+00:08:31,910 --> 00:08:36,000
+a new variable with type vec3 called specular
+light.
+
+128
+00:08:36,000 --> 00:08:39,709
+This will hold the total for each point lights
+specular contribution.
+
+129
+00:08:39,709 --> 00:08:45,260
+Following that we will extract the camera’s
+position in world space from the inverse view
+
+130
+00:08:45,260 --> 00:08:50,950
+matrix by indexing into the last column, and
+then selecting the first 3 components with
+
+131
+00:08:50,950 --> 00:08:53,060
+dot xyz.
+
+132
+00:08:53,060 --> 00:08:56,700
+We normalize the camera’s position minus
+the fragments position to get the surface
+
+133
+00:08:56,700 --> 00:09:02,540
+vector pointing to the viewer, this will be
+used when calculating the half angle vector.
+
+134
+00:09:02,540 --> 00:09:05,490
+And that’s all the pre-calculation shared
+by each light.
+
+135
+00:09:05,490 --> 00:09:11,630
+Now per light object first I’m going to
+normalize the directionToLight vector.
+
+136
+00:09:11,630 --> 00:09:16,750
+Make sure to do this after setting the attenuation,
+otherwise the distance calculation will be
+
+137
+00:09:16,750 --> 00:09:23,270
+incorrect, and then normalize view direction
+is no longer necessary in the angle of incidence
+
+138
+00:09:23,270 --> 00:09:24,270
+calculation.
+
+139
+00:09:24,270 --> 00:09:27,830
+I’m doing this to avoid having to repeat
+the normalization function.
+
+140
+00:09:27,830 --> 00:09:32,760
+I believe normalization is a pretty optimized
+function on modern hardware, but still, it’s
+
+141
+00:09:32,760 --> 00:09:36,160
+best not to recalculate unnecessarily.
+
+142
+00:09:36,160 --> 00:09:39,660
+Ok now let’s compute the specular component
+for the light.
+
+143
+00:09:39,660 --> 00:09:44,890
+The half angle vector is equal to the sum
+of the direction to light plus the view direction,
+
+144
+00:09:44,890 --> 00:09:47,800
+and we will normalize all of that as well.
+
+145
+00:09:47,800 --> 00:09:52,360
+The blinn term can then be calculated using
+the dot product of the surface normal and
+
+146
+00:09:52,360 --> 00:09:54,580
+the half angle.
+
+147
+00:09:54,580 --> 00:09:58,500
+We clamp this value to the 0 to 1 range to
+ignore cases when the viewer and light are
+
+148
+00:09:58,500 --> 00:10:03,430
+on opposite sides of the surface, and then
+we raise the result to some power.
+
+149
+00:10:03,430 --> 00:10:06,620
+A higher exponent will be a sharper highlight.
+
+150
+00:10:06,620 --> 00:10:12,110
+In the future, we can pass this value into
+the shader so that it can differ between objects.
+
+151
+00:10:12,110 --> 00:10:18,190
+Then we can calculate the specular contribution
+as the light color times attenuation times
+
+152
+00:10:18,190 --> 00:10:22,690
+the blinn term.
+
+153
+00:10:22,690 --> 00:10:26,010
+The final step is to add the total specular
+light to the output color.
+
+154
+00:10:26,010 --> 00:10:30,410
+I haven’t included the control term at this
+point yet since we’re not passing it in,
+
+155
+00:10:30,410 --> 00:10:35,710
+so for now at least I’ll also just multiply
+by the fragment color, which I mentioned before
+
+156
+00:10:35,710 --> 00:10:42,000
+is what you would set the control term to
+in the case of some metallic materials.
+
+157
+00:10:42,000 --> 00:10:45,640
+Now if you build and run, your screen should
+look much shinier.
+
+158
+00:10:45,640 --> 00:10:50,420
+Also to check that things are working correctly,
+is that as you move the camera, the specular
+
+159
+00:10:50,420 --> 00:10:52,010
+light should also move.
+
+160
+00:10:52,010 --> 00:10:58,580
+This is easier to notice when using a sharper
+highlight.
+
+161
+00:10:58,580 --> 00:11:01,560
+Now before you go I just noticed a small mistake.
+
+162
+00:11:01,560 --> 00:11:06,590
+I forgot to multiply by the light’s intensity
+when calculating the specular value.
+
+163
+00:11:06,590 --> 00:11:10,890
+This here should just use the intensity value
+we calculated just above.
+
+164
+00:11:10,890 --> 00:11:20,680
+If I rebuild, the specular reflections are
+still noticeable, just much dimmer now.
+
+165
+00:11:20,680 --> 00:11:22,070
+Anyway that’s enough for today.
+
+166
+00:11:22,070 --> 00:11:23,800
+Thanks for watching and keep coding.
+
+167
+00:11:23,800 --> 00:11:24,390
+Cheers.
+

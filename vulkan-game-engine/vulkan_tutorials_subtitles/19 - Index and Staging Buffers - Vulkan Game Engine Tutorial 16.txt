@@ -1,0 +1,3915 @@
+1
+00:00:00,440 --> 00:00:02,710
+ 
+currently we pass in each vertex for
+
+2
+00:00:02,710 --> 00:00:02,720
+currently we pass in each vertex for
+ 
+
+3
+00:00:02,720 --> 00:00:05,510
+currently we pass in each vertex for
+every triangle that makes up a 3D mesh
+
+4
+00:00:05,510 --> 00:00:05,520
+every triangle that makes up a 3D mesh
+ 
+
+5
+00:00:05,520 --> 00:00:07,550
+every triangle that makes up a 3D mesh
+however most vertices in a mesh will be
+
+6
+00:00:07,550 --> 00:00:07,560
+however most vertices in a mesh will be
+ 
+
+7
+00:00:07,560 --> 00:00:10,430
+however most vertices in a mesh will be
+shared by multiple triangles in which
+
+8
+00:00:10,430 --> 00:00:10,440
+shared by multiple triangles in which
+ 
+
+9
+00:00:10,440 --> 00:00:13,390
+shared by multiple triangles in which
+case we must duplicate that verticy data
+
+10
+00:00:13,390 --> 00:00:13,400
+case we must duplicate that verticy data
+ 
+
+11
+00:00:13,400 --> 00:00:15,669
+case we must duplicate that verticy data
+for example take the simple Cube we have
+
+12
+00:00:15,669 --> 00:00:15,679
+for example take the simple Cube we have
+ 
+
+13
+00:00:15,679 --> 00:00:17,830
+for example take the simple Cube we have
+been rendering for the past few
+
+14
+00:00:17,830 --> 00:00:17,840
+been rendering for the past few
+ 
+
+15
+00:00:17,840 --> 00:00:20,109
+been rendering for the past few
+tutorials even though a cube has only
+
+16
+00:00:20,109 --> 00:00:20,119
+tutorials even though a cube has only
+ 
+
+17
+00:00:20,119 --> 00:00:22,910
+tutorials even though a cube has only
+eight unique vertex positions each face
+
+18
+00:00:22,910 --> 00:00:22,920
+eight unique vertex positions each face
+ 
+
+19
+00:00:22,920 --> 00:00:25,630
+eight unique vertex positions each face
+of the cube contains two triangles so
+
+20
+00:00:25,630 --> 00:00:25,640
+of the cube contains two triangles so
+ 
+
+21
+00:00:25,640 --> 00:00:28,550
+of the cube contains two triangles so
+six vertices and therefore is using 36
+
+22
+00:00:28,550 --> 00:00:28,560
+six vertices and therefore is using 36
+ 
+
+23
+00:00:28,560 --> 00:00:31,230
+six vertices and therefore is using 36
+vertices to be rendered a Vertex
+
+24
+00:00:31,230 --> 00:00:31,240
+vertices to be rendered a Vertex
+ 
+
+25
+00:00:31,240 --> 00:00:33,030
+vertices to be rendered a Vertex
+currently consists of two three
+
+26
+00:00:33,030 --> 00:00:33,040
+currently consists of two three
+ 
+
+27
+00:00:33,040 --> 00:00:35,670
+currently consists of two three
+component vectors one for position and
+
+28
+00:00:35,670 --> 00:00:35,680
+component vectors one for position and
+ 
+
+29
+00:00:35,680 --> 00:00:38,350
+component vectors one for position and
+another for color as we continue to add
+
+30
+00:00:38,350 --> 00:00:38,360
+another for color as we continue to add
+ 
+
+31
+00:00:38,360 --> 00:00:40,670
+another for color as we continue to add
+more attributes to each vertex such as
+
+32
+00:00:40,670 --> 00:00:40,680
+more attributes to each vertex such as
+ 
+
+33
+00:00:40,680 --> 00:00:42,830
+more attributes to each vertex such as
+normals texture coordinates and tangent
+
+34
+00:00:42,830 --> 00:00:42,840
+normals texture coordinates and tangent
+ 
+
+35
+00:00:42,840 --> 00:00:45,229
+normals texture coordinates and tangent
+vectors the number of attributes and the
+
+36
+00:00:45,229 --> 00:00:45,239
+vectors the number of attributes and the
+ 
+
+37
+00:00:45,239 --> 00:00:48,310
+vectors the number of attributes and the
+size of each vertex will only get larger
+
+38
+00:00:48,310 --> 00:00:48,320
+size of each vertex will only get larger
+ 
+
+39
+00:00:48,320 --> 00:00:50,709
+size of each vertex will only get larger
+for most models it just doesn't make
+
+40
+00:00:50,709 --> 00:00:50,719
+for most models it just doesn't make
+ 
+
+41
+00:00:50,719 --> 00:00:53,790
+for most models it just doesn't make
+sense to be duplicating this data and
+
+42
+00:00:53,790 --> 00:00:53,800
+sense to be duplicating this data and
+ 
+
+43
+00:00:53,800 --> 00:00:56,950
+sense to be duplicating this data and
+that's where index buffers come in an
+
+44
+00:00:56,950 --> 00:00:56,960
+that's where index buffers come in an
+ 
+
+45
+00:00:56,960 --> 00:00:59,590
+that's where index buffers come in an
+index buffer is a piece of additional
+
+46
+00:00:59,590 --> 00:00:59,600
+index buffer is a piece of additional
+ 
+
+47
+00:00:59,600 --> 00:01:02,069
+index buffer is a piece of additional
+data we can provide to the model's draw
+
+48
+00:01:02,069 --> 00:01:02,079
+data we can provide to the model's draw
+ 
+
+49
+00:01:02,079 --> 00:01:04,630
+data we can provide to the model's draw
+command that tells the GPU how to
+
+50
+00:01:04,630 --> 00:01:04,640
+command that tells the GPU how to
+ 
+
+51
+00:01:04,640 --> 00:01:08,070
+command that tells the GPU how to
+combine vertices to make up triangles an
+
+52
+00:01:08,070 --> 00:01:08,080
+combine vertices to make up triangles an
+ 
+
+53
+00:01:08,080 --> 00:01:10,109
+combine vertices to make up triangles an
+index buffer is like an array of
+
+54
+00:01:10,109 --> 00:01:10,119
+index buffer is like an array of
+ 
+
+55
+00:01:10,119 --> 00:01:12,950
+index buffer is like an array of
+pointers into the vertex buffer the
+
+56
+00:01:12,950 --> 00:01:12,960
+pointers into the vertex buffer the
+ 
+
+57
+00:01:12,960 --> 00:01:15,310
+pointers into the vertex buffer the
+first three index values say which three
+
+58
+00:01:15,310 --> 00:01:15,320
+first three index values say which three
+ 
+
+59
+00:01:15,320 --> 00:01:17,710
+first three index values say which three
+vertices make up the first triangle the
+
+60
+00:01:17,710 --> 00:01:17,720
+vertices make up the first triangle the
+ 
+
+61
+00:01:17,720 --> 00:01:19,270
+vertices make up the first triangle the
+next three vertices for the second
+
+62
+00:01:19,270 --> 00:01:19,280
+next three vertices for the second
+ 
+
+63
+00:01:19,280 --> 00:01:22,550
+next three vertices for the second
+triangle and so on this way the vertex
+
+64
+00:01:22,550 --> 00:01:22,560
+triangle and so on this way the vertex
+ 
+
+65
+00:01:22,560 --> 00:01:25,310
+triangle and so on this way the vertex
+can contain only the unique vertex
+
+66
+00:01:25,310 --> 00:01:25,320
+can contain only the unique vertex
+ 
+
+67
+00:01:25,320 --> 00:01:28,510
+can contain only the unique vertex
+values and to reuse a Vertex we simply
+
+68
+00:01:28,510 --> 00:01:28,520
+values and to reuse a Vertex we simply
+ 
+
+69
+00:01:28,520 --> 00:01:31,030
+values and to reuse a Vertex we simply
+use its index multiple times within the
+
+70
+00:01:31,030 --> 00:01:31,040
+use its index multiple times within the
+ 
+
+71
+00:01:31,040 --> 00:01:32,389
+use its index multiple times within the
+index
+
+72
+00:01:32,389 --> 00:01:32,399
+index
+ 
+
+73
+00:01:32,399 --> 00:01:35,190
+index
+buffer let's start with the most basic
+
+74
+00:01:35,190 --> 00:01:35,200
+buffer let's start with the most basic
+ 
+
+75
+00:01:35,200 --> 00:01:38,830
+buffer let's start with the most basic
+example a rectangle consisting of two
+
+76
+00:01:38,830 --> 00:01:38,840
+example a rectangle consisting of two
+ 
+
+77
+00:01:38,840 --> 00:01:41,749
+example a rectangle consisting of two
+triangles using our previous method we
+
+78
+00:01:41,749 --> 00:01:41,759
+triangles using our previous method we
+ 
+
+79
+00:01:41,759 --> 00:01:44,310
+triangles using our previous method we
+would require a total of six vertices in
+
+80
+00:01:44,310 --> 00:01:44,320
+would require a total of six vertices in
+ 
+
+81
+00:01:44,320 --> 00:01:46,590
+would require a total of six vertices in
+the vertex buffer three for the first
+
+82
+00:01:46,590 --> 00:01:46,600
+the vertex buffer three for the first
+ 
+
+83
+00:01:46,600 --> 00:01:48,590
+the vertex buffer three for the first
+triangle and another three for the
+
+84
+00:01:48,590 --> 00:01:48,600
+triangle and another three for the
+ 
+
+85
+00:01:48,600 --> 00:01:50,910
+triangle and another three for the
+second and we've had to duplicate these
+
+86
+00:01:50,910 --> 00:01:50,920
+second and we've had to duplicate these
+ 
+
+87
+00:01:50,920 --> 00:01:54,469
+second and we've had to duplicate these
+two vertices using an index buffer we
+
+88
+00:01:54,469 --> 00:01:54,479
+two vertices using an index buffer we
+ 
+
+89
+00:01:54,479 --> 00:01:57,350
+two vertices using an index buffer we
+specify each unique vertex just once
+
+90
+00:01:57,350 --> 00:01:57,360
+specify each unique vertex just once
+ 
+
+91
+00:01:57,360 --> 00:01:59,910
+specify each unique vertex just once
+within the vertex buffer and the index
+
+92
+00:01:59,910 --> 00:01:59,920
+within the vertex buffer and the index
+ 
+
+93
+00:01:59,920 --> 00:02:01,910
+within the vertex buffer and the index
+buffer will say how to link up these
+
+94
+00:02:01,910 --> 00:02:01,920
+buffer will say how to link up these
+ 
+
+95
+00:02:01,920 --> 00:02:04,789
+buffer will say how to link up these
+vertices into triangles so for the first
+
+96
+00:02:04,789 --> 00:02:04,799
+vertices into triangles so for the first
+ 
+
+97
+00:02:04,799 --> 00:02:08,309
+vertices into triangles so for the first
+triangle we would have index 0 1 and 2
+
+98
+00:02:08,309 --> 00:02:08,319
+triangle we would have index 0 1 and 2
+ 
+
+99
+00:02:08,319 --> 00:02:10,830
+triangle we would have index 0 1 and 2
+and then 2 one and three for the second
+
+100
+00:02:10,830 --> 00:02:10,840
+and then 2 one and three for the second
+ 
+
+101
+00:02:10,840 --> 00:02:14,390
+and then 2 one and three for the second
+triangle or complex 3D models with many
+
+102
+00:02:14,390 --> 00:02:14,400
+triangle or complex 3D models with many
+ 
+
+103
+00:02:14,400 --> 00:02:16,550
+triangle or complex 3D models with many
+attributes per vertex and triangles
+
+104
+00:02:16,550 --> 00:02:16,560
+attributes per vertex and triangles
+ 
+
+105
+00:02:16,560 --> 00:02:19,710
+attributes per vertex and triangles
+sharing many vertices the amount of GPU
+
+106
+00:02:19,710 --> 00:02:19,720
+sharing many vertices the amount of GPU
+ 
+
+107
+00:02:19,720 --> 00:02:21,750
+sharing many vertices the amount of GPU
+memory saved with the use of an index
+
+108
+00:02:21,750 --> 00:02:21,760
+memory saved with the use of an index
+ 
+
+109
+00:02:21,760 --> 00:02:23,869
+memory saved with the use of an index
+buffer will quickly add
+
+110
+00:02:23,869 --> 00:02:23,879
+buffer will quickly add
+ 
+
+111
+00:02:23,879 --> 00:02:27,430
+buffer will quickly add
+up okay let's get to coding start by
+
+112
+00:02:27,430 --> 00:02:27,440
+up okay let's get to coding start by
+ 
+
+113
+00:02:27,440 --> 00:02:30,150
+up okay let's get to coding start by
+opening the model header file and below
+
+114
+00:02:30,150 --> 00:02:30,160
+opening the model header file and below
+ 
+
+115
+00:02:30,160 --> 00:02:32,309
+opening the model header file and below
+the vertex struct definition we will add
+
+116
+00:02:32,309 --> 00:02:32,319
+the vertex struct definition we will add
+ 
+
+117
+00:02:32,319 --> 00:02:34,589
+the vertex struct definition we will add
+a struct called Builder which will
+
+118
+00:02:34,589 --> 00:02:34,599
+a struct called Builder which will
+ 
+
+119
+00:02:34,599 --> 00:02:36,750
+a struct called Builder which will
+contain two vectors the first will
+
+120
+00:02:36,750 --> 00:02:36,760
+contain two vectors the first will
+ 
+
+121
+00:02:36,760 --> 00:02:39,509
+contain two vectors the first will
+contain vertex objects called vertices
+
+122
+00:02:39,509 --> 00:02:39,519
+contain vertex objects called vertices
+ 
+
+123
+00:02:39,519 --> 00:02:42,550
+contain vertex objects called vertices
+and initialize it to be empty the second
+
+124
+00:02:42,550 --> 00:02:42,560
+and initialize it to be empty the second
+ 
+
+125
+00:02:42,560 --> 00:02:44,949
+and initialize it to be empty the second
+STD Vector will contain values with the
+
+126
+00:02:44,949 --> 00:02:44,959
+STD Vector will contain values with the
+ 
+
+127
+00:02:44,959 --> 00:02:48,750
+STD Vector will contain values with the
+uint32 typee called indices and also
+
+128
+00:02:48,750 --> 00:02:48,760
+uint32 typee called indices and also
+ 
+
+129
+00:02:48,760 --> 00:02:52,149
+uint32 typee called indices and also
+initialize that to be empty this Builder
+
+130
+00:02:52,149 --> 00:02:52,159
+initialize that to be empty this Builder
+ 
+
+131
+00:02:52,159 --> 00:02:54,390
+initialize that to be empty this Builder
+will be used as a temporary helper
+
+132
+00:02:54,390 --> 00:02:54,400
+will be used as a temporary helper
+ 
+
+133
+00:02:54,400 --> 00:02:57,110
+will be used as a temporary helper
+object storing our vertex and index
+
+134
+00:02:57,110 --> 00:02:57,120
+object storing our vertex and index
+ 
+
+135
+00:02:57,120 --> 00:02:59,270
+object storing our vertex and index
+information until it can be copied over
+
+136
+00:02:59,270 --> 00:02:59,280
+information until it can be copied over
+ 
+
+137
+00:02:59,280 --> 00:03:01,750
+information until it can be copied over
+into the models vertex and index buffer
+
+138
+00:03:01,750 --> 00:03:01,760
+into the models vertex and index buffer
+ 
+
+139
+00:03:01,760 --> 00:03:04,430
+into the models vertex and index buffer
+memory okay next we will update the
+
+140
+00:03:04,430 --> 00:03:04,440
+memory okay next we will update the
+ 
+
+141
+00:03:04,440 --> 00:03:07,350
+memory okay next we will update the
+model Constructor to take a const lve
+
+142
+00:03:07,350 --> 00:03:07,360
+model Constructor to take a const lve
+ 
+
+143
+00:03:07,360 --> 00:03:09,910
+model Constructor to take a const lve
+model builder reference as the second
+
+144
+00:03:09,910 --> 00:03:09,920
+model builder reference as the second
+ 
+
+145
+00:03:09,920 --> 00:03:12,550
+model builder reference as the second
+argument rather than just the
+
+146
+00:03:12,550 --> 00:03:12,560
+argument rather than just the
+ 
+
+147
+00:03:12,560 --> 00:03:15,070
+argument rather than just the
+vertices now just like how we've created
+
+148
+00:03:15,070 --> 00:03:15,080
+vertices now just like how we've created
+ 
+
+149
+00:03:15,080 --> 00:03:17,589
+vertices now just like how we've created
+the vertex buffer the model class also
+
+150
+00:03:17,589 --> 00:03:17,599
+the vertex buffer the model class also
+ 
+
+151
+00:03:17,599 --> 00:03:20,110
+the vertex buffer the model class also
+needs to create an index buffer so I'm
+
+152
+00:03:20,110 --> 00:03:20,120
+needs to create an index buffer so I'm
+ 
+
+153
+00:03:20,120 --> 00:03:22,030
+needs to create an index buffer so I'm
+going to first duplicate the create
+
+154
+00:03:22,030 --> 00:03:22,040
+going to first duplicate the create
+ 
+
+155
+00:03:22,040 --> 00:03:24,670
+going to first duplicate the create
+vertex buffers function and rename it to
+
+156
+00:03:24,670 --> 00:03:24,680
+vertex buffers function and rename it to
+ 
+
+157
+00:03:24,680 --> 00:03:27,149
+vertex buffers function and rename it to
+be create index buffer update the
+
+158
+00:03:27,149 --> 00:03:27,159
+be create index buffer update the
+ 
+
+159
+00:03:27,159 --> 00:03:29,470
+be create index buffer update the
+function argument to take a const vector
+
+160
+00:03:29,470 --> 00:03:29,480
+function argument to take a const vector
+ 
+
+161
+00:03:29,480 --> 00:03:32,789
+function argument to take a const vector
+of U 32 types and rename the parameter
+
+162
+00:03:32,789 --> 00:03:32,799
+of U 32 types and rename the parameter
+ 
+
+163
+00:03:32,799 --> 00:03:34,149
+of U 32 types and rename the parameter
+to be
+
+164
+00:03:34,149 --> 00:03:34,159
+to be
+ 
+
+165
+00:03:34,159 --> 00:03:37,390
+to be
+indices then duplicate these three lines
+
+166
+00:03:37,390 --> 00:03:37,400
+indices then duplicate these three lines
+ 
+
+167
+00:03:37,400 --> 00:03:40,550
+indices then duplicate these three lines
+we similarly require a VK buffer device
+
+168
+00:03:40,550 --> 00:03:40,560
+we similarly require a VK buffer device
+ 
+
+169
+00:03:40,560 --> 00:03:43,589
+we similarly require a VK buffer device
+memory and count for our indices I'll
+
+170
+00:03:43,589 --> 00:03:43,599
+memory and count for our indices I'll
+ 
+
+171
+00:03:43,599 --> 00:03:45,589
+memory and count for our indices I'll
+rename the variables to index buffer
+
+172
+00:03:45,589 --> 00:03:45,599
+rename the variables to index buffer
+ 
+
+173
+00:03:45,599 --> 00:03:48,830
+rename the variables to index buffer
+index buffer memory and index count
+
+174
+00:03:48,830 --> 00:03:48,840
+index buffer memory and index count
+ 
+
+175
+00:03:48,840 --> 00:03:50,670
+index buffer memory and index count
+finally I will also add a member
+
+176
+00:03:50,670 --> 00:03:50,680
+finally I will also add a member
+ 
+
+177
+00:03:50,680 --> 00:03:53,509
+finally I will also add a member
+variable with type buou called has index
+
+178
+00:03:53,509 --> 00:03:53,519
+variable with type buou called has index
+ 
+
+179
+00:03:53,519 --> 00:03:56,030
+variable with type buou called has index
+buffer and initialize that to
+
+180
+00:03:56,030 --> 00:03:56,040
+buffer and initialize that to
+ 
+
+181
+00:03:56,040 --> 00:03:58,830
+buffer and initialize that to
+false this way we can have both options
+
+182
+00:03:58,830 --> 00:03:58,840
+false this way we can have both options
+ 
+
+183
+00:03:58,840 --> 00:04:01,110
+false this way we can have both options
+remain available to us creating a model
+
+184
+00:04:01,110 --> 00:04:01,120
+remain available to us creating a model
+ 
+
+185
+00:04:01,120 --> 00:04:03,190
+remain available to us creating a model
+with just vertices as we've been doing
+
+186
+00:04:03,190 --> 00:04:03,200
+with just vertices as we've been doing
+ 
+
+187
+00:04:03,200 --> 00:04:05,949
+with just vertices as we've been doing
+so far and alternatively a model with
+
+188
+00:04:05,949 --> 00:04:05,959
+so far and alternatively a model with
+ 
+
+189
+00:04:05,959 --> 00:04:07,990
+so far and alternatively a model with
+both a vertex and index
+
+190
+00:04:07,990 --> 00:04:08,000
+both a vertex and index
+ 
+
+191
+00:04:08,000 --> 00:04:11,550
+both a vertex and index
+buffer okay now navigate to your model
+
+192
+00:04:11,550 --> 00:04:11,560
+buffer okay now navigate to your model
+ 
+
+193
+00:04:11,560 --> 00:04:13,670
+buffer okay now navigate to your model
+implementation and we will start by
+
+194
+00:04:13,670 --> 00:04:13,680
+implementation and we will start by
+ 
+
+195
+00:04:13,680 --> 00:04:16,469
+implementation and we will start by
+updating the Constructor change the
+
+196
+00:04:16,469 --> 00:04:16,479
+updating the Constructor change the
+ 
+
+197
+00:04:16,479 --> 00:04:18,229
+updating the Constructor change the
+second argument of the Constructor to
+
+198
+00:04:18,229 --> 00:04:18,239
+second argument of the Constructor to
+ 
+
+199
+00:04:18,239 --> 00:04:20,909
+second argument of the Constructor to
+instead be a const lve model builder
+
+200
+00:04:20,909 --> 00:04:20,919
+instead be a const lve model builder
+ 
+
+201
+00:04:20,919 --> 00:04:24,150
+instead be a const lve model builder
+reference called Builder and then update
+
+202
+00:04:24,150 --> 00:04:24,160
+reference called Builder and then update
+ 
+
+203
+00:04:24,160 --> 00:04:26,950
+reference called Builder and then update
+the create vertex buffers function with
+
+204
+00:04:26,950 --> 00:04:26,960
+the create vertex buffers function with
+ 
+
+205
+00:04:26,960 --> 00:04:30,390
+the create vertex buffers function with
+builder. vertices for the argument
+
+206
+00:04:30,390 --> 00:04:30,400
+builder. vertices for the argument
+ 
+
+207
+00:04:30,400 --> 00:04:32,670
+builder. vertices for the argument
+then just below call create index
+
+208
+00:04:32,670 --> 00:04:32,680
+then just below call create index
+ 
+
+209
+00:04:32,680 --> 00:04:35,270
+then just below call create index
+buffers with builder. indices as the
+
+210
+00:04:35,270 --> 00:04:35,280
+buffers with builder. indices as the
+ 
+
+211
+00:04:35,280 --> 00:04:38,110
+buffers with builder. indices as the
+functions argument inside the destructor
+
+212
+00:04:38,110 --> 00:04:38,120
+functions argument inside the destructor
+ 
+
+213
+00:04:38,120 --> 00:04:40,350
+functions argument inside the destructor
+we need to clean up our index buffer and
+
+214
+00:04:40,350 --> 00:04:40,360
+we need to clean up our index buffer and
+ 
+
+215
+00:04:40,360 --> 00:04:43,350
+we need to clean up our index buffer and
+memory but only if the model contains
+
+216
+00:04:43,350 --> 00:04:43,360
+memory but only if the model contains
+ 
+
+217
+00:04:43,360 --> 00:04:47,189
+memory but only if the model contains
+them so I will copy these two lines then
+
+218
+00:04:47,189 --> 00:04:47,199
+them so I will copy these two lines then
+ 
+
+219
+00:04:47,199 --> 00:04:50,350
+them so I will copy these two lines then
+add if has index buffer and paste the
+
+220
+00:04:50,350 --> 00:04:50,360
+add if has index buffer and paste the
+ 
+
+221
+00:04:50,360 --> 00:04:53,990
+add if has index buffer and paste the
+lines inside update VK destroy buffer to
+
+222
+00:04:53,990 --> 00:04:54,000
+lines inside update VK destroy buffer to
+ 
+
+223
+00:04:54,000 --> 00:04:56,469
+lines inside update VK destroy buffer to
+take the index buffer as the second
+
+224
+00:04:56,469 --> 00:04:56,479
+take the index buffer as the second
+ 
+
+225
+00:04:56,479 --> 00:04:59,230
+take the index buffer as the second
+argument and vkf free memory to take
+
+226
+00:04:59,230 --> 00:04:59,240
+argument and vkf free memory to take
+ 
+
+227
+00:04:59,240 --> 00:05:02,469
+argument and vkf free memory to take
+index buffer memory the create index
+
+228
+00:05:02,469 --> 00:05:02,479
+index buffer memory the create index
+ 
+
+229
+00:05:02,479 --> 00:05:04,870
+index buffer memory the create index
+buffer function is very similar to the
+
+230
+00:05:04,870 --> 00:05:04,880
+buffer function is very similar to the
+ 
+
+231
+00:05:04,880 --> 00:05:07,390
+buffer function is very similar to the
+create vertex buffers function so I will
+
+232
+00:05:07,390 --> 00:05:07,400
+create vertex buffers function so I will
+ 
+
+233
+00:05:07,400 --> 00:05:10,189
+create vertex buffers function so I will
+use that as my starting point duplicate
+
+234
+00:05:10,189 --> 00:05:10,199
+use that as my starting point duplicate
+ 
+
+235
+00:05:10,199 --> 00:05:12,270
+use that as my starting point duplicate
+the function and update it to instead
+
+236
+00:05:12,270 --> 00:05:12,280
+the function and update it to instead
+ 
+
+237
+00:05:12,280 --> 00:05:15,430
+the function and update it to instead
+read create index buffers and take a
+
+238
+00:05:15,430 --> 00:05:15,440
+read create index buffers and take a
+ 
+
+239
+00:05:15,440 --> 00:05:18,469
+read create index buffers and take a
+cons Vector reference of U in32 types
+
+240
+00:05:18,469 --> 00:05:18,479
+cons Vector reference of U in32 types
+ 
+
+241
+00:05:18,479 --> 00:05:21,950
+cons Vector reference of U in32 types
+called indices instead of vertex count
+
+242
+00:05:21,950 --> 00:05:21,960
+called indices instead of vertex count
+ 
+
+243
+00:05:21,960 --> 00:05:24,550
+called indices instead of vertex count
+we have index count is equal to static
+
+244
+00:05:24,550 --> 00:05:24,560
+we have index count is equal to static
+ 
+
+245
+00:05:24,560 --> 00:05:28,510
+we have index count is equal to static
+cast of indices do size following this
+
+246
+00:05:28,510 --> 00:05:28,520
+cast of indices do size following this
+ 
+
+247
+00:05:28,520 --> 00:05:31,430
+cast of indices do size following this
+we can properly ini I has index buffer
+
+248
+00:05:31,430 --> 00:05:31,440
+we can properly ini I has index buffer
+ 
+
+249
+00:05:31,440 --> 00:05:33,629
+we can properly ini I has index buffer
+to equal index count is greater than
+
+250
+00:05:33,629 --> 00:05:33,639
+to equal index count is greater than
+ 
+
+251
+00:05:33,639 --> 00:05:36,309
+to equal index count is greater than
+zero so what this means is that if a
+
+252
+00:05:36,309 --> 00:05:36,319
+zero so what this means is that if a
+ 
+
+253
+00:05:36,319 --> 00:05:39,150
+zero so what this means is that if a
+non-empty vector of indices is provided
+
+254
+00:05:39,150 --> 00:05:39,160
+non-empty vector of indices is provided
+ 
+
+255
+00:05:39,160 --> 00:05:41,150
+non-empty vector of indices is provided
+then we want to use an index buffer for
+
+256
+00:05:41,150 --> 00:05:41,160
+then we want to use an index buffer for
+ 
+
+257
+00:05:41,160 --> 00:05:43,990
+then we want to use an index buffer for
+rendering the model now we no longer
+
+258
+00:05:43,990 --> 00:05:44,000
+rendering the model now we no longer
+ 
+
+259
+00:05:44,000 --> 00:05:46,830
+rendering the model now we no longer
+require this assertion but instead we'll
+
+260
+00:05:46,830 --> 00:05:46,840
+require this assertion but instead we'll
+ 
+
+261
+00:05:46,840 --> 00:05:50,270
+require this assertion but instead we'll
+check if not has index buffer then
+
+262
+00:05:50,270 --> 00:05:50,280
+check if not has index buffer then
+ 
+
+263
+00:05:50,280 --> 00:05:53,029
+check if not has index buffer then
+return so when an index buffer is not
+
+264
+00:05:53,029 --> 00:05:53,039
+return so when an index buffer is not
+ 
+
+265
+00:05:53,039 --> 00:05:55,590
+return so when an index buffer is not
+present then we don't need to do any
+
+266
+00:05:55,590 --> 00:05:55,600
+present then we don't need to do any
+ 
+
+267
+00:05:55,600 --> 00:05:58,749
+present then we don't need to do any
+more work okay the buffer size should be
+
+268
+00:05:58,749 --> 00:05:58,759
+more work okay the buffer size should be
+ 
+
+269
+00:05:58,759 --> 00:06:01,070
+more work okay the buffer size should be
+equal to the size of indices at index
+
+270
+00:06:01,070 --> 00:06:01,080
+equal to the size of indices at index
+ 
+
+271
+00:06:01,080 --> 00:06:04,270
+equal to the size of indices at index
+zero multiplied by the index count so
+
+272
+00:06:04,270 --> 00:06:04,280
+zero multiplied by the index count so
+ 
+
+273
+00:06:04,280 --> 00:06:06,950
+zero multiplied by the index count so
+update those two spots and for the
+
+274
+00:06:06,950 --> 00:06:06,960
+update those two spots and for the
+ 
+
+275
+00:06:06,960 --> 00:06:09,070
+update those two spots and for the
+create buffer function we need to change
+
+276
+00:06:09,070 --> 00:06:09,080
+create buffer function we need to change
+ 
+
+277
+00:06:09,080 --> 00:06:12,270
+create buffer function we need to change
+the VK buffer usage from vertex buffer
+
+278
+00:06:12,270 --> 00:06:12,280
+the VK buffer usage from vertex buffer
+ 
+
+279
+00:06:12,280 --> 00:06:15,749
+the VK buffer usage from vertex buffer
+bit to index buffer bit then both the
+
+280
+00:06:15,749 --> 00:06:15,759
+bit to index buffer bit then both the
+ 
+
+281
+00:06:15,759 --> 00:06:18,990
+bit to index buffer bit then both the
+host visible and host coherent can stay
+
+282
+00:06:18,990 --> 00:06:19,000
+host visible and host coherent can stay
+ 
+
+283
+00:06:19,000 --> 00:06:20,670
+host visible and host coherent can stay
+and the last two arguments can be
+
+284
+00:06:20,670 --> 00:06:20,680
+and the last two arguments can be
+ 
+
+285
+00:06:20,680 --> 00:06:23,390
+and the last two arguments can be
+changed to be index buffer and index
+
+286
+00:06:23,390 --> 00:06:23,400
+changed to be index buffer and index
+ 
+
+287
+00:06:23,400 --> 00:06:24,550
+changed to be index buffer and index
+buffer
+
+288
+00:06:24,550 --> 00:06:24,560
+buffer
+ 
+
+289
+00:06:24,560 --> 00:06:27,350
+buffer
+memory all that's left to do is map the
+
+290
+00:06:27,350 --> 00:06:27,360
+memory all that's left to do is map the
+ 
+
+291
+00:06:27,360 --> 00:06:30,150
+memory all that's left to do is map the
+memory three things need to be updated
+
+292
+00:06:30,150 --> 00:06:30,160
+memory three things need to be updated
+ 
+
+293
+00:06:30,160 --> 00:06:32,550
+memory three things need to be updated
+we want to VK map memory for the index
+
+294
+00:06:32,550 --> 00:06:32,560
+we want to VK map memory for the index
+ 
+
+295
+00:06:32,560 --> 00:06:35,150
+we want to VK map memory for the index
+buffer memory we want to mem copy the
+
+296
+00:06:35,150 --> 00:06:35,160
+buffer memory we want to mem copy the
+ 
+
+297
+00:06:35,160 --> 00:06:38,350
+buffer memory we want to mem copy the
+indices do dat and finally unmap the
+
+298
+00:06:38,350 --> 00:06:38,360
+indices do dat and finally unmap the
+ 
+
+299
+00:06:38,360 --> 00:06:41,350
+indices do dat and finally unmap the
+index buffer memory let's just quickly
+
+300
+00:06:41,350 --> 00:06:41,360
+index buffer memory let's just quickly
+ 
+
+301
+00:06:41,360 --> 00:06:43,589
+index buffer memory let's just quickly
+review what we did here this is pretty
+
+302
+00:06:43,589 --> 00:06:43,599
+review what we did here this is pretty
+ 
+
+303
+00:06:43,599 --> 00:06:46,189
+review what we did here this is pretty
+much exactly what we did in tutorial 6
+
+304
+00:06:46,189 --> 00:06:46,199
+much exactly what we did in tutorial 6
+ 
+
+305
+00:06:46,199 --> 00:06:47,589
+much exactly what we did in tutorial 6
+remember that the purpose of these
+
+306
+00:06:47,589 --> 00:06:47,599
+remember that the purpose of these
+ 
+
+307
+00:06:47,599 --> 00:06:49,670
+remember that the purpose of these
+buffer objects is that we want to write
+
+308
+00:06:49,670 --> 00:06:49,680
+buffer objects is that we want to write
+ 
+
+309
+00:06:49,680 --> 00:06:52,430
+buffer objects is that we want to write
+this information to device memory first
+
+310
+00:06:52,430 --> 00:06:52,440
+this information to device memory first
+ 
+
+311
+00:06:52,440 --> 00:06:54,629
+this information to device memory first
+we create a buffer of the required size
+
+312
+00:06:54,629 --> 00:06:54,639
+we create a buffer of the required size
+ 
+
+313
+00:06:54,639 --> 00:06:56,790
+we create a buffer of the required size
+on the GPU with the create buffer
+
+314
+00:06:56,790 --> 00:06:56,800
+on the GPU with the create buffer
+ 
+
+315
+00:06:56,800 --> 00:06:59,270
+on the GPU with the create buffer
+command then we map memory on our host
+
+316
+00:06:59,270 --> 00:06:59,280
+command then we map memory on our host
+ 
+
+317
+00:06:59,280 --> 00:07:01,950
+command then we map memory on our host
+to the device memory what this does is
+
+318
+00:07:01,950 --> 00:07:01,960
+to the device memory what this does is
+ 
+
+319
+00:07:01,960 --> 00:07:04,189
+to the device memory what this does is
+create a data region on the host that is
+
+320
+00:07:04,189 --> 00:07:04,199
+create a data region on the host that is
+ 
+
+321
+00:07:04,199 --> 00:07:07,309
+create a data region on the host that is
+linked to the device memory this way
+
+322
+00:07:07,309 --> 00:07:07,319
+linked to the device memory this way
+ 
+
+323
+00:07:07,319 --> 00:07:10,189
+linked to the device memory this way
+when we use mem copy to write to the CPU
+
+324
+00:07:10,189 --> 00:07:10,199
+when we use mem copy to write to the CPU
+ 
+
+325
+00:07:10,199 --> 00:07:12,830
+when we use mem copy to write to the CPU
+accessible memory that information will
+
+326
+00:07:12,830 --> 00:07:12,840
+accessible memory that information will
+ 
+
+327
+00:07:12,840 --> 00:07:15,270
+accessible memory that information will
+also be flushed to the GPU memory
+
+328
+00:07:15,270 --> 00:07:15,280
+also be flushed to the GPU memory
+ 
+
+329
+00:07:15,280 --> 00:07:17,950
+also be flushed to the GPU memory
+through that link we established finally
+
+330
+00:07:17,950 --> 00:07:17,960
+through that link we established finally
+ 
+
+331
+00:07:17,960 --> 00:07:20,670
+through that link we established finally
+since our mesh data is unchanging we no
+
+332
+00:07:20,670 --> 00:07:20,680
+since our mesh data is unchanging we no
+ 
+
+333
+00:07:20,680 --> 00:07:22,629
+since our mesh data is unchanging we no
+longer need the region of data on the
+
+334
+00:07:22,629 --> 00:07:22,639
+longer need the region of data on the
+ 
+
+335
+00:07:22,639 --> 00:07:25,350
+longer need the region of data on the
+host side so we can unmap it and let it
+
+336
+00:07:25,350 --> 00:07:25,360
+host side so we can unmap it and let it
+ 
+
+337
+00:07:25,360 --> 00:07:28,189
+host side so we can unmap it and let it
+be cleaned up so we have created an
+
+338
+00:07:28,189 --> 00:07:28,199
+be cleaned up so we have created an
+ 
+
+339
+00:07:28,199 --> 00:07:30,670
+be cleaned up so we have created an
+index buffer but we need to tell Vulcan
+
+340
+00:07:30,670 --> 00:07:30,680
+index buffer but we need to tell Vulcan
+ 
+
+341
+00:07:30,680 --> 00:07:32,950
+index buffer but we need to tell Vulcan
+how to use it when rendering in the
+
+342
+00:07:32,950 --> 00:07:32,960
+how to use it when rendering in the
+ 
+
+343
+00:07:32,960 --> 00:07:35,510
+how to use it when rendering in the
+model draw function we will check if has
+
+344
+00:07:35,510 --> 00:07:35,520
+model draw function we will check if has
+ 
+
+345
+00:07:35,520 --> 00:07:38,070
+model draw function we will check if has
+index buffer then use the VK command
+
+346
+00:07:38,070 --> 00:07:38,080
+index buffer then use the VK command
+ 
+
+347
+00:07:38,080 --> 00:07:40,550
+index buffer then use the VK command
+draw indexed function this takes a
+
+348
+00:07:40,550 --> 00:07:40,560
+draw indexed function this takes a
+ 
+
+349
+00:07:40,560 --> 00:07:43,550
+draw indexed function this takes a
+command buffer the index and an instance
+
+350
+00:07:43,550 --> 00:07:43,560
+command buffer the index and an instance
+ 
+
+351
+00:07:43,560 --> 00:07:46,830
+command buffer the index and an instance
+count of one and then 0 0 for the first
+
+352
+00:07:46,830 --> 00:07:46,840
+count of one and then 0 0 for the first
+ 
+
+353
+00:07:46,840 --> 00:07:50,710
+count of one and then 0 0 for the first
+index vertex offset and first instance
+
+354
+00:07:50,710 --> 00:07:50,720
+index vertex offset and first instance
+ 
+
+355
+00:07:50,720 --> 00:07:53,110
+index vertex offset and first instance
+respectively otherwise if we don't have
+
+356
+00:07:53,110 --> 00:07:53,120
+respectively otherwise if we don't have
+ 
+
+357
+00:07:53,120 --> 00:07:56,070
+respectively otherwise if we don't have
+an index buffer we just use the regular
+
+358
+00:07:56,070 --> 00:07:56,080
+an index buffer we just use the regular
+ 
+
+359
+00:07:56,080 --> 00:08:00,070
+an index buffer we just use the regular
+draw command so add else VK command
+
+360
+00:08:00,070 --> 00:08:00,080
+draw command so add else VK command
+ 
+
+361
+00:08:00,080 --> 00:08:03,070
+draw command so add else VK command
+draw Draw indexed Works just like the
+
+362
+00:08:03,070 --> 00:08:03,080
+draw Draw indexed Works just like the
+ 
+
+363
+00:08:03,080 --> 00:08:05,749
+draw Draw indexed Works just like the
+normal draw function but it signals to
+
+364
+00:08:05,749 --> 00:08:05,759
+normal draw function but it signals to
+ 
+
+365
+00:08:05,759 --> 00:08:07,550
+normal draw function but it signals to
+Vulcan that there will be an index
+
+366
+00:08:07,550 --> 00:08:07,560
+Vulcan that there will be an index
+ 
+
+367
+00:08:07,560 --> 00:08:10,550
+Vulcan that there will be an index
+buffer available for use but we haven't
+
+368
+00:08:10,550 --> 00:08:10,560
+buffer available for use but we haven't
+ 
+
+369
+00:08:10,560 --> 00:08:13,230
+buffer available for use but we haven't
+yet made the index buffer available so
+
+370
+00:08:13,230 --> 00:08:13,240
+yet made the index buffer available so
+ 
+
+371
+00:08:13,240 --> 00:08:15,629
+yet made the index buffer available so
+in the models bind function following
+
+372
+00:08:15,629 --> 00:08:15,639
+in the models bind function following
+ 
+
+373
+00:08:15,639 --> 00:08:18,790
+in the models bind function following
+the call to bind the vertex buffer add
+
+374
+00:08:18,790 --> 00:08:18,800
+the call to bind the vertex buffer add
+ 
+
+375
+00:08:18,800 --> 00:08:22,309
+the call to bind the vertex buffer add
+if has index buffer then VK command bind
+
+376
+00:08:22,309 --> 00:08:22,319
+if has index buffer then VK command bind
+ 
+
+377
+00:08:22,319 --> 00:08:24,670
+if has index buffer then VK command bind
+index buffer which takes the command
+
+378
+00:08:24,670 --> 00:08:24,680
+index buffer which takes the command
+ 
+
+379
+00:08:24,680 --> 00:08:27,550
+index buffer which takes the command
+buffer the index buffer and an initial
+
+380
+00:08:27,550 --> 00:08:27,560
+buffer the index buffer and an initial
+ 
+
+381
+00:08:27,560 --> 00:08:30,830
+buffer the index buffer and an initial
+offset of zero and finally a VK index
+
+382
+00:08:30,830 --> 00:08:30,840
+offset of zero and finally a VK index
+ 
+
+383
+00:08:30,840 --> 00:08:32,350
+offset of zero and finally a VK index
+Type U
+
+384
+00:08:32,350 --> 00:08:32,360
+Type U
+ 
+
+385
+00:08:32,360 --> 00:08:35,350
+Type U
+in32 the index type needs to match the
+
+386
+00:08:35,350 --> 00:08:35,360
+in32 the index type needs to match the
+ 
+
+387
+00:08:35,360 --> 00:08:38,630
+in32 the index type needs to match the
+type of the indices vector or small
+
+388
+00:08:38,630 --> 00:08:38,640
+type of the indices vector or small
+ 
+
+389
+00:08:38,640 --> 00:08:40,990
+type of the indices vector or small
+models you can save memory by using a
+
+390
+00:08:40,990 --> 00:08:41,000
+models you can save memory by using a
+ 
+
+391
+00:08:41,000 --> 00:08:44,230
+models you can save memory by using a
+smaller index type A 16bit index can
+
+392
+00:08:44,230 --> 00:08:44,240
+smaller index type A 16bit index can
+ 
+
+393
+00:08:44,240 --> 00:08:47,110
+smaller index type A 16bit index can
+store models up to
+
+394
+00:08:47,110 --> 00:08:47,120
+store models up to
+ 
+
+395
+00:08:47,120 --> 00:08:50,670
+store models up to
+65,535 vertices but more complex models
+
+396
+00:08:50,670 --> 00:08:50,680
+65,535 vertices but more complex models
+ 
+
+397
+00:08:50,680 --> 00:08:53,829
+65,535 vertices but more complex models
+may have significantly more vertices so
+
+398
+00:08:53,829 --> 00:08:53,839
+may have significantly more vertices so
+ 
+
+399
+00:08:53,839 --> 00:08:55,829
+may have significantly more vertices so
+I have chosen to just stick with using a
+
+400
+00:08:55,829 --> 00:08:55,839
+I have chosen to just stick with using a
+ 
+
+401
+00:08:55,839 --> 00:08:58,310
+I have chosen to just stick with using a
+32-bit index type for the tutorial
+
+402
+00:08:58,310 --> 00:08:58,320
+32-bit index type for the tutorial
+ 
+
+403
+00:08:58,320 --> 00:08:59,430
+32-bit index type for the tutorial
+series to keep things straight
+
+404
+00:08:59,430 --> 00:08:59,440
+series to keep things straight
+ 
+
+405
+00:08:59,440 --> 00:09:01,750
+series to keep things straight
+straightforward and model
+
+406
+00:09:01,750 --> 00:09:01,760
+straightforward and model
+ 
+
+407
+00:09:01,760 --> 00:09:04,190
+straightforward and model
+independent before we can test this code
+
+408
+00:09:04,190 --> 00:09:04,200
+independent before we can test this code
+ 
+
+409
+00:09:04,200 --> 00:09:06,670
+independent before we can test this code
+we need to update the create Cube model
+
+410
+00:09:06,670 --> 00:09:06,680
+we need to update the create Cube model
+ 
+
+411
+00:09:06,680 --> 00:09:08,910
+we need to update the create Cube model
+function in the app implementation to
+
+412
+00:09:08,910 --> 00:09:08,920
+function in the app implementation to
+ 
+
+413
+00:09:08,920 --> 00:09:10,949
+function in the app implementation to
+now use the Builder
+
+414
+00:09:10,949 --> 00:09:10,959
+now use the Builder
+ 
+
+415
+00:09:10,959 --> 00:09:13,590
+now use the Builder
+Constructor at the top of the function I
+
+416
+00:09:13,590 --> 00:09:13,600
+Constructor at the top of the function I
+ 
+
+417
+00:09:13,600 --> 00:09:15,670
+Constructor at the top of the function I
+will create an lve model builder
+
+418
+00:09:15,670 --> 00:09:15,680
+will create an lve model builder
+ 
+
+419
+00:09:15,680 --> 00:09:18,790
+will create an lve model builder
+variable named model builder and then
+
+420
+00:09:18,790 --> 00:09:18,800
+variable named model builder and then
+ 
+
+421
+00:09:18,800 --> 00:09:20,949
+variable named model builder and then
+change the line below to set model
+
+422
+00:09:20,949 --> 00:09:20,959
+change the line below to set model
+ 
+
+423
+00:09:20,959 --> 00:09:24,829
+change the line below to set model
+builder. vertices to equal our Vector of
+
+424
+00:09:24,829 --> 00:09:24,839
+builder. vertices to equal our Vector of
+ 
+
+425
+00:09:24,839 --> 00:09:27,630
+builder. vertices to equal our Vector of
+data next I will scroll down and fix up
+
+426
+00:09:27,630 --> 00:09:27,640
+data next I will scroll down and fix up
+ 
+
+427
+00:09:27,640 --> 00:09:30,389
+data next I will scroll down and fix up
+the for Loop to use model build bu.
+
+428
+00:09:30,389 --> 00:09:30,399
+the for Loop to use model build bu.
+ 
+
+429
+00:09:30,399 --> 00:09:32,630
+the for Loop to use model build bu.
+vertices and then update the model
+
+430
+00:09:32,630 --> 00:09:32,640
+vertices and then update the model
+ 
+
+431
+00:09:32,640 --> 00:09:35,110
+vertices and then update the model
+Constructor to take the Builder object
+
+432
+00:09:35,110 --> 00:09:35,120
+Constructor to take the Builder object
+ 
+
+433
+00:09:35,120 --> 00:09:37,509
+Constructor to take the Builder object
+as its second argument build and run
+
+434
+00:09:37,509 --> 00:09:37,519
+as its second argument build and run
+ 
+
+435
+00:09:37,519 --> 00:09:39,269
+as its second argument build and run
+your code and check to make sure things
+
+436
+00:09:39,269 --> 00:09:39,279
+your code and check to make sure things
+ 
+
+437
+00:09:39,279 --> 00:09:41,790
+your code and check to make sure things
+are working as they were previously so
+
+438
+00:09:41,790 --> 00:09:41,800
+are working as they were previously so
+ 
+
+439
+00:09:41,800 --> 00:09:43,750
+are working as they were previously so
+the vertex buffer functionality still
+
+440
+00:09:43,750 --> 00:09:43,760
+the vertex buffer functionality still
+ 
+
+441
+00:09:43,760 --> 00:09:46,470
+the vertex buffer functionality still
+works next we need to test out the index
+
+442
+00:09:46,470 --> 00:09:46,480
+works next we need to test out the index
+ 
+
+443
+00:09:46,480 --> 00:09:48,949
+works next we need to test out the index
+buffer functionality to do so I have
+
+444
+00:09:48,949 --> 00:09:48,959
+buffer functionality to do so I have
+ 
+
+445
+00:09:48,959 --> 00:09:51,190
+buffer functionality to do so I have
+provided an updated create Cube model
+
+446
+00:09:51,190 --> 00:09:51,200
+provided an updated create Cube model
+ 
+
+447
+00:09:51,200 --> 00:09:53,150
+provided an updated create Cube model
+function in a pce span Link in the
+
+448
+00:09:53,150 --> 00:09:53,160
+function in a pce span Link in the
+ 
+
+449
+00:09:53,160 --> 00:09:55,949
+function in a pce span Link in the
+description below that uses indices to
+
+450
+00:09:55,949 --> 00:09:55,959
+description below that uses indices to
+ 
+
+451
+00:09:55,959 --> 00:09:58,310
+description below that uses indices to
+specify the vertex ordering I will
+
+452
+00:09:58,310 --> 00:09:58,320
+specify the vertex ordering I will
+ 
+
+453
+00:09:58,320 --> 00:09:59,870
+specify the vertex ordering I will
+remove the old function
+
+454
+00:09:59,870 --> 00:09:59,880
+remove the old function
+ 
+
+455
+00:09:59,880 --> 00:10:01,990
+remove the old function
+and override it with the new
+
+456
+00:10:01,990 --> 00:10:02,000
+and override it with the new
+ 
+
+457
+00:10:02,000 --> 00:10:04,269
+and override it with the new
+implementation the first thing to notice
+
+458
+00:10:04,269 --> 00:10:04,279
+implementation the first thing to notice
+ 
+
+459
+00:10:04,279 --> 00:10:06,269
+implementation the first thing to notice
+is that we now have only four vertices
+
+460
+00:10:06,269 --> 00:10:06,279
+is that we now have only four vertices
+ 
+
+461
+00:10:06,279 --> 00:10:09,790
+is that we now have only four vertices
+specified per phase as opposed to six as
+
+462
+00:10:09,790 --> 00:10:09,800
+specified per phase as opposed to six as
+ 
+
+463
+00:10:09,800 --> 00:10:12,190
+specified per phase as opposed to six as
+well as a vector of index values
+
+464
+00:10:12,190 --> 00:10:12,200
+well as a vector of index values
+ 
+
+465
+00:10:12,200 --> 00:10:14,550
+well as a vector of index values
+specifying which vertex values are used
+
+466
+00:10:14,550 --> 00:10:14,560
+specifying which vertex values are used
+ 
+
+467
+00:10:14,560 --> 00:10:17,550
+specifying which vertex values are used
+for each triangle we still require four
+
+468
+00:10:17,550 --> 00:10:17,560
+for each triangle we still require four
+ 
+
+469
+00:10:17,560 --> 00:10:20,590
+for each triangle we still require four
+vertices per face since each face has a
+
+470
+00:10:20,590 --> 00:10:20,600
+vertices per face since each face has a
+ 
+
+471
+00:10:20,600 --> 00:10:23,389
+vertices per face since each face has a
+different color however if the cube was
+
+472
+00:10:23,389 --> 00:10:23,399
+different color however if the cube was
+ 
+
+473
+00:10:23,399 --> 00:10:26,069
+different color however if the cube was
+just one color then we would be able to
+
+474
+00:10:26,069 --> 00:10:26,079
+just one color then we would be able to
+ 
+
+475
+00:10:26,079 --> 00:10:28,630
+just one color then we would be able to
+further simplify the vertex data to just
+
+476
+00:10:28,630 --> 00:10:28,640
+further simplify the vertex data to just
+ 
+
+477
+00:10:28,640 --> 00:10:30,350
+further simplify the vertex data to just
+eight vertices
+
+478
+00:10:30,350 --> 00:10:30,360
+eight vertices
+ 
+
+479
+00:10:30,360 --> 00:10:32,310
+eight vertices
+build and run your code to confirm
+
+480
+00:10:32,310 --> 00:10:32,320
+build and run your code to confirm
+ 
+
+481
+00:10:32,320 --> 00:10:34,509
+build and run your code to confirm
+everything is still working correctly
+
+482
+00:10:34,509 --> 00:10:34,519
+everything is still working correctly
+ 
+
+483
+00:10:34,519 --> 00:10:36,710
+everything is still working correctly
+the cube is now being rendered using an
+
+484
+00:10:36,710 --> 00:10:36,720
+the cube is now being rendered using an
+ 
+
+485
+00:10:36,720 --> 00:10:39,110
+the cube is now being rendered using an
+index buffer note that if you try to
+
+486
+00:10:39,110 --> 00:10:39,120
+index buffer note that if you try to
+ 
+
+487
+00:10:39,120 --> 00:10:41,069
+index buffer note that if you try to
+measure the performance you won't likely
+
+488
+00:10:41,069 --> 00:10:41,079
+measure the performance you won't likely
+ 
+
+489
+00:10:41,079 --> 00:10:44,069
+measure the performance you won't likely
+see any change with such a simple scene
+
+490
+00:10:44,069 --> 00:10:44,079
+see any change with such a simple scene
+ 
+
+491
+00:10:44,079 --> 00:10:46,069
+see any change with such a simple scene
+memory access won't be the bottleneck
+
+492
+00:10:46,069 --> 00:10:46,079
+memory access won't be the bottleneck
+ 
+
+493
+00:10:46,079 --> 00:10:46,990
+memory access won't be the bottleneck
+for
+
+494
+00:10:46,990 --> 00:10:47,000
+for
+ 
+
+495
+00:10:47,000 --> 00:10:49,590
+for
+performance since we've already been
+
+496
+00:10:49,590 --> 00:10:49,600
+performance since we've already been
+ 
+
+497
+00:10:49,600 --> 00:10:52,030
+performance since we've already been
+working in the model class I think now
+
+498
+00:10:52,030 --> 00:10:52,040
+working in the model class I think now
+ 
+
+499
+00:10:52,040 --> 00:10:54,750
+working in the model class I think now
+is as good a time as any to further
+
+500
+00:10:54,750 --> 00:10:54,760
+is as good a time as any to further
+ 
+
+501
+00:10:54,760 --> 00:10:57,509
+is as good a time as any to further
+optimize our models currently the memory
+
+502
+00:10:57,509 --> 00:10:57,519
+optimize our models currently the memory
+ 
+
+503
+00:10:57,519 --> 00:10:59,389
+optimize our models currently the memory
+type we are using to store the vertex
+
+504
+00:10:59,389 --> 00:10:59,399
+type we are using to store the vertex
+ 
+
+505
+00:10:59,399 --> 00:11:02,110
+type we are using to store the vertex
+and index buffers isn't as optimal as it
+
+506
+00:11:02,110 --> 00:11:02,120
+and index buffers isn't as optimal as it
+ 
+
+507
+00:11:02,120 --> 00:11:04,590
+and index buffers isn't as optimal as it
+could be for both these buffers we have
+
+508
+00:11:04,590 --> 00:11:04,600
+could be for both these buffers we have
+ 
+
+509
+00:11:04,600 --> 00:11:06,670
+could be for both these buffers we have
+been using the host visible and host
+
+510
+00:11:06,670 --> 00:11:06,680
+been using the host visible and host
+ 
+
+511
+00:11:06,680 --> 00:11:09,430
+been using the host visible and host
+coherent memory bits looking at the
+
+512
+00:11:09,430 --> 00:11:09,440
+coherent memory bits looking at the
+ 
+
+513
+00:11:09,440 --> 00:11:11,949
+coherent memory bits looking at the
+official Vulcan documentation we can see
+
+514
+00:11:11,949 --> 00:11:11,959
+official Vulcan documentation we can see
+ 
+
+515
+00:11:11,959 --> 00:11:14,590
+official Vulcan documentation we can see
+that host visible bit specifies that
+
+516
+00:11:14,590 --> 00:11:14,600
+that host visible bit specifies that
+ 
+
+517
+00:11:14,600 --> 00:11:17,030
+that host visible bit specifies that
+memory allocated with this type can be
+
+518
+00:11:17,030 --> 00:11:17,040
+memory allocated with this type can be
+ 
+
+519
+00:11:17,040 --> 00:11:19,750
+memory allocated with this type can be
+mapped for host access using VK map
+
+520
+00:11:19,750 --> 00:11:19,760
+mapped for host access using VK map
+ 
+
+521
+00:11:19,760 --> 00:11:22,230
+mapped for host access using VK map
+memory what this essentially means is
+
+522
+00:11:22,230 --> 00:11:22,240
+memory what this essentially means is
+ 
+
+523
+00:11:22,240 --> 00:11:25,310
+memory what this essentially means is
+that the host aka the code on our CPU
+
+524
+00:11:25,310 --> 00:11:25,320
+that the host aka the code on our CPU
+ 
+
+525
+00:11:25,320 --> 00:11:28,269
+that the host aka the code on our CPU
+can write to this memory however the
+
+526
+00:11:28,269 --> 00:11:28,279
+can write to this memory however the
+ 
+
+527
+00:11:28,279 --> 00:11:31,030
+can write to this memory however the
+most optimal and fastest memory requires
+
+528
+00:11:31,030 --> 00:11:31,040
+most optimal and fastest memory requires
+ 
+
+529
+00:11:31,040 --> 00:11:33,910
+most optimal and fastest memory requires
+the device local bit to be set and is
+
+530
+00:11:33,910 --> 00:11:33,920
+the device local bit to be set and is
+ 
+
+531
+00:11:33,920 --> 00:11:36,069
+the device local bit to be set and is
+typically not compatible with the host
+
+532
+00:11:36,069 --> 00:11:36,079
+typically not compatible with the host
+ 
+
+533
+00:11:36,079 --> 00:11:39,310
+typically not compatible with the host
+visible bit in order to use device local
+
+534
+00:11:39,310 --> 00:11:39,320
+visible bit in order to use device local
+ 
+
+535
+00:11:39,320 --> 00:11:41,870
+visible bit in order to use device local
+memory we must first copy the buffer
+
+536
+00:11:41,870 --> 00:11:41,880
+memory we must first copy the buffer
+ 
+
+537
+00:11:41,880 --> 00:11:44,910
+memory we must first copy the buffer
+data from the host to a temporary buffer
+
+538
+00:11:44,910 --> 00:11:44,920
+data from the host to a temporary buffer
+ 
+
+539
+00:11:44,920 --> 00:11:47,509
+data from the host to a temporary buffer
+that is visible to the host from there
+
+540
+00:11:47,509 --> 00:11:47,519
+that is visible to the host from there
+ 
+
+541
+00:11:47,519 --> 00:11:49,670
+that is visible to the host from there
+we can then copy the data to device
+
+542
+00:11:49,670 --> 00:11:49,680
+we can then copy the data to device
+ 
+
+543
+00:11:49,680 --> 00:11:52,030
+we can then copy the data to device
+local memory by using the VK command
+
+544
+00:11:52,030 --> 00:11:52,040
+local memory by using the VK command
+ 
+
+545
+00:11:52,040 --> 00:11:54,550
+local memory by using the VK command
+copy buffer function once this command
+
+546
+00:11:54,550 --> 00:11:54,560
+copy buffer function once this command
+ 
+
+547
+00:11:54,560 --> 00:11:56,870
+copy buffer function once this command
+has copied the data we can destroy the
+
+548
+00:11:56,870 --> 00:11:56,880
+has copied the data we can destroy the
+ 
+
+549
+00:11:56,880 --> 00:11:59,590
+has copied the data we can destroy the
+temporary buffer the temporary buffer
+
+550
+00:11:59,590 --> 00:11:59,600
+temporary buffer the temporary buffer
+ 
+
+551
+00:11:59,600 --> 00:12:01,990
+temporary buffer the temporary buffer
+used in this process is commonly known
+
+552
+00:12:01,990 --> 00:12:02,000
+used in this process is commonly known
+ 
+
+553
+00:12:02,000 --> 00:12:05,269
+used in this process is commonly known
+as a staging buffer okay so back in the
+
+554
+00:12:05,269 --> 00:12:05,279
+as a staging buffer okay so back in the
+ 
+
+555
+00:12:05,279 --> 00:12:07,910
+as a staging buffer okay so back in the
+model implementation let's update both
+
+556
+00:12:07,910 --> 00:12:07,920
+model implementation let's update both
+ 
+
+557
+00:12:07,920 --> 00:12:10,030
+model implementation let's update both
+the create vertex and create index
+
+558
+00:12:10,030 --> 00:12:10,040
+the create vertex and create index
+ 
+
+559
+00:12:10,040 --> 00:12:12,389
+the create vertex and create index
+buffer functions to First Stage the
+
+560
+00:12:12,389 --> 00:12:12,399
+buffer functions to First Stage the
+ 
+
+561
+00:12:12,399 --> 00:12:14,949
+buffer functions to First Stage the
+buffer data and then copy it to device
+
+562
+00:12:14,949 --> 00:12:14,959
+buffer data and then copy it to device
+ 
+
+563
+00:12:14,959 --> 00:12:17,150
+buffer data and then copy it to device
+local memory underneath the line
+
+564
+00:12:17,150 --> 00:12:17,160
+local memory underneath the line
+ 
+
+565
+00:12:17,160 --> 00:12:19,870
+local memory underneath the line
+declaring the Buffer's size I will add
+
+566
+00:12:19,870 --> 00:12:19,880
+declaring the Buffer's size I will add
+ 
+
+567
+00:12:19,880 --> 00:12:23,430
+declaring the Buffer's size I will add
+two new local variables one with type VK
+
+568
+00:12:23,430 --> 00:12:23,440
+two new local variables one with type VK
+ 
+
+569
+00:12:23,440 --> 00:12:26,269
+two new local variables one with type VK
+buffer called staging buffer and the
+
+570
+00:12:26,269 --> 00:12:26,279
+buffer called staging buffer and the
+ 
+
+571
+00:12:26,279 --> 00:12:29,269
+buffer called staging buffer and the
+other would type VK device memory called
+
+572
+00:12:29,269 --> 00:12:29,279
+other would type VK device memory called
+ 
+
+573
+00:12:29,279 --> 00:12:32,430
+other would type VK device memory called
+staging buffer memory we need to create
+
+574
+00:12:32,430 --> 00:12:32,440
+staging buffer memory we need to create
+ 
+
+575
+00:12:32,440 --> 00:12:35,110
+staging buffer memory we need to create
+two buffers one for the vertex buffer
+
+576
+00:12:35,110 --> 00:12:35,120
+two buffers one for the vertex buffer
+ 
+
+577
+00:12:35,120 --> 00:12:37,750
+two buffers one for the vertex buffer
+and now another for the staging buffer
+
+578
+00:12:37,750 --> 00:12:37,760
+and now another for the staging buffer
+ 
+
+579
+00:12:37,760 --> 00:12:40,509
+and now another for the staging buffer
+so copy the create buffer command and
+
+580
+00:12:40,509 --> 00:12:40,519
+so copy the create buffer command and
+ 
+
+581
+00:12:40,519 --> 00:12:42,670
+so copy the create buffer command and
+paste it in below the code for mapping
+
+582
+00:12:42,670 --> 00:12:42,680
+paste it in below the code for mapping
+ 
+
+583
+00:12:42,680 --> 00:12:46,069
+paste it in below the code for mapping
+the host to device memory let's update
+
+584
+00:12:46,069 --> 00:12:46,079
+the host to device memory let's update
+ 
+
+585
+00:12:46,079 --> 00:12:48,150
+the host to device memory let's update
+this first create buffer command to
+
+586
+00:12:48,150 --> 00:12:48,160
+this first create buffer command to
+ 
+
+587
+00:12:48,160 --> 00:12:50,870
+this first create buffer command to
+instead create the staging buffer the
+
+588
+00:12:50,870 --> 00:12:50,880
+instead create the staging buffer the
+ 
+
+589
+00:12:50,880 --> 00:12:53,189
+instead create the staging buffer the
+buffer size Remains the Same but we need
+
+590
+00:12:53,189 --> 00:12:53,199
+buffer size Remains the Same but we need
+ 
+
+591
+00:12:53,199 --> 00:12:56,590
+buffer size Remains the Same but we need
+to update the buffer usage to now be VK
+
+592
+00:12:56,590 --> 00:12:56,600
+to update the buffer usage to now be VK
+ 
+
+593
+00:12:56,600 --> 00:13:00,030
+to update the buffer usage to now be VK
+buffer usage transfer Source B
+
+594
+00:13:00,030 --> 00:13:00,040
+buffer usage transfer Source B
+ 
+
+595
+00:13:00,040 --> 00:13:02,310
+buffer usage transfer Source B
+what this does is tell Vulcan that the
+
+596
+00:13:02,310 --> 00:13:02,320
+what this does is tell Vulcan that the
+ 
+
+597
+00:13:02,320 --> 00:13:04,389
+what this does is tell Vulcan that the
+buffer we are creating is going to be
+
+598
+00:13:04,389 --> 00:13:04,399
+buffer we are creating is going to be
+ 
+
+599
+00:13:04,399 --> 00:13:07,150
+buffer we are creating is going to be
+used just as the source location for a
+
+600
+00:13:07,150 --> 00:13:07,160
+used just as the source location for a
+ 
+
+601
+00:13:07,160 --> 00:13:09,910
+used just as the source location for a
+memory transfer operation next the
+
+602
+00:13:09,910 --> 00:13:09,920
+memory transfer operation next the
+ 
+
+603
+00:13:09,920 --> 00:13:12,509
+memory transfer operation next the
+staging buffer needs to be host visible
+
+604
+00:13:12,509 --> 00:13:12,519
+staging buffer needs to be host visible
+ 
+
+605
+00:13:12,519 --> 00:13:14,750
+staging buffer needs to be host visible
+and host coherent tells Vulcan that
+
+606
+00:13:14,750 --> 00:13:14,760
+and host coherent tells Vulcan that
+ 
+
+607
+00:13:14,760 --> 00:13:16,870
+and host coherent tells Vulcan that
+whenever we update memory on the host
+
+608
+00:13:16,870 --> 00:13:16,880
+whenever we update memory on the host
+ 
+
+609
+00:13:16,880 --> 00:13:19,629
+whenever we update memory on the host
+side to automatically flush that data to
+
+610
+00:13:19,629 --> 00:13:19,639
+side to automatically flush that data to
+ 
+
+611
+00:13:19,639 --> 00:13:22,790
+side to automatically flush that data to
+the device side finally change vertex
+
+612
+00:13:22,790 --> 00:13:22,800
+the device side finally change vertex
+ 
+
+613
+00:13:22,800 --> 00:13:24,990
+the device side finally change vertex
+buffer and vertex buffer memory to
+
+614
+00:13:24,990 --> 00:13:25,000
+buffer and vertex buffer memory to
+ 
+
+615
+00:13:25,000 --> 00:13:27,710
+buffer and vertex buffer memory to
+instead be staging buffer and staging
+
+616
+00:13:27,710 --> 00:13:27,720
+instead be staging buffer and staging
+ 
+
+617
+00:13:27,720 --> 00:13:29,750
+instead be staging buffer and staging
+buffer memory
+
+618
+00:13:29,750 --> 00:13:29,760
+buffer memory
+ 
+
+619
+00:13:29,760 --> 00:13:31,910
+buffer memory
+now we need to create the host mapped
+
+620
+00:13:31,910 --> 00:13:31,920
+now we need to create the host mapped
+ 
+
+621
+00:13:31,920 --> 00:13:35,030
+now we need to create the host mapped
+memory region with our staging buffer so
+
+622
+00:13:35,030 --> 00:13:35,040
+memory region with our staging buffer so
+ 
+
+623
+00:13:35,040 --> 00:13:38,110
+memory region with our staging buffer so
+update VK map memory in VK unmapped
+
+624
+00:13:38,110 --> 00:13:38,120
+update VK map memory in VK unmapped
+ 
+
+625
+00:13:38,120 --> 00:13:40,750
+update VK map memory in VK unmapped
+memory to use the staging buffer memory
+
+626
+00:13:40,750 --> 00:13:40,760
+memory to use the staging buffer memory
+ 
+
+627
+00:13:40,760 --> 00:13:43,310
+memory to use the staging buffer memory
+variable okay for creating the vertex
+
+628
+00:13:43,310 --> 00:13:43,320
+variable okay for creating the vertex
+ 
+
+629
+00:13:43,320 --> 00:13:45,990
+variable okay for creating the vertex
+buffer we need to update its usage to
+
+630
+00:13:45,990 --> 00:13:46,000
+buffer we need to update its usage to
+ 
+
+631
+00:13:46,000 --> 00:13:48,069
+buffer we need to update its usage to
+also indicate that it can be used as a
+
+632
+00:13:48,069 --> 00:13:48,079
+also indicate that it can be used as a
+ 
+
+633
+00:13:48,079 --> 00:13:50,990
+also indicate that it can be used as a
+transfer destination so following the
+
+634
+00:13:50,990 --> 00:13:51,000
+transfer destination so following the
+ 
+
+635
+00:13:51,000 --> 00:13:53,550
+transfer destination so following the
+usage vertex buffer bit add the pipe
+
+636
+00:13:53,550 --> 00:13:53,560
+usage vertex buffer bit add the pipe
+ 
+
+637
+00:13:53,560 --> 00:13:57,150
+usage vertex buffer bit add the pipe
+operator then VK buffer usage transfer
+
+638
+00:13:57,150 --> 00:13:57,160
+operator then VK buffer usage transfer
+ 
+
+639
+00:13:57,160 --> 00:14:01,110
+operator then VK buffer usage transfer
+DST bit for the vertex buffer we would
+
+640
+00:14:01,110 --> 00:14:01,120
+DST bit for the vertex buffer we would
+ 
+
+641
+00:14:01,120 --> 00:14:03,350
+DST bit for the vertex buffer we would
+like to use the optimal device local
+
+642
+00:14:03,350 --> 00:14:03,360
+like to use the optimal device local
+ 
+
+643
+00:14:03,360 --> 00:14:05,749
+like to use the optimal device local
+memory so we need to remove both the
+
+644
+00:14:05,749 --> 00:14:05,759
+memory so we need to remove both the
+ 
+
+645
+00:14:05,759 --> 00:14:08,310
+memory so we need to remove both the
+host visible and host coherent bits
+
+646
+00:14:08,310 --> 00:14:08,320
+host visible and host coherent bits
+ 
+
+647
+00:14:08,320 --> 00:14:11,150
+host visible and host coherent bits
+replacing them with VK memory property
+
+648
+00:14:11,150 --> 00:14:11,160
+replacing them with VK memory property
+ 
+
+649
+00:14:11,160 --> 00:14:14,430
+replacing them with VK memory property
+device local bit next we need to tell
+
+650
+00:14:14,430 --> 00:14:14,440
+device local bit next we need to tell
+ 
+
+651
+00:14:14,440 --> 00:14:17,430
+device local bit next we need to tell
+Vulcan to perform a copy operation to
+
+652
+00:14:17,430 --> 00:14:17,440
+Vulcan to perform a copy operation to
+ 
+
+653
+00:14:17,440 --> 00:14:19,629
+Vulcan to perform a copy operation to
+move the contents of the staging buffer
+
+654
+00:14:19,629 --> 00:14:19,639
+move the contents of the staging buffer
+ 
+
+655
+00:14:19,639 --> 00:14:22,629
+move the contents of the staging buffer
+to the vertex buffer the device class I
+
+656
+00:14:22,629 --> 00:14:22,639
+to the vertex buffer the device class I
+ 
+
+657
+00:14:22,639 --> 00:14:25,110
+to the vertex buffer the device class I
+provided already includes a helper
+
+658
+00:14:25,110 --> 00:14:25,120
+provided already includes a helper
+ 
+
+659
+00:14:25,120 --> 00:14:29,350
+provided already includes a helper
+function to do just this at LV device.
+
+660
+00:14:29,350 --> 00:14:29,360
+function to do just this at LV device.
+ 
+
+661
+00:14:29,360 --> 00:14:31,509
+function to do just this at LV device.
+buffer with the staging buffer as the
+
+662
+00:14:31,509 --> 00:14:31,519
+buffer with the staging buffer as the
+ 
+
+663
+00:14:31,519 --> 00:14:33,829
+buffer with the staging buffer as the
+source the vertex buffer as the
+
+664
+00:14:33,829 --> 00:14:33,839
+source the vertex buffer as the
+ 
+
+665
+00:14:33,839 --> 00:14:35,990
+source the vertex buffer as the
+destination and the buffer size
+
+666
+00:14:35,990 --> 00:14:36,000
+destination and the buffer size
+ 
+
+667
+00:14:36,000 --> 00:14:39,389
+destination and the buffer size
+indicating how many bites to copy and
+
+668
+00:14:39,389 --> 00:14:39,399
+indicating how many bites to copy and
+ 
+
+669
+00:14:39,399 --> 00:14:41,590
+indicating how many bites to copy and
+that's it all that's left to do is to
+
+670
+00:14:41,590 --> 00:14:41,600
+that's it all that's left to do is to
+ 
+
+671
+00:14:41,600 --> 00:14:44,269
+that's it all that's left to do is to
+clean up the staging buffer as it is no
+
+672
+00:14:44,269 --> 00:14:44,279
+clean up the staging buffer as it is no
+ 
+
+673
+00:14:44,279 --> 00:14:47,030
+clean up the staging buffer as it is no
+longer needed I am going to copy and
+
+674
+00:14:47,030 --> 00:14:47,040
+longer needed I am going to copy and
+ 
+
+675
+00:14:47,040 --> 00:14:48,749
+longer needed I am going to copy and
+paste these two lines from the
+
+676
+00:14:48,749 --> 00:14:48,759
+paste these two lines from the
+ 
+
+677
+00:14:48,759 --> 00:14:51,030
+paste these two lines from the
+destructor into the end of my create
+
+678
+00:14:51,030 --> 00:14:51,040
+destructor into the end of my create
+ 
+
+679
+00:14:51,040 --> 00:14:53,870
+destructor into the end of my create
+vertex buffer function and update the
+
+680
+00:14:53,870 --> 00:14:53,880
+vertex buffer function and update the
+ 
+
+681
+00:14:53,880 --> 00:14:56,509
+vertex buffer function and update the
+values to be VK destroy buffer staging
+
+682
+00:14:56,509 --> 00:14:56,519
+values to be VK destroy buffer staging
+ 
+
+683
+00:14:56,519 --> 00:14:59,430
+values to be VK destroy buffer staging
+buffer and VK free memory stage aging
+
+684
+00:14:59,430 --> 00:14:59,440
+buffer and VK free memory stage aging
+ 
+
+685
+00:14:59,440 --> 00:15:02,230
+buffer and VK free memory stage aging
+buffer memory now the create index
+
+686
+00:15:02,230 --> 00:15:02,240
+buffer memory now the create index
+ 
+
+687
+00:15:02,240 --> 00:15:04,509
+buffer memory now the create index
+buffers function will be virtually the
+
+688
+00:15:04,509 --> 00:15:04,519
+buffers function will be virtually the
+ 
+
+689
+00:15:04,519 --> 00:15:07,550
+buffers function will be virtually the
+same I will copy from the Declaration of
+
+690
+00:15:07,550 --> 00:15:07,560
+same I will copy from the Declaration of
+ 
+
+691
+00:15:07,560 --> 00:15:11,230
+same I will copy from the Declaration of
+staging buffer down to its destruction
+
+692
+00:15:11,230 --> 00:15:11,240
+staging buffer down to its destruction
+ 
+
+693
+00:15:11,240 --> 00:15:13,269
+staging buffer down to its destruction
+and then in the create index buffers
+
+694
+00:15:13,269 --> 00:15:13,279
+and then in the create index buffers
+ 
+
+695
+00:15:13,279 --> 00:15:16,350
+and then in the create index buffers
+function just under the buffer size
+
+696
+00:15:16,350 --> 00:15:16,360
+function just under the buffer size
+ 
+
+697
+00:15:16,360 --> 00:15:19,069
+function just under the buffer size
+declaration replace the remaining
+
+698
+00:15:19,069 --> 00:15:19,079
+declaration replace the remaining
+ 
+
+699
+00:15:19,079 --> 00:15:21,269
+declaration replace the remaining
+contents of the function with what we've
+
+700
+00:15:21,269 --> 00:15:21,279
+contents of the function with what we've
+ 
+
+701
+00:15:21,279 --> 00:15:25,110
+contents of the function with what we've
+just copied okay so staging buffer and
+
+702
+00:15:25,110 --> 00:15:25,120
+just copied okay so staging buffer and
+ 
+
+703
+00:15:25,120 --> 00:15:27,829
+just copied okay so staging buffer and
+staging buffer memory are all good
+
+704
+00:15:27,829 --> 00:15:27,839
+staging buffer memory are all good
+ 
+
+705
+00:15:27,839 --> 00:15:29,470
+staging buffer memory are all good
+creating the staging buffer doesn't need
+
+706
+00:15:29,470 --> 00:15:29,480
+creating the staging buffer doesn't need
+ 
+
+707
+00:15:29,480 --> 00:15:32,590
+creating the staging buffer doesn't need
+to change for mem copy we need to copy
+
+708
+00:15:32,590 --> 00:15:32,600
+to change for mem copy we need to copy
+ 
+
+709
+00:15:32,600 --> 00:15:35,829
+to change for mem copy we need to copy
+the indices rather than the vertices do
+
+710
+00:15:35,829 --> 00:15:35,839
+the indices rather than the vertices do
+ 
+
+711
+00:15:35,839 --> 00:15:38,829
+the indices rather than the vertices do
+dat and then in create buffer we need to
+
+712
+00:15:38,829 --> 00:15:38,839
+dat and then in create buffer we need to
+ 
+
+713
+00:15:38,839 --> 00:15:41,430
+dat and then in create buffer we need to
+update the buffer usage from vertex
+
+714
+00:15:41,430 --> 00:15:41,440
+update the buffer usage from vertex
+ 
+
+715
+00:15:41,440 --> 00:15:44,470
+update the buffer usage from vertex
+buffer bit to index buffer bit and then
+
+716
+00:15:44,470 --> 00:15:44,480
+buffer bit to index buffer bit and then
+ 
+
+717
+00:15:44,480 --> 00:15:46,870
+buffer bit to index buffer bit and then
+change the last two arguments to be
+
+718
+00:15:46,870 --> 00:15:46,880
+change the last two arguments to be
+ 
+
+719
+00:15:46,880 --> 00:15:50,629
+change the last two arguments to be
+index buffer and index buffer memory
+
+720
+00:15:50,629 --> 00:15:50,639
+index buffer and index buffer memory
+ 
+
+721
+00:15:50,639 --> 00:15:52,629
+index buffer and index buffer memory
+finally in the copy buffer command
+
+722
+00:15:52,629 --> 00:15:52,639
+finally in the copy buffer command
+ 
+
+723
+00:15:52,639 --> 00:15:54,949
+finally in the copy buffer command
+change the destination argument to be
+
+724
+00:15:54,949 --> 00:15:54,959
+change the destination argument to be
+ 
+
+725
+00:15:54,959 --> 00:15:57,590
+change the destination argument to be
+the index
+
+726
+00:15:57,590 --> 00:15:57,600
+
+ 
+
+727
+00:15:57,600 --> 00:16:00,350
+ 
+buffer and that's it build and run and
+
+728
+00:16:00,350 --> 00:16:00,360
+buffer and that's it build and run and
+ 
+
+729
+00:16:00,360 --> 00:16:02,269
+buffer and that's it build and run and
+things should work just as before but we
+
+730
+00:16:02,269 --> 00:16:02,279
+things should work just as before but we
+ 
+
+731
+00:16:02,279 --> 00:16:05,590
+things should work just as before but we
+are now using more optimal device memory
+
+732
+00:16:05,590 --> 00:16:05,600
+are now using more optimal device memory
+ 
+
+733
+00:16:05,600 --> 00:16:07,509
+are now using more optimal device memory
+this can make a noticeable difference
+
+734
+00:16:07,509 --> 00:16:07,519
+this can make a noticeable difference
+ 
+
+735
+00:16:07,519 --> 00:16:10,069
+this can make a noticeable difference
+after we start working with more complex
+
+736
+00:16:10,069 --> 00:16:10,079
+after we start working with more complex
+ 
+
+737
+00:16:10,079 --> 00:16:13,069
+after we start working with more complex
+models so when should you use a staging
+
+738
+00:16:13,069 --> 00:16:13,079
+models so when should you use a staging
+ 
+
+739
+00:16:13,079 --> 00:16:16,150
+models so when should you use a staging
+buffer and device local memory well it
+
+740
+00:16:16,150 --> 00:16:16,160
+buffer and device local memory well it
+ 
+
+741
+00:16:16,160 --> 00:16:19,749
+buffer and device local memory well it
+works best for data that is static so 3D
+
+742
+00:16:19,749 --> 00:16:19,759
+works best for data that is static so 3D
+ 
+
+743
+00:16:19,759 --> 00:16:22,710
+works best for data that is static so 3D
+meshes are a good option if you find
+
+744
+00:16:22,710 --> 00:16:22,720
+meshes are a good option if you find
+ 
+
+745
+00:16:22,720 --> 00:16:24,749
+meshes are a good option if you find
+yourself frequently updating the
+
+746
+00:16:24,749 --> 00:16:24,759
+yourself frequently updating the
+ 
+
+747
+00:16:24,759 --> 00:16:27,269
+yourself frequently updating the
+contents of the data from the host then
+
+748
+00:16:27,269 --> 00:16:27,279
+contents of the data from the host then
+ 
+
+749
+00:16:27,279 --> 00:16:29,470
+contents of the data from the host then
+the extra step of having to to copy the
+
+750
+00:16:29,470 --> 00:16:29,480
+the extra step of having to to copy the
+ 
+
+751
+00:16:29,480 --> 00:16:31,870
+the extra step of having to to copy the
+data from host visible to device local
+
+752
+00:16:31,870 --> 00:16:31,880
+data from host visible to device local
+ 
+
+753
+00:16:31,880 --> 00:16:33,949
+data from host visible to device local
+memory may actually negate any
+
+754
+00:16:33,949 --> 00:16:33,959
+memory may actually negate any
+ 
+
+755
+00:16:33,959 --> 00:16:36,509
+memory may actually negate any
+performance gains furthermore the
+
+756
+00:16:36,509 --> 00:16:36,519
+performance gains furthermore the
+ 
+
+757
+00:16:36,519 --> 00:16:38,430
+performance gains furthermore the
+implementation I have provided for the
+
+758
+00:16:38,430 --> 00:16:38,440
+implementation I have provided for the
+ 
+
+759
+00:16:38,440 --> 00:16:40,949
+implementation I have provided for the
+copy buffer function in the device class
+
+760
+00:16:40,949 --> 00:16:40,959
+copy buffer function in the device class
+ 
+
+761
+00:16:40,959 --> 00:16:43,350
+copy buffer function in the device class
+relies on a single time command that
+
+762
+00:16:43,350 --> 00:16:43,360
+relies on a single time command that
+ 
+
+763
+00:16:43,360 --> 00:16:45,309
+relies on a single time command that
+requires that we wait on the device to
+
+764
+00:16:45,309 --> 00:16:45,319
+requires that we wait on the device to
+ 
+
+765
+00:16:45,319 --> 00:16:47,710
+requires that we wait on the device to
+be idle to ensure that the copy command
+
+766
+00:16:47,710 --> 00:16:47,720
+be idle to ensure that the copy command
+ 
+
+767
+00:16:47,720 --> 00:16:50,790
+be idle to ensure that the copy command
+has finished before we start rendering
+
+768
+00:16:50,790 --> 00:16:50,800
+has finished before we start rendering
+ 
+
+769
+00:16:50,800 --> 00:16:52,590
+has finished before we start rendering
+this can be avoided with the use of a
+
+770
+00:16:52,590 --> 00:16:52,600
+this can be avoided with the use of a
+ 
+
+771
+00:16:52,600 --> 00:16:54,870
+this can be avoided with the use of a
+memory barrier but that is beyond the
+
+772
+00:16:54,870 --> 00:16:54,880
+memory barrier but that is beyond the
+ 
+
+773
+00:16:54,880 --> 00:16:57,309
+memory barrier but that is beyond the
+scope of this video so for now I
+
+774
+00:16:57,309 --> 00:16:57,319
+scope of this video so for now I
+ 
+
+775
+00:16:57,319 --> 00:16:59,949
+scope of this video so for now I
+recommend only using stage buffers for
+
+776
+00:16:59,949 --> 00:16:59,959
+recommend only using stage buffers for
+ 
+
+777
+00:16:59,959 --> 00:17:02,389
+recommend only using stage buffers for
+static data that is loaded at the start
+
+778
+00:17:02,389 --> 00:17:02,399
+static data that is loaded at the start
+ 
+
+779
+00:17:02,399 --> 00:17:05,429
+static data that is loaded at the start
+of the application anyway that's it for
+
+780
+00:17:05,429 --> 00:17:05,439
+of the application anyway that's it for
+ 
+
+781
+00:17:05,439 --> 00:17:08,510
+of the application anyway that's it for
+today thanks for watching and keep on
+
+782
+00:17:08,510 --> 00:17:08,520
+today thanks for watching and keep on
+ 
+
+783
+00:17:08,520 --> 00:17:12,199
+today thanks for watching and keep on
+coding cheers
+

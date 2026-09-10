@@ -1,0 +1,4505 @@
+1
+00:00:00,160 --> 00:00:02,389
+ 
+in vulcan we are not able to execute
+
+2
+00:00:02,389 --> 00:00:02,399
+in vulcan we are not able to execute
+ 
+
+3
+00:00:02,399 --> 00:00:05,030
+in vulcan we are not able to execute
+commands directly with function calls
+
+4
+00:00:05,030 --> 00:00:05,040
+commands directly with function calls
+ 
+
+5
+00:00:05,040 --> 00:00:07,110
+commands directly with function calls
+we are first required to record them to
+
+6
+00:00:07,110 --> 00:00:07,120
+we are first required to record them to
+ 
+
+7
+00:00:07,120 --> 00:00:08,230
+we are first required to record them to
+a command buffer
+
+8
+00:00:08,230 --> 00:00:08,240
+a command buffer
+ 
+
+9
+00:00:08,240 --> 00:00:10,230
+a command buffer
+and then submit the buffer to a device
+
+10
+00:00:10,230 --> 00:00:10,240
+and then submit the buffer to a device
+ 
+
+11
+00:00:10,240 --> 00:00:11,910
+and then submit the buffer to a device
+queue to be executed
+
+12
+00:00:11,910 --> 00:00:11,920
+queue to be executed
+ 
+
+13
+00:00:11,920 --> 00:00:14,230
+queue to be executed
+while this may seem a bit tedious it has
+
+14
+00:00:14,230 --> 00:00:14,240
+while this may seem a bit tedious it has
+ 
+
+15
+00:00:14,240 --> 00:00:16,230
+while this may seem a bit tedious it has
+significant advantages over older
+
+16
+00:00:16,230 --> 00:00:16,240
+significant advantages over older
+ 
+
+17
+00:00:16,240 --> 00:00:17,830
+significant advantages over older
+graphics apis
+
+18
+00:00:17,830 --> 00:00:17,840
+graphics apis
+ 
+
+19
+00:00:17,840 --> 00:00:20,070
+graphics apis
+command buffers allow a sequence of
+
+20
+00:00:20,070 --> 00:00:20,080
+command buffers allow a sequence of
+ 
+
+21
+00:00:20,080 --> 00:00:21,830
+command buffers allow a sequence of
+commands to be recorded
+
+22
+00:00:21,830 --> 00:00:21,840
+commands to be recorded
+ 
+
+23
+00:00:21,840 --> 00:00:25,109
+commands to be recorded
+once and then reused for multiple frames
+
+24
+00:00:25,109 --> 00:00:25,119
+once and then reused for multiple frames
+ 
+
+25
+00:00:25,119 --> 00:00:27,910
+once and then reused for multiple frames
+this is opposed to apis like opengl
+
+26
+00:00:27,910 --> 00:00:27,920
+this is opposed to apis like opengl
+ 
+
+27
+00:00:27,920 --> 00:00:29,589
+this is opposed to apis like opengl
+where draw commands will need to be
+
+28
+00:00:29,589 --> 00:00:29,599
+where draw commands will need to be
+ 
+
+29
+00:00:29,599 --> 00:00:31,189
+where draw commands will need to be
+repeated every frame
+
+30
+00:00:31,189 --> 00:00:31,199
+repeated every frame
+ 
+
+31
+00:00:31,199 --> 00:00:33,030
+repeated every frame
+for now we're going to record the
+
+32
+00:00:33,030 --> 00:00:33,040
+for now we're going to record the
+ 
+
+33
+00:00:33,040 --> 00:00:34,870
+for now we're going to record the
+command buffers once at program
+
+34
+00:00:34,870 --> 00:00:34,880
+command buffers once at program
+ 
+
+35
+00:00:34,880 --> 00:00:35,990
+command buffers once at program
+initialization
+
+36
+00:00:35,990 --> 00:00:36,000
+initialization
+ 
+
+37
+00:00:36,000 --> 00:00:38,470
+initialization
+and then reuse them for each frame
+
+38
+00:00:38,470 --> 00:00:38,480
+and then reuse them for each frame
+ 
+
+39
+00:00:38,480 --> 00:00:39,030
+and then reuse them for each frame
+another
+
+40
+00:00:39,030 --> 00:00:39,040
+another
+ 
+
+41
+00:00:39,040 --> 00:00:41,030
+another
+option would be to re-record a command
+
+42
+00:00:41,030 --> 00:00:41,040
+option would be to re-record a command
+ 
+
+43
+00:00:41,040 --> 00:00:42,310
+option would be to re-record a command
+buffer every frame
+
+44
+00:00:42,310 --> 00:00:42,320
+buffer every frame
+ 
+
+45
+00:00:42,320 --> 00:00:44,709
+buffer every frame
+which i cover a few videos from now
+
+46
+00:00:44,709 --> 00:00:44,719
+which i cover a few videos from now
+ 
+
+47
+00:00:44,719 --> 00:00:46,709
+which i cover a few videos from now
+command buffers have a life cycle
+
+48
+00:00:46,709 --> 00:00:46,719
+command buffers have a life cycle
+ 
+
+49
+00:00:46,719 --> 00:00:50,069
+command buffers have a life cycle
+described by this state diagram when a
+
+50
+00:00:50,069 --> 00:00:50,079
+described by this state diagram when a
+ 
+
+51
+00:00:50,079 --> 00:00:51,750
+described by this state diagram when a
+command buffer is submitted to the
+
+52
+00:00:51,750 --> 00:00:51,760
+command buffer is submitted to the
+ 
+
+53
+00:00:51,760 --> 00:00:52,869
+command buffer is submitted to the
+device queue
+
+54
+00:00:52,869 --> 00:00:52,879
+device queue
+ 
+
+55
+00:00:52,879 --> 00:00:55,590
+device queue
+it enters the pending state it is
+
+56
+00:00:55,590 --> 00:00:55,600
+it enters the pending state it is
+ 
+
+57
+00:00:55,600 --> 00:00:57,990
+it enters the pending state it is
+invalid to resubmit a command buffer
+
+58
+00:00:57,990 --> 00:00:58,000
+invalid to resubmit a command buffer
+ 
+
+59
+00:00:58,000 --> 00:01:00,549
+invalid to resubmit a command buffer
+that is already in the pending state it
+
+60
+00:01:00,549 --> 00:01:00,559
+that is already in the pending state it
+ 
+
+61
+00:01:00,559 --> 00:01:02,709
+that is already in the pending state it
+needs to first complete before being
+
+62
+00:01:02,709 --> 00:01:02,719
+needs to first complete before being
+ 
+
+63
+00:01:02,719 --> 00:01:04,549
+needs to first complete before being
+resubmitted
+
+64
+00:01:04,549 --> 00:01:04,559
+resubmitted
+ 
+
+65
+00:01:04,559 --> 00:01:06,870
+resubmitted
+the swap chain class provided limits us
+
+66
+00:01:06,870 --> 00:01:06,880
+the swap chain class provided limits us
+ 
+
+67
+00:01:06,880 --> 00:01:07,590
+the swap chain class provided limits us
+to submitting
+
+68
+00:01:07,590 --> 00:01:07,600
+to submitting
+ 
+
+69
+00:01:07,600 --> 00:01:09,590
+to submitting
+at most two command buffers to the
+
+70
+00:01:09,590 --> 00:01:09,600
+at most two command buffers to the
+ 
+
+71
+00:01:09,600 --> 00:01:12,230
+at most two command buffers to the
+device's graphics queue at once after
+
+72
+00:01:12,230 --> 00:01:12,240
+device's graphics queue at once after
+ 
+
+73
+00:01:12,240 --> 00:01:14,230
+device's graphics queue at once after
+two command buffers have been submitted
+
+74
+00:01:14,230 --> 00:01:14,240
+two command buffers have been submitted
+ 
+
+75
+00:01:14,240 --> 00:01:16,630
+two command buffers have been submitted
+the cpu will block on the next call to
+
+76
+00:01:16,630 --> 00:01:16,640
+the cpu will block on the next call to
+ 
+
+77
+00:01:16,640 --> 00:01:18,710
+the cpu will block on the next call to
+the acquire next image function
+
+78
+00:01:18,710 --> 00:01:18,720
+the acquire next image function
+ 
+
+79
+00:01:18,720 --> 00:01:21,190
+the acquire next image function
+when the gpu has finished executing one
+
+80
+00:01:21,190 --> 00:01:21,200
+when the gpu has finished executing one
+ 
+
+81
+00:01:21,200 --> 00:01:22,630
+when the gpu has finished executing one
+of the command buffers
+
+82
+00:01:22,630 --> 00:01:22,640
+of the command buffers
+ 
+
+83
+00:01:22,640 --> 00:01:25,429
+of the command buffers
+it will signal the cpu to carry on
+
+84
+00:01:25,429 --> 00:01:25,439
+it will signal the cpu to carry on
+ 
+
+85
+00:01:25,439 --> 00:01:26,070
+it will signal the cpu to carry on
+therefore
+
+86
+00:01:26,070 --> 00:01:26,080
+therefore
+ 
+
+87
+00:01:26,080 --> 00:01:28,310
+therefore
+it is possible to get away with using
+
+88
+00:01:28,310 --> 00:01:28,320
+it is possible to get away with using
+ 
+
+89
+00:01:28,320 --> 00:01:30,390
+it is possible to get away with using
+only two command buffers even when there
+
+90
+00:01:30,390 --> 00:01:30,400
+only two command buffers even when there
+ 
+
+91
+00:01:30,400 --> 00:01:32,550
+only two command buffers even when there
+are more than two frame buffers
+
+92
+00:01:32,550 --> 00:01:32,560
+are more than two frame buffers
+ 
+
+93
+00:01:32,560 --> 00:01:35,030
+are more than two frame buffers
+but when recording a start render pass
+
+94
+00:01:35,030 --> 00:01:35,040
+but when recording a start render pass
+ 
+
+95
+00:01:35,040 --> 00:01:35,749
+but when recording a start render pass
+command
+
+96
+00:01:35,749 --> 00:01:35,759
+command
+ 
+
+97
+00:01:35,759 --> 00:01:38,230
+command
+we must specify the target output frame
+
+98
+00:01:38,230 --> 00:01:38,240
+we must specify the target output frame
+ 
+
+99
+00:01:38,240 --> 00:01:38,870
+we must specify the target output frame
+buffer
+
+100
+00:01:38,870 --> 00:01:38,880
+buffer
+ 
+
+101
+00:01:38,880 --> 00:01:41,190
+buffer
+so in the case we have two commands but
+
+102
+00:01:41,190 --> 00:01:41,200
+so in the case we have two commands but
+ 
+
+103
+00:01:41,200 --> 00:01:42,469
+so in the case we have two commands but
+three frame buffers
+
+104
+00:01:42,469 --> 00:01:42,479
+three frame buffers
+ 
+
+105
+00:01:42,479 --> 00:01:44,950
+three frame buffers
+we need to re-record a command buffer
+
+106
+00:01:44,950 --> 00:01:44,960
+we need to re-record a command buffer
+ 
+
+107
+00:01:44,960 --> 00:01:45,990
+we need to re-record a command buffer
+every frame
+
+108
+00:01:45,990 --> 00:01:46,000
+every frame
+ 
+
+109
+00:01:46,000 --> 00:01:48,389
+every frame
+so at least for now it is simpler to use
+
+110
+00:01:48,389 --> 00:01:48,399
+so at least for now it is simpler to use
+ 
+
+111
+00:01:48,399 --> 00:01:51,590
+so at least for now it is simpler to use
+a one-to-one relationship
+
+112
+00:01:51,590 --> 00:01:51,600
+a one-to-one relationship
+ 
+
+113
+00:01:51,600 --> 00:01:53,590
+a one-to-one relationship
+next let's implement or create command
+
+114
+00:01:53,590 --> 00:01:53,600
+next let's implement or create command
+ 
+
+115
+00:01:53,600 --> 00:01:55,190
+next let's implement or create command
+buffers function
+
+116
+00:01:55,190 --> 00:01:55,200
+buffers function
+ 
+
+117
+00:01:55,200 --> 00:01:57,670
+buffers function
+so let's start by resizing our command
+
+118
+00:01:57,670 --> 00:01:57,680
+so let's start by resizing our command
+ 
+
+119
+00:01:57,680 --> 00:01:59,990
+so let's start by resizing our command
+buffers vector to be the same size as
+
+120
+00:01:59,990 --> 00:02:00,000
+buffers vector to be the same size as
+ 
+
+121
+00:02:00,000 --> 00:02:02,149
+buffers vector to be the same size as
+the swap chain image count
+
+122
+00:02:02,149 --> 00:02:02,159
+the swap chain image count
+ 
+
+123
+00:02:02,159 --> 00:02:04,550
+the swap chain image count
+the swap chain image count will likely
+
+124
+00:02:04,550 --> 00:02:04,560
+the swap chain image count will likely
+ 
+
+125
+00:02:04,560 --> 00:02:05,190
+the swap chain image count will likely
+be either
+
+126
+00:02:05,190 --> 00:02:05,200
+be either
+ 
+
+127
+00:02:05,200 --> 00:02:07,749
+be either
+2 or 3 depending on if your device
+
+128
+00:02:07,749 --> 00:02:07,759
+2 or 3 depending on if your device
+ 
+
+129
+00:02:07,759 --> 00:02:09,910
+2 or 3 depending on if your device
+supports double or triple buffering
+
+130
+00:02:09,910 --> 00:02:09,920
+supports double or triple buffering
+ 
+
+131
+00:02:09,920 --> 00:02:11,910
+supports double or triple buffering
+as each command buffer is going to draw
+
+132
+00:02:11,910 --> 00:02:11,920
+as each command buffer is going to draw
+ 
+
+133
+00:02:11,920 --> 00:02:13,990
+as each command buffer is going to draw
+to a different frame buffer
+
+134
+00:02:13,990 --> 00:02:14,000
+to a different frame buffer
+ 
+
+135
+00:02:14,000 --> 00:02:15,830
+to a different frame buffer
+next we need to allocate our command
+
+136
+00:02:15,830 --> 00:02:15,840
+next we need to allocate our command
+ 
+
+137
+00:02:15,840 --> 00:02:18,229
+next we need to allocate our command
+buffers create a local variable with
+
+138
+00:02:18,229 --> 00:02:18,239
+buffers create a local variable with
+ 
+
+139
+00:02:18,239 --> 00:02:18,790
+buffers create a local variable with
+type
+
+140
+00:02:18,790 --> 00:02:18,800
+type
+ 
+
+141
+00:02:18,800 --> 00:02:21,750
+type
+vk command buffer allocate info called
+
+142
+00:02:21,750 --> 00:02:21,760
+vk command buffer allocate info called
+ 
+
+143
+00:02:21,760 --> 00:02:22,229
+vk command buffer allocate info called
+alec
+
+144
+00:02:22,229 --> 00:02:22,239
+alec
+ 
+
+145
+00:02:22,239 --> 00:02:24,869
+alec
+info make sure not to forget to zero
+
+146
+00:02:24,869 --> 00:02:24,879
+info make sure not to forget to zero
+ 
+
+147
+00:02:24,879 --> 00:02:26,710
+info make sure not to forget to zero
+initialize the struct with trailing
+
+148
+00:02:26,710 --> 00:02:26,720
+initialize the struct with trailing
+ 
+
+149
+00:02:26,720 --> 00:02:27,830
+initialize the struct with trailing
+braces
+
+150
+00:02:27,830 --> 00:02:27,840
+braces
+ 
+
+151
+00:02:27,840 --> 00:02:29,510
+braces
+now just like with the other vulcan
+
+152
+00:02:29,510 --> 00:02:29,520
+now just like with the other vulcan
+ 
+
+153
+00:02:29,520 --> 00:02:32,070
+now just like with the other vulcan
+structs set the s-type member equal to
+
+154
+00:02:32,070 --> 00:02:32,080
+structs set the s-type member equal to
+ 
+
+155
+00:02:32,080 --> 00:02:34,070
+structs set the s-type member equal to
+vk structure type command buffer
+
+156
+00:02:34,070 --> 00:02:34,080
+vk structure type command buffer
+ 
+
+157
+00:02:34,080 --> 00:02:36,150
+vk structure type command buffer
+allocate info
+
+158
+00:02:36,150 --> 00:02:36,160
+allocate info
+ 
+
+159
+00:02:36,160 --> 00:02:39,030
+allocate info
+then the level 2 vk command buffer
+
+160
+00:02:39,030 --> 00:02:39,040
+then the level 2 vk command buffer
+ 
+
+161
+00:02:39,040 --> 00:02:40,229
+then the level 2 vk command buffer
+primary
+
+162
+00:02:40,229 --> 00:02:40,239
+primary
+ 
+
+163
+00:02:40,239 --> 00:02:42,150
+primary
+there are two types of command buffers
+
+164
+00:02:42,150 --> 00:02:42,160
+there are two types of command buffers
+ 
+
+165
+00:02:42,160 --> 00:02:44,309
+there are two types of command buffers
+primary and secondary
+
+166
+00:02:44,309 --> 00:02:44,319
+primary and secondary
+ 
+
+167
+00:02:44,319 --> 00:02:46,150
+primary and secondary
+primary command buffers can be submitted
+
+168
+00:02:46,150 --> 00:02:46,160
+primary command buffers can be submitted
+ 
+
+169
+00:02:46,160 --> 00:02:47,589
+primary command buffers can be submitted
+to a queue for execution
+
+170
+00:02:47,589 --> 00:02:47,599
+to a queue for execution
+ 
+
+171
+00:02:47,599 --> 00:02:49,589
+to a queue for execution
+but cannot be called by other command
+
+172
+00:02:49,589 --> 00:02:49,599
+but cannot be called by other command
+ 
+
+173
+00:02:49,599 --> 00:02:51,750
+but cannot be called by other command
+buffers while secondary command buffers
+
+174
+00:02:51,750 --> 00:02:51,760
+buffers while secondary command buffers
+ 
+
+175
+00:02:51,760 --> 00:02:53,990
+buffers while secondary command buffers
+cannot be submitted but can be called by
+
+176
+00:02:53,990 --> 00:02:54,000
+cannot be submitted but can be called by
+ 
+
+177
+00:02:54,000 --> 00:02:55,670
+cannot be submitted but can be called by
+other command buffers
+
+178
+00:02:55,670 --> 00:02:55,680
+other command buffers
+ 
+
+179
+00:02:55,680 --> 00:02:57,589
+other command buffers
+we will cover secondary command buffers
+
+180
+00:02:57,589 --> 00:02:57,599
+we will cover secondary command buffers
+ 
+
+181
+00:02:57,599 --> 00:02:59,589
+we will cover secondary command buffers
+in a future video
+
+182
+00:02:59,589 --> 00:02:59,599
+in a future video
+ 
+
+183
+00:02:59,599 --> 00:03:01,910
+in a future video
+next set the command pool member to
+
+184
+00:03:01,910 --> 00:03:01,920
+next set the command pool member to
+ 
+
+185
+00:03:01,920 --> 00:03:03,110
+next set the command pool member to
+equal device dot
+
+186
+00:03:03,110 --> 00:03:03,120
+equal device dot
+ 
+
+187
+00:03:03,120 --> 00:03:06,070
+equal device dot
+get command pool in the device class we
+
+188
+00:03:06,070 --> 00:03:06,080
+get command pool in the device class we
+ 
+
+189
+00:03:06,080 --> 00:03:08,070
+get command pool in the device class we
+have already created a command pool when
+
+190
+00:03:08,070 --> 00:03:08,080
+have already created a command pool when
+ 
+
+191
+00:03:08,080 --> 00:03:10,630
+have already created a command pool when
+our device was first initialized
+
+192
+00:03:10,630 --> 00:03:10,640
+our device was first initialized
+ 
+
+193
+00:03:10,640 --> 00:03:12,550
+our device was first initialized
+command pools are opaque objects that
+
+194
+00:03:12,550 --> 00:03:12,560
+command pools are opaque objects that
+ 
+
+195
+00:03:12,560 --> 00:03:15,270
+command pools are opaque objects that
+command buffer memory is allocated from
+
+196
+00:03:15,270 --> 00:03:15,280
+command buffer memory is allocated from
+ 
+
+197
+00:03:15,280 --> 00:03:17,190
+command buffer memory is allocated from
+an application may need to create and
+
+198
+00:03:17,190 --> 00:03:17,200
+an application may need to create and
+ 
+
+199
+00:03:17,200 --> 00:03:19,350
+an application may need to create and
+destroy command buffers frequently
+
+200
+00:03:19,350 --> 00:03:19,360
+destroy command buffers frequently
+ 
+
+201
+00:03:19,360 --> 00:03:21,270
+destroy command buffers frequently
+so to reduce the cost of resource
+
+202
+00:03:21,270 --> 00:03:21,280
+so to reduce the cost of resource
+ 
+
+203
+00:03:21,280 --> 00:03:22,710
+so to reduce the cost of resource
+creation vulcan has us
+
+204
+00:03:22,710 --> 00:03:22,720
+creation vulcan has us
+ 
+
+205
+00:03:22,720 --> 00:03:24,390
+creation vulcan has us
+allocate and free command buffers from
+
+206
+00:03:24,390 --> 00:03:24,400
+allocate and free command buffers from
+ 
+
+207
+00:03:24,400 --> 00:03:26,390
+allocate and free command buffers from
+command pools this way the most
+
+208
+00:03:26,390 --> 00:03:26,400
+command pools this way the most
+ 
+
+209
+00:03:26,400 --> 00:03:27,430
+command pools this way the most
+expensive step
+
+210
+00:03:27,430 --> 00:03:27,440
+expensive step
+ 
+
+211
+00:03:27,440 --> 00:03:29,750
+expensive step
+of acquiring memory can be done once and
+
+212
+00:03:29,750 --> 00:03:29,760
+of acquiring memory can be done once and
+ 
+
+213
+00:03:29,760 --> 00:03:31,830
+of acquiring memory can be done once and
+then reused as buffers are created and
+
+214
+00:03:31,830 --> 00:03:31,840
+then reused as buffers are created and
+ 
+
+215
+00:03:31,840 --> 00:03:33,030
+then reused as buffers are created and
+destroyed
+
+216
+00:03:33,030 --> 00:03:33,040
+destroyed
+ 
+
+217
+00:03:33,040 --> 00:03:34,710
+destroyed
+finally set the command buffer count
+
+218
+00:03:34,710 --> 00:03:34,720
+finally set the command buffer count
+ 
+
+219
+00:03:34,720 --> 00:03:36,390
+finally set the command buffer count
+variable to the size of our command
+
+220
+00:03:36,390 --> 00:03:36,400
+variable to the size of our command
+ 
+
+221
+00:03:36,400 --> 00:03:37,750
+variable to the size of our command
+buffers vector
+
+222
+00:03:37,750 --> 00:03:37,760
+buffers vector
+ 
+
+223
+00:03:37,760 --> 00:03:41,110
+buffers vector
+this expects a uint32 type so static
+
+224
+00:03:41,110 --> 00:03:41,120
+this expects a uint32 type so static
+ 
+
+225
+00:03:41,120 --> 00:03:45,589
+this expects a uint32 type so static
+cast uint32 command buffers dot size
+
+226
+00:03:45,589 --> 00:03:45,599
+cast uint32 command buffers dot size
+ 
+
+227
+00:03:45,599 --> 00:03:48,229
+cast uint32 command buffers dot size
+then in an if statement call vk allocate
+
+228
+00:03:48,229 --> 00:03:48,239
+then in an if statement call vk allocate
+ 
+
+229
+00:03:48,239 --> 00:03:49,430
+then in an if statement call vk allocate
+command buffers
+
+230
+00:03:49,430 --> 00:03:49,440
+command buffers
+ 
+
+231
+00:03:49,440 --> 00:03:52,710
+command buffers
+lve device dot device a pointer to our
+
+232
+00:03:52,710 --> 00:03:52,720
+lve device dot device a pointer to our
+ 
+
+233
+00:03:52,720 --> 00:03:54,149
+lve device dot device a pointer to our
+alec info
+
+234
+00:03:54,149 --> 00:03:54,159
+alec info
+ 
+
+235
+00:03:54,159 --> 00:03:58,390
+alec info
+and then command buffers dot data
+
+236
+00:03:58,390 --> 00:03:58,400
+
+ 
+
+237
+00:03:58,400 --> 00:04:00,630
+ 
+check that this is not equal to vk
+
+238
+00:04:00,630 --> 00:04:00,640
+check that this is not equal to vk
+ 
+
+239
+00:04:00,640 --> 00:04:03,270
+check that this is not equal to vk
+success otherwise throw a new runtime
+
+240
+00:04:03,270 --> 00:04:03,280
+success otherwise throw a new runtime
+ 
+
+241
+00:04:03,280 --> 00:04:05,270
+success otherwise throw a new runtime
+error
+
+242
+00:04:05,270 --> 00:04:05,280
+error
+ 
+
+243
+00:04:05,280 --> 00:04:10,070
+error
+fail to allocate command buffers
+
+244
+00:04:10,070 --> 00:04:10,080
+
+ 
+
+245
+00:04:10,080 --> 00:04:12,309
+ 
+the next step is we need to record or
+
+246
+00:04:12,309 --> 00:04:12,319
+the next step is we need to record or
+ 
+
+247
+00:04:12,319 --> 00:04:14,710
+the next step is we need to record or
+draw commands to each buffer
+
+248
+00:04:14,710 --> 00:04:14,720
+draw commands to each buffer
+ 
+
+249
+00:04:14,720 --> 00:04:17,909
+draw commands to each buffer
+so in a for loop int i equals zero i is
+
+250
+00:04:17,909 --> 00:04:17,919
+so in a for loop int i equals zero i is
+ 
+
+251
+00:04:17,919 --> 00:04:18,629
+so in a for loop int i equals zero i is
+less than
+
+252
+00:04:18,629 --> 00:04:18,639
+less than
+ 
+
+253
+00:04:18,639 --> 00:04:22,390
+less than
+command buffers dot size i plus plus
+
+254
+00:04:22,390 --> 00:04:22,400
+command buffers dot size i plus plus
+ 
+
+255
+00:04:22,400 --> 00:04:24,950
+command buffers dot size i plus plus
+and now we have another struct type vk
+
+256
+00:04:24,950 --> 00:04:24,960
+and now we have another struct type vk
+ 
+
+257
+00:04:24,960 --> 00:04:25,430
+and now we have another struct type vk
+command
+
+258
+00:04:25,430 --> 00:04:25,440
+command
+ 
+
+259
+00:04:25,440 --> 00:04:29,030
+command
+buffer begin info called begin
+
+260
+00:04:29,030 --> 00:04:29,040
+buffer begin info called begin
+ 
+
+261
+00:04:29,040 --> 00:04:32,390
+buffer begin info called begin
+info with brace initialization set the s
+
+262
+00:04:32,390 --> 00:04:32,400
+info with brace initialization set the s
+ 
+
+263
+00:04:32,400 --> 00:04:35,189
+info with brace initialization set the s
+type member to vk structure type command
+
+264
+00:04:35,189 --> 00:04:35,199
+type member to vk structure type command
+ 
+
+265
+00:04:35,199 --> 00:04:36,710
+type member to vk structure type command
+buffer begin info
+
+266
+00:04:36,710 --> 00:04:36,720
+buffer begin info
+ 
+
+267
+00:04:36,720 --> 00:04:39,670
+buffer begin info
+we don't need any other fields yet then
+
+268
+00:04:39,670 --> 00:04:39,680
+we don't need any other fields yet then
+ 
+
+269
+00:04:39,680 --> 00:04:41,909
+we don't need any other fields yet then
+in an if statement call the function vk
+
+270
+00:04:41,909 --> 00:04:41,919
+in an if statement call the function vk
+ 
+
+271
+00:04:41,919 --> 00:04:42,390
+in an if statement call the function vk
+begin
+
+272
+00:04:42,390 --> 00:04:42,400
+begin
+ 
+
+273
+00:04:42,400 --> 00:04:45,430
+begin
+command buffer with the command buffer
+
+274
+00:04:45,430 --> 00:04:45,440
+command buffer with the command buffer
+ 
+
+275
+00:04:45,440 --> 00:04:46,310
+command buffer with the command buffer
+at index i
+
+276
+00:04:46,310 --> 00:04:46,320
+at index i
+ 
+
+277
+00:04:46,320 --> 00:04:48,469
+at index i
+as the first argument and a pointer to
+
+278
+00:04:48,469 --> 00:04:48,479
+as the first argument and a pointer to
+ 
+
+279
+00:04:48,479 --> 00:04:53,270
+as the first argument and a pointer to
+the begin info as the second
+
+280
+00:04:53,270 --> 00:04:53,280
+
+ 
+
+281
+00:04:53,280 --> 00:04:55,270
+ 
+check that this is not equal to vk
+
+282
+00:04:55,270 --> 00:04:55,280
+check that this is not equal to vk
+ 
+
+283
+00:04:55,280 --> 00:04:57,510
+check that this is not equal to vk
+success otherwise throw an error that
+
+284
+00:04:57,510 --> 00:04:57,520
+success otherwise throw an error that
+ 
+
+285
+00:04:57,520 --> 00:04:59,350
+success otherwise throw an error that
+our command buffer failed to begin
+
+286
+00:04:59,350 --> 00:04:59,360
+our command buffer failed to begin
+ 
+
+287
+00:04:59,360 --> 00:05:05,510
+our command buffer failed to begin
+recording
+
+288
+00:05:05,510 --> 00:05:05,520
+
+ 
+
+289
+00:05:05,520 --> 00:05:07,350
+ 
+so the first command we're going to
+
+290
+00:05:07,350 --> 00:05:07,360
+so the first command we're going to
+ 
+
+291
+00:05:07,360 --> 00:05:09,510
+so the first command we're going to
+record is to begin a render pass
+
+292
+00:05:09,510 --> 00:05:09,520
+record is to begin a render pass
+ 
+
+293
+00:05:09,520 --> 00:05:11,590
+record is to begin a render pass
+to do so we need to configure another
+
+294
+00:05:11,590 --> 00:05:11,600
+to do so we need to configure another
+ 
+
+295
+00:05:11,600 --> 00:05:12,550
+to do so we need to configure another
+struct
+
+296
+00:05:12,550 --> 00:05:12,560
+struct
+ 
+
+297
+00:05:12,560 --> 00:05:14,629
+struct
+so create another local variable this
+
+298
+00:05:14,629 --> 00:05:14,639
+so create another local variable this
+ 
+
+299
+00:05:14,639 --> 00:05:17,430
+so create another local variable this
+time with type vk render pass begin info
+
+300
+00:05:17,430 --> 00:05:17,440
+time with type vk render pass begin info
+ 
+
+301
+00:05:17,440 --> 00:05:19,909
+time with type vk render pass begin info
+called render pass info set the s-type
+
+302
+00:05:19,909 --> 00:05:19,919
+called render pass info set the s-type
+ 
+
+303
+00:05:19,919 --> 00:05:21,590
+called render pass info set the s-type
+member to vk structure type
+
+304
+00:05:21,590 --> 00:05:21,600
+member to vk structure type
+ 
+
+305
+00:05:21,600 --> 00:05:24,390
+member to vk structure type
+render pass begin info next we need to
+
+306
+00:05:24,390 --> 00:05:24,400
+render pass begin info next we need to
+ 
+
+307
+00:05:24,400 --> 00:05:25,830
+render pass begin info next we need to
+set the render pass member
+
+308
+00:05:25,830 --> 00:05:25,840
+set the render pass member
+ 
+
+309
+00:05:25,840 --> 00:05:27,749
+set the render pass member
+which we have already one set up for us
+
+310
+00:05:27,749 --> 00:05:27,759
+which we have already one set up for us
+ 
+
+311
+00:05:27,759 --> 00:05:29,270
+which we have already one set up for us
+by the swap chain
+
+312
+00:05:29,270 --> 00:05:29,280
+by the swap chain
+ 
+
+313
+00:05:29,280 --> 00:05:31,990
+by the swap chain
+so render pass is equal to swap chain
+
+314
+00:05:31,990 --> 00:05:32,000
+so render pass is equal to swap chain
+ 
+
+315
+00:05:32,000 --> 00:05:32,550
+so render pass is equal to swap chain
+dot
+
+316
+00:05:32,550 --> 00:05:32,560
+dot
+ 
+
+317
+00:05:32,560 --> 00:05:35,270
+dot
+get render pass next we need to say
+
+318
+00:05:35,270 --> 00:05:35,280
+get render pass next we need to say
+ 
+
+319
+00:05:35,280 --> 00:05:37,110
+get render pass next we need to say
+which frame buffer this render pass is
+
+320
+00:05:37,110 --> 00:05:37,120
+which frame buffer this render pass is
+ 
+
+321
+00:05:37,120 --> 00:05:40,629
+which frame buffer this render pass is
+write in so renderpassinfo.framebuffer
+
+322
+00:05:40,629 --> 00:05:40,639
+write in so renderpassinfo.framebuffer
+ 
+
+323
+00:05:40,639 --> 00:05:43,270
+write in so renderpassinfo.framebuffer
+is equal to swapchain.getframebuffer at
+
+324
+00:05:43,270 --> 00:05:43,280
+is equal to swapchain.getframebuffer at
+ 
+
+325
+00:05:43,280 --> 00:05:45,430
+is equal to swapchain.getframebuffer at
+index i
+
+326
+00:05:45,430 --> 00:05:45,440
+index i
+ 
+
+327
+00:05:45,440 --> 00:05:48,150
+index i
+now we need to set up the render area
+
+328
+00:05:48,150 --> 00:05:48,160
+now we need to set up the render area
+ 
+
+329
+00:05:48,160 --> 00:05:49,590
+now we need to set up the render area
+this defines the area
+
+330
+00:05:49,590 --> 00:05:49,600
+this defines the area
+ 
+
+331
+00:05:49,600 --> 00:05:51,590
+this defines the area
+where the shader loads and stores will
+
+332
+00:05:51,590 --> 00:05:51,600
+where the shader loads and stores will
+ 
+
+333
+00:05:51,600 --> 00:05:54,469
+where the shader loads and stores will
+take place so set render passinfo dot
+
+334
+00:05:54,469 --> 00:05:54,479
+take place so set render passinfo dot
+ 
+
+335
+00:05:54,479 --> 00:05:56,070
+take place so set render passinfo dot
+render area dot offset
+
+336
+00:05:56,070 --> 00:05:56,080
+render area dot offset
+ 
+
+337
+00:05:56,080 --> 00:05:59,029
+render area dot offset
+equal to zero zero then render pass info
+
+338
+00:05:59,029 --> 00:05:59,039
+equal to zero zero then render pass info
+ 
+
+339
+00:05:59,039 --> 00:06:01,110
+equal to zero zero then render pass info
+dot render area dot extent
+
+340
+00:06:01,110 --> 00:06:01,120
+dot render area dot extent
+ 
+
+341
+00:06:01,120 --> 00:06:03,430
+dot render area dot extent
+equal to swap chain dot get swap chain
+
+342
+00:06:03,430 --> 00:06:03,440
+equal to swap chain dot get swap chain
+ 
+
+343
+00:06:03,440 --> 00:06:04,629
+equal to swap chain dot get swap chain
+extent
+
+344
+00:06:04,629 --> 00:06:04,639
+extent
+ 
+
+345
+00:06:04,639 --> 00:06:06,550
+extent
+make sure to use the swap chain extent
+
+346
+00:06:06,550 --> 00:06:06,560
+make sure to use the swap chain extent
+ 
+
+347
+00:06:06,560 --> 00:06:08,550
+make sure to use the swap chain extent
+here and not the window extent
+
+348
+00:06:08,550 --> 00:06:08,560
+here and not the window extent
+ 
+
+349
+00:06:08,560 --> 00:06:10,550
+here and not the window extent
+because as mentioned before for high
+
+350
+00:06:10,550 --> 00:06:10,560
+because as mentioned before for high
+ 
+
+351
+00:06:10,560 --> 00:06:12,710
+because as mentioned before for high
+density displays the swap chain extent
+
+352
+00:06:12,710 --> 00:06:12,720
+density displays the swap chain extent
+ 
+
+353
+00:06:12,720 --> 00:06:13,510
+density displays the swap chain extent
+may actually be
+
+354
+00:06:13,510 --> 00:06:13,520
+may actually be
+ 
+
+355
+00:06:13,520 --> 00:06:16,790
+may actually be
+larger than our windows
+
+356
+00:06:16,790 --> 00:06:16,800
+larger than our windows
+ 
+
+357
+00:06:16,800 --> 00:06:18,870
+larger than our windows
+next we need to set the clear values
+
+358
+00:06:18,870 --> 00:06:18,880
+next we need to set the clear values
+ 
+
+359
+00:06:18,880 --> 00:06:19,990
+next we need to set the clear values
+this corresponds to
+
+360
+00:06:19,990 --> 00:06:20,000
+this corresponds to
+ 
+
+361
+00:06:20,000 --> 00:06:21,749
+this corresponds to
+what we want the initial values of our
+
+362
+00:06:21,749 --> 00:06:21,759
+what we want the initial values of our
+ 
+
+363
+00:06:21,759 --> 00:06:23,110
+what we want the initial values of our
+frame buffer attachments
+
+364
+00:06:23,110 --> 00:06:23,120
+frame buffer attachments
+ 
+
+365
+00:06:23,120 --> 00:06:25,830
+frame buffer attachments
+to be cleared to so first at the top of
+
+366
+00:06:25,830 --> 00:06:25,840
+to be cleared to so first at the top of
+ 
+
+367
+00:06:25,840 --> 00:06:26,469
+to be cleared to so first at the top of
+the file
+
+368
+00:06:26,469 --> 00:06:26,479
+the file
+ 
+
+369
+00:06:26,479 --> 00:06:29,749
+the file
+include array then std array
+
+370
+00:06:29,749 --> 00:06:29,759
+include array then std array
+ 
+
+371
+00:06:29,759 --> 00:06:32,390
+include array then std array
+vk clear value with size 2 closing
+
+372
+00:06:32,390 --> 00:06:32,400
+vk clear value with size 2 closing
+ 
+
+373
+00:06:32,400 --> 00:06:33,110
+vk clear value with size 2 closing
+bracket
+
+374
+00:06:33,110 --> 00:06:33,120
+bracket
+ 
+
+375
+00:06:33,120 --> 00:06:37,230
+bracket
+called clearvalues then at
+
+376
+00:06:37,230 --> 00:06:37,240
+called clearvalues then at
+ 
+
+377
+00:06:37,240 --> 00:06:38,629
+called clearvalues then at
+clearvalueindex0.color
+
+378
+00:06:38,629 --> 00:06:38,639
+clearvalueindex0.color
+ 
+
+379
+00:06:38,639 --> 00:06:41,350
+clearvalueindex0.color
+set this equal to an rgba value of your
+
+380
+00:06:41,350 --> 00:06:41,360
+set this equal to an rgba value of your
+ 
+
+381
+00:06:41,360 --> 00:06:42,070
+set this equal to an rgba value of your
+choosing
+
+382
+00:06:42,070 --> 00:06:42,080
+choosing
+ 
+
+383
+00:06:42,080 --> 00:06:44,790
+choosing
+then at clear values index 1 set the
+
+384
+00:06:44,790 --> 00:06:44,800
+then at clear values index 1 set the
+ 
+
+385
+00:06:44,800 --> 00:06:45,270
+then at clear values index 1 set the
+depth
+
+386
+00:06:45,270 --> 00:06:45,280
+depth
+ 
+
+387
+00:06:45,280 --> 00:06:48,710
+depth
+stencil clear value to 1 0
+
+388
+00:06:48,710 --> 00:06:48,720
+stencil clear value to 1 0
+ 
+
+389
+00:06:48,720 --> 00:06:50,710
+stencil clear value to 1 0
+remember that for the depth buffer the
+
+390
+00:06:50,710 --> 00:06:50,720
+remember that for the depth buffer the
+ 
+
+391
+00:06:50,720 --> 00:06:53,189
+remember that for the depth buffer the
+farthest away value is 1 and the closest
+
+392
+00:06:53,189 --> 00:06:53,199
+farthest away value is 1 and the closest
+ 
+
+393
+00:06:53,199 --> 00:06:54,309
+farthest away value is 1 and the closest
+is 0.
+
+394
+00:06:54,309 --> 00:06:54,319
+is 0.
+ 
+
+395
+00:06:54,319 --> 00:06:57,189
+is 0.
+don't worry about the stencil for now so
+
+396
+00:06:57,189 --> 00:06:57,199
+don't worry about the stencil for now so
+ 
+
+397
+00:06:57,199 --> 00:06:59,110
+don't worry about the stencil for now so
+one thing that you may find confusing is
+
+398
+00:06:59,110 --> 00:06:59,120
+one thing that you may find confusing is
+ 
+
+399
+00:06:59,120 --> 00:06:59,510
+one thing that you may find confusing is
+why
+
+400
+00:06:59,510 --> 00:06:59,520
+why
+ 
+
+401
+00:06:59,520 --> 00:07:01,909
+why
+we are saying the clear value zero dot
+
+402
+00:07:01,909 --> 00:07:01,919
+we are saying the clear value zero dot
+ 
+
+403
+00:07:01,919 --> 00:07:02,629
+we are saying the clear value zero dot
+color
+
+404
+00:07:02,629 --> 00:07:02,639
+color
+ 
+
+405
+00:07:02,639 --> 00:07:04,870
+color
+but not clear value zero dot depth
+
+406
+00:07:04,870 --> 00:07:04,880
+but not clear value zero dot depth
+ 
+
+407
+00:07:04,880 --> 00:07:06,390
+but not clear value zero dot depth
+stencil
+
+408
+00:07:06,390 --> 00:07:06,400
+stencil
+ 
+
+409
+00:07:06,400 --> 00:07:08,309
+stencil
+and that's just because if you remember
+
+410
+00:07:08,309 --> 00:07:08,319
+and that's just because if you remember
+ 
+
+411
+00:07:08,319 --> 00:07:10,150
+and that's just because if you remember
+in our render pass we structured our
+
+412
+00:07:10,150 --> 00:07:10,160
+in our render pass we structured our
+ 
+
+413
+00:07:10,160 --> 00:07:11,990
+in our render pass we structured our
+attachments so that index zero is the
+
+414
+00:07:11,990 --> 00:07:12,000
+attachments so that index zero is the
+ 
+
+415
+00:07:12,000 --> 00:07:13,990
+attachments so that index zero is the
+color attachment and index one is the
+
+416
+00:07:13,990 --> 00:07:14,000
+color attachment and index one is the
+ 
+
+417
+00:07:14,000 --> 00:07:16,230
+color attachment and index one is the
+depth attachment
+
+418
+00:07:16,230 --> 00:07:16,240
+depth attachment
+ 
+
+419
+00:07:16,240 --> 00:07:18,070
+depth attachment
+now let's provide a render pass info
+
+420
+00:07:18,070 --> 00:07:18,080
+now let's provide a render pass info
+ 
+
+421
+00:07:18,080 --> 00:07:19,909
+now let's provide a render pass info
+with our clear values info
+
+422
+00:07:19,909 --> 00:07:19,919
+with our clear values info
+ 
+
+423
+00:07:19,919 --> 00:07:22,950
+with our clear values info
+so renderpassinfo.clearvalue count
+
+424
+00:07:22,950 --> 00:07:22,960
+so renderpassinfo.clearvalue count
+ 
+
+425
+00:07:22,960 --> 00:07:28,830
+so renderpassinfo.clearvalue count
+equals staticcast uint32 type
+
+426
+00:07:28,830 --> 00:07:28,840
+
+ 
+
+427
+00:07:28,840 --> 00:07:29,990
+
+clearvalues.size
+
+428
+00:07:29,990 --> 00:07:30,000
+clearvalues.size
+ 
+
+429
+00:07:30,000 --> 00:07:33,790
+clearvalues.size
+and renderpassinfo.pclearvalues equals
+
+430
+00:07:33,790 --> 00:07:33,800
+and renderpassinfo.pclearvalues equals
+ 
+
+431
+00:07:33,800 --> 00:07:36,870
+and renderpassinfo.pclearvalues equals
+clearvalues.data that's it for our
+
+432
+00:07:36,870 --> 00:07:36,880
+clearvalues.data that's it for our
+ 
+
+433
+00:07:36,880 --> 00:07:38,230
+clearvalues.data that's it for our
+render pass info
+
+434
+00:07:38,230 --> 00:07:38,240
+render pass info
+ 
+
+435
+00:07:38,240 --> 00:07:40,390
+render pass info
+so let's record to our command buffer to
+
+436
+00:07:40,390 --> 00:07:40,400
+so let's record to our command buffer to
+ 
+
+437
+00:07:40,400 --> 00:07:42,230
+so let's record to our command buffer to
+begin this render pass
+
+438
+00:07:42,230 --> 00:07:42,240
+begin this render pass
+ 
+
+439
+00:07:42,240 --> 00:07:44,550
+begin this render pass
+we do this with the function vk command
+
+440
+00:07:44,550 --> 00:07:44,560
+we do this with the function vk command
+ 
+
+441
+00:07:44,560 --> 00:07:45,909
+we do this with the function vk command
+begin render pass
+
+442
+00:07:45,909 --> 00:07:45,919
+begin render pass
+ 
+
+443
+00:07:45,919 --> 00:07:47,670
+begin render pass
+this first argument is the command
+
+444
+00:07:47,670 --> 00:07:47,680
+this first argument is the command
+ 
+
+445
+00:07:47,680 --> 00:07:49,430
+this first argument is the command
+buffer we are recording to
+
+446
+00:07:49,430 --> 00:07:49,440
+buffer we are recording to
+ 
+
+447
+00:07:49,440 --> 00:07:52,390
+buffer we are recording to
+so command buffers at index i next pass
+
+448
+00:07:52,390 --> 00:07:52,400
+so command buffers at index i next pass
+ 
+
+449
+00:07:52,400 --> 00:07:53,749
+so command buffers at index i next pass
+in our render pass info
+
+450
+00:07:53,749 --> 00:07:53,759
+in our render pass info
+ 
+
+451
+00:07:53,759 --> 00:07:56,150
+in our render pass info
+using a pointer and for the third
+
+452
+00:07:56,150 --> 00:07:56,160
+using a pointer and for the third
+ 
+
+453
+00:07:56,160 --> 00:07:57,990
+using a pointer and for the third
+argument use vk subpass
+
+454
+00:07:57,990 --> 00:07:58,000
+argument use vk subpass
+ 
+
+455
+00:07:58,000 --> 00:08:01,029
+argument use vk subpass
+contents inline the vk subpass contents
+
+456
+00:08:01,029 --> 00:08:01,039
+contents inline the vk subpass contents
+ 
+
+457
+00:08:01,039 --> 00:08:01,589
+contents inline the vk subpass contents
+argument
+
+458
+00:08:01,589 --> 00:08:01,599
+argument
+ 
+
+459
+00:08:01,599 --> 00:08:03,430
+argument
+signals that the subsequent render pass
+
+460
+00:08:03,430 --> 00:08:03,440
+signals that the subsequent render pass
+ 
+
+461
+00:08:03,440 --> 00:08:05,350
+signals that the subsequent render pass
+commands will be directly embedded in
+
+462
+00:08:05,350 --> 00:08:05,360
+commands will be directly embedded in
+ 
+
+463
+00:08:05,360 --> 00:08:07,589
+commands will be directly embedded in
+the primary command buffer itself
+
+464
+00:08:07,589 --> 00:08:07,599
+the primary command buffer itself
+ 
+
+465
+00:08:07,599 --> 00:08:09,350
+the primary command buffer itself
+and that no secondary command buffers
+
+466
+00:08:09,350 --> 00:08:09,360
+and that no secondary command buffers
+ 
+
+467
+00:08:09,360 --> 00:08:11,990
+and that no secondary command buffers
+will be used the alternative is to use
+
+468
+00:08:11,990 --> 00:08:12,000
+will be used the alternative is to use
+ 
+
+469
+00:08:12,000 --> 00:08:14,390
+will be used the alternative is to use
+vk subpass content's secondary command
+
+470
+00:08:14,390 --> 00:08:14,400
+vk subpass content's secondary command
+ 
+
+471
+00:08:14,400 --> 00:08:14,950
+vk subpass content's secondary command
+buffers
+
+472
+00:08:14,950 --> 00:08:14,960
+buffers
+ 
+
+473
+00:08:14,960 --> 00:08:16,950
+buffers
+signaling that render pass commands will
+
+474
+00:08:16,950 --> 00:08:16,960
+signaling that render pass commands will
+ 
+
+475
+00:08:16,960 --> 00:08:18,950
+signaling that render pass commands will
+be executed from secondary command
+
+476
+00:08:18,950 --> 00:08:18,960
+be executed from secondary command
+ 
+
+477
+00:08:18,960 --> 00:08:19,990
+be executed from secondary command
+buffers
+
+478
+00:08:19,990 --> 00:08:20,000
+buffers
+ 
+
+479
+00:08:20,000 --> 00:08:22,550
+buffers
+this means there is no mixing allowed we
+
+480
+00:08:22,550 --> 00:08:22,560
+this means there is no mixing allowed we
+ 
+
+481
+00:08:22,560 --> 00:08:24,790
+this means there is no mixing allowed we
+cannot have a render pass that uses both
+
+482
+00:08:24,790 --> 00:08:24,800
+cannot have a render pass that uses both
+ 
+
+483
+00:08:24,800 --> 00:08:25,749
+cannot have a render pass that uses both
+inline commands
+
+484
+00:08:25,749 --> 00:08:25,759
+inline commands
+ 
+
+485
+00:08:25,759 --> 00:08:27,589
+inline commands
+and secondary command buffers at the
+
+486
+00:08:27,589 --> 00:08:27,599
+and secondary command buffers at the
+ 
+
+487
+00:08:27,599 --> 00:08:29,110
+and secondary command buffers at the
+same time
+
+488
+00:08:29,110 --> 00:08:29,120
+same time
+ 
+
+489
+00:08:29,120 --> 00:08:30,629
+same time
+the first thing we need to do in a
+
+490
+00:08:30,629 --> 00:08:30,639
+the first thing we need to do in a
+ 
+
+491
+00:08:30,639 --> 00:08:32,949
+the first thing we need to do in a
+render pass is bind a pipeline
+
+492
+00:08:32,949 --> 00:08:32,959
+render pass is bind a pipeline
+ 
+
+493
+00:08:32,959 --> 00:08:34,709
+render pass is bind a pipeline
+jump to your pipeline header and add a
+
+494
+00:08:34,709 --> 00:08:34,719
+jump to your pipeline header and add a
+ 
+
+495
+00:08:34,719 --> 00:08:36,149
+jump to your pipeline header and add a
+public function void
+
+496
+00:08:36,149 --> 00:08:36,159
+public function void
+ 
+
+497
+00:08:36,159 --> 00:08:41,430
+public function void
+bind vk command buffer command buffer
+
+498
+00:08:41,430 --> 00:08:41,440
+bind vk command buffer command buffer
+ 
+
+499
+00:08:41,440 --> 00:08:43,589
+bind vk command buffer command buffer
+copy the function signature and paste it
+
+500
+00:08:43,589 --> 00:08:43,599
+copy the function signature and paste it
+ 
+
+501
+00:08:43,599 --> 00:08:47,030
+copy the function signature and paste it
+into your pipeline implementation file
+
+502
+00:08:47,030 --> 00:08:47,040
+into your pipeline implementation file
+ 
+
+503
+00:08:47,040 --> 00:08:49,030
+into your pipeline implementation file
+add the class scope before the function
+
+504
+00:08:49,030 --> 00:08:49,040
+add the class scope before the function
+ 
+
+505
+00:08:49,040 --> 00:08:50,870
+add the class scope before the function
+name
+
+506
+00:08:50,870 --> 00:08:50,880
+name
+ 
+
+507
+00:08:50,880 --> 00:08:53,430
+name
+and in this function called vk command
+
+508
+00:08:53,430 --> 00:08:53,440
+and in this function called vk command
+ 
+
+509
+00:08:53,440 --> 00:08:55,670
+and in this function called vk command
+bind pipeline
+
+510
+00:08:55,670 --> 00:08:55,680
+bind pipeline
+ 
+
+511
+00:08:55,680 --> 00:08:57,430
+bind pipeline
+with the first command being the command
+
+512
+00:08:57,430 --> 00:08:57,440
+with the first command being the command
+ 
+
+513
+00:08:57,440 --> 00:08:58,710
+with the first command being the command
+buffer then
+
+514
+00:08:58,710 --> 00:08:58,720
+buffer then
+ 
+
+515
+00:08:58,720 --> 00:09:01,990
+buffer then
+vk pipeline bind point graphics
+
+516
+00:09:01,990 --> 00:09:02,000
+vk pipeline bind point graphics
+ 
+
+517
+00:09:02,000 --> 00:09:05,269
+vk pipeline bind point graphics
+and finally graphics pipeline the vk
+
+518
+00:09:05,269 --> 00:09:05,279
+and finally graphics pipeline the vk
+ 
+
+519
+00:09:05,279 --> 00:09:08,070
+and finally graphics pipeline the vk
+pipeline bind point graphics option
+
+520
+00:09:08,070 --> 00:09:08,080
+pipeline bind point graphics option
+ 
+
+521
+00:09:08,080 --> 00:09:10,470
+pipeline bind point graphics option
+signals that this is a graphics pipeline
+
+522
+00:09:10,470 --> 00:09:10,480
+signals that this is a graphics pipeline
+ 
+
+523
+00:09:10,480 --> 00:09:12,550
+signals that this is a graphics pipeline
+the other types of pipelines are compute
+
+524
+00:09:12,550 --> 00:09:12,560
+the other types of pipelines are compute
+ 
+
+525
+00:09:12,560 --> 00:09:15,350
+the other types of pipelines are compute
+pipelines and ray tracing pipelines
+
+526
+00:09:15,350 --> 00:09:15,360
+pipelines and ray tracing pipelines
+ 
+
+527
+00:09:15,360 --> 00:09:17,430
+pipelines and ray tracing pipelines
+we don't need any checks validating the
+
+528
+00:09:17,430 --> 00:09:17,440
+we don't need any checks validating the
+ 
+
+529
+00:09:17,440 --> 00:09:19,430
+we don't need any checks validating the
+graphics pipeline before binding
+
+530
+00:09:19,430 --> 00:09:19,440
+graphics pipeline before binding
+ 
+
+531
+00:09:19,440 --> 00:09:21,190
+graphics pipeline before binding
+because it must have been properly
+
+532
+00:09:21,190 --> 00:09:21,200
+because it must have been properly
+ 
+
+533
+00:09:21,200 --> 00:09:24,470
+because it must have been properly
+created at initialization
+
+534
+00:09:24,470 --> 00:09:24,480
+created at initialization
+ 
+
+535
+00:09:24,480 --> 00:09:26,630
+created at initialization
+back in first app call this function on
+
+536
+00:09:26,630 --> 00:09:26,640
+back in first app call this function on
+ 
+
+537
+00:09:26,640 --> 00:09:27,590
+back in first app call this function on
+our pipeline
+
+538
+00:09:27,590 --> 00:09:27,600
+our pipeline
+ 
+
+539
+00:09:27,600 --> 00:09:30,949
+our pipeline
+so lve arrow bind command buffer at
+
+540
+00:09:30,949 --> 00:09:30,959
+so lve arrow bind command buffer at
+ 
+
+541
+00:09:30,959 --> 00:09:35,110
+so lve arrow bind command buffer at
+index i
+
+542
+00:09:35,110 --> 00:09:35,120
+
+ 
+
+543
+00:09:35,120 --> 00:09:37,750
+ 
+then use vk command draw with command
+
+544
+00:09:37,750 --> 00:09:37,760
+then use vk command draw with command
+ 
+
+545
+00:09:37,760 --> 00:09:39,350
+then use vk command draw with command
+buffer at index i
+
+546
+00:09:39,350 --> 00:09:39,360
+buffer at index i
+ 
+
+547
+00:09:39,360 --> 00:09:43,430
+buffer at index i
+then three one zero zero
+
+548
+00:09:43,430 --> 00:09:43,440
+then three one zero zero
+ 
+
+549
+00:09:43,440 --> 00:09:45,509
+then three one zero zero
+this records a draw command to draw
+
+550
+00:09:45,509 --> 00:09:45,519
+this records a draw command to draw
+ 
+
+551
+00:09:45,519 --> 00:09:48,230
+this records a draw command to draw
+three vertices and only one instance
+
+552
+00:09:48,230 --> 00:09:48,240
+three vertices and only one instance
+ 
+
+553
+00:09:48,240 --> 00:09:49,990
+three vertices and only one instance
+instances can be used when you want to
+
+554
+00:09:49,990 --> 00:09:50,000
+instances can be used when you want to
+ 
+
+555
+00:09:50,000 --> 00:09:52,150
+instances can be used when you want to
+draw multiple copies of the same vertex
+
+556
+00:09:52,150 --> 00:09:52,160
+draw multiple copies of the same vertex
+ 
+
+557
+00:09:52,160 --> 00:09:52,710
+draw multiple copies of the same vertex
+data
+
+558
+00:09:52,710 --> 00:09:52,720
+data
+ 
+
+559
+00:09:52,720 --> 00:09:54,550
+data
+you sometimes see this being used for
+
+560
+00:09:54,550 --> 00:09:54,560
+you sometimes see this being used for
+ 
+
+561
+00:09:54,560 --> 00:09:56,230
+you sometimes see this being used for
+rendering particle systems
+
+562
+00:09:56,230 --> 00:09:56,240
+rendering particle systems
+ 
+
+563
+00:09:56,240 --> 00:09:58,230
+rendering particle systems
+we'll cover this in the future and then
+
+564
+00:09:58,230 --> 00:09:58,240
+we'll cover this in the future and then
+ 
+
+565
+00:09:58,240 --> 00:10:01,030
+we'll cover this in the future and then
+0 0 because we aren't using any offsets
+
+566
+00:10:01,030 --> 00:10:01,040
+0 0 because we aren't using any offsets
+ 
+
+567
+00:10:01,040 --> 00:10:02,069
+0 0 because we aren't using any offsets
+into our data
+
+568
+00:10:02,069 --> 00:10:02,079
+into our data
+ 
+
+569
+00:10:02,079 --> 00:10:03,750
+into our data
+we actually aren't even providing any
+
+570
+00:10:03,750 --> 00:10:03,760
+we actually aren't even providing any
+ 
+
+571
+00:10:03,760 --> 00:10:05,829
+we actually aren't even providing any
+data right now because if you remember
+
+572
+00:10:05,829 --> 00:10:05,839
+data right now because if you remember
+ 
+
+573
+00:10:05,839 --> 00:10:07,750
+data right now because if you remember
+way back when we set up our vertex
+
+574
+00:10:07,750 --> 00:10:07,760
+way back when we set up our vertex
+ 
+
+575
+00:10:07,760 --> 00:10:08,230
+way back when we set up our vertex
+shader
+
+576
+00:10:08,230 --> 00:10:08,240
+shader
+ 
+
+577
+00:10:08,240 --> 00:10:10,150
+shader
+we actually hard-coded our vertices
+
+578
+00:10:10,150 --> 00:10:10,160
+we actually hard-coded our vertices
+ 
+
+579
+00:10:10,160 --> 00:10:12,870
+we actually hard-coded our vertices
+directly into the shader itself
+
+580
+00:10:12,870 --> 00:10:12,880
+directly into the shader itself
+ 
+
+581
+00:10:12,880 --> 00:10:15,350
+directly into the shader itself
+and that's it for our commands to finish
+
+582
+00:10:15,350 --> 00:10:15,360
+and that's it for our commands to finish
+ 
+
+583
+00:10:15,360 --> 00:10:17,350
+and that's it for our commands to finish
+recording first end the render path
+
+584
+00:10:17,350 --> 00:10:17,360
+recording first end the render path
+ 
+
+585
+00:10:17,360 --> 00:10:19,990
+recording first end the render path
+with vk command and render pass command
+
+586
+00:10:19,990 --> 00:10:20,000
+with vk command and render pass command
+ 
+
+587
+00:10:20,000 --> 00:10:21,110
+with vk command and render pass command
+buffer at index
+
+588
+00:10:21,110 --> 00:10:21,120
+buffer at index
+ 
+
+589
+00:10:21,120 --> 00:10:24,710
+buffer at index
+i and then in an if statement vkn
+
+590
+00:10:24,710 --> 00:10:24,720
+i and then in an if statement vkn
+ 
+
+591
+00:10:24,720 --> 00:10:27,190
+i and then in an if statement vkn
+command buffer command buffer at index i
+
+592
+00:10:27,190 --> 00:10:27,200
+command buffer command buffer at index i
+ 
+
+593
+00:10:27,200 --> 00:10:28,150
+command buffer command buffer at index i
+not equal to
+
+594
+00:10:28,150 --> 00:10:28,160
+not equal to
+ 
+
+595
+00:10:28,160 --> 00:10:32,550
+not equal to
+vk success
+
+596
+00:10:32,550 --> 00:10:32,560
+vk success
+ 
+
+597
+00:10:32,560 --> 00:10:36,150
+vk success
+in which case we throw std runtime error
+
+598
+00:10:36,150 --> 00:10:36,160
+in which case we throw std runtime error
+ 
+
+599
+00:10:36,160 --> 00:10:38,870
+in which case we throw std runtime error
+fail to record command buffer so these
+
+600
+00:10:38,870 --> 00:10:38,880
+fail to record command buffer so these
+ 
+
+601
+00:10:38,880 --> 00:10:41,110
+fail to record command buffer so these
+runtime errors are mostly for debugging
+
+602
+00:10:41,110 --> 00:10:41,120
+runtime errors are mostly for debugging
+ 
+
+603
+00:10:41,120 --> 00:10:42,150
+runtime errors are mostly for debugging
+purposes
+
+604
+00:10:42,150 --> 00:10:42,160
+purposes
+ 
+
+605
+00:10:42,160 --> 00:10:43,750
+purposes
+for a production application we'll
+
+606
+00:10:43,750 --> 00:10:43,760
+for a production application we'll
+ 
+
+607
+00:10:43,760 --> 00:10:45,350
+for a production application we'll
+eventually have to handle the more
+
+608
+00:10:45,350 --> 00:10:45,360
+eventually have to handle the more
+ 
+
+609
+00:10:45,360 --> 00:10:46,230
+eventually have to handle the more
+robustly
+
+610
+00:10:46,230 --> 00:10:46,240
+robustly
+ 
+
+611
+00:10:46,240 --> 00:10:47,990
+robustly
+so the last thing to do is finish
+
+612
+00:10:47,990 --> 00:10:48,000
+so the last thing to do is finish
+ 
+
+613
+00:10:48,000 --> 00:10:50,150
+so the last thing to do is finish
+implementing the drawframe function
+
+614
+00:10:50,150 --> 00:10:50,160
+implementing the drawframe function
+ 
+
+615
+00:10:50,160 --> 00:10:52,550
+implementing the drawframe function
+first declare a uin32 type local
+
+616
+00:10:52,550 --> 00:10:52,560
+first declare a uin32 type local
+ 
+
+617
+00:10:52,560 --> 00:10:55,110
+first declare a uin32 type local
+variable called image index
+
+618
+00:10:55,110 --> 00:10:55,120
+variable called image index
+ 
+
+619
+00:10:55,120 --> 00:10:57,829
+variable called image index
+then on the next line auto result is
+
+620
+00:10:57,829 --> 00:10:57,839
+then on the next line auto result is
+ 
+
+621
+00:10:57,839 --> 00:10:58,630
+then on the next line auto result is
+equal to
+
+622
+00:10:58,630 --> 00:10:58,640
+equal to
+ 
+
+623
+00:10:58,640 --> 00:11:02,550
+equal to
+swap chain dot acquire next image
+
+624
+00:11:02,550 --> 00:11:02,560
+swap chain dot acquire next image
+ 
+
+625
+00:11:02,560 --> 00:11:04,310
+swap chain dot acquire next image
+and then pass the pointer to our image
+
+626
+00:11:04,310 --> 00:11:04,320
+and then pass the pointer to our image
+ 
+
+627
+00:11:04,320 --> 00:11:07,350
+and then pass the pointer to our image
+index
+
+628
+00:11:07,350 --> 00:11:07,360
+
+ 
+
+629
+00:11:07,360 --> 00:11:09,350
+ 
+this function fetches the index of the
+
+630
+00:11:09,350 --> 00:11:09,360
+this function fetches the index of the
+ 
+
+631
+00:11:09,360 --> 00:11:11,430
+this function fetches the index of the
+frame we should render to next
+
+632
+00:11:11,430 --> 00:11:11,440
+frame we should render to next
+ 
+
+633
+00:11:11,440 --> 00:11:13,509
+frame we should render to next
+it also automatically handles all the
+
+634
+00:11:13,509 --> 00:11:13,519
+it also automatically handles all the
+ 
+
+635
+00:11:13,519 --> 00:11:15,590
+it also automatically handles all the
+cpu and gpu synchronization
+
+636
+00:11:15,590 --> 00:11:15,600
+cpu and gpu synchronization
+ 
+
+637
+00:11:15,600 --> 00:11:17,829
+cpu and gpu synchronization
+surrounding double or triple buffering
+
+638
+00:11:17,829 --> 00:11:17,839
+surrounding double or triple buffering
+ 
+
+639
+00:11:17,839 --> 00:11:19,910
+surrounding double or triple buffering
+the result value returned determines if
+
+640
+00:11:19,910 --> 00:11:19,920
+the result value returned determines if
+ 
+
+641
+00:11:19,920 --> 00:11:22,710
+the result value returned determines if
+this process was successful
+
+642
+00:11:22,710 --> 00:11:22,720
+this process was successful
+ 
+
+643
+00:11:22,720 --> 00:11:24,949
+this process was successful
+so in an if statement we can check that
+
+644
+00:11:24,949 --> 00:11:24,959
+so in an if statement we can check that
+ 
+
+645
+00:11:24,959 --> 00:11:26,630
+so in an if statement we can check that
+the result variable is not equal to
+
+646
+00:11:26,630 --> 00:11:26,640
+the result variable is not equal to
+ 
+
+647
+00:11:26,640 --> 00:11:28,069
+the result variable is not equal to
+success or that result
+
+648
+00:11:28,069 --> 00:11:28,079
+success or that result
+ 
+
+649
+00:11:28,079 --> 00:11:32,230
+success or that result
+is not equal to vk suboptimal khr
+
+650
+00:11:32,230 --> 00:11:32,240
+is not equal to vk suboptimal khr
+ 
+
+651
+00:11:32,240 --> 00:11:34,230
+is not equal to vk suboptimal khr
+for now we will just throw a runtime
+
+652
+00:11:34,230 --> 00:11:34,240
+for now we will just throw a runtime
+ 
+
+653
+00:11:34,240 --> 00:11:36,069
+for now we will just throw a runtime
+error that we failed to acquire the next
+
+654
+00:11:36,069 --> 00:11:36,079
+error that we failed to acquire the next
+ 
+
+655
+00:11:36,079 --> 00:11:37,430
+error that we failed to acquire the next
+swap chain image
+
+656
+00:11:37,430 --> 00:11:37,440
+swap chain image
+ 
+
+657
+00:11:37,440 --> 00:11:39,430
+swap chain image
+but in the future we will need to handle
+
+658
+00:11:39,430 --> 00:11:39,440
+but in the future we will need to handle
+ 
+
+659
+00:11:39,440 --> 00:11:41,829
+but in the future we will need to handle
+this situation because it can occur when
+
+660
+00:11:41,829 --> 00:11:41,839
+this situation because it can occur when
+ 
+
+661
+00:11:41,839 --> 00:11:45,590
+this situation because it can occur when
+our window is resized
+
+662
+00:11:45,590 --> 00:11:45,600
+
+ 
+
+663
+00:11:45,600 --> 00:11:48,150
+ 
+next set result equal to swap chain dot
+
+664
+00:11:48,150 --> 00:11:48,160
+next set result equal to swap chain dot
+ 
+
+665
+00:11:48,160 --> 00:11:49,110
+next set result equal to swap chain dot
+submit command
+
+666
+00:11:49,110 --> 00:11:49,120
+submit command
+ 
+
+667
+00:11:49,120 --> 00:11:52,870
+submit command
+buffers with the first argument being a
+
+668
+00:11:52,870 --> 00:11:52,880
+buffers with the first argument being a
+ 
+
+669
+00:11:52,880 --> 00:11:54,829
+buffers with the first argument being a
+pointer to command buffers at image
+
+670
+00:11:54,829 --> 00:11:54,839
+pointer to command buffers at image
+ 
+
+671
+00:11:54,839 --> 00:11:59,430
+pointer to command buffers at image
+index
+
+672
+00:11:59,430 --> 00:11:59,440
+
+ 
+
+673
+00:11:59,440 --> 00:12:01,350
+ 
+and for the second argument a pointer to
+
+674
+00:12:01,350 --> 00:12:01,360
+and for the second argument a pointer to
+ 
+
+675
+00:12:01,360 --> 00:12:02,629
+and for the second argument a pointer to
+the image index
+
+676
+00:12:02,629 --> 00:12:02,639
+the image index
+ 
+
+677
+00:12:02,639 --> 00:12:04,470
+the image index
+so what this function does is it will
+
+678
+00:12:04,470 --> 00:12:04,480
+so what this function does is it will
+ 
+
+679
+00:12:04,480 --> 00:12:06,389
+so what this function does is it will
+submit the provided command buffer to
+
+680
+00:12:06,389 --> 00:12:06,399
+submit the provided command buffer to
+ 
+
+681
+00:12:06,399 --> 00:12:08,230
+submit the provided command buffer to
+our device graphics queue
+
+682
+00:12:08,230 --> 00:12:08,240
+our device graphics queue
+ 
+
+683
+00:12:08,240 --> 00:12:10,069
+our device graphics queue
+while handling cpu and gpu
+
+684
+00:12:10,069 --> 00:12:10,079
+while handling cpu and gpu
+ 
+
+685
+00:12:10,079 --> 00:12:11,269
+while handling cpu and gpu
+synchronization
+
+686
+00:12:11,269 --> 00:12:11,279
+synchronization
+ 
+
+687
+00:12:11,279 --> 00:12:13,750
+synchronization
+the command buffer will then be executed
+
+688
+00:12:13,750 --> 00:12:13,760
+the command buffer will then be executed
+ 
+
+689
+00:12:13,760 --> 00:12:15,030
+the command buffer will then be executed
+and then the swap chain
+
+690
+00:12:15,030 --> 00:12:15,040
+and then the swap chain
+ 
+
+691
+00:12:15,040 --> 00:12:16,710
+and then the swap chain
+will present the associated color
+
+692
+00:12:16,710 --> 00:12:16,720
+will present the associated color
+ 
+
+693
+00:12:16,720 --> 00:12:19,110
+will present the associated color
+attachment image view to the display at
+
+694
+00:12:19,110 --> 00:12:19,120
+attachment image view to the display at
+ 
+
+695
+00:12:19,120 --> 00:12:20,629
+attachment image view to the display at
+the appropriate time based on the
+
+696
+00:12:20,629 --> 00:12:20,639
+the appropriate time based on the
+ 
+
+697
+00:12:20,639 --> 00:12:22,870
+the appropriate time based on the
+present mode selected
+
+698
+00:12:22,870 --> 00:12:22,880
+present mode selected
+ 
+
+699
+00:12:22,880 --> 00:12:24,710
+present mode selected
+finally let's also check that if the
+
+700
+00:12:24,710 --> 00:12:24,720
+finally let's also check that if the
+ 
+
+701
+00:12:24,720 --> 00:12:27,350
+finally let's also check that if the
+result is not equal to vk success
+
+702
+00:12:27,350 --> 00:12:27,360
+result is not equal to vk success
+ 
+
+703
+00:12:27,360 --> 00:12:29,190
+result is not equal to vk success
+in which case we will throw a runtime
+
+704
+00:12:29,190 --> 00:12:29,200
+in which case we will throw a runtime
+ 
+
+705
+00:12:29,200 --> 00:12:30,870
+in which case we will throw a runtime
+error
+
+706
+00:12:30,870 --> 00:12:30,880
+error
+ 
+
+707
+00:12:30,880 --> 00:12:33,190
+error
+then scroll up and in our game loop just
+
+708
+00:12:33,190 --> 00:12:33,200
+then scroll up and in our game loop just
+ 
+
+709
+00:12:33,200 --> 00:12:35,110
+then scroll up and in our game loop just
+below poll events add a call to the
+
+710
+00:12:35,110 --> 00:12:35,120
+below poll events add a call to the
+ 
+
+711
+00:12:35,120 --> 00:12:37,430
+below poll events add a call to the
+drawframe function
+
+712
+00:12:37,430 --> 00:12:37,440
+drawframe function
+ 
+
+713
+00:12:37,440 --> 00:12:39,750
+drawframe function
+so it's the moment of truth it's time to
+
+714
+00:12:39,750 --> 00:12:39,760
+so it's the moment of truth it's time to
+ 
+
+715
+00:12:39,760 --> 00:12:41,190
+so it's the moment of truth it's time to
+build and run our code
+
+716
+00:12:41,190 --> 00:12:41,200
+build and run our code
+ 
+
+717
+00:12:41,200 --> 00:12:43,350
+build and run our code
+if everything has been done correctly
+
+718
+00:12:43,350 --> 00:12:43,360
+if everything has been done correctly
+ 
+
+719
+00:12:43,360 --> 00:12:44,870
+if everything has been done correctly
+our window should now have a right
+
+720
+00:12:44,870 --> 00:12:44,880
+our window should now have a right
+ 
+
+721
+00:12:44,880 --> 00:12:46,629
+our window should now have a right
+triangle
+
+722
+00:12:46,629 --> 00:12:46,639
+triangle
+ 
+
+723
+00:12:46,639 --> 00:12:48,550
+triangle
+don't panic if you get some errors or
+
+724
+00:12:48,550 --> 00:12:48,560
+don't panic if you get some errors or
+ 
+
+725
+00:12:48,560 --> 00:12:49,829
+don't panic if you get some errors or
+don't see a triangle
+
+726
+00:12:49,829 --> 00:12:49,839
+don't see a triangle
+ 
+
+727
+00:12:49,839 --> 00:12:51,829
+don't see a triangle
+we've written a lot of code and this is
+
+728
+00:12:51,829 --> 00:12:51,839
+we've written a lot of code and this is
+ 
+
+729
+00:12:51,839 --> 00:12:53,269
+we've written a lot of code and this is
+the first real test
+
+730
+00:12:53,269 --> 00:12:53,279
+the first real test
+ 
+
+731
+00:12:53,279 --> 00:12:55,430
+the first real test
+so it's almost expected that something's
+
+732
+00:12:55,430 --> 00:12:55,440
+so it's almost expected that something's
+ 
+
+733
+00:12:55,440 --> 00:12:57,430
+so it's almost expected that something's
+not quite right
+
+734
+00:12:57,430 --> 00:12:57,440
+not quite right
+ 
+
+735
+00:12:57,440 --> 00:12:59,829
+not quite right
+just take your time look at any compiler
+
+736
+00:12:59,829 --> 00:12:59,839
+just take your time look at any compiler
+ 
+
+737
+00:12:59,839 --> 00:13:01,829
+just take your time look at any compiler
+errors or validation layer messages and
+
+738
+00:13:01,829 --> 00:13:01,839
+errors or validation layer messages and
+ 
+
+739
+00:13:01,839 --> 00:13:03,430
+errors or validation layer messages and
+you should be able to figure it out
+
+740
+00:13:03,430 --> 00:13:03,440
+you should be able to figure it out
+ 
+
+741
+00:13:03,440 --> 00:13:04,870
+you should be able to figure it out
+when you close your window you will
+
+742
+00:13:04,870 --> 00:13:04,880
+when you close your window you will
+ 
+
+743
+00:13:04,880 --> 00:13:07,030
+when you close your window you will
+likely be bombarded by validation layer
+
+744
+00:13:07,030 --> 00:13:07,040
+likely be bombarded by validation layer
+ 
+
+745
+00:13:07,040 --> 00:13:07,990
+likely be bombarded by validation layer
+messages
+
+746
+00:13:07,990 --> 00:13:08,000
+messages
+ 
+
+747
+00:13:08,000 --> 00:13:09,910
+messages
+this is to be expected and is because
+
+748
+00:13:09,910 --> 00:13:09,920
+this is to be expected and is because
+ 
+
+749
+00:13:09,920 --> 00:13:11,750
+this is to be expected and is because
+it's possible that a command buffer was
+
+750
+00:13:11,750 --> 00:13:11,760
+it's possible that a command buffer was
+ 
+
+751
+00:13:11,760 --> 00:13:13,750
+it's possible that a command buffer was
+being executed at the same time our
+
+752
+00:13:13,750 --> 00:13:13,760
+being executed at the same time our
+ 
+
+753
+00:13:13,760 --> 00:13:15,910
+being executed at the same time our
+application tried to close
+
+754
+00:13:15,910 --> 00:13:15,920
+application tried to close
+ 
+
+755
+00:13:15,920 --> 00:13:18,150
+application tried to close
+a really easy fix for this is that in
+
+756
+00:13:18,150 --> 00:13:18,160
+a really easy fix for this is that in
+ 
+
+757
+00:13:18,160 --> 00:13:19,190
+a really easy fix for this is that in
+our run function
+
+758
+00:13:19,190 --> 00:13:19,200
+our run function
+ 
+
+759
+00:13:19,200 --> 00:13:21,910
+our run function
+as the last line add vk device weight
+
+760
+00:13:21,910 --> 00:13:21,920
+as the last line add vk device weight
+ 
+
+761
+00:13:21,920 --> 00:13:22,629
+as the last line add vk device weight
+idle
+
+762
+00:13:22,629 --> 00:13:22,639
+idle
+ 
+
+763
+00:13:22,639 --> 00:13:25,750
+idle
+lve device dot device by calling this
+
+764
+00:13:25,750 --> 00:13:25,760
+lve device dot device by calling this
+ 
+
+765
+00:13:25,760 --> 00:13:26,230
+lve device dot device by calling this
+function
+
+766
+00:13:26,230 --> 00:13:26,240
+function
+ 
+
+767
+00:13:26,240 --> 00:13:28,470
+function
+the cpu will block until all gpu
+
+768
+00:13:28,470 --> 00:13:28,480
+the cpu will block until all gpu
+ 
+
+769
+00:13:28,480 --> 00:13:30,710
+the cpu will block until all gpu
+operations have completed
+
+770
+00:13:30,710 --> 00:13:30,720
+operations have completed
+ 
+
+771
+00:13:30,720 --> 00:13:32,550
+operations have completed
+at which point we can then safely clean
+
+772
+00:13:32,550 --> 00:13:32,560
+at which point we can then safely clean
+ 
+
+773
+00:13:32,560 --> 00:13:34,470
+at which point we can then safely clean
+up all resources knowing that they are
+
+774
+00:13:34,470 --> 00:13:34,480
+up all resources knowing that they are
+ 
+
+775
+00:13:34,480 --> 00:13:36,629
+up all resources knowing that they are
+no longer in use
+
+776
+00:13:36,629 --> 00:13:36,639
+no longer in use
+ 
+
+777
+00:13:36,639 --> 00:13:38,310
+no longer in use
+one thing you may have noticed is that
+
+778
+00:13:38,310 --> 00:13:38,320
+one thing you may have noticed is that
+ 
+
+779
+00:13:38,320 --> 00:13:39,910
+one thing you may have noticed is that
+even though we never free the command
+
+780
+00:13:39,910 --> 00:13:39,920
+even though we never free the command
+ 
+
+781
+00:13:39,920 --> 00:13:41,990
+even though we never free the command
+buffers we do not have any validation
+
+782
+00:13:41,990 --> 00:13:42,000
+buffers we do not have any validation
+ 
+
+783
+00:13:42,000 --> 00:13:43,590
+buffers we do not have any validation
+messages telling us they were not
+
+784
+00:13:43,590 --> 00:13:43,600
+messages telling us they were not
+ 
+
+785
+00:13:43,600 --> 00:13:45,110
+messages telling us they were not
+properly cleaned up
+
+786
+00:13:45,110 --> 00:13:45,120
+properly cleaned up
+ 
+
+787
+00:13:45,120 --> 00:13:46,710
+properly cleaned up
+and this is because when our device is
+
+788
+00:13:46,710 --> 00:13:46,720
+and this is because when our device is
+ 
+
+789
+00:13:46,720 --> 00:13:48,870
+and this is because when our device is
+deleted so is the command pool
+
+790
+00:13:48,870 --> 00:13:48,880
+deleted so is the command pool
+ 
+
+791
+00:13:48,880 --> 00:13:51,110
+deleted so is the command pool
+and any buffers allocated from that pool
+
+792
+00:13:51,110 --> 00:13:51,120
+and any buffers allocated from that pool
+ 
+
+793
+00:13:51,120 --> 00:13:54,550
+and any buffers allocated from that pool
+will automatically be destroyed as well
+
+794
+00:13:54,550 --> 00:13:54,560
+will automatically be destroyed as well
+ 
+
+795
+00:13:54,560 --> 00:13:56,550
+will automatically be destroyed as well
+so if you open up your fragment shader
+
+796
+00:13:56,550 --> 00:13:56,560
+so if you open up your fragment shader
+ 
+
+797
+00:13:56,560 --> 00:13:58,710
+so if you open up your fragment shader
+file here we can change the color of our
+
+798
+00:13:58,710 --> 00:13:58,720
+file here we can change the color of our
+ 
+
+799
+00:13:58,720 --> 00:13:59,670
+file here we can change the color of our
+triangle
+
+800
+00:13:59,670 --> 00:13:59,680
+triangle
+ 
+
+801
+00:13:59,680 --> 00:14:02,389
+triangle
+for example by changing the 0 to 1 we
+
+802
+00:14:02,389 --> 00:14:02,399
+for example by changing the 0 to 1 we
+ 
+
+803
+00:14:02,399 --> 00:14:04,389
+for example by changing the 0 to 1 we
+should now have a yellow triangle
+
+804
+00:14:04,389 --> 00:14:04,399
+should now have a yellow triangle
+ 
+
+805
+00:14:04,399 --> 00:14:07,910
+should now have a yellow triangle
+build and run your code and the triangle
+
+806
+00:14:07,910 --> 00:14:07,920
+build and run your code and the triangle
+ 
+
+807
+00:14:07,920 --> 00:14:09,590
+build and run your code and the triangle
+is still red
+
+808
+00:14:09,590 --> 00:14:09,600
+is still red
+ 
+
+809
+00:14:09,600 --> 00:14:11,269
+is still red
+well this is actually a very common
+
+810
+00:14:11,269 --> 00:14:11,279
+well this is actually a very common
+ 
+
+811
+00:14:11,279 --> 00:14:13,750
+well this is actually a very common
+mistake we forgot to recompile
+
+812
+00:14:13,750 --> 00:14:13,760
+mistake we forgot to recompile
+ 
+
+813
+00:14:13,760 --> 00:14:16,150
+mistake we forgot to recompile
+our shader code whenever you update a
+
+814
+00:14:16,150 --> 00:14:16,160
+our shader code whenever you update a
+ 
+
+815
+00:14:16,160 --> 00:14:18,790
+our shader code whenever you update a
+shader file it needs to be recompiled
+
+816
+00:14:18,790 --> 00:14:18,800
+shader file it needs to be recompiled
+ 
+
+817
+00:14:18,800 --> 00:14:20,870
+shader file it needs to be recompiled
+so you might want to set up an automatic
+
+818
+00:14:20,870 --> 00:14:20,880
+so you might want to set up an automatic
+ 
+
+819
+00:14:20,880 --> 00:14:23,509
+so you might want to set up an automatic
+build step to compile your shaders
+
+820
+00:14:23,509 --> 00:14:23,519
+build step to compile your shaders
+ 
+
+821
+00:14:23,519 --> 00:14:25,269
+build step to compile your shaders
+how you do this will differ based on
+
+822
+00:14:25,269 --> 00:14:25,279
+how you do this will differ based on
+ 
+
+823
+00:14:25,279 --> 00:14:26,949
+how you do this will differ based on
+what development environment you are
+
+824
+00:14:26,949 --> 00:14:26,959
+what development environment you are
+ 
+
+825
+00:14:26,959 --> 00:14:27,670
+what development environment you are
+using
+
+826
+00:14:27,670 --> 00:14:27,680
+using
+ 
+
+827
+00:14:27,680 --> 00:14:29,509
+using
+if you're unsure how to do this a good
+
+828
+00:14:29,509 --> 00:14:29,519
+if you're unsure how to do this a good
+ 
+
+829
+00:14:29,519 --> 00:14:31,590
+if you're unsure how to do this a good
+place to start would be by googling your
+
+830
+00:14:31,590 --> 00:14:31,600
+place to start would be by googling your
+ 
+
+831
+00:14:31,600 --> 00:14:34,870
+place to start would be by googling your
+ide followed by custom build step
+
+832
+00:14:34,870 --> 00:14:34,880
+ide followed by custom build step
+ 
+
+833
+00:14:34,880 --> 00:14:36,550
+ide followed by custom build step
+if you're using a make file i've
+
+834
+00:14:36,550 --> 00:14:36,560
+if you're using a make file i've
+ 
+
+835
+00:14:36,560 --> 00:14:38,470
+if you're using a make file i've
+provided an updated version in the
+
+836
+00:14:38,470 --> 00:14:38,480
+provided an updated version in the
+ 
+
+837
+00:14:38,480 --> 00:14:39,910
+provided an updated version in the
+description below
+
+838
+00:14:39,910 --> 00:14:39,920
+description below
+ 
+
+839
+00:14:39,920 --> 00:14:42,069
+description below
+what this basically does is searches for
+
+840
+00:14:42,069 --> 00:14:42,079
+what this basically does is searches for
+ 
+
+841
+00:14:42,079 --> 00:14:43,910
+what this basically does is searches for
+all vertex shader and fragment shader
+
+842
+00:14:43,910 --> 00:14:43,920
+all vertex shader and fragment shader
+ 
+
+843
+00:14:43,920 --> 00:14:44,870
+all vertex shader and fragment shader
+source files
+
+844
+00:14:44,870 --> 00:14:44,880
+source files
+ 
+
+845
+00:14:44,880 --> 00:14:47,750
+source files
+in my shaders directory note that this
+
+846
+00:14:47,750 --> 00:14:47,760
+in my shaders directory note that this
+ 
+
+847
+00:14:47,760 --> 00:14:49,269
+in my shaders directory note that this
+is a relative path
+
+848
+00:14:49,269 --> 00:14:49,279
+is a relative path
+ 
+
+849
+00:14:49,279 --> 00:14:51,189
+is a relative path
+then i do a pattern substitution
+
+850
+00:14:51,189 --> 00:14:51,199
+then i do a pattern substitution
+ 
+
+851
+00:14:51,199 --> 00:14:53,910
+then i do a pattern substitution
+appending the spv file extension to each
+
+852
+00:14:53,910 --> 00:14:53,920
+appending the spv file extension to each
+ 
+
+853
+00:14:53,920 --> 00:14:56,150
+appending the spv file extension to each
+source file and i set those as a
+
+854
+00:14:56,150 --> 00:14:56,160
+source file and i set those as a
+ 
+
+855
+00:14:56,160 --> 00:14:58,310
+source file and i set those as a
+dependency for my application
+
+856
+00:14:58,310 --> 00:14:58,320
+dependency for my application
+ 
+
+857
+00:14:58,320 --> 00:15:00,470
+dependency for my application
+i then have an added build rule that
+
+858
+00:15:00,470 --> 00:15:00,480
+i then have an added build rule that
+ 
+
+859
+00:15:00,480 --> 00:15:03,110
+i then have an added build rule that
+each spv file depends on itself without
+
+860
+00:15:03,110 --> 00:15:03,120
+each spv file depends on itself without
+ 
+
+861
+00:15:03,120 --> 00:15:04,949
+each spv file depends on itself without
+the spv extension
+
+862
+00:15:04,949 --> 00:15:04,959
+the spv extension
+ 
+
+863
+00:15:04,959 --> 00:15:08,310
+the spv extension
+and can be built using gl slc this way
+
+864
+00:15:08,310 --> 00:15:08,320
+and can be built using gl slc this way
+ 
+
+865
+00:15:08,320 --> 00:15:10,470
+and can be built using gl slc this way
+whenever the shader code is modified a
+
+866
+00:15:10,470 --> 00:15:10,480
+whenever the shader code is modified a
+ 
+
+867
+00:15:10,480 --> 00:15:12,550
+whenever the shader code is modified a
+new spv file will be generated
+
+868
+00:15:12,550 --> 00:15:12,560
+new spv file will be generated
+ 
+
+869
+00:15:12,560 --> 00:15:13,430
+new spv file will be generated
+automatically
+
+870
+00:15:13,430 --> 00:15:13,440
+automatically
+ 
+
+871
+00:15:13,440 --> 00:15:15,430
+automatically
+so now if i build and run my fragment
+
+872
+00:15:15,430 --> 00:15:15,440
+so now if i build and run my fragment
+ 
+
+873
+00:15:15,440 --> 00:15:17,670
+so now if i build and run my fragment
+shader will automatically be recompiled
+
+874
+00:15:17,670 --> 00:15:17,680
+shader will automatically be recompiled
+ 
+
+875
+00:15:17,680 --> 00:15:19,829
+shader will automatically be recompiled
+and my triangle has changed from red to
+
+876
+00:15:19,829 --> 00:15:19,839
+and my triangle has changed from red to
+ 
+
+877
+00:15:19,839 --> 00:15:22,550
+and my triangle has changed from red to
+yellow as expected
+
+878
+00:15:22,550 --> 00:15:22,560
+yellow as expected
+ 
+
+879
+00:15:22,560 --> 00:15:24,790
+yellow as expected
+so now that we've drawn a triangle it's
+
+880
+00:15:24,790 --> 00:15:24,800
+so now that we've drawn a triangle it's
+ 
+
+881
+00:15:24,800 --> 00:15:27,350
+so now that we've drawn a triangle it's
+a good time to take a bit of a step back
+
+882
+00:15:27,350 --> 00:15:27,360
+a good time to take a bit of a step back
+ 
+
+883
+00:15:27,360 --> 00:15:29,590
+a good time to take a bit of a step back
+and review the role of each component
+
+884
+00:15:29,590 --> 00:15:29,600
+and review the role of each component
+ 
+
+885
+00:15:29,600 --> 00:15:31,749
+and review the role of each component
+and the relationships between them
+
+886
+00:15:31,749 --> 00:15:31,759
+and the relationships between them
+ 
+
+887
+00:15:31,759 --> 00:15:33,509
+and the relationships between them
+in the next video we will remove the
+
+888
+00:15:33,509 --> 00:15:33,519
+in the next video we will remove the
+ 
+
+889
+00:15:33,519 --> 00:15:35,590
+in the next video we will remove the
+hard-coded data from our vertex shader
+
+890
+00:15:35,590 --> 00:15:35,600
+hard-coded data from our vertex shader
+ 
+
+891
+00:15:35,600 --> 00:15:37,749
+hard-coded data from our vertex shader
+and instead pass data into the graphics
+
+892
+00:15:37,749 --> 00:15:37,759
+and instead pass data into the graphics
+ 
+
+893
+00:15:37,759 --> 00:15:38,389
+and instead pass data into the graphics
+pipeline
+
+894
+00:15:38,389 --> 00:15:38,399
+pipeline
+ 
+
+895
+00:15:38,399 --> 00:15:41,110
+pipeline
+by using a vertex buffer and thanks for
+
+896
+00:15:41,110 --> 00:15:41,120
+by using a vertex buffer and thanks for
+ 
+
+897
+00:15:41,120 --> 00:15:41,749
+by using a vertex buffer and thanks for
+watching
+
+898
+00:15:41,749 --> 00:15:41,759
+watching
+ 
+
+899
+00:15:41,759 --> 00:16:03,350
+watching
+please like and subscribe cheers
+
+900
+00:16:03,350 --> 00:16:03,360
+
+ 
+
+901
+00:16:03,360 --> 00:16:05,440
+
+you
+

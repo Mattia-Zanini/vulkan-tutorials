@@ -35,12 +35,13 @@ namespace lve {
     float lightIntensity = 1.0f;
   };
 
+  // Dati di trasformazione per-oggetto memorizzati nell'UBO (sostituiscono le push constants per le matrici)
   struct GameObjectBufferData {
     glm::mat4 modelMatrix{ 1.f };
     glm::mat4 normalMatrix{ 1.f };
   };
 
-  class LveGameObjectManager; // forward declare game object manager class
+  class LveGameObjectManager; // Dichiarazione anticipata del gestore dei game object
 
   // Rappresenta un'entità di gioco (Game Object).
   class LveGameObject {
@@ -51,17 +52,19 @@ namespace lve {
     LveGameObject(const LveGameObject&) = delete;
     LveGameObject& operator=(const LveGameObject&) = delete;
     LveGameObject(LveGameObject&&) = default;
+    // Disabilitato: la presenza del membro di riferimento const LveGameObjectManager& impedisce il move assignment
     LveGameObject& operator=(LveGameObject&&) = delete;
 
     id_t getId() const { return id; }
 
+    // Restituisce le informazioni del descrittore per il buffer UBO dell'oggetto per il frame corrente
     VkDescriptorBufferInfo getBufferInfo(int frameIndex);
 
     glm::vec3 color{};
     TransformComponent transform{};
 
     std::shared_ptr<LveModel> model{};
-    std::shared_ptr<LveTexture> diffuseMap = nullptr;
+    std::shared_ptr<LveTexture> diffuseMap = nullptr; // Texture 2D per il canale diffuso dell'oggetto
     std::unique_ptr<PointLightComponent> pointLight = nullptr;
 
   private:
@@ -73,9 +76,10 @@ namespace lve {
     friend class LveGameObjectManager;
   };
 
+  // Gestore centralizzato del ciclo di vita dei Game Object e dei relativi buffer di trasformazione GPU
   class LveGameObjectManager {
   public:
-    static constexpr int MAX_GAME_OBJECTS = 1000;
+    static constexpr int MAX_GAME_OBJECTS = 1000; // Limite massimo di oggetti allocati nel buffer UBO
 
     LveGameObjectManager(LveDevice& device);
     LveGameObjectManager(const LveGameObjectManager&) = delete;
@@ -83,6 +87,7 @@ namespace lve {
     LveGameObjectManager(LveGameObjectManager&&) = delete;
     LveGameObjectManager& operator=(LveGameObjectManager&&) = delete;
 
+    // Crea un nuovo game object, gli assegna la texture di default (missing.png) e lo memorizza nella mappa
     LveGameObject& createGameObject() {
       assert(currentId < MAX_GAME_OBJECTS && "Max game object count exceeded!");
       auto gameObject = LveGameObject{ currentId++, *this };
@@ -92,13 +97,16 @@ namespace lve {
       return gameObjects.at(gameObjectId);
     }
 
+    // Helper per creare e configurare una point light all'interno del manager
     LveGameObject& makePointLight(
       float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
 
+    // Restituisce la porzione di buffer UBO associata all'indice del game object
     VkDescriptorBufferInfo getBufferInfoForGameObject(int frameIndex, id_t gameObjectId) const {
       return uboBuffers[frameIndex]->descriptorInfoForIndex(gameObjectId);
     }
 
+    // Aggiorna le matrici model e normal di tutti gli oggetti nel buffer per il frame indicato
     void updateBuffer(int frameIndex);
 
     LveGameObject::Map gameObjects{};

@@ -1,0 +1,6095 @@
+1
+00:00:00,480 --> 00:00:02,470
+ 
+last time we covered some basic linear
+
+2
+00:00:02,470 --> 00:00:02,480
+last time we covered some basic linear
+ 
+
+3
+00:00:02,480 --> 00:00:04,470
+last time we covered some basic linear
+transformations such as scaling and
+
+4
+00:00:04,470 --> 00:00:04,480
+transformations such as scaling and
+ 
+
+5
+00:00:04,480 --> 00:00:05,430
+transformations such as scaling and
+rotation
+
+6
+00:00:05,430 --> 00:00:05,440
+rotation
+ 
+
+7
+00:00:05,440 --> 00:00:07,670
+rotation
+however we've left the offset as a
+
+8
+00:00:07,670 --> 00:00:07,680
+however we've left the offset as a
+ 
+
+9
+00:00:07,680 --> 00:00:09,110
+however we've left the offset as a
+separate final addition
+
+10
+00:00:09,110 --> 00:00:09,120
+separate final addition
+ 
+
+11
+00:00:09,120 --> 00:00:11,270
+separate final addition
+performed by the vertex shader it would
+
+12
+00:00:11,270 --> 00:00:11,280
+performed by the vertex shader it would
+ 
+
+13
+00:00:11,280 --> 00:00:13,430
+performed by the vertex shader it would
+be convenient if we could also represent
+
+14
+00:00:13,430 --> 00:00:13,440
+be convenient if we could also represent
+ 
+
+15
+00:00:13,440 --> 00:00:15,270
+be convenient if we could also represent
+the translation transformation
+
+16
+00:00:15,270 --> 00:00:15,280
+the translation transformation
+ 
+
+17
+00:00:15,280 --> 00:00:18,230
+the translation transformation
+in matrix form as well but a translation
+
+18
+00:00:18,230 --> 00:00:18,240
+in matrix form as well but a translation
+ 
+
+19
+00:00:18,240 --> 00:00:19,510
+in matrix form as well but a translation
+clearly does not
+
+20
+00:00:19,510 --> 00:00:19,520
+clearly does not
+ 
+
+21
+00:00:19,520 --> 00:00:21,750
+clearly does not
+satisfy the property that for a linear
+
+22
+00:00:21,750 --> 00:00:21,760
+satisfy the property that for a linear
+ 
+
+23
+00:00:21,760 --> 00:00:24,230
+satisfy the property that for a linear
+transformation the origin must remain at
+
+24
+00:00:24,230 --> 00:00:24,240
+transformation the origin must remain at
+ 
+
+25
+00:00:24,240 --> 00:00:25,189
+transformation the origin must remain at
+zero
+
+26
+00:00:25,189 --> 00:00:25,199
+zero
+ 
+
+27
+00:00:25,199 --> 00:00:27,750
+zero
+so therefore it is not possible to
+
+28
+00:00:27,750 --> 00:00:27,760
+so therefore it is not possible to
+ 
+
+29
+00:00:27,760 --> 00:00:28,550
+so therefore it is not possible to
+represent an
+
+30
+00:00:28,550 --> 00:00:28,560
+represent an
+ 
+
+31
+00:00:28,560 --> 00:00:31,429
+represent an
+x and y translation using a two by two
+
+32
+00:00:31,429 --> 00:00:31,439
+x and y translation using a two by two
+ 
+
+33
+00:00:31,439 --> 00:00:32,470
+x and y translation using a two by two
+matrix
+
+34
+00:00:32,470 --> 00:00:32,480
+matrix
+ 
+
+35
+00:00:32,480 --> 00:00:34,870
+matrix
+however by being a bit clever and
+
+36
+00:00:34,870 --> 00:00:34,880
+however by being a bit clever and
+ 
+
+37
+00:00:34,880 --> 00:00:36,709
+however by being a bit clever and
+increasing the dimension
+
+38
+00:00:36,709 --> 00:00:36,719
+increasing the dimension
+ 
+
+39
+00:00:36,719 --> 00:00:38,790
+increasing the dimension
+we can actually represent a two by two
+
+40
+00:00:38,790 --> 00:00:38,800
+we can actually represent a two by two
+ 
+
+41
+00:00:38,800 --> 00:00:42,229
+we can actually represent a two by two
+translation with a three by three matrix
+
+42
+00:00:42,229 --> 00:00:42,239
+translation with a three by three matrix
+ 
+
+43
+00:00:42,239 --> 00:00:45,590
+translation with a three by three matrix
+first to represent any position vector
+
+44
+00:00:45,590 --> 00:00:45,600
+first to represent any position vector
+ 
+
+45
+00:00:45,600 --> 00:00:48,549
+first to represent any position vector
+we add a third component with value one
+
+46
+00:00:48,549 --> 00:00:48,559
+we add a third component with value one
+ 
+
+47
+00:00:48,559 --> 00:00:50,869
+we add a third component with value one
+and then we extend the prior matrix to
+
+48
+00:00:50,869 --> 00:00:50,879
+and then we extend the prior matrix to
+ 
+
+49
+00:00:50,879 --> 00:00:51,189
+and then we extend the prior matrix to
+be
+
+50
+00:00:51,189 --> 00:00:51,199
+be
+ 
+
+51
+00:00:51,199 --> 00:00:53,830
+be
+three by three this two by two portion
+
+52
+00:00:53,830 --> 00:00:53,840
+three by three this two by two portion
+ 
+
+53
+00:00:53,840 --> 00:00:54,709
+three by three this two by two portion
+is the same
+
+54
+00:00:54,709 --> 00:00:54,719
+is the same
+ 
+
+55
+00:00:54,719 --> 00:00:57,029
+is the same
+old linear transformation without any
+
+56
+00:00:57,029 --> 00:00:57,039
+old linear transformation without any
+ 
+
+57
+00:00:57,039 --> 00:00:59,110
+old linear transformation without any
+changes next we have the first two
+
+58
+00:00:59,110 --> 00:00:59,120
+changes next we have the first two
+ 
+
+59
+00:00:59,120 --> 00:01:00,790
+changes next we have the first two
+components in the third column
+
+60
+00:01:00,790 --> 00:01:00,800
+components in the third column
+ 
+
+61
+00:01:00,800 --> 00:01:03,990
+components in the third column
+which specify the x and y offsets
+
+62
+00:01:03,990 --> 00:01:04,000
+which specify the x and y offsets
+ 
+
+63
+00:01:04,000 --> 00:01:05,990
+which specify the x and y offsets
+multiplying by this matrix will
+
+64
+00:01:05,990 --> 00:01:06,000
+multiplying by this matrix will
+ 
+
+65
+00:01:06,000 --> 00:01:07,350
+multiplying by this matrix will
+effectively apply
+
+66
+00:01:07,350 --> 00:01:07,360
+effectively apply
+ 
+
+67
+00:01:07,360 --> 00:01:09,990
+effectively apply
+a linear transformation followed by an
+
+68
+00:01:09,990 --> 00:01:10,000
+a linear transformation followed by an
+ 
+
+69
+00:01:10,000 --> 00:01:10,950
+a linear transformation followed by an
+offset
+
+70
+00:01:10,950 --> 00:01:10,960
+offset
+ 
+
+71
+00:01:10,960 --> 00:01:13,510
+offset
+if we expand out the multiplication we
+
+72
+00:01:13,510 --> 00:01:13,520
+if we expand out the multiplication we
+ 
+
+73
+00:01:13,520 --> 00:01:15,670
+if we expand out the multiplication we
+can see this takes on the form of the
+
+74
+00:01:15,670 --> 00:01:15,680
+can see this takes on the form of the
+ 
+
+75
+00:01:15,680 --> 00:01:16,710
+can see this takes on the form of the
+calculation
+
+76
+00:01:16,710 --> 00:01:16,720
+calculation
+ 
+
+77
+00:01:16,720 --> 00:01:18,789
+calculation
+we were already using in the vertex
+
+78
+00:01:18,789 --> 00:01:18,799
+we were already using in the vertex
+ 
+
+79
+00:01:18,799 --> 00:01:19,830
+we were already using in the vertex
+shader
+
+80
+00:01:19,830 --> 00:01:19,840
+shader
+ 
+
+81
+00:01:19,840 --> 00:01:23,190
+shader
+finally this fixed third row simply will
+
+82
+00:01:23,190 --> 00:01:23,200
+finally this fixed third row simply will
+ 
+
+83
+00:01:23,200 --> 00:01:24,870
+finally this fixed third row simply will
+copy the value 1
+
+84
+00:01:24,870 --> 00:01:24,880
+copy the value 1
+ 
+
+85
+00:01:24,880 --> 00:01:27,030
+copy the value 1
+from the position vector into the
+
+86
+00:01:27,030 --> 00:01:27,040
+from the position vector into the
+ 
+
+87
+00:01:27,040 --> 00:01:28,950
+from the position vector into the
+transformed result
+
+88
+00:01:28,950 --> 00:01:28,960
+transformed result
+ 
+
+89
+00:01:28,960 --> 00:01:31,670
+transformed result
+this family of transformations is known
+
+90
+00:01:31,670 --> 00:01:31,680
+this family of transformations is known
+ 
+
+91
+00:01:31,680 --> 00:01:32,710
+this family of transformations is known
+as a fine
+
+92
+00:01:32,710 --> 00:01:32,720
+as a fine
+ 
+
+93
+00:01:32,720 --> 00:01:35,030
+as a fine
+transformations and this way of
+
+94
+00:01:35,030 --> 00:01:35,040
+transformations and this way of
+ 
+
+95
+00:01:35,040 --> 00:01:37,350
+transformations and this way of
+implementing a fine transformations by
+
+96
+00:01:37,350 --> 00:01:37,360
+implementing a fine transformations by
+ 
+
+97
+00:01:37,360 --> 00:01:38,069
+implementing a fine transformations by
+adding an
+
+98
+00:01:38,069 --> 00:01:38,079
+adding an
+ 
+
+99
+00:01:38,079 --> 00:01:41,030
+adding an
+extra dimension is called homogeneous
+
+100
+00:01:41,030 --> 00:01:41,040
+extra dimension is called homogeneous
+ 
+
+101
+00:01:41,040 --> 00:01:42,630
+extra dimension is called homogeneous
+coordinates
+
+102
+00:01:42,630 --> 00:01:42,640
+coordinates
+ 
+
+103
+00:01:42,640 --> 00:01:45,190
+coordinates
+one disadvantage of the previous method
+
+104
+00:01:45,190 --> 00:01:45,200
+one disadvantage of the previous method
+ 
+
+105
+00:01:45,200 --> 00:01:47,350
+one disadvantage of the previous method
+is that the translations would always be
+
+106
+00:01:47,350 --> 00:01:47,360
+is that the translations would always be
+ 
+
+107
+00:01:47,360 --> 00:01:47,990
+is that the translations would always be
+applied
+
+108
+00:01:47,990 --> 00:01:48,000
+applied
+ 
+
+109
+00:01:48,000 --> 00:01:50,950
+applied
+as the final step but with affine
+
+110
+00:01:50,950 --> 00:01:50,960
+as the final step but with affine
+ 
+
+111
+00:01:50,960 --> 00:01:53,030
+as the final step but with affine
+transformations we can interleave
+
+112
+00:01:53,030 --> 00:01:53,040
+transformations we can interleave
+ 
+
+113
+00:01:53,040 --> 00:01:53,990
+transformations we can interleave
+translations
+
+114
+00:01:53,990 --> 00:01:54,000
+translations
+ 
+
+115
+00:01:54,000 --> 00:01:56,630
+translations
+in with the other linear transformations
+
+116
+00:01:56,630 --> 00:01:56,640
+in with the other linear transformations
+ 
+
+117
+00:01:56,640 --> 00:01:57,749
+in with the other linear transformations
+for example
+
+118
+00:01:57,749 --> 00:01:57,759
+for example
+ 
+
+119
+00:01:57,759 --> 00:02:00,230
+for example
+currently whenever we rotate an object
+
+120
+00:02:00,230 --> 00:02:00,240
+currently whenever we rotate an object
+ 
+
+121
+00:02:00,240 --> 00:02:02,870
+currently whenever we rotate an object
+it can only rotate around the origin
+
+122
+00:02:02,870 --> 00:02:02,880
+it can only rotate around the origin
+ 
+
+123
+00:02:02,880 --> 00:02:05,190
+it can only rotate around the origin
+but some of the time it would be useful
+
+124
+00:02:05,190 --> 00:02:05,200
+but some of the time it would be useful
+ 
+
+125
+00:02:05,200 --> 00:02:07,590
+but some of the time it would be useful
+to be able to rotate around an arbitrary
+
+126
+00:02:07,590 --> 00:02:07,600
+to be able to rotate around an arbitrary
+ 
+
+127
+00:02:07,600 --> 00:02:08,229
+to be able to rotate around an arbitrary
+point
+
+128
+00:02:08,229 --> 00:02:08,239
+point
+ 
+
+129
+00:02:08,239 --> 00:02:10,389
+point
+known as the anchor with the fine
+
+130
+00:02:10,389 --> 00:02:10,399
+known as the anchor with the fine
+ 
+
+131
+00:02:10,399 --> 00:02:11,430
+known as the anchor with the fine
+transformations
+
+132
+00:02:11,430 --> 00:02:11,440
+transformations
+ 
+
+133
+00:02:11,440 --> 00:02:14,470
+transformations
+this is much easier to do first
+
+134
+00:02:14,470 --> 00:02:14,480
+this is much easier to do first
+ 
+
+135
+00:02:14,480 --> 00:02:16,470
+this is much easier to do first
+translate the object so that the anchor
+
+136
+00:02:16,470 --> 00:02:16,480
+translate the object so that the anchor
+ 
+
+137
+00:02:16,480 --> 00:02:18,630
+translate the object so that the anchor
+point moves to the origin
+
+138
+00:02:18,630 --> 00:02:18,640
+point moves to the origin
+ 
+
+139
+00:02:18,640 --> 00:02:20,869
+point moves to the origin
+then rotate the object and finally
+
+140
+00:02:20,869 --> 00:02:20,879
+then rotate the object and finally
+ 
+
+141
+00:02:20,879 --> 00:02:22,869
+then rotate the object and finally
+translate the anchor point back to its
+
+142
+00:02:22,869 --> 00:02:22,879
+translate the anchor point back to its
+ 
+
+143
+00:02:22,879 --> 00:02:24,390
+translate the anchor point back to its
+original position
+
+144
+00:02:24,390 --> 00:02:24,400
+original position
+ 
+
+145
+00:02:24,400 --> 00:02:26,229
+original position
+combining these three transformation
+
+146
+00:02:26,229 --> 00:02:26,239
+combining these three transformation
+ 
+
+147
+00:02:26,239 --> 00:02:28,630
+combining these three transformation
+matrices together using multiplication
+
+148
+00:02:28,630 --> 00:02:28,640
+matrices together using multiplication
+ 
+
+149
+00:02:28,640 --> 00:02:30,070
+matrices together using multiplication
+will result in the desired
+
+150
+00:02:30,070 --> 00:02:30,080
+will result in the desired
+ 
+
+151
+00:02:30,080 --> 00:02:32,150
+will result in the desired
+transformation however
+
+152
+00:02:32,150 --> 00:02:32,160
+transformation however
+ 
+
+153
+00:02:32,160 --> 00:02:34,550
+transformation however
+a distinction arises when we need to
+
+154
+00:02:34,550 --> 00:02:34,560
+a distinction arises when we need to
+ 
+
+155
+00:02:34,560 --> 00:02:35,350
+a distinction arises when we need to
+transform
+
+156
+00:02:35,350 --> 00:02:35,360
+transform
+ 
+
+157
+00:02:35,360 --> 00:02:37,830
+transform
+vectors that represent directions or
+
+158
+00:02:37,830 --> 00:02:37,840
+vectors that represent directions or
+ 
+
+159
+00:02:37,840 --> 00:02:39,270
+vectors that represent directions or
+relative offsets
+
+160
+00:02:39,270 --> 00:02:39,280
+relative offsets
+ 
+
+161
+00:02:39,280 --> 00:02:41,910
+relative offsets
+rather than positions the distance
+
+162
+00:02:41,910 --> 00:02:41,920
+rather than positions the distance
+ 
+
+163
+00:02:41,920 --> 00:02:44,070
+rather than positions the distance
+between two corners of a square
+
+164
+00:02:44,070 --> 00:02:44,080
+between two corners of a square
+ 
+
+165
+00:02:44,080 --> 00:02:46,229
+between two corners of a square
+is the same regardless of where the
+
+166
+00:02:46,229 --> 00:02:46,239
+is the same regardless of where the
+ 
+
+167
+00:02:46,239 --> 00:02:47,589
+is the same regardless of where the
+square is placed
+
+168
+00:02:47,589 --> 00:02:47,599
+square is placed
+ 
+
+169
+00:02:47,599 --> 00:02:50,229
+square is placed
+however if the square is rotated or
+
+170
+00:02:50,229 --> 00:02:50,239
+however if the square is rotated or
+ 
+
+171
+00:02:50,239 --> 00:02:50,949
+however if the square is rotated or
+scaled
+
+172
+00:02:50,949 --> 00:02:50,959
+scaled
+ 
+
+173
+00:02:50,959 --> 00:02:53,990
+scaled
+then this relative offset is affected so
+
+174
+00:02:53,990 --> 00:02:54,000
+then this relative offset is affected so
+ 
+
+175
+00:02:54,000 --> 00:02:56,390
+then this relative offset is affected so
+if we are storing this relative offset
+
+176
+00:02:56,390 --> 00:02:56,400
+if we are storing this relative offset
+ 
+
+177
+00:02:56,400 --> 00:02:57,910
+if we are storing this relative offset
+value in a variable
+
+178
+00:02:57,910 --> 00:02:57,920
+value in a variable
+ 
+
+179
+00:02:57,920 --> 00:02:59,990
+value in a variable
+we want it to be affected by linear
+
+180
+00:02:59,990 --> 00:03:00,000
+we want it to be affected by linear
+ 
+
+181
+00:03:00,000 --> 00:03:02,309
+we want it to be affected by linear
+transformations applied to the square
+
+182
+00:03:02,309 --> 00:03:02,319
+transformations applied to the square
+ 
+
+183
+00:03:02,319 --> 00:03:04,949
+transformations applied to the square
+but we do not want distances to be
+
+184
+00:03:04,949 --> 00:03:04,959
+but we do not want distances to be
+ 
+
+185
+00:03:04,959 --> 00:03:07,030
+but we do not want distances to be
+affected by translations
+
+186
+00:03:07,030 --> 00:03:07,040
+affected by translations
+ 
+
+187
+00:03:07,040 --> 00:03:09,270
+affected by translations
+homogeneous coordinates can easily
+
+188
+00:03:09,270 --> 00:03:09,280
+homogeneous coordinates can easily
+ 
+
+189
+00:03:09,280 --> 00:03:10,869
+homogeneous coordinates can easily
+account for this by encoding
+
+190
+00:03:10,869 --> 00:03:10,879
+account for this by encoding
+ 
+
+191
+00:03:10,879 --> 00:03:12,869
+account for this by encoding
+any vector that does not represent a
+
+192
+00:03:12,869 --> 00:03:12,879
+any vector that does not represent a
+ 
+
+193
+00:03:12,879 --> 00:03:14,470
+any vector that does not represent a
+position with a zero
+
+194
+00:03:14,470 --> 00:03:14,480
+position with a zero
+ 
+
+195
+00:03:14,480 --> 00:03:17,430
+position with a zero
+as the third component so that it's not
+
+196
+00:03:17,430 --> 00:03:17,440
+as the third component so that it's not
+ 
+
+197
+00:03:17,440 --> 00:03:19,110
+as the third component so that it's not
+affected by translations
+
+198
+00:03:19,110 --> 00:03:19,120
+affected by translations
+ 
+
+199
+00:03:19,120 --> 00:03:21,270
+affected by translations
+but will still be affected by other
+
+200
+00:03:21,270 --> 00:03:21,280
+but will still be affected by other
+ 
+
+201
+00:03:21,280 --> 00:03:23,270
+but will still be affected by other
+linear transformations
+
+202
+00:03:23,270 --> 00:03:23,280
+linear transformations
+ 
+
+203
+00:03:23,280 --> 00:03:25,030
+linear transformations
+this can be shown to be true by
+
+204
+00:03:25,030 --> 00:03:25,040
+this can be shown to be true by
+ 
+
+205
+00:03:25,040 --> 00:03:27,830
+this can be shown to be true by
+multiplying out a transformation matrix
+
+206
+00:03:27,830 --> 00:03:27,840
+multiplying out a transformation matrix
+ 
+
+207
+00:03:27,840 --> 00:03:28,869
+multiplying out a transformation matrix
+by a vector
+
+208
+00:03:28,869 --> 00:03:28,879
+by a vector
+ 
+
+209
+00:03:28,879 --> 00:03:30,470
+by a vector
+because the third component of the
+
+210
+00:03:30,470 --> 00:03:30,480
+because the third component of the
+ 
+
+211
+00:03:30,480 --> 00:03:33,030
+because the third component of the
+vector is when multiplied by the third
+
+212
+00:03:33,030 --> 00:03:33,040
+vector is when multiplied by the third
+ 
+
+213
+00:03:33,040 --> 00:03:35,030
+vector is when multiplied by the third
+column of the matrix the translation
+
+214
+00:03:35,030 --> 00:03:35,040
+column of the matrix the translation
+ 
+
+215
+00:03:35,040 --> 00:03:36,869
+column of the matrix the translation
+values are cancelled out
+
+216
+00:03:36,869 --> 00:03:36,879
+values are cancelled out
+ 
+
+217
+00:03:36,879 --> 00:03:39,509
+values are cancelled out
+and the homogeneous coordinate value is
+
+218
+00:03:39,509 --> 00:03:39,519
+and the homogeneous coordinate value is
+ 
+
+219
+00:03:39,519 --> 00:03:40,869
+and the homogeneous coordinate value is
+carried over
+
+220
+00:03:40,869 --> 00:03:40,879
+carried over
+ 
+
+221
+00:03:40,879 --> 00:03:43,190
+carried over
+so using this system of homogeneous
+
+222
+00:03:43,190 --> 00:03:43,200
+so using this system of homogeneous
+ 
+
+223
+00:03:43,200 --> 00:03:44,070
+so using this system of homogeneous
+coordinates
+
+224
+00:03:44,070 --> 00:03:44,080
+coordinates
+ 
+
+225
+00:03:44,080 --> 00:03:46,789
+coordinates
+a vector v equal to 3 2 1 would
+
+226
+00:03:46,789 --> 00:03:46,799
+a vector v equal to 3 2 1 would
+ 
+
+227
+00:03:46,799 --> 00:03:48,149
+a vector v equal to 3 2 1 would
+represent the position
+
+228
+00:03:48,149 --> 00:03:48,159
+represent the position
+ 
+
+229
+00:03:48,159 --> 00:03:51,350
+represent the position
+at 3 2 and a vector u equal to 3
+
+230
+00:03:51,350 --> 00:03:51,360
+at 3 2 and a vector u equal to 3
+ 
+
+231
+00:03:51,360 --> 00:03:54,309
+at 3 2 and a vector u equal to 3
+2 0 would represent a displacement or
+
+232
+00:03:54,309 --> 00:03:54,319
+2 0 would represent a displacement or
+ 
+
+233
+00:03:54,319 --> 00:03:55,910
+2 0 would represent a displacement or
+direction
+
+234
+00:03:55,910 --> 00:03:55,920
+direction
+ 
+
+235
+00:03:55,920 --> 00:03:58,229
+direction
+now all of this applies just the same
+
+236
+00:03:58,229 --> 00:03:58,239
+now all of this applies just the same
+ 
+
+237
+00:03:58,239 --> 00:04:00,070
+now all of this applies just the same
+for three dimensions
+
+238
+00:04:00,070 --> 00:04:00,080
+for three dimensions
+ 
+
+239
+00:04:00,080 --> 00:04:02,309
+for three dimensions
+if we have a position represented by an
+
+240
+00:04:02,309 --> 00:04:02,319
+if we have a position represented by an
+ 
+
+241
+00:04:02,319 --> 00:04:03,509
+if we have a position represented by an
+x y and z
+
+242
+00:04:03,509 --> 00:04:03,519
+x y and z
+ 
+
+243
+00:04:03,519 --> 00:04:05,190
+x y and z
+component we can add a fourth
+
+244
+00:04:05,190 --> 00:04:05,200
+component we can add a fourth
+ 
+
+245
+00:04:05,200 --> 00:04:07,589
+component we can add a fourth
+homogeneous coordinate and use four by
+
+246
+00:04:07,589 --> 00:04:07,599
+homogeneous coordinate and use four by
+ 
+
+247
+00:04:07,599 --> 00:04:07,990
+homogeneous coordinate and use four by
+four
+
+248
+00:04:07,990 --> 00:04:08,000
+four
+ 
+
+249
+00:04:08,000 --> 00:04:09,670
+four
+matrices when working with
+
+250
+00:04:09,670 --> 00:04:09,680
+matrices when working with
+ 
+
+251
+00:04:09,680 --> 00:04:11,830
+matrices when working with
+three-dimensional geometry
+
+252
+00:04:11,830 --> 00:04:11,840
+three-dimensional geometry
+ 
+
+253
+00:04:11,840 --> 00:04:14,149
+three-dimensional geometry
+this is why you will commonly see many
+
+254
+00:04:14,149 --> 00:04:14,159
+this is why you will commonly see many
+ 
+
+255
+00:04:14,159 --> 00:04:16,390
+this is why you will commonly see many
+3d graphics libraries and engines
+
+256
+00:04:16,390 --> 00:04:16,400
+3d graphics libraries and engines
+ 
+
+257
+00:04:16,400 --> 00:04:19,509
+3d graphics libraries and engines
+using four by four matrices when working
+
+258
+00:04:19,509 --> 00:04:19,519
+using four by four matrices when working
+ 
+
+259
+00:04:19,519 --> 00:04:21,349
+using four by four matrices when working
+with transformation matrices in three
+
+260
+00:04:21,349 --> 00:04:21,359
+with transformation matrices in three
+ 
+
+261
+00:04:21,359 --> 00:04:22,390
+with transformation matrices in three
+dimensions
+
+262
+00:04:22,390 --> 00:04:22,400
+dimensions
+ 
+
+263
+00:04:22,400 --> 00:04:24,469
+dimensions
+the linear transformation portion will
+
+264
+00:04:24,469 --> 00:04:24,479
+the linear transformation portion will
+ 
+
+265
+00:04:24,479 --> 00:04:25,590
+the linear transformation portion will
+be three by three
+
+266
+00:04:25,590 --> 00:04:25,600
+be three by three
+ 
+
+267
+00:04:25,600 --> 00:04:27,350
+be three by three
+and the fourth column holds the
+
+268
+00:04:27,350 --> 00:04:27,360
+and the fourth column holds the
+ 
+
+269
+00:04:27,360 --> 00:04:29,430
+and the fourth column holds the
+translation component
+
+270
+00:04:29,430 --> 00:04:29,440
+translation component
+ 
+
+271
+00:04:29,440 --> 00:04:31,350
+translation component
+so in this tutorial we're going to
+
+272
+00:04:31,350 --> 00:04:31,360
+so in this tutorial we're going to
+ 
+
+273
+00:04:31,360 --> 00:04:34,790
+so in this tutorial we're going to
+update our engine to render 3d objects
+
+274
+00:04:34,790 --> 00:04:34,800
+update our engine to render 3d objects
+ 
+
+275
+00:04:34,800 --> 00:04:37,270
+update our engine to render 3d objects
+it may be a good idea to create a copy
+
+276
+00:04:37,270 --> 00:04:37,280
+it may be a good idea to create a copy
+ 
+
+277
+00:04:37,280 --> 00:04:38,469
+it may be a good idea to create a copy
+of your project
+
+278
+00:04:38,469 --> 00:04:38,479
+of your project
+ 
+
+279
+00:04:38,479 --> 00:04:40,469
+of your project
+if you want to have a 2d version of the
+
+280
+00:04:40,469 --> 00:04:40,479
+if you want to have a 2d version of the
+ 
+
+281
+00:04:40,479 --> 00:04:42,790
+if you want to have a 2d version of the
+engine to come back to since from this
+
+282
+00:04:42,790 --> 00:04:42,800
+engine to come back to since from this
+ 
+
+283
+00:04:42,800 --> 00:04:44,629
+engine to come back to since from this
+point on we're going to focus
+
+284
+00:04:44,629 --> 00:04:44,639
+point on we're going to focus
+ 
+
+285
+00:04:44,639 --> 00:04:48,070
+point on we're going to focus
+mostly on 3d rendering okay let's start
+
+286
+00:04:48,070 --> 00:04:48,080
+mostly on 3d rendering okay let's start
+ 
+
+287
+00:04:48,080 --> 00:04:48,950
+mostly on 3d rendering okay let's start
+coding
+
+288
+00:04:48,950 --> 00:04:48,960
+coding
+ 
+
+289
+00:04:48,960 --> 00:04:51,670
+coding
+in the game object implementation file
+
+290
+00:04:51,670 --> 00:04:51,680
+in the game object implementation file
+ 
+
+291
+00:04:51,680 --> 00:04:53,909
+in the game object implementation file
+i'm going to rename the transform 2d
+
+292
+00:04:53,909 --> 00:04:53,919
+i'm going to rename the transform 2d
+ 
+
+293
+00:04:53,919 --> 00:04:54,710
+i'm going to rename the transform 2d
+component
+
+294
+00:04:54,710 --> 00:04:54,720
+component
+ 
+
+295
+00:04:54,720 --> 00:04:57,990
+component
+to just be transform component
+
+296
+00:04:57,990 --> 00:04:58,000
+to just be transform component
+ 
+
+297
+00:04:58,000 --> 00:05:00,550
+to just be transform component
+next update the type of the translation
+
+298
+00:05:00,550 --> 00:05:00,560
+next update the type of the translation
+ 
+
+299
+00:05:00,560 --> 00:05:03,110
+next update the type of the translation
+and scale properties to be a vac3
+
+300
+00:05:03,110 --> 00:05:03,120
+and scale properties to be a vac3
+ 
+
+301
+00:05:03,120 --> 00:05:05,909
+and scale properties to be a vac3
+instead of a vac2 and update the scale
+
+302
+00:05:05,909 --> 00:05:05,919
+instead of a vac2 and update the scale
+ 
+
+303
+00:05:05,919 --> 00:05:07,909
+instead of a vac2 and update the scale
+properties constructor with a third
+
+304
+00:05:07,909 --> 00:05:07,919
+properties constructor with a third
+ 
+
+305
+00:05:07,919 --> 00:05:08,550
+properties constructor with a third
+argument
+
+306
+00:05:08,550 --> 00:05:08,560
+argument
+ 
+
+307
+00:05:08,560 --> 00:05:11,430
+argument
+also with the value one now in three
+
+308
+00:05:11,430 --> 00:05:11,440
+also with the value one now in three
+ 
+
+309
+00:05:11,440 --> 00:05:12,150
+also with the value one now in three
+dimensions
+
+310
+00:05:12,150 --> 00:05:12,160
+dimensions
+ 
+
+311
+00:05:12,160 --> 00:05:14,710
+dimensions
+it is no longer possible to specify an
+
+312
+00:05:14,710 --> 00:05:14,720
+it is no longer possible to specify an
+ 
+
+313
+00:05:14,720 --> 00:05:16,150
+it is no longer possible to specify an
+object's orientation
+
+314
+00:05:16,150 --> 00:05:16,160
+object's orientation
+ 
+
+315
+00:05:16,160 --> 00:05:18,710
+object's orientation
+with just a single value we actually
+
+316
+00:05:18,710 --> 00:05:18,720
+with just a single value we actually
+ 
+
+317
+00:05:18,720 --> 00:05:20,070
+with just a single value we actually
+require at least
+
+318
+00:05:20,070 --> 00:05:20,080
+require at least
+ 
+
+319
+00:05:20,080 --> 00:05:23,029
+require at least
+three so change rotation to also be of
+
+320
+00:05:23,029 --> 00:05:23,039
+three so change rotation to also be of
+ 
+
+321
+00:05:23,039 --> 00:05:23,430
+three so change rotation to also be of
+type
+
+322
+00:05:23,430 --> 00:05:23,440
+type
+ 
+
+323
+00:05:23,440 --> 00:05:27,189
+type
+glm fact3 get rid of the matte tube
+
+324
+00:05:27,189 --> 00:05:27,199
+glm fact3 get rid of the matte tube
+ 
+
+325
+00:05:27,199 --> 00:05:27,990
+glm fact3 get rid of the matte tube
+function
+
+326
+00:05:27,990 --> 00:05:28,000
+function
+ 
+
+327
+00:05:28,000 --> 00:05:30,550
+function
+and add a new function with return type
+
+328
+00:05:30,550 --> 00:05:30,560
+and add a new function with return type
+ 
+
+329
+00:05:30,560 --> 00:05:31,430
+and add a new function with return type
+glm mat
+
+330
+00:05:31,430 --> 00:05:31,440
+glm mat
+ 
+
+331
+00:05:31,440 --> 00:05:35,430
+glm mat
+4 called mat4 we are using 4x4 matrices
+
+332
+00:05:35,430 --> 00:05:35,440
+4 called mat4 we are using 4x4 matrices
+ 
+
+333
+00:05:35,440 --> 00:05:35,830
+4 called mat4 we are using 4x4 matrices
+here
+
+334
+00:05:35,830 --> 00:05:35,840
+here
+ 
+
+335
+00:05:35,840 --> 00:05:38,070
+here
+because we have three spatial dimensions
+
+336
+00:05:38,070 --> 00:05:38,080
+because we have three spatial dimensions
+ 
+
+337
+00:05:38,080 --> 00:05:40,230
+because we have three spatial dimensions
+plus one more for homogeneous
+
+338
+00:05:40,230 --> 00:05:40,240
+plus one more for homogeneous
+ 
+
+339
+00:05:40,240 --> 00:05:41,510
+plus one more for homogeneous
+coordinates
+
+340
+00:05:41,510 --> 00:05:41,520
+coordinates
+ 
+
+341
+00:05:41,520 --> 00:05:44,790
+coordinates
+okay so the glm vector library has some
+
+342
+00:05:44,790 --> 00:05:44,800
+okay so the glm vector library has some
+ 
+
+343
+00:05:44,800 --> 00:05:47,189
+okay so the glm vector library has some
+built-in helper functions we can use to
+
+344
+00:05:47,189 --> 00:05:47,199
+built-in helper functions we can use to
+ 
+
+345
+00:05:47,199 --> 00:05:49,590
+built-in helper functions we can use to
+easily construct 4x4 transformation
+
+346
+00:05:49,590 --> 00:05:49,600
+easily construct 4x4 transformation
+ 
+
+347
+00:05:49,600 --> 00:05:50,629
+easily construct 4x4 transformation
+matrices
+
+348
+00:05:50,629 --> 00:05:50,639
+matrices
+ 
+
+349
+00:05:50,639 --> 00:05:52,870
+matrices
+which we can get access to by including
+
+350
+00:05:52,870 --> 00:05:52,880
+which we can get access to by including
+ 
+
+351
+00:05:52,880 --> 00:05:54,390
+which we can get access to by including
+the glm
+
+352
+00:05:54,390 --> 00:05:54,400
+the glm
+ 
+
+353
+00:05:54,400 --> 00:05:58,070
+the glm
+gtc slash matrix underscore transform
+
+354
+00:05:58,070 --> 00:05:58,080
+gtc slash matrix underscore transform
+ 
+
+355
+00:05:58,080 --> 00:06:01,189
+gtc slash matrix underscore transform
+dot hpp header file then inside the
+
+356
+00:06:01,189 --> 00:06:01,199
+dot hpp header file then inside the
+ 
+
+357
+00:06:01,199 --> 00:06:03,110
+dot hpp header file then inside the
+matte bore function body
+
+358
+00:06:03,110 --> 00:06:03,120
+matte bore function body
+ 
+
+359
+00:06:03,120 --> 00:06:05,510
+matte bore function body
+initialize a new local variable with
+
+360
+00:06:05,510 --> 00:06:05,520
+initialize a new local variable with
+ 
+
+361
+00:06:05,520 --> 00:06:06,150
+initialize a new local variable with
+auto
+
+362
+00:06:06,150 --> 00:06:06,160
+auto
+ 
+
+363
+00:06:06,160 --> 00:06:10,230
+auto
+transform is equal to glm translate
+
+364
+00:06:10,230 --> 00:06:10,240
+transform is equal to glm translate
+ 
+
+365
+00:06:10,240 --> 00:06:12,390
+transform is equal to glm translate
+with the first argument being a four by
+
+366
+00:06:12,390 --> 00:06:12,400
+with the first argument being a four by
+ 
+
+367
+00:06:12,400 --> 00:06:14,309
+with the first argument being a four by
+four identity matrix
+
+368
+00:06:14,309 --> 00:06:14,319
+four identity matrix
+ 
+
+369
+00:06:14,319 --> 00:06:16,309
+four identity matrix
+and the second being the translation
+
+370
+00:06:16,309 --> 00:06:16,319
+and the second being the translation
+ 
+
+371
+00:06:16,319 --> 00:06:17,350
+and the second being the translation
+property
+
+372
+00:06:17,350 --> 00:06:17,360
+property
+ 
+
+373
+00:06:17,360 --> 00:06:19,350
+property
+this creates a four by four translation
+
+374
+00:06:19,350 --> 00:06:19,360
+this creates a four by four translation
+ 
+
+375
+00:06:19,360 --> 00:06:21,830
+this creates a four by four translation
+matrix using the transform component's
+
+376
+00:06:21,830 --> 00:06:21,840
+matrix using the transform component's
+ 
+
+377
+00:06:21,840 --> 00:06:24,550
+matrix using the transform component's
+current translation values
+
+378
+00:06:24,550 --> 00:06:24,560
+current translation values
+ 
+
+379
+00:06:24,560 --> 00:06:26,870
+current translation values
+then to combine this with a scale
+
+380
+00:06:26,870 --> 00:06:26,880
+then to combine this with a scale
+ 
+
+381
+00:06:26,880 --> 00:06:27,909
+then to combine this with a scale
+transform
+
+382
+00:06:27,909 --> 00:06:27,919
+transform
+ 
+
+383
+00:06:27,919 --> 00:06:31,430
+transform
+we have transform is equal to glm scale
+
+384
+00:06:31,430 --> 00:06:31,440
+we have transform is equal to glm scale
+ 
+
+385
+00:06:31,440 --> 00:06:33,430
+we have transform is equal to glm scale
+with the transform local variable as the
+
+386
+00:06:33,430 --> 00:06:33,440
+with the transform local variable as the
+ 
+
+387
+00:06:33,440 --> 00:06:34,629
+with the transform local variable as the
+first argument
+
+388
+00:06:34,629 --> 00:06:34,639
+first argument
+ 
+
+389
+00:06:34,639 --> 00:06:36,950
+first argument
+and the scale property of this transform
+
+390
+00:06:36,950 --> 00:06:36,960
+and the scale property of this transform
+ 
+
+391
+00:06:36,960 --> 00:06:38,950
+and the scale property of this transform
+component as the second
+
+392
+00:06:38,950 --> 00:06:38,960
+component as the second
+ 
+
+393
+00:06:38,960 --> 00:06:41,029
+component as the second
+and then on the next line return the
+
+394
+00:06:41,029 --> 00:06:41,039
+and then on the next line return the
+ 
+
+395
+00:06:41,039 --> 00:06:42,469
+and then on the next line return the
+transform variable with
+
+396
+00:06:42,469 --> 00:06:42,479
+transform variable with
+ 
+
+397
+00:06:42,479 --> 00:06:45,590
+transform variable with
+return transform the way to think about
+
+398
+00:06:45,590 --> 00:06:45,600
+return transform the way to think about
+ 
+
+399
+00:06:45,600 --> 00:06:47,830
+return transform the way to think about
+how all these gl and matrix functions
+
+400
+00:06:47,830 --> 00:06:47,840
+how all these gl and matrix functions
+ 
+
+401
+00:06:47,840 --> 00:06:50,070
+how all these gl and matrix functions
+work is by treating the first argument
+
+402
+00:06:50,070 --> 00:06:50,080
+work is by treating the first argument
+ 
+
+403
+00:06:50,080 --> 00:06:52,230
+work is by treating the first argument
+as the left hand side of a matrix
+
+404
+00:06:52,230 --> 00:06:52,240
+as the left hand side of a matrix
+ 
+
+405
+00:06:52,240 --> 00:06:53,670
+as the left hand side of a matrix
+multiplication
+
+406
+00:06:53,670 --> 00:06:53,680
+multiplication
+ 
+
+407
+00:06:53,680 --> 00:06:55,830
+multiplication
+so for example the scale function
+
+408
+00:06:55,830 --> 00:06:55,840
+so for example the scale function
+ 
+
+409
+00:06:55,840 --> 00:06:56,950
+so for example the scale function
+returns the result
+
+410
+00:06:56,950 --> 00:06:56,960
+returns the result
+ 
+
+411
+00:06:56,960 --> 00:06:59,589
+returns the result
+of the transform matrix multiplied by a
+
+412
+00:06:59,589 --> 00:06:59,599
+of the transform matrix multiplied by a
+ 
+
+413
+00:06:59,599 --> 00:07:01,990
+of the transform matrix multiplied by a
+scale matrix constructed by using the
+
+414
+00:07:01,990 --> 00:07:02,000
+scale matrix constructed by using the
+ 
+
+415
+00:07:02,000 --> 00:07:04,710
+scale matrix constructed by using the
+vect3 scale argument note that the
+
+416
+00:07:04,710 --> 00:07:04,720
+vect3 scale argument note that the
+ 
+
+417
+00:07:04,720 --> 00:07:06,629
+vect3 scale argument note that the
+actual implementation of the scale
+
+418
+00:07:06,629 --> 00:07:06,639
+actual implementation of the scale
+ 
+
+419
+00:07:06,639 --> 00:07:08,390
+actual implementation of the scale
+function is more optimized than
+
+420
+00:07:08,390 --> 00:07:08,400
+function is more optimized than
+ 
+
+421
+00:07:08,400 --> 00:07:09,990
+function is more optimized than
+computing the entire matrix
+
+422
+00:07:09,990 --> 00:07:10,000
+computing the entire matrix
+ 
+
+423
+00:07:10,000 --> 00:07:11,270
+computing the entire matrix
+multiplication
+
+424
+00:07:11,270 --> 00:07:11,280
+multiplication
+ 
+
+425
+00:07:11,280 --> 00:07:13,430
+multiplication
+we're not done yet though we still need
+
+426
+00:07:13,430 --> 00:07:13,440
+we're not done yet though we still need
+ 
+
+427
+00:07:13,440 --> 00:07:16,070
+we're not done yet though we still need
+to apply the rotation transformations
+
+428
+00:07:16,070 --> 00:07:16,080
+to apply the rotation transformations
+ 
+
+429
+00:07:16,080 --> 00:07:18,230
+to apply the rotation transformations
+rotations are much more complicated in
+
+430
+00:07:18,230 --> 00:07:18,240
+rotations are much more complicated in
+ 
+
+431
+00:07:18,240 --> 00:07:19,270
+rotations are much more complicated in
+three dimensions
+
+432
+00:07:19,270 --> 00:07:19,280
+three dimensions
+ 
+
+433
+00:07:19,280 --> 00:07:21,830
+three dimensions
+when working in 2d there only exists one
+
+434
+00:07:21,830 --> 00:07:21,840
+when working in 2d there only exists one
+ 
+
+435
+00:07:21,840 --> 00:07:23,749
+when working in 2d there only exists one
+possible axis of rotation
+
+436
+00:07:23,749 --> 00:07:23,759
+possible axis of rotation
+ 
+
+437
+00:07:23,759 --> 00:07:25,909
+possible axis of rotation
+but in 3d we can rotate about any
+
+438
+00:07:25,909 --> 00:07:25,919
+but in 3d we can rotate about any
+ 
+
+439
+00:07:25,919 --> 00:07:28,309
+but in 3d we can rotate about any
+arbitrary three-dimensional vector
+
+440
+00:07:28,309 --> 00:07:28,319
+arbitrary three-dimensional vector
+ 
+
+441
+00:07:28,319 --> 00:07:30,790
+arbitrary three-dimensional vector
+euler angles are one way to represent an
+
+442
+00:07:30,790 --> 00:07:30,800
+euler angles are one way to represent an
+ 
+
+443
+00:07:30,800 --> 00:07:32,070
+euler angles are one way to represent an
+object's orientation
+
+444
+00:07:32,070 --> 00:07:32,080
+object's orientation
+ 
+
+445
+00:07:32,080 --> 00:07:33,990
+object's orientation
+in three dimensions by using three
+
+446
+00:07:33,990 --> 00:07:34,000
+in three dimensions by using three
+ 
+
+447
+00:07:34,000 --> 00:07:36,550
+in three dimensions by using three
+values which represent a rotation about
+
+448
+00:07:36,550 --> 00:07:36,560
+values which represent a rotation about
+ 
+
+449
+00:07:36,560 --> 00:07:37,830
+values which represent a rotation about
+one of the coordinate
+
+450
+00:07:37,830 --> 00:07:37,840
+one of the coordinate
+ 
+
+451
+00:07:37,840 --> 00:07:41,510
+one of the coordinate
+axes a rotation about a coordinate axis
+
+452
+00:07:41,510 --> 00:07:41,520
+axes a rotation about a coordinate axis
+ 
+
+453
+00:07:41,520 --> 00:07:44,550
+axes a rotation about a coordinate axis
+is called an elemental rotation so an
+
+454
+00:07:44,550 --> 00:07:44,560
+is called an elemental rotation so an
+ 
+
+455
+00:07:44,560 --> 00:07:46,629
+is called an elemental rotation so an
+elemental rotation can be about the
+
+456
+00:07:46,629 --> 00:07:46,639
+elemental rotation can be about the
+ 
+
+457
+00:07:46,639 --> 00:07:47,430
+elemental rotation can be about the
+x-axis
+
+458
+00:07:47,430 --> 00:07:47,440
+x-axis
+ 
+
+459
+00:07:47,440 --> 00:07:50,790
+x-axis
+y-axis or z-axis by composing three
+
+460
+00:07:50,790 --> 00:07:50,800
+y-axis or z-axis by composing three
+ 
+
+461
+00:07:50,800 --> 00:07:53,029
+y-axis or z-axis by composing three
+elemental rotations any target
+
+462
+00:07:53,029 --> 00:07:53,039
+elemental rotations any target
+ 
+
+463
+00:07:53,039 --> 00:07:54,950
+elemental rotations any target
+orientation can be reached
+
+464
+00:07:54,950 --> 00:07:54,960
+orientation can be reached
+ 
+
+465
+00:07:54,960 --> 00:07:57,430
+orientation can be reached
+there exists 12 possible sequences of
+
+466
+00:07:57,430 --> 00:07:57,440
+there exists 12 possible sequences of
+ 
+
+467
+00:07:57,440 --> 00:07:57,990
+there exists 12 possible sequences of
+rotation
+
+468
+00:07:57,990 --> 00:07:58,000
+rotation
+ 
+
+469
+00:07:58,000 --> 00:08:01,510
+rotation
+axes divided into two groups proper
+
+470
+00:08:01,510 --> 00:08:01,520
+axes divided into two groups proper
+ 
+
+471
+00:08:01,520 --> 00:08:04,150
+axes divided into two groups proper
+or sometimes called classic euler angles
+
+472
+00:08:04,150 --> 00:08:04,160
+or sometimes called classic euler angles
+ 
+
+473
+00:08:04,160 --> 00:08:06,629
+or sometimes called classic euler angles
+use the same axis for both the first and
+
+474
+00:08:06,629 --> 00:08:06,639
+use the same axis for both the first and
+ 
+
+475
+00:08:06,639 --> 00:08:08,790
+use the same axis for both the first and
+third elemental rotations
+
+476
+00:08:08,790 --> 00:08:08,800
+third elemental rotations
+ 
+
+477
+00:08:08,800 --> 00:08:10,230
+third elemental rotations
+with there being a total of six
+
+478
+00:08:10,230 --> 00:08:10,240
+with there being a total of six
+ 
+
+479
+00:08:10,240 --> 00:08:12,550
+with there being a total of six
+different possible proper euler angle
+
+480
+00:08:12,550 --> 00:08:12,560
+different possible proper euler angle
+ 
+
+481
+00:08:12,560 --> 00:08:13,749
+different possible proper euler angle
+combinations
+
+482
+00:08:13,749 --> 00:08:13,759
+combinations
+ 
+
+483
+00:08:13,759 --> 00:08:16,629
+combinations
+the second group is known as tate bryan
+
+484
+00:08:16,629 --> 00:08:16,639
+the second group is known as tate bryan
+ 
+
+485
+00:08:16,639 --> 00:08:17,350
+the second group is known as tate bryan
+angles
+
+486
+00:08:17,350 --> 00:08:17,360
+angles
+ 
+
+487
+00:08:17,360 --> 00:08:19,670
+angles
+which represent rotations using three
+
+488
+00:08:19,670 --> 00:08:19,680
+which represent rotations using three
+ 
+
+489
+00:08:19,680 --> 00:08:21,430
+which represent rotations using three
+distinct axes
+
+490
+00:08:21,430 --> 00:08:21,440
+distinct axes
+ 
+
+491
+00:08:21,440 --> 00:08:24,469
+distinct axes
+for example x y z or y z
+
+492
+00:08:24,469 --> 00:08:24,479
+for example x y z or y z
+ 
+
+493
+00:08:24,479 --> 00:08:27,110
+for example x y z or y z
+x and so on with there also being a
+
+494
+00:08:27,110 --> 00:08:27,120
+x and so on with there also being a
+ 
+
+495
+00:08:27,120 --> 00:08:28,790
+x and so on with there also being a
+total of 6 different possible
+
+496
+00:08:28,790 --> 00:08:28,800
+total of 6 different possible
+ 
+
+497
+00:08:28,800 --> 00:08:30,230
+total of 6 different possible
+combinations
+
+498
+00:08:30,230 --> 00:08:30,240
+combinations
+ 
+
+499
+00:08:30,240 --> 00:08:32,469
+combinations
+all 12 of these orderings are equally
+
+500
+00:08:32,469 --> 00:08:32,479
+all 12 of these orderings are equally
+ 
+
+501
+00:08:32,479 --> 00:08:33,269
+all 12 of these orderings are equally
+valid
+
+502
+00:08:33,269 --> 00:08:33,279
+valid
+ 
+
+503
+00:08:33,279 --> 00:08:35,350
+valid
+but i think it is more common for game
+
+504
+00:08:35,350 --> 00:08:35,360
+but i think it is more common for game
+ 
+
+505
+00:08:35,360 --> 00:08:37,589
+but i think it is more common for game
+engines and other 3d graphics programs
+
+506
+00:08:37,589 --> 00:08:37,599
+engines and other 3d graphics programs
+ 
+
+507
+00:08:37,599 --> 00:08:39,269
+engines and other 3d graphics programs
+to use tate brian over
+
+508
+00:08:39,269 --> 00:08:39,279
+to use tate brian over
+ 
+
+509
+00:08:39,279 --> 00:08:42,630
+to use tate brian over
+proper euler angles such as in blender's
+
+510
+00:08:42,630 --> 00:08:42,640
+proper euler angles such as in blender's
+ 
+
+511
+00:08:42,640 --> 00:08:45,350
+proper euler angles such as in blender's
+object properties tab in the transform
+
+512
+00:08:45,350 --> 00:08:45,360
+object properties tab in the transform
+ 
+
+513
+00:08:45,360 --> 00:08:47,350
+object properties tab in the transform
+component you can select which rotation
+
+514
+00:08:47,350 --> 00:08:47,360
+component you can select which rotation
+ 
+
+515
+00:08:47,360 --> 00:08:48,630
+component you can select which rotation
+mode you want to use
+
+516
+00:08:48,630 --> 00:08:48,640
+mode you want to use
+ 
+
+517
+00:08:48,640 --> 00:08:50,870
+mode you want to use
+and you can see listed here the six
+
+518
+00:08:50,870 --> 00:08:50,880
+and you can see listed here the six
+ 
+
+519
+00:08:50,880 --> 00:08:53,110
+and you can see listed here the six
+possible combinations of tape brian
+
+520
+00:08:53,110 --> 00:08:53,120
+possible combinations of tape brian
+ 
+
+521
+00:08:53,120 --> 00:08:53,990
+possible combinations of tape brian
+angles
+
+522
+00:08:53,990 --> 00:08:54,000
+angles
+ 
+
+523
+00:08:54,000 --> 00:08:55,990
+angles
+additionally there exists two other
+
+524
+00:08:55,990 --> 00:08:56,000
+additionally there exists two other
+ 
+
+525
+00:08:56,000 --> 00:08:58,550
+additionally there exists two other
+commonly used representations for object
+
+526
+00:08:58,550 --> 00:08:58,560
+commonly used representations for object
+ 
+
+527
+00:08:58,560 --> 00:09:00,949
+commonly used representations for object
+orientation in three dimensions
+
+528
+00:09:00,949 --> 00:09:00,959
+orientation in three dimensions
+ 
+
+529
+00:09:00,959 --> 00:09:04,470
+orientation in three dimensions
+quaternions and axis angle quaternions
+
+530
+00:09:04,470 --> 00:09:04,480
+quaternions and axis angle quaternions
+ 
+
+531
+00:09:04,480 --> 00:09:06,550
+quaternions and axis angle quaternions
+actually have a few advantages over
+
+532
+00:09:06,550 --> 00:09:06,560
+actually have a few advantages over
+ 
+
+533
+00:09:06,560 --> 00:09:08,310
+actually have a few advantages over
+rotation matrices
+
+534
+00:09:08,310 --> 00:09:08,320
+rotation matrices
+ 
+
+535
+00:09:08,320 --> 00:09:11,269
+rotation matrices
+but are beyond the scope of this video
+
+536
+00:09:11,269 --> 00:09:11,279
+but are beyond the scope of this video
+ 
+
+537
+00:09:11,279 --> 00:09:12,389
+but are beyond the scope of this video
+axis angle
+
+538
+00:09:12,389 --> 00:09:12,399
+axis angle
+ 
+
+539
+00:09:12,399 --> 00:09:14,550
+axis angle
+as the name suggests consists of
+
+540
+00:09:14,550 --> 00:09:14,560
+as the name suggests consists of
+ 
+
+541
+00:09:14,560 --> 00:09:15,430
+as the name suggests consists of
+specifying an
+
+542
+00:09:15,430 --> 00:09:15,440
+specifying an
+ 
+
+543
+00:09:15,440 --> 00:09:18,550
+specifying an
+arbitrary 3d vector and using that as
+
+544
+00:09:18,550 --> 00:09:18,560
+arbitrary 3d vector and using that as
+ 
+
+545
+00:09:18,560 --> 00:09:20,630
+arbitrary 3d vector and using that as
+the axis to rotate about
+
+546
+00:09:20,630 --> 00:09:20,640
+the axis to rotate about
+ 
+
+547
+00:09:20,640 --> 00:09:22,710
+the axis to rotate about
+but for now we will just start with
+
+548
+00:09:22,710 --> 00:09:22,720
+but for now we will just start with
+ 
+
+549
+00:09:22,720 --> 00:09:23,670
+but for now we will just start with
+using the y
+
+550
+00:09:23,670 --> 00:09:23,680
+using the y
+ 
+
+551
+00:09:23,680 --> 00:09:26,949
+using the y
+x z euler angle representation
+
+552
+00:09:26,949 --> 00:09:26,959
+x z euler angle representation
+ 
+
+553
+00:09:26,959 --> 00:09:29,190
+x z euler angle representation
+so first we need to apply the rotation
+
+554
+00:09:29,190 --> 00:09:29,200
+so first we need to apply the rotation
+ 
+
+555
+00:09:29,200 --> 00:09:31,030
+so first we need to apply the rotation
+about the y axis
+
+556
+00:09:31,030 --> 00:09:31,040
+about the y axis
+ 
+
+557
+00:09:31,040 --> 00:09:33,430
+about the y axis
+so between translate and scale at
+
+558
+00:09:33,430 --> 00:09:33,440
+so between translate and scale at
+ 
+
+559
+00:09:33,440 --> 00:09:35,350
+so between translate and scale at
+transform is equal to
+
+560
+00:09:35,350 --> 00:09:35,360
+transform is equal to
+ 
+
+561
+00:09:35,360 --> 00:09:38,070
+transform is equal to
+glm rotate with the transform as the
+
+562
+00:09:38,070 --> 00:09:38,080
+glm rotate with the transform as the
+ 
+
+563
+00:09:38,080 --> 00:09:39,350
+glm rotate with the transform as the
+first argument
+
+564
+00:09:39,350 --> 00:09:39,360
+first argument
+ 
+
+565
+00:09:39,360 --> 00:09:41,590
+first argument
+and rotation dot y as the second
+
+566
+00:09:41,590 --> 00:09:41,600
+and rotation dot y as the second
+ 
+
+567
+00:09:41,600 --> 00:09:42,550
+and rotation dot y as the second
+argument
+
+568
+00:09:42,550 --> 00:09:42,560
+argument
+ 
+
+569
+00:09:42,560 --> 00:09:45,190
+argument
+this specifies the angle to rotate by in
+
+570
+00:09:45,190 --> 00:09:45,200
+this specifies the angle to rotate by in
+ 
+
+571
+00:09:45,200 --> 00:09:45,910
+this specifies the angle to rotate by in
+radians
+
+572
+00:09:45,910 --> 00:09:45,920
+radians
+ 
+
+573
+00:09:45,920 --> 00:09:48,630
+radians
+not degrees and finally the axis of
+
+574
+00:09:48,630 --> 00:09:48,640
+not degrees and finally the axis of
+ 
+
+575
+00:09:48,640 --> 00:09:50,230
+not degrees and finally the axis of
+which to rotate around
+
+576
+00:09:50,230 --> 00:09:50,240
+which to rotate around
+ 
+
+577
+00:09:50,240 --> 00:09:53,110
+which to rotate around
+so for the y-axis we have a vac 3 with
+
+578
+00:09:53,110 --> 00:09:53,120
+so for the y-axis we have a vac 3 with
+ 
+
+579
+00:09:53,120 --> 00:09:53,829
+so for the y-axis we have a vac 3 with
+values
+
+580
+00:09:53,829 --> 00:09:53,839
+values
+ 
+
+581
+00:09:53,839 --> 00:09:57,030
+values
+0 1 and 0. now let's copy and paste this
+
+582
+00:09:57,030 --> 00:09:57,040
+0 1 and 0. now let's copy and paste this
+ 
+
+583
+00:09:57,040 --> 00:09:57,990
+0 1 and 0. now let's copy and paste this
+line twice
+
+584
+00:09:57,990 --> 00:09:58,000
+line twice
+ 
+
+585
+00:09:58,000 --> 00:10:00,630
+line twice
+for the two remaining axes update the
+
+586
+00:10:00,630 --> 00:10:00,640
+for the two remaining axes update the
+ 
+
+587
+00:10:00,640 --> 00:10:01,269
+for the two remaining axes update the
+rotation
+
+588
+00:10:01,269 --> 00:10:01,279
+rotation
+ 
+
+589
+00:10:01,279 --> 00:10:05,590
+rotation
+angles to use rotation.x and rotation.z
+
+590
+00:10:05,590 --> 00:10:05,600
+angles to use rotation.x and rotation.z
+ 
+
+591
+00:10:05,600 --> 00:10:08,710
+angles to use rotation.x and rotation.z
+and then update the axes so 1 0
+
+592
+00:10:08,710 --> 00:10:08,720
+and then update the axes so 1 0
+ 
+
+593
+00:10:08,720 --> 00:10:11,910
+and then update the axes so 1 0
+0 for the x rotation and 0 0
+
+594
+00:10:11,910 --> 00:10:11,920
+0 for the x rotation and 0 0
+ 
+
+595
+00:10:11,920 --> 00:10:15,030
+0 for the x rotation and 0 0
+1 for the z rotation to summarize this
+
+596
+00:10:15,030 --> 00:10:15,040
+1 for the z rotation to summarize this
+ 
+
+597
+00:10:15,040 --> 00:10:15,829
+1 for the z rotation to summarize this
+function
+
+598
+00:10:15,829 --> 00:10:15,839
+function
+ 
+
+599
+00:10:15,839 --> 00:10:17,910
+function
+we use the current property values of
+
+600
+00:10:17,910 --> 00:10:17,920
+we use the current property values of
+ 
+
+601
+00:10:17,920 --> 00:10:20,150
+we use the current property values of
+the transform component to construct a
+
+602
+00:10:20,150 --> 00:10:20,160
+the transform component to construct a
+ 
+
+603
+00:10:20,160 --> 00:10:23,030
+the transform component to construct a
+combined 4x4 affine transformation
+
+604
+00:10:23,030 --> 00:10:23,040
+combined 4x4 affine transformation
+ 
+
+605
+00:10:23,040 --> 00:10:24,150
+combined 4x4 affine transformation
+matrix
+
+606
+00:10:24,150 --> 00:10:24,160
+matrix
+ 
+
+607
+00:10:24,160 --> 00:10:25,670
+matrix
+this matrix applies a scale
+
+608
+00:10:25,670 --> 00:10:25,680
+this matrix applies a scale
+ 
+
+609
+00:10:25,680 --> 00:10:27,590
+this matrix applies a scale
+transformation followed by a rotation
+
+610
+00:10:27,590 --> 00:10:27,600
+transformation followed by a rotation
+ 
+
+611
+00:10:27,600 --> 00:10:28,870
+transformation followed by a rotation
+about the z-axis
+
+612
+00:10:28,870 --> 00:10:28,880
+about the z-axis
+ 
+
+613
+00:10:28,880 --> 00:10:31,350
+about the z-axis
+of rotation about the x-axis a rotation
+
+614
+00:10:31,350 --> 00:10:31,360
+of rotation about the x-axis a rotation
+ 
+
+615
+00:10:31,360 --> 00:10:33,110
+of rotation about the x-axis a rotation
+about the y-axis and finally a
+
+616
+00:10:33,110 --> 00:10:33,120
+about the y-axis and finally a
+ 
+
+617
+00:10:33,120 --> 00:10:34,710
+about the y-axis and finally a
+translation transformation
+
+618
+00:10:34,710 --> 00:10:34,720
+translation transformation
+ 
+
+619
+00:10:34,720 --> 00:10:38,310
+translation transformation
+in that specific order finally scroll
+
+620
+00:10:38,310 --> 00:10:38,320
+in that specific order finally scroll
+ 
+
+621
+00:10:38,320 --> 00:10:40,710
+in that specific order finally scroll
+down and update game object by renaming
+
+622
+00:10:40,710 --> 00:10:40,720
+down and update game object by renaming
+ 
+
+623
+00:10:40,720 --> 00:10:41,990
+down and update game object by renaming
+the transform 2d
+
+624
+00:10:41,990 --> 00:10:42,000
+the transform 2d
+ 
+
+625
+00:10:42,000 --> 00:10:44,069
+the transform 2d
+component type and member variable to
+
+626
+00:10:44,069 --> 00:10:44,079
+component type and member variable to
+ 
+
+627
+00:10:44,079 --> 00:10:46,630
+component type and member variable to
+just be transform component
+
+628
+00:10:46,630 --> 00:10:46,640
+just be transform component
+ 
+
+629
+00:10:46,640 --> 00:10:48,470
+just be transform component
+now there are a few small changes we
+
+630
+00:10:48,470 --> 00:10:48,480
+now there are a few small changes we
+ 
+
+631
+00:10:48,480 --> 00:10:50,150
+now there are a few small changes we
+need to make for the engine to be
+
+632
+00:10:50,150 --> 00:10:50,160
+need to make for the engine to be
+ 
+
+633
+00:10:50,160 --> 00:10:52,949
+need to make for the engine to be
+3d in the model header file update the
+
+634
+00:10:52,949 --> 00:10:52,959
+3d in the model header file update the
+ 
+
+635
+00:10:52,959 --> 00:10:55,190
+3d in the model header file update the
+type of our vertex position property to
+
+636
+00:10:55,190 --> 00:10:55,200
+type of our vertex position property to
+ 
+
+637
+00:10:55,200 --> 00:10:56,230
+type of our vertex position property to
+be a vec3
+
+638
+00:10:56,230 --> 00:10:56,240
+be a vec3
+ 
+
+639
+00:10:56,240 --> 00:10:58,949
+be a vec3
+rather than a vec2 don't forget to also
+
+640
+00:10:58,949 --> 00:10:58,959
+rather than a vec2 don't forget to also
+ 
+
+641
+00:10:58,959 --> 00:11:00,550
+rather than a vec2 don't forget to also
+update the attribute descriptions
+
+642
+00:11:00,550 --> 00:11:00,560
+update the attribute descriptions
+ 
+
+643
+00:11:00,560 --> 00:11:02,550
+update the attribute descriptions
+whenever you make changes to the vertex
+
+644
+00:11:02,550 --> 00:11:02,560
+whenever you make changes to the vertex
+ 
+
+645
+00:11:02,560 --> 00:11:03,350
+whenever you make changes to the vertex
+struct
+
+646
+00:11:03,350 --> 00:11:03,360
+struct
+ 
+
+647
+00:11:03,360 --> 00:11:04,949
+struct
+so at the bottom of the model
+
+648
+00:11:04,949 --> 00:11:04,959
+so at the bottom of the model
+ 
+
+649
+00:11:04,959 --> 00:11:06,389
+so at the bottom of the model
+implementation file
+
+650
+00:11:06,389 --> 00:11:06,399
+implementation file
+ 
+
+651
+00:11:06,399 --> 00:11:08,630
+implementation file
+we need to update the position attribute
+
+652
+00:11:08,630 --> 00:11:08,640
+we need to update the position attribute
+ 
+
+653
+00:11:08,640 --> 00:11:10,069
+we need to update the position attribute
+descriptions format
+
+654
+00:11:10,069 --> 00:11:10,079
+descriptions format
+ 
+
+655
+00:11:10,079 --> 00:11:12,310
+descriptions format
+to be three components rather than just
+
+656
+00:11:12,310 --> 00:11:12,320
+to be three components rather than just
+ 
+
+657
+00:11:12,320 --> 00:11:13,110
+to be three components rather than just
+two
+
+658
+00:11:13,110 --> 00:11:13,120
+two
+ 
+
+659
+00:11:13,120 --> 00:11:15,190
+two
+this can be a tricky thing to debug if
+
+660
+00:11:15,190 --> 00:11:15,200
+this can be a tricky thing to debug if
+ 
+
+661
+00:11:15,200 --> 00:11:17,110
+this can be a tricky thing to debug if
+you forget to do so
+
+662
+00:11:17,110 --> 00:11:17,120
+you forget to do so
+ 
+
+663
+00:11:17,120 --> 00:11:19,670
+you forget to do so
+then in the app implementation file we
+
+664
+00:11:19,670 --> 00:11:19,680
+then in the app implementation file we
+ 
+
+665
+00:11:19,680 --> 00:11:21,269
+then in the app implementation file we
+are going to add a temporary function
+
+666
+00:11:21,269 --> 00:11:21,279
+are going to add a temporary function
+ 
+
+667
+00:11:21,279 --> 00:11:23,190
+are going to add a temporary function
+for creating a cube model
+
+668
+00:11:23,190 --> 00:11:23,200
+for creating a cube model
+ 
+
+669
+00:11:23,200 --> 00:11:25,030
+for creating a cube model
+this can be copied from the pastebin
+
+670
+00:11:25,030 --> 00:11:25,040
+this can be copied from the pastebin
+ 
+
+671
+00:11:25,040 --> 00:11:27,110
+this can be copied from the pastebin
+link in the description below
+
+672
+00:11:27,110 --> 00:11:27,120
+link in the description below
+ 
+
+673
+00:11:27,120 --> 00:11:29,190
+link in the description below
+copy this and for now just paste it in
+
+674
+00:11:29,190 --> 00:11:29,200
+copy this and for now just paste it in
+ 
+
+675
+00:11:29,200 --> 00:11:32,790
+copy this and for now just paste it in
+above the load game objects function
+
+676
+00:11:32,790 --> 00:11:32,800
+above the load game objects function
+ 
+
+677
+00:11:32,800 --> 00:11:35,590
+above the load game objects function
+next um let's start this bit again from
+
+678
+00:11:35,590 --> 00:11:35,600
+next um let's start this bit again from
+ 
+
+679
+00:11:35,600 --> 00:11:36,630
+next um let's start this bit again from
+scratch
+
+680
+00:11:36,630 --> 00:11:36,640
+scratch
+ 
+
+681
+00:11:36,640 --> 00:11:38,710
+scratch
+clear out the load game objects function
+
+682
+00:11:38,710 --> 00:11:38,720
+clear out the load game objects function
+ 
+
+683
+00:11:38,720 --> 00:11:41,030
+clear out the load game objects function
+body and then create a new variable
+
+684
+00:11:41,030 --> 00:11:41,040
+body and then create a new variable
+ 
+
+685
+00:11:41,040 --> 00:11:44,069
+body and then create a new variable
+std shared pointer with
+
+686
+00:11:44,069 --> 00:11:44,079
+std shared pointer with
+ 
+
+687
+00:11:44,079 --> 00:11:47,509
+std shared pointer with
+type lve model called lve model
+
+688
+00:11:47,509 --> 00:11:47,519
+type lve model called lve model
+ 
+
+689
+00:11:47,519 --> 00:11:50,710
+type lve model called lve model
+and set that equal to create cube model
+
+690
+00:11:50,710 --> 00:11:50,720
+and set that equal to create cube model
+ 
+
+691
+00:11:50,720 --> 00:11:53,829
+and set that equal to create cube model
+with lve device as the first argument
+
+692
+00:11:53,829 --> 00:11:53,839
+with lve device as the first argument
+ 
+
+693
+00:11:53,839 --> 00:11:58,310
+with lve device as the first argument
+and use glm 3 0 as the second argument
+
+694
+00:11:58,310 --> 00:11:58,320
+and use glm 3 0 as the second argument
+ 
+
+695
+00:11:58,320 --> 00:12:01,030
+and use glm 3 0 as the second argument
+then create a game object with auto cube
+
+696
+00:12:01,030 --> 00:12:01,040
+then create a game object with auto cube
+ 
+
+697
+00:12:01,040 --> 00:12:02,550
+then create a game object with auto cube
+is equal to lve game
+
+698
+00:12:02,550 --> 00:12:02,560
+is equal to lve game
+ 
+
+699
+00:12:02,560 --> 00:12:05,750
+is equal to lve game
+object create game object
+
+700
+00:12:05,750 --> 00:12:05,760
+object create game object
+ 
+
+701
+00:12:05,760 --> 00:12:09,509
+object create game object
+and set cube.model to lve model
+
+702
+00:12:09,509 --> 00:12:09,519
+and set cube.model to lve model
+ 
+
+703
+00:12:09,519 --> 00:12:13,509
+and set cube.model to lve model
+next set cube.transform.translation
+
+704
+00:12:13,509 --> 00:12:13,519
+next set cube.transform.translation
+ 
+
+705
+00:12:13,519 --> 00:12:18,550
+next set cube.transform.translation
+to 00.5
+
+706
+00:12:18,550 --> 00:12:18,560
+
+ 
+
+707
+00:12:18,560 --> 00:12:22,829
+ 
+and cube.transform.scale to
+
+708
+00:12:22,829 --> 00:12:22,839
+and cube.transform.scale to
+ 
+
+709
+00:12:22,839 --> 00:12:26,150
+and cube.transform.scale to
+0.5.5.5 the reason we need to do this
+
+710
+00:12:26,150 --> 00:12:26,160
+0.5.5.5 the reason we need to do this
+ 
+
+711
+00:12:26,160 --> 00:12:28,629
+0.5.5.5 the reason we need to do this
+is that the view volume spans from x
+
+712
+00:12:28,629 --> 00:12:28,639
+is that the view volume spans from x
+ 
+
+713
+00:12:28,639 --> 00:12:30,069
+is that the view volume spans from x
+equal to negative 1
+
+714
+00:12:30,069 --> 00:12:30,079
+equal to negative 1
+ 
+
+715
+00:12:30,079 --> 00:12:33,269
+equal to negative 1
+to positive 1 y equal to negative 1
+
+716
+00:12:33,269 --> 00:12:33,279
+to positive 1 y equal to negative 1
+ 
+
+717
+00:12:33,279 --> 00:12:36,870
+to positive 1 y equal to negative 1
+to positive 1 and z from 0 to 1.
+
+718
+00:12:36,870 --> 00:12:36,880
+to positive 1 and z from 0 to 1.
+ 
+
+719
+00:12:36,880 --> 00:12:39,030
+to positive 1 and z from 0 to 1.
+only the objects that are within this
+
+720
+00:12:39,030 --> 00:12:39,040
+only the objects that are within this
+ 
+
+721
+00:12:39,040 --> 00:12:40,150
+only the objects that are within this
+viewing volume
+
+722
+00:12:40,150 --> 00:12:40,160
+viewing volume
+ 
+
+723
+00:12:40,160 --> 00:12:43,030
+viewing volume
+will be displayed to the screen so these
+
+724
+00:12:43,030 --> 00:12:43,040
+will be displayed to the screen so these
+ 
+
+725
+00:12:43,040 --> 00:12:45,030
+will be displayed to the screen so these
+transformations shrink the cube to half
+
+726
+00:12:45,030 --> 00:12:45,040
+transformations shrink the cube to half
+ 
+
+727
+00:12:45,040 --> 00:12:45,910
+transformations shrink the cube to half
+its size
+
+728
+00:12:45,910 --> 00:12:45,920
+its size
+ 
+
+729
+00:12:45,920 --> 00:12:48,069
+its size
+and move the cube to be centered within
+
+730
+00:12:48,069 --> 00:12:48,079
+and move the cube to be centered within
+ 
+
+731
+00:12:48,079 --> 00:12:50,310
+and move the cube to be centered within
+the z 0 to 1 range
+
+732
+00:12:50,310 --> 00:12:50,320
+the z 0 to 1 range
+ 
+
+733
+00:12:50,320 --> 00:12:52,470
+the z 0 to 1 range
+if we left the cube at the origin then
+
+734
+00:12:52,470 --> 00:12:52,480
+if we left the cube at the origin then
+ 
+
+735
+00:12:52,480 --> 00:12:54,230
+if we left the cube at the origin then
+the front half of the cube would be
+
+736
+00:12:54,230 --> 00:12:54,240
+the front half of the cube would be
+ 
+
+737
+00:12:54,240 --> 00:12:54,870
+the front half of the cube would be
+clipped
+
+738
+00:12:54,870 --> 00:12:54,880
+clipped
+ 
+
+739
+00:12:54,880 --> 00:12:57,430
+clipped
+resulting in some pretty crazy output
+
+740
+00:12:57,430 --> 00:12:57,440
+resulting in some pretty crazy output
+ 
+
+741
+00:12:57,440 --> 00:12:58,069
+resulting in some pretty crazy output
+finally
+
+742
+00:12:58,069 --> 00:12:58,079
+finally
+ 
+
+743
+00:12:58,079 --> 00:13:00,150
+finally
+make sure to add the cube to the list of
+
+744
+00:13:00,150 --> 00:13:00,160
+make sure to add the cube to the list of
+ 
+
+745
+00:13:00,160 --> 00:13:01,430
+make sure to add the cube to the list of
+game objects
+
+746
+00:13:01,430 --> 00:13:01,440
+game objects
+ 
+
+747
+00:13:01,440 --> 00:13:06,629
+game objects
+with gameobjects.pushback std move cube
+
+748
+00:13:06,629 --> 00:13:06,639
+with gameobjects.pushback std move cube
+ 
+
+749
+00:13:06,639 --> 00:13:09,030
+with gameobjects.pushback std move cube
+okay next the simple render system needs
+
+750
+00:13:09,030 --> 00:13:09,040
+okay next the simple render system needs
+ 
+
+751
+00:13:09,040 --> 00:13:09,910
+okay next the simple render system needs
+updating
+
+752
+00:13:09,910 --> 00:13:09,920
+updating
+ 
+
+753
+00:13:09,920 --> 00:13:11,750
+updating
+so open the simple render system
+
+754
+00:13:11,750 --> 00:13:11,760
+so open the simple render system
+ 
+
+755
+00:13:11,760 --> 00:13:14,150
+so open the simple render system
+implementation and start by changing the
+
+756
+00:13:14,150 --> 00:13:14,160
+implementation and start by changing the
+ 
+
+757
+00:13:14,160 --> 00:13:16,550
+implementation and start by changing the
+transform property from the map to type
+
+758
+00:13:16,550 --> 00:13:16,560
+transform property from the map to type
+ 
+
+759
+00:13:16,560 --> 00:13:17,990
+transform property from the map to type
+to the map4 type
+
+760
+00:13:17,990 --> 00:13:18,000
+to the map4 type
+ 
+
+761
+00:13:18,000 --> 00:13:19,910
+to the map4 type
+within the simple push constant data
+
+762
+00:13:19,910 --> 00:13:19,920
+within the simple push constant data
+ 
+
+763
+00:13:19,920 --> 00:13:22,550
+within the simple push constant data
+struct the offset is now baked into the
+
+764
+00:13:22,550 --> 00:13:22,560
+struct the offset is now baked into the
+ 
+
+765
+00:13:22,560 --> 00:13:23,350
+struct the offset is now baked into the
+transform
+
+766
+00:13:23,350 --> 00:13:23,360
+transform
+ 
+
+767
+00:13:23,360 --> 00:13:25,590
+transform
+with the help of homogeneous coordinates
+
+768
+00:13:25,590 --> 00:13:25,600
+with the help of homogeneous coordinates
+ 
+
+769
+00:13:25,600 --> 00:13:27,590
+with the help of homogeneous coordinates
+so we can remove this field
+
+770
+00:13:27,590 --> 00:13:27,600
+so we can remove this field
+ 
+
+771
+00:13:27,600 --> 00:13:29,670
+so we can remove this field
+despite the cube having per vertex
+
+772
+00:13:29,670 --> 00:13:29,680
+despite the cube having per vertex
+ 
+
+773
+00:13:29,680 --> 00:13:31,990
+despite the cube having per vertex
+colors i'm not going to delete the color
+
+774
+00:13:31,990 --> 00:13:32,000
+colors i'm not going to delete the color
+ 
+
+775
+00:13:32,000 --> 00:13:34,150
+colors i'm not going to delete the color
+property yet because i think we may use
+
+776
+00:13:34,150 --> 00:13:34,160
+property yet because i think we may use
+ 
+
+777
+00:13:34,160 --> 00:13:36,710
+property yet because i think we may use
+it again in the future
+
+778
+00:13:36,710 --> 00:13:36,720
+it again in the future
+ 
+
+779
+00:13:36,720 --> 00:13:38,949
+it again in the future
+then scrolling down let's fix up the
+
+780
+00:13:38,949 --> 00:13:38,959
+then scrolling down let's fix up the
+ 
+
+781
+00:13:38,959 --> 00:13:41,670
+then scrolling down let's fix up the
+render game objects function
+
+782
+00:13:41,670 --> 00:13:41,680
+render game objects function
+ 
+
+783
+00:13:41,680 --> 00:13:43,590
+render game objects function
+change this line that updates the
+
+784
+00:13:43,590 --> 00:13:43,600
+change this line that updates the
+ 
+
+785
+00:13:43,600 --> 00:13:45,590
+change this line that updates the
+rotation value from each frame
+
+786
+00:13:45,590 --> 00:13:45,600
+rotation value from each frame
+ 
+
+787
+00:13:45,600 --> 00:13:47,990
+rotation value from each frame
+to instead update the rotation.y
+
+788
+00:13:47,990 --> 00:13:48,000
+to instead update the rotation.y
+ 
+
+789
+00:13:48,000 --> 00:13:49,350
+to instead update the rotation.y
+component
+
+790
+00:13:49,350 --> 00:13:49,360
+component
+ 
+
+791
+00:13:49,360 --> 00:13:50,870
+component
+this should make it so that our cube
+
+792
+00:13:50,870 --> 00:13:50,880
+this should make it so that our cube
+ 
+
+793
+00:13:50,880 --> 00:13:54,310
+this should make it so that our cube
+object rotates around the vertical axis
+
+794
+00:13:54,310 --> 00:13:54,320
+object rotates around the vertical axis
+ 
+
+795
+00:13:54,320 --> 00:13:56,189
+object rotates around the vertical axis
+then remove the line setting the
+
+796
+00:13:56,189 --> 00:13:56,199
+then remove the line setting the
+ 
+
+797
+00:13:56,199 --> 00:13:57,910
+then remove the line setting the
+push.offset field
+
+798
+00:13:57,910 --> 00:13:57,920
+push.offset field
+ 
+
+799
+00:13:57,920 --> 00:14:00,829
+push.offset field
+as that no longer exists and
+
+800
+00:14:00,829 --> 00:14:00,839
+as that no longer exists and
+ 
+
+801
+00:14:00,839 --> 00:14:01,990
+as that no longer exists and
+updatepush.transform
+
+802
+00:14:01,990 --> 00:14:02,000
+updatepush.transform
+ 
+
+803
+00:14:02,000 --> 00:14:04,670
+updatepush.transform
+to equal
+
+804
+00:14:04,670 --> 00:14:04,680
+
+ 
+
+805
+00:14:04,680 --> 00:14:05,990
+
+object.transform.map4functioncall
+
+806
+00:14:05,990 --> 00:14:06,000
+object.transform.map4functioncall
+ 
+
+807
+00:14:06,000 --> 00:14:08,310
+object.transform.map4functioncall
+and now the only remaining thing to do
+
+808
+00:14:08,310 --> 00:14:08,320
+and now the only remaining thing to do
+ 
+
+809
+00:14:08,320 --> 00:14:10,550
+and now the only remaining thing to do
+is to update the vertex and fragment
+
+810
+00:14:10,550 --> 00:14:10,560
+is to update the vertex and fragment
+ 
+
+811
+00:14:10,560 --> 00:14:11,430
+is to update the vertex and fragment
+shader
+
+812
+00:14:11,430 --> 00:14:11,440
+shader
+ 
+
+813
+00:14:11,440 --> 00:14:14,230
+shader
+start by opening simpleshader.vert and
+
+814
+00:14:14,230 --> 00:14:14,240
+start by opening simpleshader.vert and
+ 
+
+815
+00:14:14,240 --> 00:14:15,750
+start by opening simpleshader.vert and
+change the first line declaring the
+
+816
+00:14:15,750 --> 00:14:15,760
+change the first line declaring the
+ 
+
+817
+00:14:15,760 --> 00:14:16,310
+change the first line declaring the
+vector
+
+818
+00:14:16,310 --> 00:14:16,320
+vector
+ 
+
+819
+00:14:16,320 --> 00:14:19,030
+vector
+position attribute to instead be a vec3
+
+820
+00:14:19,030 --> 00:14:19,040
+position attribute to instead be a vec3
+ 
+
+821
+00:14:19,040 --> 00:14:19,590
+position attribute to instead be a vec3
+position
+
+822
+00:14:19,590 --> 00:14:19,600
+position
+ 
+
+823
+00:14:19,600 --> 00:14:22,389
+position
+attribute then update the push constant
+
+824
+00:14:22,389 --> 00:14:22,399
+attribute then update the push constant
+ 
+
+825
+00:14:22,399 --> 00:14:24,389
+attribute then update the push constant
+struct to match what we now have
+
+826
+00:14:24,389 --> 00:14:24,399
+struct to match what we now have
+ 
+
+827
+00:14:24,399 --> 00:14:26,949
+struct to match what we now have
+in the simple render system class so
+
+828
+00:14:26,949 --> 00:14:26,959
+in the simple render system class so
+ 
+
+829
+00:14:26,959 --> 00:14:29,509
+in the simple render system class so
+make the transform field a map4 type and
+
+830
+00:14:29,509 --> 00:14:29,519
+make the transform field a map4 type and
+ 
+
+831
+00:14:29,519 --> 00:14:31,269
+make the transform field a map4 type and
+remove the offset field
+
+832
+00:14:31,269 --> 00:14:31,279
+remove the offset field
+ 
+
+833
+00:14:31,279 --> 00:14:33,189
+remove the offset field
+don't forget that field ordering here
+
+834
+00:14:33,189 --> 00:14:33,199
+don't forget that field ordering here
+ 
+
+835
+00:14:33,199 --> 00:14:35,430
+don't forget that field ordering here
+matters now because we are using
+
+836
+00:14:35,430 --> 00:14:35,440
+matters now because we are using
+ 
+
+837
+00:14:35,440 --> 00:14:37,110
+matters now because we are using
+homogeneous coordinates
+
+838
+00:14:37,110 --> 00:14:37,120
+homogeneous coordinates
+ 
+
+839
+00:14:37,120 --> 00:14:39,269
+homogeneous coordinates
+we no longer need to separately add an
+
+840
+00:14:39,269 --> 00:14:39,279
+we no longer need to separately add an
+ 
+
+841
+00:14:39,279 --> 00:14:40,470
+we no longer need to separately add an
+offset value
+
+842
+00:14:40,470 --> 00:14:40,480
+offset value
+ 
+
+843
+00:14:40,480 --> 00:14:42,550
+offset value
+so this line becomes gl underscore
+
+844
+00:14:42,550 --> 00:14:42,560
+so this line becomes gl underscore
+ 
+
+845
+00:14:42,560 --> 00:14:44,470
+so this line becomes gl underscore
+position with a capital p
+
+846
+00:14:44,470 --> 00:14:44,480
+position with a capital p
+ 
+
+847
+00:14:44,480 --> 00:14:46,870
+position with a capital p
+is equal to push dot transform times
+
+848
+00:14:46,870 --> 00:14:46,880
+is equal to push dot transform times
+ 
+
+849
+00:14:46,880 --> 00:14:47,910
+is equal to push dot transform times
+vector
+
+850
+00:14:47,910 --> 00:14:47,920
+vector
+ 
+
+851
+00:14:47,920 --> 00:14:51,110
+vector
+open bracket position comma one so this
+
+852
+00:14:51,110 --> 00:14:51,120
+open bracket position comma one so this
+ 
+
+853
+00:14:51,120 --> 00:14:52,150
+open bracket position comma one so this
+value of one here
+
+854
+00:14:52,150 --> 00:14:52,160
+value of one here
+ 
+
+855
+00:14:52,160 --> 00:14:54,629
+value of one here
+is the homogeneous coordinate if you are
+
+856
+00:14:54,629 --> 00:14:54,639
+is the homogeneous coordinate if you are
+ 
+
+857
+00:14:54,639 --> 00:14:56,550
+is the homogeneous coordinate if you are
+transforming a direction vector
+
+858
+00:14:56,550 --> 00:14:56,560
+transforming a direction vector
+ 
+
+859
+00:14:56,560 --> 00:14:59,269
+transforming a direction vector
+then this should be the value 0 instead
+
+860
+00:14:59,269 --> 00:14:59,279
+then this should be the value 0 instead
+ 
+
+861
+00:14:59,279 --> 00:14:59,910
+then this should be the value 0 instead
+finally
+
+862
+00:14:59,910 --> 00:14:59,920
+finally
+ 
+
+863
+00:14:59,920 --> 00:15:02,230
+finally
+i want to use a per vertex coloring
+
+864
+00:15:02,230 --> 00:15:02,240
+i want to use a per vertex coloring
+ 
+
+865
+00:15:02,240 --> 00:15:04,230
+i want to use a per vertex coloring
+rather than one color for the entire
+
+866
+00:15:04,230 --> 00:15:04,240
+rather than one color for the entire
+ 
+
+867
+00:15:04,240 --> 00:15:05,189
+rather than one color for the entire
+object
+
+868
+00:15:05,189 --> 00:15:05,199
+object
+ 
+
+869
+00:15:05,199 --> 00:15:07,110
+object
+to do so we need to add an output from
+
+870
+00:15:07,110 --> 00:15:07,120
+to do so we need to add an output from
+ 
+
+871
+00:15:07,120 --> 00:15:09,269
+to do so we need to add an output from
+the vertex to fragment shader
+
+872
+00:15:09,269 --> 00:15:09,279
+the vertex to fragment shader
+ 
+
+873
+00:15:09,279 --> 00:15:11,990
+the vertex to fragment shader
+so just like we did in tutorial 6 under
+
+874
+00:15:11,990 --> 00:15:12,000
+so just like we did in tutorial 6 under
+ 
+
+875
+00:15:12,000 --> 00:15:13,590
+so just like we did in tutorial 6 under
+the input attributes add
+
+876
+00:15:13,590 --> 00:15:13,600
+the input attributes add
+ 
+
+877
+00:15:13,600 --> 00:15:16,949
+the input attributes add
+layout open bracket location equal to 0
+
+878
+00:15:16,949 --> 00:15:16,959
+layout open bracket location equal to 0
+ 
+
+879
+00:15:16,959 --> 00:15:19,990
+layout open bracket location equal to 0
+closing bracket out vect3
+
+880
+00:15:19,990 --> 00:15:20,000
+closing bracket out vect3
+ 
+
+881
+00:15:20,000 --> 00:15:23,030
+closing bracket out vect3
+frag color and in the main function body
+
+882
+00:15:23,030 --> 00:15:23,040
+frag color and in the main function body
+ 
+
+883
+00:15:23,040 --> 00:15:26,949
+frag color and in the main function body
+set break color equal to color
+
+884
+00:15:26,949 --> 00:15:26,959
+set break color equal to color
+ 
+
+885
+00:15:26,959 --> 00:15:29,269
+set break color equal to color
+copy the push content layout struct and
+
+886
+00:15:29,269 --> 00:15:29,279
+copy the push content layout struct and
+ 
+
+887
+00:15:29,279 --> 00:15:31,269
+copy the push content layout struct and
+then navigate to your fragment shader
+
+888
+00:15:31,269 --> 00:15:31,279
+then navigate to your fragment shader
+ 
+
+889
+00:15:31,279 --> 00:15:33,430
+then navigate to your fragment shader
+and paste it over the existing struct
+
+890
+00:15:33,430 --> 00:15:33,440
+and paste it over the existing struct
+ 
+
+891
+00:15:33,440 --> 00:15:36,550
+and paste it over the existing struct
+declaration
+
+892
+00:15:36,550 --> 00:15:36,560
+
+ 
+
+893
+00:15:36,560 --> 00:15:38,550
+ 
+then we need to add the fragment input
+
+894
+00:15:38,550 --> 00:15:38,560
+then we need to add the fragment input
+ 
+
+895
+00:15:38,560 --> 00:15:40,470
+then we need to add the fragment input
+attribute with layout
+
+896
+00:15:40,470 --> 00:15:40,480
+attribute with layout
+ 
+
+897
+00:15:40,480 --> 00:15:46,470
+attribute with layout
+location equals zero in vect3frag color
+
+898
+00:15:46,470 --> 00:15:46,480
+
+ 
+
+899
+00:15:46,480 --> 00:15:49,509
+ 
+finally just set out color equal to back
+
+900
+00:15:49,509 --> 00:15:49,519
+finally just set out color equal to back
+ 
+
+901
+00:15:49,519 --> 00:15:49,829
+finally just set out color equal to back
+four
+
+902
+00:15:49,829 --> 00:15:49,839
+four
+ 
+
+903
+00:15:49,839 --> 00:15:54,389
+four
+fret color comma one
+
+904
+00:15:54,389 --> 00:15:54,399
+fret color comma one
+ 
+
+905
+00:15:54,399 --> 00:15:56,870
+fret color comma one
+now build and run your code make sure
+
+906
+00:15:56,870 --> 00:15:56,880
+now build and run your code make sure
+ 
+
+907
+00:15:56,880 --> 00:15:57,749
+now build and run your code make sure
+your vertex
+
+908
+00:15:57,749 --> 00:15:57,759
+your vertex
+ 
+
+909
+00:15:57,759 --> 00:16:00,389
+your vertex
+and fragment shaders were recompiled and
+
+910
+00:16:00,389 --> 00:16:00,399
+and fragment shaders were recompiled and
+ 
+
+911
+00:16:00,399 --> 00:16:02,150
+and fragment shaders were recompiled and
+if everything's working correctly
+
+912
+00:16:02,150 --> 00:16:02,160
+if everything's working correctly
+ 
+
+913
+00:16:02,160 --> 00:16:04,550
+if everything's working correctly
+you should have a rotating multi-colored
+
+914
+00:16:04,550 --> 00:16:04,560
+you should have a rotating multi-colored
+ 
+
+915
+00:16:04,560 --> 00:16:05,590
+you should have a rotating multi-colored
+cube
+
+916
+00:16:05,590 --> 00:16:05,600
+cube
+ 
+
+917
+00:16:05,600 --> 00:16:07,990
+cube
+to make things a bit more interesting
+
+918
+00:16:07,990 --> 00:16:08,000
+to make things a bit more interesting
+ 
+
+919
+00:16:08,000 --> 00:16:09,749
+to make things a bit more interesting
+open the simple render system
+
+920
+00:16:09,749 --> 00:16:09,759
+open the simple render system
+ 
+
+921
+00:16:09,759 --> 00:16:10,949
+open the simple render system
+implementation
+
+922
+00:16:10,949 --> 00:16:10,959
+implementation
+ 
+
+923
+00:16:10,959 --> 00:16:12,949
+implementation
+and duplicate the line that updates the
+
+924
+00:16:12,949 --> 00:16:12,959
+and duplicate the line that updates the
+ 
+
+925
+00:16:12,959 --> 00:16:14,389
+and duplicate the line that updates the
+y rotation
+
+926
+00:16:14,389 --> 00:16:14,399
+y rotation
+ 
+
+927
+00:16:14,399 --> 00:16:16,470
+y rotation
+let's make the cube also rotate around
+
+928
+00:16:16,470 --> 00:16:16,480
+let's make the cube also rotate around
+ 
+
+929
+00:16:16,480 --> 00:16:17,670
+let's make the cube also rotate around
+the x-axis
+
+930
+00:16:17,670 --> 00:16:17,680
+the x-axis
+ 
+
+931
+00:16:17,680 --> 00:16:21,110
+the x-axis
+but let's say at half the speed
+
+932
+00:16:21,110 --> 00:16:21,120
+but let's say at half the speed
+ 
+
+933
+00:16:21,120 --> 00:16:23,110
+but let's say at half the speed
+i'll build and run again and we finally
+
+934
+00:16:23,110 --> 00:16:23,120
+i'll build and run again and we finally
+ 
+
+935
+00:16:23,120 --> 00:16:25,509
+i'll build and run again and we finally
+have something that appears 3d
+
+936
+00:16:25,509 --> 00:16:25,519
+have something that appears 3d
+ 
+
+937
+00:16:25,519 --> 00:16:28,069
+have something that appears 3d
+in the upcoming tutorials we'll improve
+
+938
+00:16:28,069 --> 00:16:28,079
+in the upcoming tutorials we'll improve
+ 
+
+939
+00:16:28,079 --> 00:16:30,069
+in the upcoming tutorials we'll improve
+on this by adding better lighting
+
+940
+00:16:30,069 --> 00:16:30,079
+on this by adding better lighting
+ 
+
+941
+00:16:30,079 --> 00:16:33,430
+on this by adding better lighting
+and using a perspective transformation
+
+942
+00:16:33,430 --> 00:16:33,440
+and using a perspective transformation
+ 
+
+943
+00:16:33,440 --> 00:16:35,350
+and using a perspective transformation
+one final change i'd like to make is
+
+944
+00:16:35,350 --> 00:16:35,360
+one final change i'd like to make is
+ 
+
+945
+00:16:35,360 --> 00:16:37,430
+one final change i'd like to make is
+back in the game object file we can
+
+946
+00:16:37,430 --> 00:16:37,440
+back in the game object file we can
+ 
+
+947
+00:16:37,440 --> 00:16:38,870
+back in the game object file we can
+optimize the map for
+
+948
+00:16:38,870 --> 00:16:38,880
+optimize the map for
+ 
+
+949
+00:16:38,880 --> 00:16:41,110
+optimize the map for
+function this function will be called
+
+950
+00:16:41,110 --> 00:16:41,120
+function this function will be called
+ 
+
+951
+00:16:41,120 --> 00:16:42,230
+function this function will be called
+pretty frequently
+
+952
+00:16:42,230 --> 00:16:42,240
+pretty frequently
+ 
+
+953
+00:16:42,240 --> 00:16:44,949
+pretty frequently
+once per frame per object so we want to
+
+954
+00:16:44,949 --> 00:16:44,959
+once per frame per object so we want to
+ 
+
+955
+00:16:44,959 --> 00:16:45,430
+once per frame per object so we want to
+avoid
+
+956
+00:16:45,430 --> 00:16:45,440
+avoid
+ 
+
+957
+00:16:45,440 --> 00:16:48,470
+avoid
+unnecessary calculations if possible
+
+958
+00:16:48,470 --> 00:16:48,480
+unnecessary calculations if possible
+ 
+
+959
+00:16:48,480 --> 00:16:50,470
+unnecessary calculations if possible
+using these rotate functions is
+
+960
+00:16:50,470 --> 00:16:50,480
+using these rotate functions is
+ 
+
+961
+00:16:50,480 --> 00:16:51,829
+using these rotate functions is
+needlessly complex
+
+962
+00:16:51,829 --> 00:16:51,839
+needlessly complex
+ 
+
+963
+00:16:51,839 --> 00:16:54,629
+needlessly complex
+since rotating about an arbitrary axis
+
+964
+00:16:54,629 --> 00:16:54,639
+since rotating about an arbitrary axis
+ 
+
+965
+00:16:54,639 --> 00:16:54,949
+since rotating about an arbitrary axis
+is
+
+966
+00:16:54,949 --> 00:16:54,959
+is
+ 
+
+967
+00:16:54,959 --> 00:16:57,030
+is
+much more complicated than a rotation
+
+968
+00:16:57,030 --> 00:16:57,040
+much more complicated than a rotation
+ 
+
+969
+00:16:57,040 --> 00:16:59,189
+much more complicated than a rotation
+about x y or z
+
+970
+00:16:59,189 --> 00:16:59,199
+about x y or z
+ 
+
+971
+00:16:59,199 --> 00:17:01,350
+about x y or z
+for calculating the algebraically
+
+972
+00:17:01,350 --> 00:17:01,360
+for calculating the algebraically
+ 
+
+973
+00:17:01,360 --> 00:17:03,430
+for calculating the algebraically
+simplified rotation matrices
+
+974
+00:17:03,430 --> 00:17:03,440
+simplified rotation matrices
+ 
+
+975
+00:17:03,440 --> 00:17:05,909
+simplified rotation matrices
+rather than doing it by hand the euler
+
+976
+00:17:05,909 --> 00:17:05,919
+rather than doing it by hand the euler
+ 
+
+977
+00:17:05,919 --> 00:17:07,909
+rather than doing it by hand the euler
+angle article on wikipedia
+
+978
+00:17:07,909 --> 00:17:07,919
+angle article on wikipedia
+ 
+
+979
+00:17:07,919 --> 00:17:10,870
+angle article on wikipedia
+has a table of rotation matrix products
+
+980
+00:17:10,870 --> 00:17:10,880
+has a table of rotation matrix products
+ 
+
+981
+00:17:10,880 --> 00:17:13,189
+has a table of rotation matrix products
+for the various possible orderings
+
+982
+00:17:13,189 --> 00:17:13,199
+for the various possible orderings
+ 
+
+983
+00:17:13,199 --> 00:17:15,110
+for the various possible orderings
+finding the entry corresponding to our
+
+984
+00:17:15,110 --> 00:17:15,120
+finding the entry corresponding to our
+ 
+
+985
+00:17:15,120 --> 00:17:16,710
+finding the entry corresponding to our
+current rotation order
+
+986
+00:17:16,710 --> 00:17:16,720
+current rotation order
+ 
+
+987
+00:17:16,720 --> 00:17:18,789
+current rotation order
+we can then multiply it with our scale
+
+988
+00:17:18,789 --> 00:17:18,799
+we can then multiply it with our scale
+ 
+
+989
+00:17:18,799 --> 00:17:20,949
+we can then multiply it with our scale
+and translation matrices to get an
+
+990
+00:17:20,949 --> 00:17:20,959
+and translation matrices to get an
+ 
+
+991
+00:17:20,959 --> 00:17:22,549
+and translation matrices to get an
+optimized calculation for the
+
+992
+00:17:22,549 --> 00:17:22,559
+optimized calculation for the
+ 
+
+993
+00:17:22,559 --> 00:17:24,069
+optimized calculation for the
+transformation matrix
+
+994
+00:17:24,069 --> 00:17:24,079
+transformation matrix
+ 
+
+995
+00:17:24,079 --> 00:17:26,150
+transformation matrix
+i've created a pastebin link with the
+
+996
+00:17:26,150 --> 00:17:26,160
+i've created a pastebin link with the
+ 
+
+997
+00:17:26,160 --> 00:17:27,909
+i've created a pastebin link with the
+solution where you should be able to
+
+998
+00:17:27,909 --> 00:17:27,919
+solution where you should be able to
+ 
+
+999
+00:17:27,919 --> 00:17:29,830
+solution where you should be able to
+copy and paste this function over your
+
+1000
+00:17:29,830 --> 00:17:29,840
+copy and paste this function over your
+ 
+
+1001
+00:17:29,840 --> 00:17:32,230
+copy and paste this function over your
+existing map4 function
+
+1002
+00:17:32,230 --> 00:17:32,240
+existing map4 function
+ 
+
+1003
+00:17:32,240 --> 00:17:34,390
+existing map4 function
+if you build and run your code visually
+
+1004
+00:17:34,390 --> 00:17:34,400
+if you build and run your code visually
+ 
+
+1005
+00:17:34,400 --> 00:17:35,590
+if you build and run your code visually
+nothing should have changed
+
+1006
+00:17:35,590 --> 00:17:35,600
+nothing should have changed
+ 
+
+1007
+00:17:35,600 --> 00:17:37,990
+nothing should have changed
+but behind the scenes fewer calculations
+
+1008
+00:17:37,990 --> 00:17:38,000
+but behind the scenes fewer calculations
+ 
+
+1009
+00:17:38,000 --> 00:17:39,510
+but behind the scenes fewer calculations
+are being performed
+
+1010
+00:17:39,510 --> 00:17:39,520
+are being performed
+ 
+
+1011
+00:17:39,520 --> 00:17:41,430
+are being performed
+now it may be a bit difficult to
+
+1012
+00:17:41,430 --> 00:17:41,440
+now it may be a bit difficult to
+ 
+
+1013
+00:17:41,440 --> 00:17:42,630
+now it may be a bit difficult to
+intuitively tell
+
+1014
+00:17:42,630 --> 00:17:42,640
+intuitively tell
+ 
+
+1015
+00:17:42,640 --> 00:17:44,830
+intuitively tell
+which angle values correspond to which
+
+1016
+00:17:44,830 --> 00:17:44,840
+which angle values correspond to which
+ 
+
+1017
+00:17:44,840 --> 00:17:47,430
+which angle values correspond to which
+orientation a concept that has really
+
+1018
+00:17:47,430 --> 00:17:47,440
+orientation a concept that has really
+ 
+
+1019
+00:17:47,440 --> 00:17:48,870
+orientation a concept that has really
+helped clear things up for me
+
+1020
+00:17:48,870 --> 00:17:48,880
+helped clear things up for me
+ 
+
+1021
+00:17:48,880 --> 00:17:52,630
+helped clear things up for me
+is intrinsic versus extrinsic rotations
+
+1022
+00:17:52,630 --> 00:17:52,640
+is intrinsic versus extrinsic rotations
+ 
+
+1023
+00:17:52,640 --> 00:17:54,230
+is intrinsic versus extrinsic rotations
+so far we've been treating each
+
+1024
+00:17:54,230 --> 00:17:54,240
+so far we've been treating each
+ 
+
+1025
+00:17:54,240 --> 00:17:56,390
+so far we've been treating each
+elemental rotation as extrinsic
+
+1026
+00:17:56,390 --> 00:17:56,400
+elemental rotation as extrinsic
+ 
+
+1027
+00:17:56,400 --> 00:17:58,870
+elemental rotation as extrinsic
+meaning that the axis x y z of the
+
+1028
+00:17:58,870 --> 00:17:58,880
+meaning that the axis x y z of the
+ 
+
+1029
+00:17:58,880 --> 00:18:00,549
+meaning that the axis x y z of the
+original coordinate system
+
+1030
+00:18:00,549 --> 00:18:00,559
+original coordinate system
+ 
+
+1031
+00:18:00,559 --> 00:18:03,270
+original coordinate system
+are assumed to remain motionless so the
+
+1032
+00:18:03,270 --> 00:18:03,280
+are assumed to remain motionless so the
+ 
+
+1033
+00:18:03,280 --> 00:18:05,510
+are assumed to remain motionless so the
+object is rotating and the coordinate
+
+1034
+00:18:05,510 --> 00:18:05,520
+object is rotating and the coordinate
+ 
+
+1035
+00:18:05,520 --> 00:18:07,590
+object is rotating and the coordinate
+system remains fixed
+
+1036
+00:18:07,590 --> 00:18:07,600
+system remains fixed
+ 
+
+1037
+00:18:07,600 --> 00:18:09,830
+system remains fixed
+we can see this with the cube where we
+
+1038
+00:18:09,830 --> 00:18:09,840
+we can see this with the cube where we
+ 
+
+1039
+00:18:09,840 --> 00:18:11,510
+we can see this with the cube where we
+first rotate around the red
+
+1040
+00:18:11,510 --> 00:18:11,520
+first rotate around the red
+ 
+
+1041
+00:18:11,520 --> 00:18:14,710
+first rotate around the red
+x axis then we rotate around the green
+
+1042
+00:18:14,710 --> 00:18:14,720
+x axis then we rotate around the green
+ 
+
+1043
+00:18:14,720 --> 00:18:17,990
+x axis then we rotate around the green
+y-axis and finally we rotate around the
+
+1044
+00:18:17,990 --> 00:18:18,000
+y-axis and finally we rotate around the
+ 
+
+1045
+00:18:18,000 --> 00:18:18,630
+y-axis and finally we rotate around the
+vertical
+
+1046
+00:18:18,630 --> 00:18:18,640
+vertical
+ 
+
+1047
+00:18:18,640 --> 00:18:21,350
+vertical
+z-axis depending on what you are trying
+
+1048
+00:18:21,350 --> 00:18:21,360
+z-axis depending on what you are trying
+ 
+
+1049
+00:18:21,360 --> 00:18:22,150
+z-axis depending on what you are trying
+to solve
+
+1050
+00:18:22,150 --> 00:18:22,160
+to solve
+ 
+
+1051
+00:18:22,160 --> 00:18:24,549
+to solve
+this can be a good way to look at things
+
+1052
+00:18:24,549 --> 00:18:24,559
+this can be a good way to look at things
+ 
+
+1053
+00:18:24,559 --> 00:18:27,510
+this can be a good way to look at things
+the alternative is intrinsic rotations
+
+1054
+00:18:27,510 --> 00:18:27,520
+the alternative is intrinsic rotations
+ 
+
+1055
+00:18:27,520 --> 00:18:29,430
+the alternative is intrinsic rotations
+where the coordinate system moves with
+
+1056
+00:18:29,430 --> 00:18:29,440
+where the coordinate system moves with
+ 
+
+1057
+00:18:29,440 --> 00:18:30,950
+where the coordinate system moves with
+the moving body
+
+1058
+00:18:30,950 --> 00:18:30,960
+the moving body
+ 
+
+1059
+00:18:30,960 --> 00:18:33,350
+the moving body
+changing the orientation of the axes
+
+1060
+00:18:33,350 --> 00:18:33,360
+changing the orientation of the axes
+ 
+
+1061
+00:18:33,360 --> 00:18:35,830
+changing the orientation of the axes
+after each elemental rotation
+
+1062
+00:18:35,830 --> 00:18:35,840
+after each elemental rotation
+ 
+
+1063
+00:18:35,840 --> 00:18:38,150
+after each elemental rotation
+one way to remember this is to think of
+
+1064
+00:18:38,150 --> 00:18:38,160
+one way to remember this is to think of
+ 
+
+1065
+00:18:38,160 --> 00:18:39,510
+one way to remember this is to think of
+the coordinate system
+
+1066
+00:18:39,510 --> 00:18:39,520
+the coordinate system
+ 
+
+1067
+00:18:39,520 --> 00:18:42,310
+the coordinate system
+being inside or attached to the moving
+
+1068
+00:18:42,310 --> 00:18:42,320
+being inside or attached to the moving
+ 
+
+1069
+00:18:42,320 --> 00:18:43,270
+being inside or attached to the moving
+object
+
+1070
+00:18:43,270 --> 00:18:43,280
+object
+ 
+
+1071
+00:18:43,280 --> 00:18:45,350
+object
+sometimes this can be a more intuitive
+
+1072
+00:18:45,350 --> 00:18:45,360
+sometimes this can be a more intuitive
+ 
+
+1073
+00:18:45,360 --> 00:18:46,870
+sometimes this can be a more intuitive
+way to approach setting an
+
+1074
+00:18:46,870 --> 00:18:46,880
+way to approach setting an
+ 
+
+1075
+00:18:46,880 --> 00:18:49,029
+way to approach setting an
+object's orientation especially if
+
+1076
+00:18:49,029 --> 00:18:49,039
+object's orientation especially if
+ 
+
+1077
+00:18:49,039 --> 00:18:51,510
+object's orientation especially if
+you're familiar with yaw pitch and roll
+
+1078
+00:18:51,510 --> 00:18:51,520
+you're familiar with yaw pitch and roll
+ 
+
+1079
+00:18:51,520 --> 00:18:54,230
+you're familiar with yaw pitch and roll
+take an airplane model for example the
+
+1080
+00:18:54,230 --> 00:18:54,240
+take an airplane model for example the
+ 
+
+1081
+00:18:54,240 --> 00:18:54,630
+take an airplane model for example the
+yaw
+
+1082
+00:18:54,630 --> 00:18:54,640
+yaw
+ 
+
+1083
+00:18:54,640 --> 00:18:57,270
+yaw
+angle sets the plane's bearing so the
+
+1084
+00:18:57,270 --> 00:18:57,280
+angle sets the plane's bearing so the
+ 
+
+1085
+00:18:57,280 --> 00:18:58,950
+angle sets the plane's bearing so the
+direction it is heading
+
+1086
+00:18:58,950 --> 00:18:58,960
+direction it is heading
+ 
+
+1087
+00:18:58,960 --> 00:19:01,590
+direction it is heading
+the pitch angle sets the elevation is
+
+1088
+00:19:01,590 --> 00:19:01,600
+the pitch angle sets the elevation is
+ 
+
+1089
+00:19:01,600 --> 00:19:03,110
+the pitch angle sets the elevation is
+the plane's nose pointing
+
+1090
+00:19:03,110 --> 00:19:03,120
+the plane's nose pointing
+ 
+
+1091
+00:19:03,120 --> 00:19:06,390
+the plane's nose pointing
+up down or neutral finally the roll is
+
+1092
+00:19:06,390 --> 00:19:06,400
+up down or neutral finally the roll is
+ 
+
+1093
+00:19:06,400 --> 00:19:08,789
+up down or neutral finally the roll is
+like setting the tilt or how sharply the
+
+1094
+00:19:08,789 --> 00:19:08,799
+like setting the tilt or how sharply the
+ 
+
+1095
+00:19:08,799 --> 00:19:10,710
+like setting the tilt or how sharply the
+plane is turning
+
+1096
+00:19:10,710 --> 00:19:10,720
+plane is turning
+ 
+
+1097
+00:19:10,720 --> 00:19:12,549
+plane is turning
+and the really cool thing is we're
+
+1098
+00:19:12,549 --> 00:19:12,559
+and the really cool thing is we're
+ 
+
+1099
+00:19:12,559 --> 00:19:14,710
+and the really cool thing is we're
+actually already using this
+
+1100
+00:19:14,710 --> 00:19:14,720
+actually already using this
+ 
+
+1101
+00:19:14,720 --> 00:19:17,029
+actually already using this
+the angle ordering we picked is not
+
+1102
+00:19:17,029 --> 00:19:17,039
+the angle ordering we picked is not
+ 
+
+1103
+00:19:17,039 --> 00:19:17,990
+the angle ordering we picked is not
+inherently
+
+1104
+00:19:17,990 --> 00:19:18,000
+inherently
+ 
+
+1105
+00:19:18,000 --> 00:19:20,870
+inherently
+extrinsic or intrinsic and is kind of
+
+1106
+00:19:20,870 --> 00:19:20,880
+extrinsic or intrinsic and is kind of
+ 
+
+1107
+00:19:20,880 --> 00:19:21,990
+extrinsic or intrinsic and is kind of
+left up to our own
+
+1108
+00:19:21,990 --> 00:19:22,000
+left up to our own
+ 
+
+1109
+00:19:22,000 --> 00:19:23,909
+left up to our own
+interpretation to interpret the
+
+1110
+00:19:23,909 --> 00:19:23,919
+interpretation to interpret the
+ 
+
+1111
+00:19:23,919 --> 00:19:25,669
+interpretation to interpret the
+rotations as extrinsic
+
+1112
+00:19:25,669 --> 00:19:25,679
+rotations as extrinsic
+ 
+
+1113
+00:19:25,679 --> 00:19:27,669
+rotations as extrinsic
+read the rotation transformations as
+
+1114
+00:19:27,669 --> 00:19:27,679
+read the rotation transformations as
+ 
+
+1115
+00:19:27,679 --> 00:19:29,590
+read the rotation transformations as
+occurring from right to left
+
+1116
+00:19:29,590 --> 00:19:29,600
+occurring from right to left
+ 
+
+1117
+00:19:29,600 --> 00:19:31,510
+occurring from right to left
+so in this case we first rotate about
+
+1118
+00:19:31,510 --> 00:19:31,520
+so in this case we first rotate about
+ 
+
+1119
+00:19:31,520 --> 00:19:32,870
+so in this case we first rotate about
+the fixed global z
+
+1120
+00:19:32,870 --> 00:19:32,880
+the fixed global z
+ 
+
+1121
+00:19:32,880 --> 00:19:35,669
+the fixed global z
+coordinate axis then about the fixed x
+
+1122
+00:19:35,669 --> 00:19:35,679
+coordinate axis then about the fixed x
+ 
+
+1123
+00:19:35,679 --> 00:19:36,310
+coordinate axis then about the fixed x
+axis
+
+1124
+00:19:36,310 --> 00:19:36,320
+axis
+ 
+
+1125
+00:19:36,320 --> 00:19:38,789
+axis
+and finally about the fixed y-axis
+
+1126
+00:19:38,789 --> 00:19:38,799
+and finally about the fixed y-axis
+ 
+
+1127
+00:19:38,799 --> 00:19:40,870
+and finally about the fixed y-axis
+however to interpret the rotations as
+
+1128
+00:19:40,870 --> 00:19:40,880
+however to interpret the rotations as
+ 
+
+1129
+00:19:40,880 --> 00:19:41,750
+however to interpret the rotations as
+intrinsic
+
+1130
+00:19:41,750 --> 00:19:41,760
+intrinsic
+ 
+
+1131
+00:19:41,760 --> 00:19:43,990
+intrinsic
+all you need to do is read the rotation
+
+1132
+00:19:43,990 --> 00:19:44,000
+all you need to do is read the rotation
+ 
+
+1133
+00:19:44,000 --> 00:19:46,070
+all you need to do is read the rotation
+transformations as occurring from
+
+1134
+00:19:46,070 --> 00:19:46,080
+transformations as occurring from
+ 
+
+1135
+00:19:46,080 --> 00:19:49,510
+transformations as occurring from
+left to right so first rotate about the
+
+1136
+00:19:49,510 --> 00:19:49,520
+left to right so first rotate about the
+ 
+
+1137
+00:19:49,520 --> 00:19:50,870
+left to right so first rotate about the
+y-axis
+
+1138
+00:19:50,870 --> 00:19:50,880
+y-axis
+ 
+
+1139
+00:19:50,880 --> 00:19:53,510
+y-axis
+then rotate about the object's new
+
+1140
+00:19:53,510 --> 00:19:53,520
+then rotate about the object's new
+ 
+
+1141
+00:19:53,520 --> 00:19:54,310
+then rotate about the object's new
+x-axis
+
+1142
+00:19:54,310 --> 00:19:54,320
+x-axis
+ 
+
+1143
+00:19:54,320 --> 00:19:57,270
+x-axis
+following the first rotation and finally
+
+1144
+00:19:57,270 --> 00:19:57,280
+following the first rotation and finally
+ 
+
+1145
+00:19:57,280 --> 00:19:59,270
+following the first rotation and finally
+rotate around the object's resulting
+
+1146
+00:19:59,270 --> 00:19:59,280
+rotate around the object's resulting
+ 
+
+1147
+00:19:59,280 --> 00:20:00,230
+rotate around the object's resulting
+z-axis
+
+1148
+00:20:00,230 --> 00:20:00,240
+z-axis
+ 
+
+1149
+00:20:00,240 --> 00:20:02,789
+z-axis
+from the second rotation this is such a
+
+1150
+00:20:02,789 --> 00:20:02,799
+from the second rotation this is such a
+ 
+
+1151
+00:20:02,799 --> 00:20:05,270
+from the second rotation this is such a
+cool duality and i wish i had time to go
+
+1152
+00:20:05,270 --> 00:20:05,280
+cool duality and i wish i had time to go
+ 
+
+1153
+00:20:05,280 --> 00:20:06,070
+cool duality and i wish i had time to go
+into a bit more
+
+1154
+00:20:06,070 --> 00:20:06,080
+into a bit more
+ 
+
+1155
+00:20:06,080 --> 00:20:08,549
+into a bit more
+detail of why this is true but for now
+
+1156
+00:20:08,549 --> 00:20:08,559
+detail of why this is true but for now
+ 
+
+1157
+00:20:08,559 --> 00:20:10,470
+detail of why this is true but for now
+keep this in mind as a really useful
+
+1158
+00:20:10,470 --> 00:20:10,480
+keep this in mind as a really useful
+ 
+
+1159
+00:20:10,480 --> 00:20:12,870
+keep this in mind as a really useful
+tool for understanding euler angles a
+
+1160
+00:20:12,870 --> 00:20:12,880
+tool for understanding euler angles a
+ 
+
+1161
+00:20:12,880 --> 00:20:14,870
+tool for understanding euler angles a
+bit more intuitively
+
+1162
+00:20:14,870 --> 00:20:14,880
+bit more intuitively
+ 
+
+1163
+00:20:14,880 --> 00:20:16,870
+bit more intuitively
+so in this tutorial we've changed our
+
+1164
+00:20:16,870 --> 00:20:16,880
+so in this tutorial we've changed our
+ 
+
+1165
+00:20:16,880 --> 00:20:18,470
+so in this tutorial we've changed our
+engine to use three dimensional
+
+1166
+00:20:18,470 --> 00:20:18,480
+engine to use three dimensional
+ 
+
+1167
+00:20:18,480 --> 00:20:19,190
+engine to use three dimensional
+positions
+
+1168
+00:20:19,190 --> 00:20:19,200
+positions
+ 
+
+1169
+00:20:19,200 --> 00:20:21,430
+positions
+as well as homogeneous coordinates with
+
+1170
+00:20:21,430 --> 00:20:21,440
+as well as homogeneous coordinates with
+ 
+
+1171
+00:20:21,440 --> 00:20:22,230
+as well as homogeneous coordinates with
+4x4
+
+1172
+00:20:22,230 --> 00:20:22,240
+4x4
+ 
+
+1173
+00:20:22,240 --> 00:20:24,630
+4x4
+matrices we are now rendering a cube
+
+1174
+00:20:24,630 --> 00:20:24,640
+matrices we are now rendering a cube
+ 
+
+1175
+00:20:24,640 --> 00:20:26,230
+matrices we are now rendering a cube
+with per vertex coloring
+
+1176
+00:20:26,230 --> 00:20:26,240
+with per vertex coloring
+ 
+
+1177
+00:20:26,240 --> 00:20:28,230
+with per vertex coloring
+but have not yet applied a perspective
+
+1178
+00:20:28,230 --> 00:20:28,240
+but have not yet applied a perspective
+ 
+
+1179
+00:20:28,240 --> 00:20:30,549
+but have not yet applied a perspective
+transformation so things might not look
+
+1180
+00:20:30,549 --> 00:20:30,559
+transformation so things might not look
+ 
+
+1181
+00:20:30,559 --> 00:20:32,070
+transformation so things might not look
+quite right yet
+
+1182
+00:20:32,070 --> 00:20:32,080
+quite right yet
+ 
+
+1183
+00:20:32,080 --> 00:20:34,390
+quite right yet
+when using homogeneous coordinates the
+
+1184
+00:20:34,390 --> 00:20:34,400
+when using homogeneous coordinates the
+ 
+
+1185
+00:20:34,400 --> 00:20:36,149
+when using homogeneous coordinates the
+last component indicates whether a
+
+1186
+00:20:36,149 --> 00:20:36,159
+last component indicates whether a
+ 
+
+1187
+00:20:36,159 --> 00:20:38,070
+last component indicates whether a
+vector represents a position or a
+
+1188
+00:20:38,070 --> 00:20:38,080
+vector represents a position or a
+ 
+
+1189
+00:20:38,080 --> 00:20:40,789
+vector represents a position or a
+direction by respectively using a 1
+
+1190
+00:20:40,789 --> 00:20:40,799
+direction by respectively using a 1
+ 
+
+1191
+00:20:40,799 --> 00:20:43,430
+direction by respectively using a 1
+or a 0. the most commonly used
+
+1192
+00:20:43,430 --> 00:20:43,440
+or a 0. the most commonly used
+ 
+
+1193
+00:20:43,440 --> 00:20:45,190
+or a 0. the most commonly used
+orientation representations
+
+1194
+00:20:45,190 --> 00:20:45,200
+orientation representations
+ 
+
+1195
+00:20:45,200 --> 00:20:48,310
+orientation representations
+are euler rotation matrices axis angle
+
+1196
+00:20:48,310 --> 00:20:48,320
+are euler rotation matrices axis angle
+ 
+
+1197
+00:20:48,320 --> 00:20:51,029
+are euler rotation matrices axis angle
+and quaternions in our engine the
+
+1198
+00:20:51,029 --> 00:20:51,039
+and quaternions in our engine the
+ 
+
+1199
+00:20:51,039 --> 00:20:52,710
+and quaternions in our engine the
+transform component represents
+
+1200
+00:20:52,710 --> 00:20:52,720
+transform component represents
+ 
+
+1201
+00:20:52,720 --> 00:20:54,710
+transform component represents
+orientation using the y1
+
+1202
+00:20:54,710 --> 00:20:54,720
+orientation using the y1
+ 
+
+1203
+00:20:54,720 --> 00:20:58,230
+orientation using the y1
+x2 z3 tape brian angle extrinsic
+
+1204
+00:20:58,230 --> 00:20:58,240
+x2 z3 tape brian angle extrinsic
+ 
+
+1205
+00:20:58,240 --> 00:20:59,430
+x2 z3 tape brian angle extrinsic
+ordering convention
+
+1206
+00:20:59,430 --> 00:20:59,440
+ordering convention
+ 
+
+1207
+00:20:59,440 --> 00:21:02,549
+ordering convention
+however any extrinsic rotation ordering
+
+1208
+00:21:02,549 --> 00:21:02,559
+however any extrinsic rotation ordering
+ 
+
+1209
+00:21:02,559 --> 00:21:05,510
+however any extrinsic rotation ordering
+can simultaneously be interpreted as an
+
+1210
+00:21:05,510 --> 00:21:05,520
+can simultaneously be interpreted as an
+ 
+
+1211
+00:21:05,520 --> 00:21:07,350
+can simultaneously be interpreted as an
+intrinsic rotation ordering
+
+1212
+00:21:07,350 --> 00:21:07,360
+intrinsic rotation ordering
+ 
+
+1213
+00:21:07,360 --> 00:21:09,350
+intrinsic rotation ordering
+by reading the rotations is being
+
+1214
+00:21:09,350 --> 00:21:09,360
+by reading the rotations is being
+ 
+
+1215
+00:21:09,360 --> 00:21:11,029
+by reading the rotations is being
+applied in the reversed
+
+1216
+00:21:11,029 --> 00:21:11,039
+applied in the reversed
+ 
+
+1217
+00:21:11,039 --> 00:21:14,310
+applied in the reversed
+direction anyway thanks for watching
+
+1218
+00:21:14,310 --> 00:21:14,320
+direction anyway thanks for watching
+ 
+
+1219
+00:21:14,320 --> 00:21:30,000
+direction anyway thanks for watching
+and keep on coding cheers
+

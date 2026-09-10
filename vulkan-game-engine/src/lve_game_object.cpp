@@ -74,8 +74,9 @@ namespace lve {
     };
   }
 
+  // Crea una point light tramite il manager impostando colore, raggio in scale.x e componente dedicato
   LveGameObject& LveGameObjectManager::makePointLight(
-      float intensity, float radius, glm::vec3 color) {
+    float intensity, float radius, glm::vec3 color) {
     auto& gameObj = createGameObject();
     gameObj.color = color;
     gameObj.transform.scale.x = radius;
@@ -86,23 +87,27 @@ namespace lve {
   }
 
   LveGameObjectManager::LveGameObjectManager(LveDevice& device) {
+    // Calcola il minimo comune multiplo (lcm) tra il limite di atomicità non coerente e l'allineamento offset UBO
+    // per garantire che ogni istanza sia allineata sia per i requisiti degli UBO sia per il flush della memoria
     int alignment = std::lcm(
-        device.properties.limits.nonCoherentAtomSize,
-        device.properties.limits.minUniformBufferOffsetAlignment);
+      device.properties.limits.nonCoherentAtomSize,
+      device.properties.limits.minUniformBufferOffsetAlignment);
     for (int i = 0; i < uboBuffers.size(); i++) {
       uboBuffers[i] = std::make_unique<LveBuffer>(
-          device,
-          sizeof(GameObjectBufferData),
-          LveGameObjectManager::MAX_GAME_OBJECTS,
-          VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
-          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
-          alignment);
+        device,
+        sizeof(GameObjectBufferData),
+        LveGameObjectManager::MAX_GAME_OBJECTS,
+        VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+        alignment);
       uboBuffers[i]->map();
     }
 
+    // Carica la texture predefinita a scacchiera (missing.png) assegnata a tutti i nuovi game object
     textureDefault = LveTexture::createTextureFromFile(device, "textures/missing.png");
   }
 
+  // Scrive le matrici correnti di tutti i game object nel buffer UBO del frame specificato ed esegue il flush
   void LveGameObjectManager::updateBuffer(int frameIndex) {
     for (auto& kv : gameObjects) {
       auto& obj = kv.second;
@@ -119,6 +124,6 @@ namespace lve {
   }
 
   LveGameObject::LveGameObject(id_t objId, const LveGameObjectManager& manager)
-      : id{objId}, gameObjectManger{manager} {}
+    : id{ objId }, gameObjectManger{ manager } {}
 
 } // namespace lve

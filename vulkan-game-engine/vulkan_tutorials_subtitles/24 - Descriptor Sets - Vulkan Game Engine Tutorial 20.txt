@@ -1,0 +1,7175 @@
+1
+00:00:00,560 --> 00:00:03,110
+ 
+last time we created a uniform buffer
+
+2
+00:00:03,110 --> 00:00:03,120
+last time we created a uniform buffer
+ 
+
+3
+00:00:03,120 --> 00:00:06,070
+last time we created a uniform buffer
+and updated its data each frame
+
+4
+00:00:06,070 --> 00:00:06,080
+and updated its data each frame
+ 
+
+5
+00:00:06,080 --> 00:00:08,470
+and updated its data each frame
+however we are not actually making use
+
+6
+00:00:08,470 --> 00:00:08,480
+however we are not actually making use
+ 
+
+7
+00:00:08,480 --> 00:00:10,790
+however we are not actually making use
+of it within our shaders yet and this is
+
+8
+00:00:10,790 --> 00:00:10,800
+of it within our shaders yet and this is
+ 
+
+9
+00:00:10,800 --> 00:00:12,870
+of it within our shaders yet and this is
+because you can't directly bind a
+
+10
+00:00:12,870 --> 00:00:12,880
+because you can't directly bind a
+ 
+
+11
+00:00:12,880 --> 00:00:15,430
+because you can't directly bind a
+uniform buffer to be used by a pipeline
+
+12
+00:00:15,430 --> 00:00:15,440
+uniform buffer to be used by a pipeline
+ 
+
+13
+00:00:15,440 --> 00:00:16,790
+uniform buffer to be used by a pipeline
+object
+
+14
+00:00:16,790 --> 00:00:16,800
+object
+ 
+
+15
+00:00:16,800 --> 00:00:18,870
+object
+vulcan has an additional abstraction
+
+16
+00:00:18,870 --> 00:00:18,880
+vulcan has an additional abstraction
+ 
+
+17
+00:00:18,880 --> 00:00:21,429
+vulcan has an additional abstraction
+known as descriptor sets
+
+18
+00:00:21,429 --> 00:00:21,439
+known as descriptor sets
+ 
+
+19
+00:00:21,439 --> 00:00:23,750
+known as descriptor sets
+descriptor sets can be pretty confusing
+
+20
+00:00:23,750 --> 00:00:23,760
+descriptor sets can be pretty confusing
+ 
+
+21
+00:00:23,760 --> 00:00:25,830
+descriptor sets can be pretty confusing
+at first since there are a few things
+
+22
+00:00:25,830 --> 00:00:25,840
+at first since there are a few things
+ 
+
+23
+00:00:25,840 --> 00:00:28,470
+at first since there are a few things
+going on at once but i will do my best
+
+24
+00:00:28,470 --> 00:00:28,480
+going on at once but i will do my best
+ 
+
+25
+00:00:28,480 --> 00:00:30,790
+going on at once but i will do my best
+to untangle this concept
+
+26
+00:00:30,790 --> 00:00:30,800
+to untangle this concept
+ 
+
+27
+00:00:30,800 --> 00:00:33,030
+to untangle this concept
+first think of a descriptor as like a
+
+28
+00:00:33,030 --> 00:00:33,040
+first think of a descriptor as like a
+ 
+
+29
+00:00:33,040 --> 00:00:35,510
+first think of a descriptor as like a
+pointer to a resource
+
+30
+00:00:35,510 --> 00:00:35,520
+pointer to a resource
+ 
+
+31
+00:00:35,520 --> 00:00:37,430
+pointer to a resource
+a buffer descriptor for example would
+
+32
+00:00:37,430 --> 00:00:37,440
+a buffer descriptor for example would
+ 
+
+33
+00:00:37,440 --> 00:00:39,990
+a buffer descriptor for example would
+point to the global ubo buffer object we
+
+34
+00:00:39,990 --> 00:00:40,000
+point to the global ubo buffer object we
+ 
+
+35
+00:00:40,000 --> 00:00:42,709
+point to the global ubo buffer object we
+created in the previous tutorial and an
+
+36
+00:00:42,709 --> 00:00:42,719
+created in the previous tutorial and an
+ 
+
+37
+00:00:42,719 --> 00:00:44,950
+created in the previous tutorial and an
+image descriptor could point to an image
+
+38
+00:00:44,950 --> 00:00:44,960
+image descriptor could point to an image
+ 
+
+39
+00:00:44,960 --> 00:00:46,310
+image descriptor could point to an image
+and a sampler
+
+40
+00:00:46,310 --> 00:00:46,320
+and a sampler
+ 
+
+41
+00:00:46,320 --> 00:00:49,110
+and a sampler
+unlike a conventional pointer these
+
+42
+00:00:49,110 --> 00:00:49,120
+unlike a conventional pointer these
+ 
+
+43
+00:00:49,120 --> 00:00:51,590
+unlike a conventional pointer these
+descriptors also store some additional
+
+44
+00:00:51,590 --> 00:00:51,600
+descriptors also store some additional
+ 
+
+45
+00:00:51,600 --> 00:00:54,389
+descriptors also store some additional
+data such as the size and offset for the
+
+46
+00:00:54,389 --> 00:00:54,399
+data such as the size and offset for the
+ 
+
+47
+00:00:54,399 --> 00:00:57,350
+data such as the size and offset for the
+buffer type and an images layout for an
+
+48
+00:00:57,350 --> 00:00:57,360
+buffer type and an images layout for an
+ 
+
+49
+00:00:57,360 --> 00:01:00,229
+buffer type and an images layout for an
+image now to further complicate things
+
+50
+00:01:00,229 --> 00:01:00,239
+image now to further complicate things
+ 
+
+51
+00:01:00,239 --> 00:01:03,029
+image now to further complicate things
+descriptors cannot be bound individually
+
+52
+00:01:03,029 --> 00:01:03,039
+descriptors cannot be bound individually
+ 
+
+53
+00:01:03,039 --> 00:01:05,590
+descriptors cannot be bound individually
+and must be grouped together into a set
+
+54
+00:01:05,590 --> 00:01:05,600
+and must be grouped together into a set
+ 
+
+55
+00:01:05,600 --> 00:01:07,910
+and must be grouped together into a set
+this is mainly for performance reasons
+
+56
+00:01:07,910 --> 00:01:07,920
+this is mainly for performance reasons
+ 
+
+57
+00:01:07,920 --> 00:01:10,469
+this is mainly for performance reasons
+and is one of the advantages of vulcan
+
+58
+00:01:10,469 --> 00:01:10,479
+and is one of the advantages of vulcan
+ 
+
+59
+00:01:10,479 --> 00:01:14,149
+and is one of the advantages of vulcan
+over older graphics apis such as opengl
+
+60
+00:01:14,149 --> 00:01:14,159
+over older graphics apis such as opengl
+ 
+
+61
+00:01:14,159 --> 00:01:16,550
+over older graphics apis such as opengl
+where each uniform needs to be updated
+
+62
+00:01:16,550 --> 00:01:16,560
+where each uniform needs to be updated
+ 
+
+63
+00:01:16,560 --> 00:01:17,830
+where each uniform needs to be updated
+individually
+
+64
+00:01:17,830 --> 00:01:17,840
+individually
+ 
+
+65
+00:01:17,840 --> 00:01:19,830
+individually
+for example if we have a complicated
+
+66
+00:01:19,830 --> 00:01:19,840
+for example if we have a complicated
+ 
+
+67
+00:01:19,840 --> 00:01:21,910
+for example if we have a complicated
+shader that uses three different uniform
+
+68
+00:01:21,910 --> 00:01:21,920
+shader that uses three different uniform
+ 
+
+69
+00:01:21,920 --> 00:01:24,710
+shader that uses three different uniform
+buffers and five different textures it'd
+
+70
+00:01:24,710 --> 00:01:24,720
+buffers and five different textures it'd
+ 
+
+71
+00:01:24,720 --> 00:01:26,789
+buffers and five different textures it'd
+be inefficient to bind each of these
+
+72
+00:01:26,789 --> 00:01:26,799
+be inefficient to bind each of these
+ 
+
+73
+00:01:26,799 --> 00:01:28,950
+be inefficient to bind each of these
+individually descriptors should be
+
+74
+00:01:28,950 --> 00:01:28,960
+individually descriptors should be
+ 
+
+75
+00:01:28,960 --> 00:01:31,590
+individually descriptors should be
+grouped into sets based on their binding
+
+76
+00:01:31,590 --> 00:01:31,600
+grouped into sets based on their binding
+ 
+
+77
+00:01:31,600 --> 00:01:34,310
+grouped into sets based on their binding
+frequency for example the projection and
+
+78
+00:01:34,310 --> 00:01:34,320
+frequency for example the projection and
+ 
+
+79
+00:01:34,320 --> 00:01:36,230
+frequency for example the projection and
+camera view matrix will likely be the
+
+80
+00:01:36,230 --> 00:01:36,240
+camera view matrix will likely be the
+ 
+
+81
+00:01:36,240 --> 00:01:38,230
+camera view matrix will likely be the
+same for every object rendered in the
+
+82
+00:01:38,230 --> 00:01:38,240
+same for every object rendered in the
+ 
+
+83
+00:01:38,240 --> 00:01:40,310
+same for every object rendered in the
+scene so it would make sense to put the
+
+84
+00:01:40,310 --> 00:01:40,320
+scene so it would make sense to put the
+ 
+
+85
+00:01:40,320 --> 00:01:42,630
+scene so it would make sense to put the
+descriptors that point to the global ubo
+
+86
+00:01:42,630 --> 00:01:42,640
+descriptors that point to the global ubo
+ 
+
+87
+00:01:42,640 --> 00:01:45,270
+descriptors that point to the global ubo
+buffer that stores these objects into
+
+88
+00:01:45,270 --> 00:01:45,280
+buffer that stores these objects into
+ 
+
+89
+00:01:45,280 --> 00:01:47,510
+buffer that stores these objects into
+set numbered 0.
+
+90
+00:01:47,510 --> 00:01:47,520
+set numbered 0.
+ 
+
+91
+00:01:47,520 --> 00:01:49,830
+set numbered 0.
+if we also have a buffer containing all
+
+92
+00:01:49,830 --> 00:01:49,840
+if we also have a buffer containing all
+ 
+
+93
+00:01:49,840 --> 00:01:52,149
+if we also have a buffer containing all
+the light sources within the scene this
+
+94
+00:01:52,149 --> 00:01:52,159
+the light sources within the scene this
+ 
+
+95
+00:01:52,159 --> 00:01:54,069
+the light sources within the scene this
+is also likely to be shared by all
+
+96
+00:01:54,069 --> 00:01:54,079
+is also likely to be shared by all
+ 
+
+97
+00:01:54,079 --> 00:01:55,910
+is also likely to be shared by all
+objects in the scene and could be also
+
+98
+00:01:55,910 --> 00:01:55,920
+objects in the scene and could be also
+ 
+
+99
+00:01:55,920 --> 00:01:58,389
+objects in the scene and could be also
+put into set 0 as well
+
+100
+00:01:58,389 --> 00:01:58,399
+put into set 0 as well
+ 
+
+101
+00:01:58,399 --> 00:02:00,389
+put into set 0 as well
+then all the resources that change per
+
+102
+00:02:00,389 --> 00:02:00,399
+then all the resources that change per
+ 
+
+103
+00:02:00,399 --> 00:02:03,270
+then all the resources that change per
+object could be grouped into set 1.
+
+104
+00:02:03,270 --> 00:02:03,280
+object could be grouped into set 1.
+ 
+
+105
+00:02:03,280 --> 00:02:07,030
+object could be grouped into set 1.
+this way we only have to bind set 0 once
+
+106
+00:02:07,030 --> 00:02:07,040
+this way we only have to bind set 0 once
+ 
+
+107
+00:02:07,040 --> 00:02:09,669
+this way we only have to bind set 0 once
+and it can be reused for every draw call
+
+108
+00:02:09,669 --> 00:02:09,679
+and it can be reused for every draw call
+ 
+
+109
+00:02:09,679 --> 00:02:11,270
+and it can be reused for every draw call
+in the frame
+
+110
+00:02:11,270 --> 00:02:11,280
+in the frame
+ 
+
+111
+00:02:11,280 --> 00:02:13,030
+in the frame
+this improves the device's rendering
+
+112
+00:02:13,030 --> 00:02:13,040
+this improves the device's rendering
+ 
+
+113
+00:02:13,040 --> 00:02:15,110
+this improves the device's rendering
+performance because it won't constantly
+
+114
+00:02:15,110 --> 00:02:15,120
+performance because it won't constantly
+ 
+
+115
+00:02:15,120 --> 00:02:17,750
+performance because it won't constantly
+be swapping out resources
+
+116
+00:02:17,750 --> 00:02:17,760
+be swapping out resources
+ 
+
+117
+00:02:17,760 --> 00:02:19,990
+be swapping out resources
+it is common to see even more sets than
+
+118
+00:02:19,990 --> 00:02:20,000
+it is common to see even more sets than
+ 
+
+119
+00:02:20,000 --> 00:02:23,110
+it is common to see even more sets than
+just two being used finding textures for
+
+120
+00:02:23,110 --> 00:02:23,120
+just two being used finding textures for
+ 
+
+121
+00:02:23,120 --> 00:02:25,830
+just two being used finding textures for
+materials can be expensive so it can be
+
+122
+00:02:25,830 --> 00:02:25,840
+materials can be expensive so it can be
+ 
+
+123
+00:02:25,840 --> 00:02:28,550
+materials can be expensive so it can be
+beneficial to have a descriptor set
+
+124
+00:02:28,550 --> 00:02:28,560
+beneficial to have a descriptor set
+ 
+
+125
+00:02:28,560 --> 00:02:31,509
+beneficial to have a descriptor set
+dedicated to binding image descriptors
+
+126
+00:02:31,509 --> 00:02:31,519
+dedicated to binding image descriptors
+ 
+
+127
+00:02:31,519 --> 00:02:33,430
+dedicated to binding image descriptors
+and then grouping object draw calls
+
+128
+00:02:33,430 --> 00:02:33,440
+and then grouping object draw calls
+ 
+
+129
+00:02:33,440 --> 00:02:35,670
+and then grouping object draw calls
+based on material usage
+
+130
+00:02:35,670 --> 00:02:35,680
+based on material usage
+ 
+
+131
+00:02:35,680 --> 00:02:37,830
+based on material usage
+if you're targeting mobile you need to
+
+132
+00:02:37,830 --> 00:02:37,840
+if you're targeting mobile you need to
+ 
+
+133
+00:02:37,840 --> 00:02:40,550
+if you're targeting mobile you need to
+use some conservative limits the minimum
+
+134
+00:02:40,550 --> 00:02:40,560
+use some conservative limits the minimum
+ 
+
+135
+00:02:40,560 --> 00:02:43,430
+use some conservative limits the minimum
+spec of vulcan guarantees only four max
+
+136
+00:02:43,430 --> 00:02:43,440
+spec of vulcan guarantees only four max
+ 
+
+137
+00:02:43,440 --> 00:02:46,150
+spec of vulcan guarantees only four max
+bound descriptor sets
+
+138
+00:02:46,150 --> 00:02:46,160
+bound descriptor sets
+ 
+
+139
+00:02:46,160 --> 00:02:48,630
+bound descriptor sets
+before pipeline is created it needs to
+
+140
+00:02:48,630 --> 00:02:48,640
+before pipeline is created it needs to
+ 
+
+141
+00:02:48,640 --> 00:02:51,990
+before pipeline is created it needs to
+be told what descriptor sets to expect
+
+142
+00:02:51,990 --> 00:02:52,000
+be told what descriptor sets to expect
+ 
+
+143
+00:02:52,000 --> 00:02:53,509
+be told what descriptor sets to expect
+this is done through the use of a
+
+144
+00:02:53,509 --> 00:02:53,519
+this is done through the use of a
+ 
+
+145
+00:02:53,519 --> 00:02:56,229
+this is done through the use of a
+descriptor set layout object
+
+146
+00:02:56,229 --> 00:02:56,239
+descriptor set layout object
+ 
+
+147
+00:02:56,239 --> 00:02:58,070
+descriptor set layout object
+this is like providing the pipeline with
+
+148
+00:02:58,070 --> 00:02:58,080
+this is like providing the pipeline with
+ 
+
+149
+00:02:58,080 --> 00:03:00,309
+this is like providing the pipeline with
+a blueprint of how many descriptor sets
+
+150
+00:03:00,309 --> 00:03:00,319
+a blueprint of how many descriptor sets
+ 
+
+151
+00:03:00,319 --> 00:03:02,550
+a blueprint of how many descriptor sets
+to expect as well as what descriptor
+
+152
+00:03:02,550 --> 00:03:02,560
+to expect as well as what descriptor
+ 
+
+153
+00:03:02,560 --> 00:03:05,190
+to expect as well as what descriptor
+types to expect within each set
+
+154
+00:03:05,190 --> 00:03:05,200
+types to expect within each set
+ 
+
+155
+00:03:05,200 --> 00:03:07,750
+types to expect within each set
+so for the previous example the
+
+156
+00:03:07,750 --> 00:03:07,760
+so for the previous example the
+ 
+
+157
+00:03:07,760 --> 00:03:10,869
+so for the previous example the
+blueprint aka the descriptor set layout
+
+158
+00:03:10,869 --> 00:03:10,879
+blueprint aka the descriptor set layout
+ 
+
+159
+00:03:10,879 --> 00:03:12,869
+blueprint aka the descriptor set layout
+may look something like this
+
+160
+00:03:12,869 --> 00:03:12,879
+may look something like this
+ 
+
+161
+00:03:12,879 --> 00:03:14,710
+may look something like this
+where we say there's going to be three
+
+162
+00:03:14,710 --> 00:03:14,720
+where we say there's going to be three
+ 
+
+163
+00:03:14,720 --> 00:03:17,110
+where we say there's going to be three
+sets with the first set having a buffer
+
+164
+00:03:17,110 --> 00:03:17,120
+sets with the first set having a buffer
+ 
+
+165
+00:03:17,120 --> 00:03:19,270
+sets with the first set having a buffer
+descriptor that will point to a buffer
+
+166
+00:03:19,270 --> 00:03:19,280
+descriptor that will point to a buffer
+ 
+
+167
+00:03:19,280 --> 00:03:21,589
+descriptor that will point to a buffer
+that contains the camera and environment
+
+168
+00:03:21,589 --> 00:03:21,599
+that contains the camera and environment
+ 
+
+169
+00:03:21,599 --> 00:03:23,990
+that contains the camera and environment
+variables at binding0
+
+170
+00:03:23,990 --> 00:03:24,000
+variables at binding0
+ 
+
+171
+00:03:24,000 --> 00:03:26,390
+variables at binding0
+and at binding1 a second buffer that
+
+172
+00:03:26,390 --> 00:03:26,400
+and at binding1 a second buffer that
+ 
+
+173
+00:03:26,400 --> 00:03:29,270
+and at binding1 a second buffer that
+points to the buffer of light sources
+
+174
+00:03:29,270 --> 00:03:29,280
+points to the buffer of light sources
+ 
+
+175
+00:03:29,280 --> 00:03:31,190
+points to the buffer of light sources
+then set 1 would be the blueprint saying
+
+176
+00:03:31,190 --> 00:03:31,200
+then set 1 would be the blueprint saying
+ 
+
+177
+00:03:31,200 --> 00:03:33,589
+then set 1 would be the blueprint saying
+to expect five image descriptors at
+
+178
+00:03:33,589 --> 00:03:33,599
+to expect five image descriptors at
+ 
+
+179
+00:03:33,599 --> 00:03:36,949
+to expect five image descriptors at
+bindings 0 to 4 and set 2 would just say
+
+180
+00:03:36,949 --> 00:03:36,959
+bindings 0 to 4 and set 2 would just say
+ 
+
+181
+00:03:36,959 --> 00:03:39,190
+bindings 0 to 4 and set 2 would just say
+to expect a single buffer descriptor at
+
+182
+00:03:39,190 --> 00:03:39,200
+to expect a single buffer descriptor at
+ 
+
+183
+00:03:39,200 --> 00:03:40,710
+to expect a single buffer descriptor at
+binding 0.
+
+184
+00:03:40,710 --> 00:03:40,720
+binding 0.
+ 
+
+185
+00:03:40,720 --> 00:03:42,630
+binding 0.
+so also note how
+
+186
+00:03:42,630 --> 00:03:42,640
+so also note how
+ 
+
+187
+00:03:42,640 --> 00:03:45,670
+so also note how
+each set has its own bindings so you can
+
+188
+00:03:45,670 --> 00:03:45,680
+each set has its own bindings so you can
+ 
+
+189
+00:03:45,680 --> 00:03:47,990
+each set has its own bindings so you can
+reuse binding zero for set zero and
+
+190
+00:03:47,990 --> 00:03:48,000
+reuse binding zero for set zero and
+ 
+
+191
+00:03:48,000 --> 00:03:50,710
+reuse binding zero for set zero and
+binding zero for set one is completely
+
+192
+00:03:50,710 --> 00:03:50,720
+binding zero for set one is completely
+ 
+
+193
+00:03:50,720 --> 00:03:51,830
+binding zero for set one is completely
+different
+
+194
+00:03:51,830 --> 00:03:51,840
+different
+ 
+
+195
+00:03:51,840 --> 00:03:54,149
+different
+okay then after being created with these
+
+196
+00:03:54,149 --> 00:03:54,159
+okay then after being created with these
+ 
+
+197
+00:03:54,159 --> 00:03:56,630
+okay then after being created with these
+descriptor set layouts the pipeline will
+
+198
+00:03:56,630 --> 00:03:56,640
+descriptor set layouts the pipeline will
+ 
+
+199
+00:03:56,640 --> 00:03:58,949
+descriptor set layouts the pipeline will
+then expect at run time the descriptor
+
+200
+00:03:58,949 --> 00:03:58,959
+then expect at run time the descriptor
+ 
+
+201
+00:03:58,959 --> 00:04:00,710
+then expect at run time the descriptor
+sets to be bound into each of these
+
+202
+00:04:00,710 --> 00:04:00,720
+sets to be bound into each of these
+ 
+
+203
+00:04:00,720 --> 00:04:05,270
+sets to be bound into each of these
+slots before a draw command is called
+
+204
+00:04:05,270 --> 00:04:05,280
+slots before a draw command is called
+ 
+
+205
+00:04:05,280 --> 00:04:08,390
+slots before a draw command is called
+now as one final step of complexity we
+
+206
+00:04:08,390 --> 00:04:08,400
+now as one final step of complexity we
+ 
+
+207
+00:04:08,400 --> 00:04:11,830
+now as one final step of complexity we
+cannot create descriptor sets directly a
+
+208
+00:04:11,830 --> 00:04:11,840
+cannot create descriptor sets directly a
+ 
+
+209
+00:04:11,840 --> 00:04:14,070
+cannot create descriptor sets directly a
+descriptor set needs to be allocated
+
+210
+00:04:14,070 --> 00:04:14,080
+descriptor set needs to be allocated
+ 
+
+211
+00:04:14,080 --> 00:04:17,110
+descriptor set needs to be allocated
+from a descriptor pool object this is
+
+212
+00:04:17,110 --> 00:04:17,120
+from a descriptor pool object this is
+ 
+
+213
+00:04:17,120 --> 00:04:19,990
+from a descriptor pool object this is
+also for performance reasons allocating
+
+214
+00:04:19,990 --> 00:04:20,000
+also for performance reasons allocating
+ 
+
+215
+00:04:20,000 --> 00:04:22,230
+also for performance reasons allocating
+memory can be expensive so descriptor
+
+216
+00:04:22,230 --> 00:04:22,240
+memory can be expensive so descriptor
+ 
+
+217
+00:04:22,240 --> 00:04:24,550
+memory can be expensive so descriptor
+pool allows us to allocate a big chunk
+
+218
+00:04:24,550 --> 00:04:24,560
+pool allows us to allocate a big chunk
+ 
+
+219
+00:04:24,560 --> 00:04:27,350
+pool allows us to allocate a big chunk
+of memory at one time that can hold many
+
+220
+00:04:27,350 --> 00:04:27,360
+of memory at one time that can hold many
+ 
+
+221
+00:04:27,360 --> 00:04:29,430
+of memory at one time that can hold many
+different descriptor sets
+
+222
+00:04:29,430 --> 00:04:29,440
+different descriptor sets
+ 
+
+223
+00:04:29,440 --> 00:04:31,350
+different descriptor sets
+then we can assign the memory from the
+
+224
+00:04:31,350 --> 00:04:31,360
+then we can assign the memory from the
+ 
+
+225
+00:04:31,360 --> 00:04:34,710
+then we can assign the memory from the
+pool as descriptor sets become needed
+
+226
+00:04:34,710 --> 00:04:34,720
+pool as descriptor sets become needed
+ 
+
+227
+00:04:34,720 --> 00:04:37,110
+pool as descriptor sets become needed
+now that was quite a lot so let's go
+
+228
+00:04:37,110 --> 00:04:37,120
+now that was quite a lot so let's go
+ 
+
+229
+00:04:37,120 --> 00:04:39,670
+now that was quite a lot so let's go
+over a quick summary and it may be worth
+
+230
+00:04:39,670 --> 00:04:39,680
+over a quick summary and it may be worth
+ 
+
+231
+00:04:39,680 --> 00:04:41,670
+over a quick summary and it may be worth
+watching this section again so that you
+
+232
+00:04:41,670 --> 00:04:41,680
+watching this section again so that you
+ 
+
+233
+00:04:41,680 --> 00:04:43,670
+watching this section again so that you
+really understand the purpose of each
+
+234
+00:04:43,670 --> 00:04:43,680
+really understand the purpose of each
+ 
+
+235
+00:04:43,680 --> 00:04:45,909
+really understand the purpose of each
+component and the relationships between
+
+236
+00:04:45,909 --> 00:04:45,919
+component and the relationships between
+ 
+
+237
+00:04:45,919 --> 00:04:47,670
+component and the relationships between
+them
+
+238
+00:04:47,670 --> 00:04:47,680
+them
+ 
+
+239
+00:04:47,680 --> 00:04:50,310
+them
+descriptors point to a resource such as
+
+240
+00:04:50,310 --> 00:04:50,320
+descriptors point to a resource such as
+ 
+
+241
+00:04:50,320 --> 00:04:51,990
+descriptors point to a resource such as
+a buffer or image
+
+242
+00:04:51,990 --> 00:04:52,000
+a buffer or image
+ 
+
+243
+00:04:52,000 --> 00:04:54,150
+a buffer or image
+and contain some additional data
+
+244
+00:04:54,150 --> 00:04:54,160
+and contain some additional data
+ 
+
+245
+00:04:54,160 --> 00:04:56,629
+and contain some additional data
+specific to the resource type
+
+246
+00:04:56,629 --> 00:04:56,639
+specific to the resource type
+ 
+
+247
+00:04:56,639 --> 00:04:58,870
+specific to the resource type
+descriptors need to be grouped into sets
+
+248
+00:04:58,870 --> 00:04:58,880
+descriptors need to be grouped into sets
+ 
+
+249
+00:04:58,880 --> 00:05:00,950
+descriptors need to be grouped into sets
+before being bound so in vulkan you
+
+250
+00:05:00,950 --> 00:05:00,960
+before being bound so in vulkan you
+ 
+
+251
+00:05:00,960 --> 00:05:03,830
+before being bound so in vulkan you
+cannot find an individual descriptor
+
+252
+00:05:03,830 --> 00:05:03,840
+cannot find an individual descriptor
+ 
+
+253
+00:05:03,840 --> 00:05:06,150
+cannot find an individual descriptor
+a descriptor set layout is like a
+
+254
+00:05:06,150 --> 00:05:06,160
+a descriptor set layout is like a
+ 
+
+255
+00:05:06,160 --> 00:05:08,550
+a descriptor set layout is like a
+blueprint that is provided for pipeline
+
+256
+00:05:08,550 --> 00:05:08,560
+blueprint that is provided for pipeline
+ 
+
+257
+00:05:08,560 --> 00:05:10,870
+blueprint that is provided for pipeline
+creation this way the pipeline knows
+
+258
+00:05:10,870 --> 00:05:10,880
+creation this way the pipeline knows
+ 
+
+259
+00:05:10,880 --> 00:05:13,909
+creation this way the pipeline knows
+what to expect in terms of how many sets
+
+260
+00:05:13,909 --> 00:05:13,919
+what to expect in terms of how many sets
+ 
+
+261
+00:05:13,919 --> 00:05:16,230
+what to expect in terms of how many sets
+what types of descriptors they contain
+
+262
+00:05:16,230 --> 00:05:16,240
+what types of descriptors they contain
+ 
+
+263
+00:05:16,240 --> 00:05:18,230
+what types of descriptors they contain
+and at which binding
+
+264
+00:05:18,230 --> 00:05:18,240
+and at which binding
+ 
+
+265
+00:05:18,240 --> 00:05:20,310
+and at which binding
+before making a draw call we need to
+
+266
+00:05:20,310 --> 00:05:20,320
+before making a draw call we need to
+ 
+
+267
+00:05:20,320 --> 00:05:22,870
+before making a draw call we need to
+bind each descriptor set to slot into
+
+268
+00:05:22,870 --> 00:05:22,880
+bind each descriptor set to slot into
+ 
+
+269
+00:05:22,880 --> 00:05:24,390
+bind each descriptor set to slot into
+the active pipeline
+
+270
+00:05:24,390 --> 00:05:24,400
+the active pipeline
+ 
+
+271
+00:05:24,400 --> 00:05:26,870
+the active pipeline
+and finally descriptor set objects can
+
+272
+00:05:26,870 --> 00:05:26,880
+and finally descriptor set objects can
+ 
+
+273
+00:05:26,880 --> 00:05:29,590
+and finally descriptor set objects can
+only be created by being allocated from
+
+274
+00:05:29,590 --> 00:05:29,600
+only be created by being allocated from
+ 
+
+275
+00:05:29,600 --> 00:05:31,670
+only be created by being allocated from
+a descriptor pool
+
+276
+00:05:31,670 --> 00:05:31,680
+a descriptor pool
+ 
+
+277
+00:05:31,680 --> 00:05:34,070
+a descriptor pool
+now before starting with this tutorial
+
+278
+00:05:34,070 --> 00:05:34,080
+now before starting with this tutorial
+ 
+
+279
+00:05:34,080 --> 00:05:35,749
+now before starting with this tutorial
+there's a small change to make to the
+
+280
+00:05:35,749 --> 00:05:35,759
+there's a small change to make to the
+ 
+
+281
+00:05:35,759 --> 00:05:38,310
+there's a small change to make to the
+buffer implementation file in the map
+
+282
+00:05:38,310 --> 00:05:38,320
+buffer implementation file in the map
+ 
+
+283
+00:05:38,320 --> 00:05:40,390
+buffer implementation file in the map
+function we want to remove this if
+
+284
+00:05:40,390 --> 00:05:40,400
+function we want to remove this if
+ 
+
+285
+00:05:40,400 --> 00:05:43,350
+function we want to remove this if
+statement that passes in the buffer size
+
+286
+00:05:43,350 --> 00:05:43,360
+statement that passes in the buffer size
+ 
+
+287
+00:05:43,360 --> 00:05:45,590
+statement that passes in the buffer size
+if you completed tutorial 19 after
+
+288
+00:05:45,590 --> 00:05:45,600
+if you completed tutorial 19 after
+ 
+
+289
+00:05:45,600 --> 00:05:48,150
+if you completed tutorial 19 after
+october 1st the file i provided would
+
+290
+00:05:48,150 --> 00:05:48,160
+october 1st the file i provided would
+ 
+
+291
+00:05:48,160 --> 00:05:50,870
+october 1st the file i provided would
+already be updated with this change
+
+292
+00:05:50,870 --> 00:05:50,880
+already be updated with this change
+ 
+
+293
+00:05:50,880 --> 00:05:53,270
+already be updated with this change
+we want to pass through the vk hole size
+
+294
+00:05:53,270 --> 00:05:53,280
+we want to pass through the vk hole size
+ 
+
+295
+00:05:53,280 --> 00:05:55,990
+we want to pass through the vk hole size
+value when specified as this signals to
+
+296
+00:05:55,990 --> 00:05:56,000
+value when specified as this signals to
+ 
+
+297
+00:05:56,000 --> 00:05:57,749
+value when specified as this signals to
+the vulcan driver that we want to use
+
+298
+00:05:57,749 --> 00:05:57,759
+the vulcan driver that we want to use
+ 
+
+299
+00:05:57,759 --> 00:06:00,150
+the vulcan driver that we want to use
+the whole memory range and behind the
+
+300
+00:06:00,150 --> 00:06:00,160
+the whole memory range and behind the
+ 
+
+301
+00:06:00,160 --> 00:06:02,070
+the whole memory range and behind the
+scenes it may allocate a larger range
+
+302
+00:06:02,070 --> 00:06:02,080
+scenes it may allocate a larger range
+ 
+
+303
+00:06:02,080 --> 00:06:04,469
+scenes it may allocate a larger range
+than the actual buffer size in order to
+
+304
+00:06:04,469 --> 00:06:04,479
+than the actual buffer size in order to
+ 
+
+305
+00:06:04,479 --> 00:06:06,629
+than the actual buffer size in order to
+be compatible with the specific gpu
+
+306
+00:06:06,629 --> 00:06:06,639
+be compatible with the specific gpu
+ 
+
+307
+00:06:06,639 --> 00:06:09,110
+be compatible with the specific gpu
+device in use
+
+308
+00:06:09,110 --> 00:06:09,120
+device in use
+ 
+
+309
+00:06:09,120 --> 00:06:11,430
+device in use
+so we are going to start by coding an
+
+310
+00:06:11,430 --> 00:06:11,440
+so we are going to start by coding an
+ 
+
+311
+00:06:11,440 --> 00:06:13,590
+so we are going to start by coding an
+abstraction to make all of these objects
+
+312
+00:06:13,590 --> 00:06:13,600
+abstraction to make all of these objects
+ 
+
+313
+00:06:13,600 --> 00:06:15,590
+abstraction to make all of these objects
+for descriptors more convenient to
+
+314
+00:06:15,590 --> 00:06:15,600
+for descriptors more convenient to
+ 
+
+315
+00:06:15,600 --> 00:06:16,790
+for descriptors more convenient to
+create
+
+316
+00:06:16,790 --> 00:06:16,800
+create
+ 
+
+317
+00:06:16,800 --> 00:06:18,309
+create
+i am going to group all of the
+
+318
+00:06:18,309 --> 00:06:18,319
+i am going to group all of the
+ 
+
+319
+00:06:18,319 --> 00:06:20,469
+i am going to group all of the
+descriptor related abstractions into a
+
+320
+00:06:20,469 --> 00:06:20,479
+descriptor related abstractions into a
+ 
+
+321
+00:06:20,479 --> 00:06:23,350
+descriptor related abstractions into a
+single class called lve descriptors
+
+322
+00:06:23,350 --> 00:06:23,360
+single class called lve descriptors
+ 
+
+323
+00:06:23,360 --> 00:06:25,350
+single class called lve descriptors
+pastebin links for the descriptor header
+
+324
+00:06:25,350 --> 00:06:25,360
+pastebin links for the descriptor header
+ 
+
+325
+00:06:25,360 --> 00:06:27,510
+pastebin links for the descriptor header
+and implementation files are provided in
+
+326
+00:06:27,510 --> 00:06:27,520
+and implementation files are provided in
+ 
+
+327
+00:06:27,520 --> 00:06:29,510
+and implementation files are provided in
+the description below
+
+328
+00:06:29,510 --> 00:06:29,520
+the description below
+ 
+
+329
+00:06:29,520 --> 00:06:32,230
+the description below
+start by copying the first class lve
+
+330
+00:06:32,230 --> 00:06:32,240
+start by copying the first class lve
+ 
+
+331
+00:06:32,240 --> 00:06:34,309
+start by copying the first class lve
+descriptor set layout as well as the
+
+332
+00:06:34,309 --> 00:06:34,319
+descriptor set layout as well as the
+ 
+
+333
+00:06:34,319 --> 00:06:36,150
+descriptor set layout as well as the
+include statements into the descriptor's
+
+334
+00:06:36,150 --> 00:06:36,160
+include statements into the descriptor's
+ 
+
+335
+00:06:36,160 --> 00:06:37,590
+include statements into the descriptor's
+header file
+
+336
+00:06:37,590 --> 00:06:37,600
+header file
+ 
+
+337
+00:06:37,600 --> 00:06:39,909
+header file
+rename your device header namespace and
+
+338
+00:06:39,909 --> 00:06:39,919
+rename your device header namespace and
+ 
+
+339
+00:06:39,919 --> 00:06:42,390
+rename your device header namespace and
+class names to your project conventions
+
+340
+00:06:42,390 --> 00:06:42,400
+class names to your project conventions
+ 
+
+341
+00:06:42,400 --> 00:06:44,309
+class names to your project conventions
+also add a closing brace to complete the
+
+342
+00:06:44,309 --> 00:06:44,319
+also add a closing brace to complete the
+ 
+
+343
+00:06:44,319 --> 00:06:47,110
+also add a closing brace to complete the
+namespace block
+
+344
+00:06:47,110 --> 00:06:47,120
+namespace block
+ 
+
+345
+00:06:47,120 --> 00:06:49,110
+namespace block
+okay let's go through this the nested
+
+346
+00:06:49,110 --> 00:06:49,120
+okay let's go through this the nested
+ 
+
+347
+00:06:49,120 --> 00:06:50,870
+okay let's go through this the nested
+builder class is just a convenience
+
+348
+00:06:50,870 --> 00:06:50,880
+builder class is just a convenience
+ 
+
+349
+00:06:50,880 --> 00:06:52,790
+builder class is just a convenience
+class for building the descriptor set
+
+350
+00:06:52,790 --> 00:06:52,800
+class for building the descriptor set
+ 
+
+351
+00:06:52,800 --> 00:06:55,189
+class for building the descriptor set
+layouts so this is making that blueprint
+
+352
+00:06:55,189 --> 00:06:55,199
+layouts so this is making that blueprint
+ 
+
+353
+00:06:55,199 --> 00:06:57,110
+layouts so this is making that blueprint
+object that the pipeline requires at
+
+354
+00:06:57,110 --> 00:06:57,120
+object that the pipeline requires at
+ 
+
+355
+00:06:57,120 --> 00:06:58,309
+object that the pipeline requires at
+creation
+
+356
+00:06:58,309 --> 00:06:58,319
+creation
+ 
+
+357
+00:06:58,319 --> 00:07:00,469
+creation
+the add binding function appends to the
+
+358
+00:07:00,469 --> 00:07:00,479
+the add binding function appends to the
+ 
+
+359
+00:07:00,479 --> 00:07:02,629
+the add binding function appends to the
+map of bindings the information that
+
+360
+00:07:02,629 --> 00:07:02,639
+map of bindings the information that
+ 
+
+361
+00:07:02,639 --> 00:07:04,629
+map of bindings the information that
+vulcan requires saying what type of
+
+362
+00:07:04,629 --> 00:07:04,639
+vulcan requires saying what type of
+ 
+
+363
+00:07:04,639 --> 00:07:07,350
+vulcan requires saying what type of
+descriptor type to expect such as a
+
+364
+00:07:07,350 --> 00:07:07,360
+descriptor type to expect such as a
+ 
+
+365
+00:07:07,360 --> 00:07:09,749
+descriptor type to expect such as a
+uniform buffer storage buffer an image
+
+366
+00:07:09,749 --> 00:07:09,759
+uniform buffer storage buffer an image
+ 
+
+367
+00:07:09,759 --> 00:07:12,469
+uniform buffer storage buffer an image
+buffer etc and then the shader stage
+
+368
+00:07:12,469 --> 00:07:12,479
+buffer etc and then the shader stage
+ 
+
+369
+00:07:12,479 --> 00:07:14,790
+buffer etc and then the shader stage
+flags tell falcon which shader stages
+
+370
+00:07:14,790 --> 00:07:14,800
+flags tell falcon which shader stages
+ 
+
+371
+00:07:14,800 --> 00:07:17,589
+flags tell falcon which shader stages
+will have access to this binding so be
+
+372
+00:07:17,589 --> 00:07:17,599
+will have access to this binding so be
+ 
+
+373
+00:07:17,599 --> 00:07:19,670
+will have access to this binding so be
+it the vertex stage fragment stage or
+
+374
+00:07:19,670 --> 00:07:19,680
+it the vertex stage fragment stage or
+ 
+
+375
+00:07:19,680 --> 00:07:21,189
+it the vertex stage fragment stage or
+maybe both
+
+376
+00:07:21,189 --> 00:07:21,199
+maybe both
+ 
+
+377
+00:07:21,199 --> 00:07:23,510
+maybe both
+finally there's a count this is kind of
+
+378
+00:07:23,510 --> 00:07:23,520
+finally there's a count this is kind of
+ 
+
+379
+00:07:23,520 --> 00:07:25,670
+finally there's a count this is kind of
+confusing because so far all the
+
+380
+00:07:25,670 --> 00:07:25,680
+confusing because so far all the
+ 
+
+381
+00:07:25,680 --> 00:07:27,350
+confusing because so far all the
+examples i have shown is that each
+
+382
+00:07:27,350 --> 00:07:27,360
+examples i have shown is that each
+ 
+
+383
+00:07:27,360 --> 00:07:29,990
+examples i have shown is that each
+binding has only one descriptor but each
+
+384
+00:07:29,990 --> 00:07:30,000
+binding has only one descriptor but each
+ 
+
+385
+00:07:30,000 --> 00:07:31,830
+binding has only one descriptor but each
+binding can actually hold an array of
+
+386
+00:07:31,830 --> 00:07:31,840
+binding can actually hold an array of
+ 
+
+387
+00:07:31,840 --> 00:07:34,309
+binding can actually hold an array of
+descriptors of that type which are then
+
+388
+00:07:34,309 --> 00:07:34,319
+descriptors of that type which are then
+ 
+
+389
+00:07:34,319 --> 00:07:36,390
+descriptors of that type which are then
+accessed in a shader by indexing into
+
+390
+00:07:36,390 --> 00:07:36,400
+accessed in a shader by indexing into
+ 
+
+391
+00:07:36,400 --> 00:07:38,710
+accessed in a shader by indexing into
+that array for now though we will stick
+
+392
+00:07:38,710 --> 00:07:38,720
+that array for now though we will stick
+ 
+
+393
+00:07:38,720 --> 00:07:41,029
+that array for now though we will stick
+with the default descriptor count of 1
+
+394
+00:07:41,029 --> 00:07:41,039
+with the default descriptor count of 1
+ 
+
+395
+00:07:41,039 --> 00:07:43,110
+with the default descriptor count of 1
+but eventually we'll start using this
+
+396
+00:07:43,110 --> 00:07:43,120
+but eventually we'll start using this
+ 
+
+397
+00:07:43,120 --> 00:07:45,589
+but eventually we'll start using this
+feature one last thing to note is how
+
+398
+00:07:45,589 --> 00:07:45,599
+feature one last thing to note is how
+ 
+
+399
+00:07:45,599 --> 00:07:47,589
+feature one last thing to note is how
+the builder class returns a reference to
+
+400
+00:07:47,589 --> 00:07:47,599
+the builder class returns a reference to
+ 
+
+401
+00:07:47,599 --> 00:07:49,589
+the builder class returns a reference to
+itself this makes it easy to chain
+
+402
+00:07:49,589 --> 00:07:49,599
+itself this makes it easy to chain
+ 
+
+403
+00:07:49,599 --> 00:07:51,350
+itself this makes it easy to chain
+multiple of these add binding function
+
+404
+00:07:51,350 --> 00:07:51,360
+multiple of these add binding function
+ 
+
+405
+00:07:51,360 --> 00:07:53,189
+multiple of these add binding function
+calls together and then to call the
+
+406
+00:07:53,189 --> 00:07:53,199
+calls together and then to call the
+ 
+
+407
+00:07:53,199 --> 00:07:55,270
+calls together and then to call the
+build function as a final step to create
+
+408
+00:07:55,270 --> 00:07:55,280
+build function as a final step to create
+ 
+
+409
+00:07:55,280 --> 00:07:57,350
+build function as a final step to create
+an instance of the descriptor set layout
+
+410
+00:07:57,350 --> 00:07:57,360
+an instance of the descriptor set layout
+ 
+
+411
+00:07:57,360 --> 00:07:58,950
+an instance of the descriptor set layout
+wrapper class
+
+412
+00:07:58,950 --> 00:07:58,960
+wrapper class
+ 
+
+413
+00:07:58,960 --> 00:08:01,350
+wrapper class
+so use of the builder class is optional
+
+414
+00:08:01,350 --> 00:08:01,360
+so use of the builder class is optional
+ 
+
+415
+00:08:01,360 --> 00:08:02,950
+so use of the builder class is optional
+its main purpose is just to make
+
+416
+00:08:02,950 --> 00:08:02,960
+its main purpose is just to make
+ 
+
+417
+00:08:02,960 --> 00:08:04,550
+its main purpose is just to make
+constructing the unordered map of
+
+418
+00:08:04,550 --> 00:08:04,560
+constructing the unordered map of
+ 
+
+419
+00:08:04,560 --> 00:08:07,189
+constructing the unordered map of
+bindings easier alternatively we can
+
+420
+00:08:07,189 --> 00:08:07,199
+bindings easier alternatively we can
+ 
+
+421
+00:08:07,199 --> 00:08:08,790
+bindings easier alternatively we can
+construct a descriptor set layout
+
+422
+00:08:08,790 --> 00:08:08,800
+construct a descriptor set layout
+ 
+
+423
+00:08:08,800 --> 00:08:10,869
+construct a descriptor set layout
+directly by passing in a list of
+
+424
+00:08:10,869 --> 00:08:10,879
+directly by passing in a list of
+ 
+
+425
+00:08:10,879 --> 00:08:13,350
+directly by passing in a list of
+bindings to its constructor i also
+
+426
+00:08:13,350 --> 00:08:13,360
+bindings to its constructor i also
+ 
+
+427
+00:08:13,360 --> 00:08:15,110
+bindings to its constructor i also
+declare here a destructor which will
+
+428
+00:08:15,110 --> 00:08:15,120
+declare here a destructor which will
+ 
+
+429
+00:08:15,120 --> 00:08:17,189
+declare here a destructor which will
+clean up the vk descriptor set layout
+
+430
+00:08:17,189 --> 00:08:17,199
+clean up the vk descriptor set layout
+ 
+
+431
+00:08:17,199 --> 00:08:19,110
+clean up the vk descriptor set layout
+object this class is responsible for
+
+432
+00:08:19,110 --> 00:08:19,120
+object this class is responsible for
+ 
+
+433
+00:08:19,120 --> 00:08:20,869
+object this class is responsible for
+managing and delete the copy
+
+434
+00:08:20,869 --> 00:08:20,879
+managing and delete the copy
+ 
+
+435
+00:08:20,879 --> 00:08:22,309
+managing and delete the copy
+constructors
+
+436
+00:08:22,309 --> 00:08:22,319
+constructors
+ 
+
+437
+00:08:22,319 --> 00:08:24,710
+constructors
+next back in the pastebin copy the
+
+438
+00:08:24,710 --> 00:08:24,720
+next back in the pastebin copy the
+ 
+
+439
+00:08:24,720 --> 00:08:27,350
+next back in the pastebin copy the
+descriptor pool class this class also
+
+440
+00:08:27,350 --> 00:08:27,360
+descriptor pool class this class also
+ 
+
+441
+00:08:27,360 --> 00:08:29,189
+descriptor pool class this class also
+provides a nested builder class to make
+
+442
+00:08:29,189 --> 00:08:29,199
+provides a nested builder class to make
+ 
+
+443
+00:08:29,199 --> 00:08:31,189
+provides a nested builder class to make
+creating an instance of the pool object
+
+444
+00:08:31,189 --> 00:08:31,199
+creating an instance of the pool object
+ 
+
+445
+00:08:31,199 --> 00:08:32,949
+creating an instance of the pool object
+more straightforward
+
+446
+00:08:32,949 --> 00:08:32,959
+more straightforward
+ 
+
+447
+00:08:32,959 --> 00:08:35,029
+more straightforward
+again by returning a reference to itself
+
+448
+00:08:35,029 --> 00:08:35,039
+again by returning a reference to itself
+ 
+
+449
+00:08:35,039 --> 00:08:36,709
+again by returning a reference to itself
+each of these function calls can be
+
+450
+00:08:36,709 --> 00:08:36,719
+each of these function calls can be
+ 
+
+451
+00:08:36,719 --> 00:08:38,389
+each of these function calls can be
+changed together
+
+452
+00:08:38,389 --> 00:08:38,399
+changed together
+ 
+
+453
+00:08:38,399 --> 00:08:40,550
+changed together
+a descriptor pool needs to have declared
+
+454
+00:08:40,550 --> 00:08:40,560
+a descriptor pool needs to have declared
+ 
+
+455
+00:08:40,560 --> 00:08:42,389
+a descriptor pool needs to have declared
+ahead of time how many descriptors of
+
+456
+00:08:42,389 --> 00:08:42,399
+ahead of time how many descriptors of
+ 
+
+457
+00:08:42,399 --> 00:08:44,630
+ahead of time how many descriptors of
+each type to expect for example we could
+
+458
+00:08:44,630 --> 00:08:44,640
+each type to expect for example we could
+ 
+
+459
+00:08:44,640 --> 00:08:47,430
+each type to expect for example we could
+add a pool size of 100 uniform buffers
+
+460
+00:08:47,430 --> 00:08:47,440
+add a pool size of 100 uniform buffers
+ 
+
+461
+00:08:47,440 --> 00:08:50,949
+add a pool size of 100 uniform buffers
+and a pool size of 100 image samplers
+
+462
+00:08:50,949 --> 00:08:50,959
+and a pool size of 100 image samplers
+ 
+
+463
+00:08:50,959 --> 00:08:53,430
+and a pool size of 100 image samplers
+the pool flags configure the behavior of
+
+464
+00:08:53,430 --> 00:08:53,440
+the pool flags configure the behavior of
+ 
+
+465
+00:08:53,440 --> 00:08:55,750
+the pool flags configure the behavior of
+the pool object and we'll cover these in
+
+466
+00:08:55,750 --> 00:08:55,760
+the pool object and we'll cover these in
+ 
+
+467
+00:08:55,760 --> 00:08:58,230
+the pool object and we'll cover these in
+more detail in a future tutorial
+
+468
+00:08:58,230 --> 00:08:58,240
+more detail in a future tutorial
+ 
+
+469
+00:08:58,240 --> 00:09:00,550
+more detail in a future tutorial
+and max sets is just the total number of
+
+470
+00:09:00,550 --> 00:09:00,560
+and max sets is just the total number of
+ 
+
+471
+00:09:00,560 --> 00:09:02,389
+and max sets is just the total number of
+descriptors that can be allocated from
+
+472
+00:09:02,389 --> 00:09:02,399
+descriptors that can be allocated from
+ 
+
+473
+00:09:02,399 --> 00:09:05,030
+descriptors that can be allocated from
+this pool object the descriptor pool
+
+474
+00:09:05,030 --> 00:09:05,040
+this pool object the descriptor pool
+ 
+
+475
+00:09:05,040 --> 00:09:07,030
+this pool object the descriptor pool
+object is responsible for managing the
+
+476
+00:09:07,030 --> 00:09:07,040
+object is responsible for managing the
+ 
+
+477
+00:09:07,040 --> 00:09:09,350
+object is responsible for managing the
+vk descriptor pool object and it
+
+478
+00:09:09,350 --> 00:09:09,360
+vk descriptor pool object and it
+ 
+
+479
+00:09:09,360 --> 00:09:11,350
+vk descriptor pool object and it
+provides functionality for allocating
+
+480
+00:09:11,350 --> 00:09:11,360
+provides functionality for allocating
+ 
+
+481
+00:09:11,360 --> 00:09:13,430
+provides functionality for allocating
+and freeing descriptors from the pool as
+
+482
+00:09:13,430 --> 00:09:13,440
+and freeing descriptors from the pool as
+ 
+
+483
+00:09:13,440 --> 00:09:15,750
+and freeing descriptors from the pool as
+well as the ability to reset the entire
+
+484
+00:09:15,750 --> 00:09:15,760
+well as the ability to reset the entire
+ 
+
+485
+00:09:15,760 --> 00:09:17,670
+well as the ability to reset the entire
+pool and all descriptors that have been
+
+486
+00:09:17,670 --> 00:09:17,680
+pool and all descriptors that have been
+ 
+
+487
+00:09:17,680 --> 00:09:19,670
+pool and all descriptors that have been
+allocated from it
+
+488
+00:09:19,670 --> 00:09:19,680
+allocated from it
+ 
+
+489
+00:09:19,680 --> 00:09:21,590
+allocated from it
+the final class to copy over is the
+
+490
+00:09:21,590 --> 00:09:21,600
+the final class to copy over is the
+ 
+
+491
+00:09:21,600 --> 00:09:24,070
+the final class to copy over is the
+descriptor writer class the purpose of
+
+492
+00:09:24,070 --> 00:09:24,080
+descriptor writer class the purpose of
+ 
+
+493
+00:09:24,080 --> 00:09:25,829
+descriptor writer class the purpose of
+which is to make building the actual
+
+494
+00:09:25,829 --> 00:09:25,839
+which is to make building the actual
+ 
+
+495
+00:09:25,839 --> 00:09:28,790
+which is to make building the actual
+descriptor objects easier so it is in
+
+496
+00:09:28,790 --> 00:09:28,800
+descriptor objects easier so it is in
+ 
+
+497
+00:09:28,800 --> 00:09:31,190
+descriptor objects easier so it is in
+charge of allocating a vk descriptor set
+
+498
+00:09:31,190 --> 00:09:31,200
+charge of allocating a vk descriptor set
+ 
+
+499
+00:09:31,200 --> 00:09:33,670
+charge of allocating a vk descriptor set
+from the pool and writing the necessary
+
+500
+00:09:33,670 --> 00:09:33,680
+from the pool and writing the necessary
+ 
+
+501
+00:09:33,680 --> 00:09:35,509
+from the pool and writing the necessary
+information for each descriptor that the
+
+502
+00:09:35,509 --> 00:09:35,519
+information for each descriptor that the
+ 
+
+503
+00:09:35,519 --> 00:09:37,269
+information for each descriptor that the
+set contains
+
+504
+00:09:37,269 --> 00:09:37,279
+set contains
+ 
+
+505
+00:09:37,279 --> 00:09:39,430
+set contains
+note that the descriptor writer class
+
+506
+00:09:39,430 --> 00:09:39,440
+note that the descriptor writer class
+ 
+
+507
+00:09:39,440 --> 00:09:41,430
+note that the descriptor writer class
+has been marked as a friend of both the
+
+508
+00:09:41,430 --> 00:09:41,440
+has been marked as a friend of both the
+ 
+
+509
+00:09:41,440 --> 00:09:43,509
+has been marked as a friend of both the
+pool and set layout classes meaning it
+
+510
+00:09:43,509 --> 00:09:43,519
+pool and set layout classes meaning it
+ 
+
+511
+00:09:43,519 --> 00:09:45,350
+pool and set layout classes meaning it
+will have access to their private member
+
+512
+00:09:45,350 --> 00:09:45,360
+will have access to their private member
+ 
+
+513
+00:09:45,360 --> 00:09:46,710
+will have access to their private member
+variables
+
+514
+00:09:46,710 --> 00:09:46,720
+variables
+ 
+
+515
+00:09:46,720 --> 00:09:48,710
+variables
+okay now let's add the descriptor's
+
+516
+00:09:48,710 --> 00:09:48,720
+okay now let's add the descriptor's
+ 
+
+517
+00:09:48,720 --> 00:09:51,190
+okay now let's add the descriptor's
+implementation file start by copying the
+
+518
+00:09:51,190 --> 00:09:51,200
+implementation file start by copying the
+ 
+
+519
+00:09:51,200 --> 00:09:53,350
+implementation file start by copying the
+first section for the descriptor set
+
+520
+00:09:53,350 --> 00:09:53,360
+first section for the descriptor set
+ 
+
+521
+00:09:53,360 --> 00:09:55,269
+first section for the descriptor set
+layout builder functions
+
+522
+00:09:55,269 --> 00:09:55,279
+layout builder functions
+ 
+
+523
+00:09:55,279 --> 00:09:57,269
+layout builder functions
+paste it into your code base and add a
+
+524
+00:09:57,269 --> 00:09:57,279
+paste it into your code base and add a
+ 
+
+525
+00:09:57,279 --> 00:10:00,230
+paste it into your code base and add a
+closing brace to complete the namespace
+
+526
+00:10:00,230 --> 00:10:00,240
+closing brace to complete the namespace
+ 
+
+527
+00:10:00,240 --> 00:10:02,550
+closing brace to complete the namespace
+so this is pretty straightforward the
+
+528
+00:10:02,550 --> 00:10:02,560
+so this is pretty straightforward the
+ 
+
+529
+00:10:02,560 --> 00:10:05,030
+so this is pretty straightforward the
+add binding method checks to make sure a
+
+530
+00:10:05,030 --> 00:10:05,040
+add binding method checks to make sure a
+ 
+
+531
+00:10:05,040 --> 00:10:07,670
+add binding method checks to make sure a
+binding at the specified index hasn't
+
+532
+00:10:07,670 --> 00:10:07,680
+binding at the specified index hasn't
+ 
+
+533
+00:10:07,680 --> 00:10:09,910
+binding at the specified index hasn't
+already been added and then configure
+
+534
+00:10:09,910 --> 00:10:09,920
+already been added and then configure
+ 
+
+535
+00:10:09,920 --> 00:10:12,310
+already been added and then configure
+the full construct with the descriptor's
+
+536
+00:10:12,310 --> 00:10:12,320
+the full construct with the descriptor's
+ 
+
+537
+00:10:12,320 --> 00:10:13,350
+the full construct with the descriptor's
+layout
+
+538
+00:10:13,350 --> 00:10:13,360
+layout
+ 
+
+539
+00:10:13,360 --> 00:10:15,190
+layout
+back in the pastebin copy the next
+
+540
+00:10:15,190 --> 00:10:15,200
+back in the pastebin copy the next
+ 
+
+541
+00:10:15,200 --> 00:10:17,750
+back in the pastebin copy the next
+section for the descriptor set layout
+
+542
+00:10:17,750 --> 00:10:17,760
+section for the descriptor set layout
+ 
+
+543
+00:10:17,760 --> 00:10:19,910
+section for the descriptor set layout
+the constructor takes the map of
+
+544
+00:10:19,910 --> 00:10:19,920
+the constructor takes the map of
+ 
+
+545
+00:10:19,920 --> 00:10:22,069
+the constructor takes the map of
+bindings the map of binding numbers to
+
+546
+00:10:22,069 --> 00:10:22,079
+bindings the map of binding numbers to
+ 
+
+547
+00:10:22,079 --> 00:10:24,230
+bindings the map of binding numbers to
+binding definitions is more useful for
+
+548
+00:10:24,230 --> 00:10:24,240
+binding definitions is more useful for
+ 
+
+549
+00:10:24,240 --> 00:10:26,550
+binding definitions is more useful for
+our purposes but vulcan only cares about
+
+550
+00:10:26,550 --> 00:10:26,560
+our purposes but vulcan only cares about
+ 
+
+551
+00:10:26,560 --> 00:10:29,030
+our purposes but vulcan only cares about
+the binding definitions so the first
+
+552
+00:10:29,030 --> 00:10:29,040
+the binding definitions so the first
+ 
+
+553
+00:10:29,040 --> 00:10:31,269
+the binding definitions so the first
+thing we need to do is to create a
+
+554
+00:10:31,269 --> 00:10:31,279
+thing we need to do is to create a
+ 
+
+555
+00:10:31,279 --> 00:10:34,310
+thing we need to do is to create a
+vector of just the set layout bindings
+
+556
+00:10:34,310 --> 00:10:34,320
+vector of just the set layout bindings
+ 
+
+557
+00:10:34,320 --> 00:10:36,389
+vector of just the set layout bindings
+then we configure a vulcan create
+
+558
+00:10:36,389 --> 00:10:36,399
+then we configure a vulcan create
+ 
+
+559
+00:10:36,399 --> 00:10:38,630
+then we configure a vulcan create
+infostruct as we've done many times
+
+560
+00:10:38,630 --> 00:10:38,640
+infostruct as we've done many times
+ 
+
+561
+00:10:38,640 --> 00:10:41,030
+infostruct as we've done many times
+throughout this tutorial series now and
+
+562
+00:10:41,030 --> 00:10:41,040
+throughout this tutorial series now and
+ 
+
+563
+00:10:41,040 --> 00:10:43,269
+throughout this tutorial series now and
+finally call vk create descriptor set
+
+564
+00:10:43,269 --> 00:10:43,279
+finally call vk create descriptor set
+ 
+
+565
+00:10:43,279 --> 00:10:45,269
+finally call vk create descriptor set
+layout to create the set layout and
+
+566
+00:10:45,269 --> 00:10:45,279
+layout to create the set layout and
+ 
+
+567
+00:10:45,279 --> 00:10:48,310
+layout to create the set layout and
+store it in the classes member variable
+
+568
+00:10:48,310 --> 00:10:48,320
+store it in the classes member variable
+ 
+
+569
+00:10:48,320 --> 00:10:50,310
+store it in the classes member variable
+the destructor's only purpose is to
+
+570
+00:10:50,310 --> 00:10:50,320
+the destructor's only purpose is to
+ 
+
+571
+00:10:50,320 --> 00:10:52,230
+the destructor's only purpose is to
+clean up the descriptor set layout when
+
+572
+00:10:52,230 --> 00:10:52,240
+clean up the descriptor set layout when
+ 
+
+573
+00:10:52,240 --> 00:10:54,550
+clean up the descriptor set layout when
+it is no longer needed
+
+574
+00:10:54,550 --> 00:10:54,560
+it is no longer needed
+ 
+
+575
+00:10:54,560 --> 00:10:57,269
+it is no longer needed
+next we have the descriptor pool builder
+
+576
+00:10:57,269 --> 00:10:57,279
+next we have the descriptor pool builder
+ 
+
+577
+00:10:57,279 --> 00:10:59,190
+next we have the descriptor pool builder
+i feel like this is all pretty
+
+578
+00:10:59,190 --> 00:10:59,200
+i feel like this is all pretty
+ 
+
+579
+00:10:59,200 --> 00:11:00,470
+i feel like this is all pretty
+self-explanatory
+
+580
+00:11:00,470 --> 00:11:00,480
+self-explanatory
+ 
+
+581
+00:11:00,480 --> 00:11:02,790
+self-explanatory
+one thing i'll point out here is that we
+
+582
+00:11:02,790 --> 00:11:02,800
+one thing i'll point out here is that we
+ 
+
+583
+00:11:02,800 --> 00:11:05,430
+one thing i'll point out here is that we
+are using implicit construction to add a
+
+584
+00:11:05,430 --> 00:11:05,440
+are using implicit construction to add a
+ 
+
+585
+00:11:05,440 --> 00:11:08,150
+are using implicit construction to add a
+vk descriptor pool size struct instance
+
+586
+00:11:08,150 --> 00:11:08,160
+vk descriptor pool size struct instance
+ 
+
+587
+00:11:08,160 --> 00:11:10,230
+vk descriptor pool size struct instance
+to the pool sizes vector
+
+588
+00:11:10,230 --> 00:11:10,240
+to the pool sizes vector
+ 
+
+589
+00:11:10,240 --> 00:11:12,310
+to the pool sizes vector
+then fetch the descriptor pool functions
+
+590
+00:11:12,310 --> 00:11:12,320
+then fetch the descriptor pool functions
+ 
+
+591
+00:11:12,320 --> 00:11:14,710
+then fetch the descriptor pool functions
+from the paste bin the constructor and
+
+592
+00:11:14,710 --> 00:11:14,720
+from the paste bin the constructor and
+ 
+
+593
+00:11:14,720 --> 00:11:16,150
+from the paste bin the constructor and
+destructor are what you'd probably
+
+594
+00:11:16,150 --> 00:11:16,160
+destructor are what you'd probably
+ 
+
+595
+00:11:16,160 --> 00:11:18,870
+destructor are what you'd probably
+expect we configure vulkan create info
+
+596
+00:11:18,870 --> 00:11:18,880
+expect we configure vulkan create info
+ 
+
+597
+00:11:18,880 --> 00:11:21,590
+expect we configure vulkan create info
+struct with the passed in information
+
+598
+00:11:21,590 --> 00:11:21,600
+struct with the passed in information
+ 
+
+599
+00:11:21,600 --> 00:11:24,230
+struct with the passed in information
+and then call a vulkan create function
+
+600
+00:11:24,230 --> 00:11:24,240
+and then call a vulkan create function
+ 
+
+601
+00:11:24,240 --> 00:11:25,670
+and then call a vulkan create function
+and the destructor cleans up the
+
+602
+00:11:25,670 --> 00:11:25,680
+and the destructor cleans up the
+ 
+
+603
+00:11:25,680 --> 00:11:28,150
+and the destructor cleans up the
+underlying vulcan pool object the
+
+604
+00:11:28,150 --> 00:11:28,160
+underlying vulcan pool object the
+ 
+
+605
+00:11:28,160 --> 00:11:29,750
+underlying vulcan pool object the
+allocate descriptor function will
+
+606
+00:11:29,750 --> 00:11:29,760
+allocate descriptor function will
+ 
+
+607
+00:11:29,760 --> 00:11:31,670
+allocate descriptor function will
+allocate a single descriptor set from
+
+608
+00:11:31,670 --> 00:11:31,680
+allocate a single descriptor set from
+ 
+
+609
+00:11:31,680 --> 00:11:33,509
+allocate a single descriptor set from
+the descriptor pool
+
+610
+00:11:33,509 --> 00:11:33,519
+the descriptor pool
+ 
+
+611
+00:11:33,519 --> 00:11:35,990
+the descriptor pool
+um in hindsight this maybe should have
+
+612
+00:11:35,990 --> 00:11:36,000
+um in hindsight this maybe should have
+ 
+
+613
+00:11:36,000 --> 00:11:38,069
+um in hindsight this maybe should have
+been called allocate descriptor set to
+
+614
+00:11:38,069 --> 00:11:38,079
+been called allocate descriptor set to
+ 
+
+615
+00:11:38,079 --> 00:11:40,069
+been called allocate descriptor set to
+make it clear that we are allocating an
+
+616
+00:11:40,069 --> 00:11:40,079
+make it clear that we are allocating an
+ 
+
+617
+00:11:40,079 --> 00:11:42,870
+make it clear that we are allocating an
+entire set not just a single descriptor
+
+618
+00:11:42,870 --> 00:11:42,880
+entire set not just a single descriptor
+ 
+
+619
+00:11:42,880 --> 00:11:44,790
+entire set not just a single descriptor
+you can't allocate single descriptors
+
+620
+00:11:44,790 --> 00:11:44,800
+you can't allocate single descriptors
+ 
+
+621
+00:11:44,800 --> 00:11:47,430
+you can't allocate single descriptors
+the entire set must be allocated at once
+
+622
+00:11:47,430 --> 00:11:47,440
+the entire set must be allocated at once
+ 
+
+623
+00:11:47,440 --> 00:11:49,509
+the entire set must be allocated at once
+note that we are required to provide a
+
+624
+00:11:49,509 --> 00:11:49,519
+note that we are required to provide a
+ 
+
+625
+00:11:49,519 --> 00:11:51,829
+note that we are required to provide a
+vulkan descriptor set layout object this
+
+626
+00:11:51,829 --> 00:11:51,839
+vulkan descriptor set layout object this
+ 
+
+627
+00:11:51,839 --> 00:11:53,350
+vulkan descriptor set layout object this
+is so that the pool knows how many
+
+628
+00:11:53,350 --> 00:11:53,360
+is so that the pool knows how many
+ 
+
+629
+00:11:53,360 --> 00:11:55,350
+is so that the pool knows how many
+descriptors and of what type that the
+
+630
+00:11:55,350 --> 00:11:55,360
+descriptors and of what type that the
+ 
+
+631
+00:11:55,360 --> 00:11:57,670
+descriptors and of what type that the
+set of descriptors contains
+
+632
+00:11:57,670 --> 00:11:57,680
+set of descriptors contains
+ 
+
+633
+00:11:57,680 --> 00:11:59,430
+set of descriptors contains
+now what would happen if we try to
+
+634
+00:11:59,430 --> 00:11:59,440
+now what would happen if we try to
+ 
+
+635
+00:11:59,440 --> 00:12:01,269
+now what would happen if we try to
+allocate a descriptor from a pool that
+
+636
+00:12:01,269 --> 00:12:01,279
+allocate a descriptor from a pool that
+ 
+
+637
+00:12:01,279 --> 00:12:03,590
+allocate a descriptor from a pool that
+has no descriptors remaining well the
+
+638
+00:12:03,590 --> 00:12:03,600
+has no descriptors remaining well the
+ 
+
+639
+00:12:03,600 --> 00:12:05,990
+has no descriptors remaining well the
+allocation will fail and if your engine
+
+640
+00:12:05,990 --> 00:12:06,000
+allocation will fail and if your engine
+ 
+
+641
+00:12:06,000 --> 00:12:07,670
+allocation will fail and if your engine
+doesn't have some way to handle this it
+
+642
+00:12:07,670 --> 00:12:07,680
+doesn't have some way to handle this it
+ 
+
+643
+00:12:07,680 --> 00:12:09,030
+doesn't have some way to handle this it
+will crash
+
+644
+00:12:09,030 --> 00:12:09,040
+will crash
+ 
+
+645
+00:12:09,040 --> 00:12:11,430
+will crash
+a common solution to this is to create a
+
+646
+00:12:11,430 --> 00:12:11,440
+a common solution to this is to create a
+ 
+
+647
+00:12:11,440 --> 00:12:14,230
+a common solution to this is to create a
+pool manager abstraction what this does
+
+648
+00:12:14,230 --> 00:12:14,240
+pool manager abstraction what this does
+ 
+
+649
+00:12:14,240 --> 00:12:16,710
+pool manager abstraction what this does
+is keep track of a list of pool objects
+
+650
+00:12:16,710 --> 00:12:16,720
+is keep track of a list of pool objects
+ 
+
+651
+00:12:16,720 --> 00:12:18,949
+is keep track of a list of pool objects
+rather than a single pool if a pool
+
+652
+00:12:18,949 --> 00:12:18,959
+rather than a single pool if a pool
+ 
+
+653
+00:12:18,959 --> 00:12:20,870
+rather than a single pool if a pool
+becomes full then a new pool can be
+
+654
+00:12:20,870 --> 00:12:20,880
+becomes full then a new pool can be
+ 
+
+655
+00:12:20,880 --> 00:12:22,870
+becomes full then a new pool can be
+created and added to the list
+
+656
+00:12:22,870 --> 00:12:22,880
+created and added to the list
+ 
+
+657
+00:12:22,880 --> 00:12:25,670
+created and added to the list
+vkguide.dev has a very nice example of
+
+658
+00:12:25,670 --> 00:12:25,680
+vkguide.dev has a very nice example of
+ 
+
+659
+00:12:25,680 --> 00:12:27,030
+vkguide.dev has a very nice example of
+what i'd consider a more
+
+660
+00:12:27,030 --> 00:12:27,040
+what i'd consider a more
+ 
+
+661
+00:12:27,040 --> 00:12:29,670
+what i'd consider a more
+production-ready descriptor abstraction
+
+662
+00:12:29,670 --> 00:12:29,680
+production-ready descriptor abstraction
+ 
+
+663
+00:12:29,680 --> 00:12:32,470
+production-ready descriptor abstraction
+his implementation has this pool manager
+
+664
+00:12:32,470 --> 00:12:32,480
+his implementation has this pool manager
+ 
+
+665
+00:12:32,480 --> 00:12:34,470
+his implementation has this pool manager
+functionality as well as caching of
+
+666
+00:12:34,470 --> 00:12:34,480
+functionality as well as caching of
+ 
+
+667
+00:12:34,480 --> 00:12:36,829
+functionality as well as caching of
+descriptor set layouts for improved
+
+668
+00:12:36,829 --> 00:12:36,839
+descriptor set layouts for improved
+ 
+
+669
+00:12:36,839 --> 00:12:39,030
+descriptor set layouts for improved
+performance it's something i definitely
+
+670
+00:12:39,030 --> 00:12:39,040
+performance it's something i definitely
+ 
+
+671
+00:12:39,040 --> 00:12:41,350
+performance it's something i definitely
+recommend looking into at some point for
+
+672
+00:12:41,350 --> 00:12:41,360
+recommend looking into at some point for
+ 
+
+673
+00:12:41,360 --> 00:12:43,190
+recommend looking into at some point for
+learning purposes i think the simple
+
+674
+00:12:43,190 --> 00:12:43,200
+learning purposes i think the simple
+ 
+
+675
+00:12:43,200 --> 00:12:45,030
+learning purposes i think the simple
+abstractions provided here are a good
+
+676
+00:12:45,030 --> 00:12:45,040
+abstractions provided here are a good
+ 
+
+677
+00:12:45,040 --> 00:12:47,269
+abstractions provided here are a good
+place to start as you get comfortable
+
+678
+00:12:47,269 --> 00:12:47,279
+place to start as you get comfortable
+ 
+
+679
+00:12:47,279 --> 00:12:48,949
+place to start as you get comfortable
+with the concepts introduced in this
+
+680
+00:12:48,949 --> 00:12:48,959
+with the concepts introduced in this
+ 
+
+681
+00:12:48,959 --> 00:12:50,470
+with the concepts introduced in this
+video
+
+682
+00:12:50,470 --> 00:12:50,480
+video
+ 
+
+683
+00:12:50,480 --> 00:12:52,790
+video
+then the free and reset functions wrap
+
+684
+00:12:52,790 --> 00:12:52,800
+then the free and reset functions wrap
+ 
+
+685
+00:12:52,800 --> 00:12:55,350
+then the free and reset functions wrap
+vulcan commands to free a specified list
+
+686
+00:12:55,350 --> 00:12:55,360
+vulcan commands to free a specified list
+ 
+
+687
+00:12:55,360 --> 00:12:58,150
+vulcan commands to free a specified list
+of descriptors or to reset the entire
+
+688
+00:12:58,150 --> 00:12:58,160
+of descriptors or to reset the entire
+ 
+
+689
+00:12:58,160 --> 00:12:59,190
+of descriptors or to reset the entire
+pool
+
+690
+00:12:59,190 --> 00:12:59,200
+pool
+ 
+
+691
+00:12:59,200 --> 00:13:01,430
+pool
+finally copy and paste the descriptor
+
+692
+00:13:01,430 --> 00:13:01,440
+finally copy and paste the descriptor
+ 
+
+693
+00:13:01,440 --> 00:13:05,110
+finally copy and paste the descriptor
+writer class
+
+694
+00:13:05,110 --> 00:13:05,120
+
+ 
+
+695
+00:13:05,120 --> 00:13:06,870
+ 
+the right buffer function takes a
+
+696
+00:13:06,870 --> 00:13:06,880
+the right buffer function takes a
+ 
+
+697
+00:13:06,880 --> 00:13:09,430
+the right buffer function takes a
+binding number and a pointer to a buffer
+
+698
+00:13:09,430 --> 00:13:09,440
+binding number and a pointer to a buffer
+ 
+
+699
+00:13:09,440 --> 00:13:11,030
+binding number and a pointer to a buffer
+info object
+
+700
+00:13:11,030 --> 00:13:11,040
+info object
+ 
+
+701
+00:13:11,040 --> 00:13:12,870
+info object
+it first checks to make sure that the
+
+702
+00:13:12,870 --> 00:13:12,880
+it first checks to make sure that the
+ 
+
+703
+00:13:12,880 --> 00:13:14,790
+it first checks to make sure that the
+binding number has been defined in the
+
+704
+00:13:14,790 --> 00:13:14,800
+binding number has been defined in the
+ 
+
+705
+00:13:14,800 --> 00:13:17,350
+binding number has been defined in the
+binding descriptions of the set layout
+
+706
+00:13:17,350 --> 00:13:17,360
+binding descriptions of the set layout
+ 
+
+707
+00:13:17,360 --> 00:13:19,590
+binding descriptions of the set layout
+it also ensures that the descriptor
+
+708
+00:13:19,590 --> 00:13:19,600
+it also ensures that the descriptor
+ 
+
+709
+00:13:19,600 --> 00:13:21,910
+it also ensures that the descriptor
+count in the binding description is in
+
+710
+00:13:21,910 --> 00:13:21,920
+count in the binding description is in
+ 
+
+711
+00:13:21,920 --> 00:13:23,269
+count in the binding description is in
+fact just one
+
+712
+00:13:23,269 --> 00:13:23,279
+fact just one
+ 
+
+713
+00:13:23,279 --> 00:13:25,590
+fact just one
+when we start working with arrays of
+
+714
+00:13:25,590 --> 00:13:25,600
+when we start working with arrays of
+ 
+
+715
+00:13:25,600 --> 00:13:27,910
+when we start working with arrays of
+descriptors we will need to add another
+
+716
+00:13:27,910 --> 00:13:27,920
+descriptors we will need to add another
+ 
+
+717
+00:13:27,920 --> 00:13:30,150
+descriptors we will need to add another
+function to the descriptor writer class
+
+718
+00:13:30,150 --> 00:13:30,160
+function to the descriptor writer class
+ 
+
+719
+00:13:30,160 --> 00:13:32,310
+function to the descriptor writer class
+that takes a vector of buffer info
+
+720
+00:13:32,310 --> 00:13:32,320
+that takes a vector of buffer info
+ 
+
+721
+00:13:32,320 --> 00:13:34,870
+that takes a vector of buffer info
+objects instead the function then
+
+722
+00:13:34,870 --> 00:13:34,880
+objects instead the function then
+ 
+
+723
+00:13:34,880 --> 00:13:37,110
+objects instead the function then
+configures a vulkan object and adds it
+
+724
+00:13:37,110 --> 00:13:37,120
+configures a vulkan object and adds it
+ 
+
+725
+00:13:37,120 --> 00:13:39,430
+configures a vulkan object and adds it
+to the descriptor's array of writes to
+
+726
+00:13:39,430 --> 00:13:39,440
+to the descriptor's array of writes to
+ 
+
+727
+00:13:39,440 --> 00:13:40,389
+to the descriptor's array of writes to
+perform
+
+728
+00:13:40,389 --> 00:13:40,399
+perform
+ 
+
+729
+00:13:40,399 --> 00:13:42,790
+perform
+the right image function is the same
+
+730
+00:13:42,790 --> 00:13:42,800
+the right image function is the same
+ 
+
+731
+00:13:42,800 --> 00:13:45,269
+the right image function is the same
+except it takes a pointer to image info
+
+732
+00:13:45,269 --> 00:13:45,279
+except it takes a pointer to image info
+ 
+
+733
+00:13:45,279 --> 00:13:47,430
+except it takes a pointer to image info
+and sets the right dot p image info
+
+734
+00:13:47,430 --> 00:13:47,440
+and sets the right dot p image info
+ 
+
+735
+00:13:47,440 --> 00:13:49,430
+and sets the right dot p image info
+field to use this value
+
+736
+00:13:49,430 --> 00:13:49,440
+field to use this value
+ 
+
+737
+00:13:49,440 --> 00:13:51,030
+field to use this value
+the build function then allocates a
+
+738
+00:13:51,030 --> 00:13:51,040
+the build function then allocates a
+ 
+
+739
+00:13:51,040 --> 00:13:52,629
+the build function then allocates a
+descriptor set from the provided
+
+740
+00:13:52,629 --> 00:13:52,639
+descriptor set from the provided
+ 
+
+741
+00:13:52,639 --> 00:13:55,110
+descriptor set from the provided
+descriptor pool and calls the overwrite
+
+742
+00:13:55,110 --> 00:13:55,120
+descriptor pool and calls the overwrite
+ 
+
+743
+00:13:55,120 --> 00:13:57,269
+descriptor pool and calls the overwrite
+method this function sets the target
+
+744
+00:13:57,269 --> 00:13:57,279
+method this function sets the target
+ 
+
+745
+00:13:57,279 --> 00:13:59,189
+method this function sets the target
+destination set of all the descriptor
+
+746
+00:13:59,189 --> 00:13:59,199
+destination set of all the descriptor
+ 
+
+747
+00:13:59,199 --> 00:14:00,870
+destination set of all the descriptor
+set objects to write to the newly
+
+748
+00:14:00,870 --> 00:14:00,880
+set objects to write to the newly
+ 
+
+749
+00:14:00,880 --> 00:14:03,110
+set objects to write to the newly
+created set and finally calls the vk
+
+750
+00:14:03,110 --> 00:14:03,120
+created set and finally calls the vk
+ 
+
+751
+00:14:03,120 --> 00:14:05,670
+created set and finally calls the vk
+update descriptor sets write command to
+
+752
+00:14:05,670 --> 00:14:05,680
+update descriptor sets write command to
+ 
+
+753
+00:14:05,680 --> 00:14:07,430
+update descriptor sets write command to
+update the destination set with all the
+
+754
+00:14:07,430 --> 00:14:07,440
+update the destination set with all the
+ 
+
+755
+00:14:07,440 --> 00:14:09,189
+update the destination set with all the
+rights that have been recorded to the
+
+756
+00:14:09,189 --> 00:14:09,199
+rights that have been recorded to the
+ 
+
+757
+00:14:09,199 --> 00:14:12,069
+rights that have been recorded to the
+descriptor rights array
+
+758
+00:14:12,069 --> 00:14:12,079
+descriptor rights array
+ 
+
+759
+00:14:12,079 --> 00:14:14,470
+descriptor rights array
+so the build function performs two
+
+760
+00:14:14,470 --> 00:14:14,480
+so the build function performs two
+ 
+
+761
+00:14:14,480 --> 00:14:15,509
+so the build function performs two
+actions
+
+762
+00:14:15,509 --> 00:14:15,519
+actions
+ 
+
+763
+00:14:15,519 --> 00:14:18,310
+actions
+it allocates a descriptor set and stores
+
+764
+00:14:18,310 --> 00:14:18,320
+it allocates a descriptor set and stores
+ 
+
+765
+00:14:18,320 --> 00:14:19,990
+it allocates a descriptor set and stores
+the handle to the newly created
+
+766
+00:14:19,990 --> 00:14:20,000
+the handle to the newly created
+ 
+
+767
+00:14:20,000 --> 00:14:22,710
+the handle to the newly created
+descriptor into the set variable
+
+768
+00:14:22,710 --> 00:14:22,720
+descriptor into the set variable
+ 
+
+769
+00:14:22,720 --> 00:14:24,629
+descriptor into the set variable
+it then updates the descriptors within
+
+770
+00:14:24,629 --> 00:14:24,639
+it then updates the descriptors within
+ 
+
+771
+00:14:24,639 --> 00:14:26,870
+it then updates the descriptors within
+the set by writing all the previously
+
+772
+00:14:26,870 --> 00:14:26,880
+the set by writing all the previously
+ 
+
+773
+00:14:26,880 --> 00:14:29,269
+the set by writing all the previously
+recorded write commands to the target
+
+774
+00:14:29,269 --> 00:14:29,279
+recorded write commands to the target
+ 
+
+775
+00:14:29,279 --> 00:14:30,389
+recorded write commands to the target
+set
+
+776
+00:14:30,389 --> 00:14:30,399
+set
+ 
+
+777
+00:14:30,399 --> 00:14:32,710
+set
+updating the resources each descriptor
+
+778
+00:14:32,710 --> 00:14:32,720
+updating the resources each descriptor
+ 
+
+779
+00:14:32,720 --> 00:14:35,430
+updating the resources each descriptor
+points to and the associated descriptor
+
+780
+00:14:35,430 --> 00:14:35,440
+points to and the associated descriptor
+ 
+
+781
+00:14:35,440 --> 00:14:37,910
+points to and the associated descriptor
+info such as size and offset for buffer
+
+782
+00:14:37,910 --> 00:14:37,920
+info such as size and offset for buffer
+ 
+
+783
+00:14:37,920 --> 00:14:39,509
+info such as size and offset for buffer
+type descriptors
+
+784
+00:14:39,509 --> 00:14:39,519
+type descriptors
+ 
+
+785
+00:14:39,519 --> 00:14:41,430
+type descriptors
+and image layout of image type
+
+786
+00:14:41,430 --> 00:14:41,440
+and image layout of image type
+ 
+
+787
+00:14:41,440 --> 00:14:43,030
+and image layout of image type
+descriptors
+
+788
+00:14:43,030 --> 00:14:43,040
+descriptors
+ 
+
+789
+00:14:43,040 --> 00:14:44,870
+descriptors
+if you already have a descriptor set
+
+790
+00:14:44,870 --> 00:14:44,880
+if you already have a descriptor set
+ 
+
+791
+00:14:44,880 --> 00:14:47,189
+if you already have a descriptor set
+that has been created and only wish to
+
+792
+00:14:47,189 --> 00:14:47,199
+that has been created and only wish to
+ 
+
+793
+00:14:47,199 --> 00:14:49,269
+that has been created and only wish to
+update its descriptors then you should
+
+794
+00:14:49,269 --> 00:14:49,279
+update its descriptors then you should
+ 
+
+795
+00:14:49,279 --> 00:14:50,790
+update its descriptors then you should
+just call the overwrite function
+
+796
+00:14:50,790 --> 00:14:50,800
+just call the overwrite function
+ 
+
+797
+00:14:50,800 --> 00:14:52,230
+just call the overwrite function
+directly
+
+798
+00:14:52,230 --> 00:14:52,240
+directly
+ 
+
+799
+00:14:52,240 --> 00:14:54,629
+directly
+okay now it's time to use these classes
+
+800
+00:14:54,629 --> 00:14:54,639
+okay now it's time to use these classes
+ 
+
+801
+00:14:54,639 --> 00:14:56,790
+okay now it's time to use these classes
+to create descriptor sets and layouts
+
+802
+00:14:56,790 --> 00:14:56,800
+to create descriptor sets and layouts
+ 
+
+803
+00:14:56,800 --> 00:14:58,790
+to create descriptor sets and layouts
+head to your app header and include your
+
+804
+00:14:58,790 --> 00:14:58,800
+head to your app header and include your
+ 
+
+805
+00:14:58,800 --> 00:15:00,949
+head to your app header and include your
+descriptor's file then just above the
+
+806
+00:15:00,949 --> 00:15:00,959
+descriptor's file then just above the
+ 
+
+807
+00:15:00,959 --> 00:15:02,629
+descriptor's file then just above the
+game objects i'm going to add a new
+
+808
+00:15:02,629 --> 00:15:02,639
+game objects i'm going to add a new
+ 
+
+809
+00:15:02,639 --> 00:15:05,030
+game objects i'm going to add a new
+unique pointer member variable with type
+
+810
+00:15:05,030 --> 00:15:05,040
+unique pointer member variable with type
+ 
+
+811
+00:15:05,040 --> 00:15:08,069
+unique pointer member variable with type
+descriptor pool called globalpool
+
+812
+00:15:08,069 --> 00:15:08,079
+descriptor pool called globalpool
+ 
+
+813
+00:15:08,079 --> 00:15:10,150
+descriptor pool called globalpool
+the way i plan to structure things is
+
+814
+00:15:10,150 --> 00:15:10,160
+the way i plan to structure things is
+ 
+
+815
+00:15:10,160 --> 00:15:11,910
+the way i plan to structure things is
+that any descriptors that should be
+
+816
+00:15:11,910 --> 00:15:11,920
+that any descriptors that should be
+ 
+
+817
+00:15:11,920 --> 00:15:14,150
+that any descriptors that should be
+shared by multiple systems can use this
+
+818
+00:15:14,150 --> 00:15:14,160
+shared by multiple systems can use this
+ 
+
+819
+00:15:14,160 --> 00:15:16,230
+shared by multiple systems can use this
+global pool object
+
+820
+00:15:16,230 --> 00:15:16,240
+global pool object
+ 
+
+821
+00:15:16,240 --> 00:15:18,710
+global pool object
+if the system's lifespan is temporary
+
+822
+00:15:18,710 --> 00:15:18,720
+if the system's lifespan is temporary
+ 
+
+823
+00:15:18,720 --> 00:15:20,550
+if the system's lifespan is temporary
+and allocates descriptors using this
+
+824
+00:15:20,550 --> 00:15:20,560
+and allocates descriptors using this
+ 
+
+825
+00:15:20,560 --> 00:15:22,389
+and allocates descriptors using this
+global pool object it should make sure
+
+826
+00:15:22,389 --> 00:15:22,399
+global pool object it should make sure
+ 
+
+827
+00:15:22,399 --> 00:15:24,230
+global pool object it should make sure
+to free those descriptors within its
+
+828
+00:15:24,230 --> 00:15:24,240
+to free those descriptors within its
+ 
+
+829
+00:15:24,240 --> 00:15:26,629
+to free those descriptors within its
+destructor so that they are properly
+
+830
+00:15:26,629 --> 00:15:26,639
+destructor so that they are properly
+ 
+
+831
+00:15:26,639 --> 00:15:28,550
+destructor so that they are properly
+cleaned up and don't hang around past
+
+832
+00:15:28,550 --> 00:15:28,560
+cleaned up and don't hang around past
+ 
+
+833
+00:15:28,560 --> 00:15:30,870
+cleaned up and don't hang around past
+the existence of the system
+
+834
+00:15:30,870 --> 00:15:30,880
+the existence of the system
+ 
+
+835
+00:15:30,880 --> 00:15:33,430
+the existence of the system
+if a system has descriptors that are
+
+836
+00:15:33,430 --> 00:15:33,440
+if a system has descriptors that are
+ 
+
+837
+00:15:33,440 --> 00:15:36,550
+if a system has descriptors that are
+only relevant to its own functionality
+
+838
+00:15:36,550 --> 00:15:36,560
+only relevant to its own functionality
+ 
+
+839
+00:15:36,560 --> 00:15:38,470
+only relevant to its own functionality
+then the system could potentially create
+
+840
+00:15:38,470 --> 00:15:38,480
+then the system could potentially create
+ 
+
+841
+00:15:38,480 --> 00:15:40,870
+then the system could potentially create
+its own pool objects specific to its
+
+842
+00:15:40,870 --> 00:15:40,880
+its own pool objects specific to its
+ 
+
+843
+00:15:40,880 --> 00:15:41,990
+its own pool objects specific to its
+needs
+
+844
+00:15:41,990 --> 00:15:42,000
+needs
+ 
+
+845
+00:15:42,000 --> 00:15:43,990
+needs
+also note that the declaration order
+
+846
+00:15:43,990 --> 00:15:44,000
+also note that the declaration order
+ 
+
+847
+00:15:44,000 --> 00:15:46,069
+also note that the declaration order
+here matters member variables are
+
+848
+00:15:46,069 --> 00:15:46,079
+here matters member variables are
+ 
+
+849
+00:15:46,079 --> 00:15:47,749
+here matters member variables are
+initialized from top to bottom and
+
+850
+00:15:47,749 --> 00:15:47,759
+initialized from top to bottom and
+ 
+
+851
+00:15:47,759 --> 00:15:50,150
+initialized from top to bottom and
+cleaned up in the reverse order we need
+
+852
+00:15:50,150 --> 00:15:50,160
+cleaned up in the reverse order we need
+ 
+
+853
+00:15:50,160 --> 00:15:51,670
+cleaned up in the reverse order we need
+to have the global pool variable
+
+854
+00:15:51,670 --> 00:15:51,680
+to have the global pool variable
+ 
+
+855
+00:15:51,680 --> 00:15:54,230
+to have the global pool variable
+declared after the device because on
+
+856
+00:15:54,230 --> 00:15:54,240
+declared after the device because on
+ 
+
+857
+00:15:54,240 --> 00:15:56,550
+declared after the device because on
+closing we want the pool to be destroyed
+
+858
+00:15:56,550 --> 00:15:56,560
+closing we want the pool to be destroyed
+ 
+
+859
+00:15:56,560 --> 00:15:58,629
+closing we want the pool to be destroyed
+before the devices
+
+860
+00:15:58,629 --> 00:15:58,639
+before the devices
+ 
+
+861
+00:15:58,639 --> 00:16:00,949
+before the devices
+alternatively in the app destructor you
+
+862
+00:16:00,949 --> 00:16:00,959
+alternatively in the app destructor you
+ 
+
+863
+00:16:00,959 --> 00:16:03,189
+alternatively in the app destructor you
+could set the global pool to equal null
+
+864
+00:16:03,189 --> 00:16:03,199
+could set the global pool to equal null
+ 
+
+865
+00:16:03,199 --> 00:16:05,350
+could set the global pool to equal null
+pointer that way you'll be guaranteed to
+
+866
+00:16:05,350 --> 00:16:05,360
+pointer that way you'll be guaranteed to
+ 
+
+867
+00:16:05,360 --> 00:16:07,430
+pointer that way you'll be guaranteed to
+be destroyed before the devices and the
+
+868
+00:16:07,430 --> 00:16:07,440
+be destroyed before the devices and the
+ 
+
+869
+00:16:07,440 --> 00:16:10,150
+be destroyed before the devices and the
+declaration order here wouldn't matter
+
+870
+00:16:10,150 --> 00:16:10,160
+declaration order here wouldn't matter
+ 
+
+871
+00:16:10,160 --> 00:16:13,590
+declaration order here wouldn't matter
+okay next in the app implementation note
+
+872
+00:16:13,590 --> 00:16:13,600
+okay next in the app implementation note
+ 
+
+873
+00:16:13,600 --> 00:16:15,350
+okay next in the app implementation note
+that your code here may look a bit
+
+874
+00:16:15,350 --> 00:16:15,360
+that your code here may look a bit
+ 
+
+875
+00:16:15,360 --> 00:16:17,110
+that your code here may look a bit
+different to mine because i actually
+
+876
+00:16:17,110 --> 00:16:17,120
+different to mine because i actually
+ 
+
+877
+00:16:17,120 --> 00:16:19,670
+different to mine because i actually
+recorded this before i made the previous
+
+878
+00:16:19,670 --> 00:16:19,680
+recorded this before i made the previous
+ 
+
+879
+00:16:19,680 --> 00:16:23,910
+recorded this before i made the previous
+video that fixed tutorial 19's mistake
+
+880
+00:16:23,910 --> 00:16:23,920
+video that fixed tutorial 19's mistake
+ 
+
+881
+00:16:23,920 --> 00:16:25,670
+video that fixed tutorial 19's mistake
+in the app constructor i'm going to
+
+882
+00:16:25,670 --> 00:16:25,680
+in the app constructor i'm going to
+ 
+
+883
+00:16:25,680 --> 00:16:28,230
+in the app constructor i'm going to
+initialize the global pool member by
+
+884
+00:16:28,230 --> 00:16:28,240
+initialize the global pool member by
+ 
+
+885
+00:16:28,240 --> 00:16:31,670
+initialize the global pool member by
+using the descriptor pool builder
+
+886
+00:16:31,670 --> 00:16:31,680
+using the descriptor pool builder
+ 
+
+887
+00:16:31,680 --> 00:16:33,749
+using the descriptor pool builder
+i'll set the max sets equal to max
+
+888
+00:16:33,749 --> 00:16:33,759
+i'll set the max sets equal to max
+ 
+
+889
+00:16:33,759 --> 00:16:35,749
+i'll set the max sets equal to max
+frames in flight
+
+890
+00:16:35,749 --> 00:16:35,759
+frames in flight
+ 
+
+891
+00:16:35,759 --> 00:16:37,910
+frames in flight
+because for now we only need one uniform
+
+892
+00:16:37,910 --> 00:16:37,920
+because for now we only need one uniform
+ 
+
+893
+00:16:37,920 --> 00:16:41,430
+because for now we only need one uniform
+buffer descriptor for each frame
+
+894
+00:16:41,430 --> 00:16:41,440
+buffer descriptor for each frame
+ 
+
+895
+00:16:41,440 --> 00:16:44,230
+buffer descriptor for each frame
+add a pool size with type uniform buffer
+
+896
+00:16:44,230 --> 00:16:44,240
+add a pool size with type uniform buffer
+ 
+
+897
+00:16:44,240 --> 00:16:47,189
+add a pool size with type uniform buffer
+also with a count of frames in flight
+
+898
+00:16:47,189 --> 00:16:47,199
+also with a count of frames in flight
+ 
+
+899
+00:16:47,199 --> 00:16:50,230
+also with a count of frames in flight
+and then finally call build
+
+900
+00:16:50,230 --> 00:16:50,240
+and then finally call build
+ 
+
+901
+00:16:50,240 --> 00:16:52,629
+and then finally call build
+so here we've created a pool with the
+
+902
+00:16:52,629 --> 00:16:52,639
+so here we've created a pool with the
+ 
+
+903
+00:16:52,639 --> 00:16:55,269
+so here we've created a pool with the
+max sets of two and that contains two
+
+904
+00:16:55,269 --> 00:16:55,279
+max sets of two and that contains two
+ 
+
+905
+00:16:55,279 --> 00:16:57,670
+max sets of two and that contains two
+uniform buffer descriptors now for
+
+906
+00:16:57,670 --> 00:16:57,680
+uniform buffer descriptors now for
+ 
+
+907
+00:16:57,680 --> 00:17:00,389
+uniform buffer descriptors now for
+example let's say we also add a second
+
+908
+00:17:00,389 --> 00:17:00,399
+example let's say we also add a second
+ 
+
+909
+00:17:00,399 --> 00:17:02,710
+example let's say we also add a second
+pool of size two but with type storage
+
+910
+00:17:02,710 --> 00:17:02,720
+pool of size two but with type storage
+ 
+
+911
+00:17:02,720 --> 00:17:05,829
+pool of size two but with type storage
+buffer each descriptor set can be made
+
+912
+00:17:05,829 --> 00:17:05,839
+buffer each descriptor set can be made
+ 
+
+913
+00:17:05,839 --> 00:17:07,909
+buffer each descriptor set can be made
+up of any combination of descriptors
+
+914
+00:17:07,909 --> 00:17:07,919
+up of any combination of descriptors
+ 
+
+915
+00:17:07,919 --> 00:17:10,230
+up of any combination of descriptors
+from within the pool so we could have
+
+916
+00:17:10,230 --> 00:17:10,240
+from within the pool so we could have
+ 
+
+917
+00:17:10,240 --> 00:17:12,470
+from within the pool so we could have
+one set with just a single uniform
+
+918
+00:17:12,470 --> 00:17:12,480
+one set with just a single uniform
+ 
+
+919
+00:17:12,480 --> 00:17:14,789
+one set with just a single uniform
+buffer descriptor and the other set with
+
+920
+00:17:14,789 --> 00:17:14,799
+buffer descriptor and the other set with
+ 
+
+921
+00:17:14,799 --> 00:17:16,949
+buffer descriptor and the other set with
+a uniform buffer descriptor and both
+
+922
+00:17:16,949 --> 00:17:16,959
+a uniform buffer descriptor and both
+ 
+
+923
+00:17:16,959 --> 00:17:18,949
+a uniform buffer descriptor and both
+storage buffer descriptors
+
+924
+00:17:18,949 --> 00:17:18,959
+storage buffer descriptors
+ 
+
+925
+00:17:18,959 --> 00:17:21,750
+storage buffer descriptors
+or both sets could be the same with one
+
+926
+00:17:21,750 --> 00:17:21,760
+or both sets could be the same with one
+ 
+
+927
+00:17:21,760 --> 00:17:23,510
+or both sets could be the same with one
+descriptor of each type
+
+928
+00:17:23,510 --> 00:17:23,520
+descriptor of each type
+ 
+
+929
+00:17:23,520 --> 00:17:25,590
+descriptor of each type
+and there are many other possible valid
+
+930
+00:17:25,590 --> 00:17:25,600
+and there are many other possible valid
+ 
+
+931
+00:17:25,600 --> 00:17:28,230
+and there are many other possible valid
+combinations but what we can't have is
+
+932
+00:17:28,230 --> 00:17:28,240
+combinations but what we can't have is
+ 
+
+933
+00:17:28,240 --> 00:17:30,470
+combinations but what we can't have is
+two sets each with two uniform buffer
+
+934
+00:17:30,470 --> 00:17:30,480
+two sets each with two uniform buffer
+ 
+
+935
+00:17:30,480 --> 00:17:33,190
+two sets each with two uniform buffer
+descriptors since the pool only has two
+
+936
+00:17:33,190 --> 00:17:33,200
+descriptors since the pool only has two
+ 
+
+937
+00:17:33,200 --> 00:17:35,669
+descriptors since the pool only has two
+descriptors of that type to give out
+
+938
+00:17:35,669 --> 00:17:35,679
+descriptors of that type to give out
+ 
+
+939
+00:17:35,679 --> 00:17:38,230
+descriptors of that type to give out
+and if the first set created already has
+
+940
+00:17:38,230 --> 00:17:38,240
+and if the first set created already has
+ 
+
+941
+00:17:38,240 --> 00:17:39,190
+and if the first set created already has
+the two
+
+942
+00:17:39,190 --> 00:17:39,200
+the two
+ 
+
+943
+00:17:39,200 --> 00:17:40,710
+the two
+then there are no more descriptors of
+
+944
+00:17:40,710 --> 00:17:40,720
+then there are no more descriptors of
+ 
+
+945
+00:17:40,720 --> 00:17:43,430
+then there are no more descriptors of
+that type remaining in the pool to give
+
+946
+00:17:43,430 --> 00:17:43,440
+that type remaining in the pool to give
+ 
+
+947
+00:17:43,440 --> 00:17:45,669
+that type remaining in the pool to give
+we also can't have three sets like this
+
+948
+00:17:45,669 --> 00:17:45,679
+we also can't have three sets like this
+ 
+
+949
+00:17:45,679 --> 00:17:47,669
+we also can't have three sets like this
+because even though the pool has enough
+
+950
+00:17:47,669 --> 00:17:47,679
+because even though the pool has enough
+ 
+
+951
+00:17:47,679 --> 00:17:50,310
+because even though the pool has enough
+descriptors to give out we can create at
+
+952
+00:17:50,310 --> 00:17:50,320
+descriptors to give out we can create at
+ 
+
+953
+00:17:50,320 --> 00:17:52,789
+descriptors to give out we can create at
+most two descriptor sets as that is what
+
+954
+00:17:52,789 --> 00:17:52,799
+most two descriptor sets as that is what
+ 
+
+955
+00:17:52,799 --> 00:17:55,590
+most two descriptor sets as that is what
+we specified as the max sets value for
+
+956
+00:17:55,590 --> 00:17:55,600
+we specified as the max sets value for
+ 
+
+957
+00:17:55,600 --> 00:17:56,870
+we specified as the max sets value for
+the pool
+
+958
+00:17:56,870 --> 00:17:56,880
+the pool
+ 
+
+959
+00:17:56,880 --> 00:17:59,669
+the pool
+okay so get rid of the storage buffer
+
+960
+00:17:59,669 --> 00:17:59,679
+okay so get rid of the storage buffer
+ 
+
+961
+00:17:59,679 --> 00:18:01,830
+okay so get rid of the storage buffer
+and now that we've made a pool object
+
+962
+00:18:01,830 --> 00:18:01,840
+and now that we've made a pool object
+ 
+
+963
+00:18:01,840 --> 00:18:04,710
+and now that we've made a pool object
+next we need to create the set layout
+
+964
+00:18:04,710 --> 00:18:04,720
+next we need to create the set layout
+ 
+
+965
+00:18:04,720 --> 00:18:07,669
+next we need to create the set layout
+inside the run function underneath ubo
+
+966
+00:18:07,669 --> 00:18:07,679
+inside the run function underneath ubo
+ 
+
+967
+00:18:07,679 --> 00:18:10,470
+inside the run function underneath ubo
+buffer dot map add a new local variable
+
+968
+00:18:10,470 --> 00:18:10,480
+buffer dot map add a new local variable
+ 
+
+969
+00:18:10,480 --> 00:18:12,950
+buffer dot map add a new local variable
+with type auto global set layout equal
+
+970
+00:18:12,950 --> 00:18:12,960
+with type auto global set layout equal
+ 
+
+971
+00:18:12,960 --> 00:18:17,029
+with type auto global set layout equal
+to descriptor set layout builder
+
+972
+00:18:17,029 --> 00:18:17,039
+
+ 
+
+973
+00:18:17,039 --> 00:18:18,950
+ 
+so our layout will have a binding at
+
+974
+00:18:18,950 --> 00:18:18,960
+so our layout will have a binding at
+ 
+
+975
+00:18:18,960 --> 00:18:21,830
+so our layout will have a binding at
+index 0 with type uniform buffer
+
+976
+00:18:21,830 --> 00:18:21,840
+index 0 with type uniform buffer
+ 
+
+977
+00:18:21,840 --> 00:18:24,789
+index 0 with type uniform buffer
+and will be used by the vertex shader
+
+978
+00:18:24,789 --> 00:18:24,799
+and will be used by the vertex shader
+ 
+
+979
+00:18:24,799 --> 00:18:26,710
+and will be used by the vertex shader
+then call build to create the descriptor
+
+980
+00:18:26,710 --> 00:18:26,720
+then call build to create the descriptor
+ 
+
+981
+00:18:26,720 --> 00:18:29,990
+then call build to create the descriptor
+set layout so recall that we want to
+
+982
+00:18:29,990 --> 00:18:30,000
+set layout so recall that we want to
+ 
+
+983
+00:18:30,000 --> 00:18:32,549
+set layout so recall that we want to
+group descriptors into sets based on
+
+984
+00:18:32,549 --> 00:18:32,559
+group descriptors into sets based on
+ 
+
+985
+00:18:32,559 --> 00:18:35,110
+group descriptors into sets based on
+binding frequency this global set will
+
+986
+00:18:35,110 --> 00:18:35,120
+binding frequency this global set will
+ 
+
+987
+00:18:35,120 --> 00:18:37,430
+binding frequency this global set will
+be the highest level set common to all
+
+988
+00:18:37,430 --> 00:18:37,440
+be the highest level set common to all
+ 
+
+989
+00:18:37,440 --> 00:18:39,029
+be the highest level set common to all
+of our shaders
+
+990
+00:18:39,029 --> 00:18:39,039
+of our shaders
+ 
+
+991
+00:18:39,039 --> 00:18:41,510
+of our shaders
+the way i'm organizing things here isn't
+
+992
+00:18:41,510 --> 00:18:41,520
+the way i'm organizing things here isn't
+ 
+
+993
+00:18:41,520 --> 00:18:43,669
+the way i'm organizing things here isn't
+final and feel free to change it based
+
+994
+00:18:43,669 --> 00:18:43,679
+final and feel free to change it based
+ 
+
+995
+00:18:43,679 --> 00:18:45,909
+final and feel free to change it based
+on your plans for your engine it might
+
+996
+00:18:45,909 --> 00:18:45,919
+on your plans for your engine it might
+ 
+
+997
+00:18:45,919 --> 00:18:47,909
+on your plans for your engine it might
+actually make more sense to have a
+
+998
+00:18:47,909 --> 00:18:47,919
+actually make more sense to have a
+ 
+
+999
+00:18:47,919 --> 00:18:50,630
+actually make more sense to have a
+single render system manage this kind of
+
+1000
+00:18:50,630 --> 00:18:50,640
+single render system manage this kind of
+ 
+
+1001
+00:18:50,640 --> 00:18:53,350
+single render system manage this kind of
+a master render system that has sub
+
+1002
+00:18:53,350 --> 00:18:53,360
+a master render system that has sub
+ 
+
+1003
+00:18:53,360 --> 00:18:55,750
+a master render system that has sub
+systems for performing certain rendering
+
+1004
+00:18:55,750 --> 00:18:55,760
+systems for performing certain rendering
+ 
+
+1005
+00:18:55,760 --> 00:18:57,990
+systems for performing certain rendering
+operations but since we don't have that
+
+1006
+00:18:57,990 --> 00:18:58,000
+operations but since we don't have that
+ 
+
+1007
+00:18:58,000 --> 00:18:59,830
+operations but since we don't have that
+set up yet i'm going to manage this
+
+1008
+00:18:59,830 --> 00:18:59,840
+set up yet i'm going to manage this
+ 
+
+1009
+00:18:59,840 --> 00:19:01,990
+set up yet i'm going to manage this
+global set layout within the app to
+
+1010
+00:19:01,990 --> 00:19:02,000
+global set layout within the app to
+ 
+
+1011
+00:19:02,000 --> 00:19:03,590
+global set layout within the app to
+demonstrate how we can then pass the
+
+1012
+00:19:03,590 --> 00:19:03,600
+demonstrate how we can then pass the
+ 
+
+1013
+00:19:03,600 --> 00:19:07,029
+demonstrate how we can then pass the
+layout down into child subsystems
+
+1014
+00:19:07,029 --> 00:19:07,039
+layout down into child subsystems
+ 
+
+1015
+00:19:07,039 --> 00:19:09,190
+layout down into child subsystems
+okay now we have both pool and layout
+
+1016
+00:19:09,190 --> 00:19:09,200
+okay now we have both pool and layout
+ 
+
+1017
+00:19:09,200 --> 00:19:10,950
+okay now we have both pool and layout
+objects and it's time to create our
+
+1018
+00:19:10,950 --> 00:19:10,960
+objects and it's time to create our
+ 
+
+1019
+00:19:10,960 --> 00:19:13,510
+objects and it's time to create our
+actual sets i'm going to create a vector
+
+1020
+00:19:13,510 --> 00:19:13,520
+actual sets i'm going to create a vector
+ 
+
+1021
+00:19:13,520 --> 00:19:15,909
+actual sets i'm going to create a vector
+of vk descriptor set objects called
+
+1022
+00:19:15,909 --> 00:19:15,919
+of vk descriptor set objects called
+ 
+
+1023
+00:19:15,919 --> 00:19:17,990
+of vk descriptor set objects called
+global descriptor sets
+
+1024
+00:19:17,990 --> 00:19:18,000
+global descriptor sets
+ 
+
+1025
+00:19:18,000 --> 00:19:20,549
+global descriptor sets
+with an initial size of max frames in
+
+1026
+00:19:20,549 --> 00:19:20,559
+with an initial size of max frames in
+ 
+
+1027
+00:19:20,559 --> 00:19:22,870
+with an initial size of max frames in
+flight since we'll have one descriptor
+
+1028
+00:19:22,870 --> 00:19:22,880
+flight since we'll have one descriptor
+ 
+
+1029
+00:19:22,880 --> 00:19:24,549
+flight since we'll have one descriptor
+set per frame
+
+1030
+00:19:24,549 --> 00:19:24,559
+set per frame
+ 
+
+1031
+00:19:24,559 --> 00:19:26,150
+set per frame
+these descriptor set handles are
+
+1032
+00:19:26,150 --> 00:19:26,160
+these descriptor set handles are
+ 
+
+1033
+00:19:26,160 --> 00:19:28,390
+these descriptor set handles are
+initially null and do not have any
+
+1034
+00:19:28,390 --> 00:19:28,400
+initially null and do not have any
+ 
+
+1035
+00:19:28,400 --> 00:19:30,710
+initially null and do not have any
+memory allocated to them we need to
+
+1036
+00:19:30,710 --> 00:19:30,720
+memory allocated to them we need to
+ 
+
+1037
+00:19:30,720 --> 00:19:33,510
+memory allocated to them we need to
+iterate over this vector and then for
+
+1038
+00:19:33,510 --> 00:19:33,520
+iterate over this vector and then for
+ 
+
+1039
+00:19:33,520 --> 00:19:36,470
+iterate over this vector and then for
+each descriptor set allocate some memory
+
+1040
+00:19:36,470 --> 00:19:36,480
+each descriptor set allocate some memory
+ 
+
+1041
+00:19:36,480 --> 00:19:38,470
+each descriptor set allocate some memory
+and write its buffer info
+
+1042
+00:19:38,470 --> 00:19:38,480
+and write its buffer info
+ 
+
+1043
+00:19:38,480 --> 00:19:40,070
+and write its buffer info
+this is exactly what the descriptor
+
+1044
+00:19:40,070 --> 00:19:40,080
+this is exactly what the descriptor
+ 
+
+1045
+00:19:40,080 --> 00:19:43,430
+this is exactly what the descriptor
+writer class was created for so in a for
+
+1046
+00:19:43,430 --> 00:19:43,440
+writer class was created for so in a for
+ 
+
+1047
+00:19:43,440 --> 00:19:45,830
+writer class was created for so in a for
+loop but using an int index since we'll
+
+1048
+00:19:45,830 --> 00:19:45,840
+loop but using an int index since we'll
+ 
+
+1049
+00:19:45,840 --> 00:19:48,710
+loop but using an int index since we'll
+need that iterate over global descriptor
+
+1050
+00:19:48,710 --> 00:19:48,720
+need that iterate over global descriptor
+ 
+
+1051
+00:19:48,720 --> 00:19:49,590
+need that iterate over global descriptor
+sets
+
+1052
+00:19:49,590 --> 00:19:49,600
+sets
+ 
+
+1053
+00:19:49,600 --> 00:19:51,270
+sets
+we can get the buffer info with the
+
+1054
+00:19:51,270 --> 00:19:51,280
+we can get the buffer info with the
+ 
+
+1055
+00:19:51,280 --> 00:19:53,830
+we can get the buffer info with the
+correct size and offset by using the
+
+1056
+00:19:53,830 --> 00:19:53,840
+correct size and offset by using the
+ 
+
+1057
+00:19:53,840 --> 00:19:55,990
+correct size and offset by using the
+descriptor info helper function on the
+
+1058
+00:19:55,990 --> 00:19:56,000
+descriptor info helper function on the
+ 
+
+1059
+00:19:56,000 --> 00:19:58,390
+descriptor info helper function on the
+buffer class
+
+1060
+00:19:58,390 --> 00:19:58,400
+buffer class
+ 
+
+1061
+00:19:58,400 --> 00:20:00,549
+buffer class
+then create an lve descriptor writer
+
+1062
+00:20:00,549 --> 00:20:00,559
+then create an lve descriptor writer
+ 
+
+1063
+00:20:00,559 --> 00:20:02,549
+then create an lve descriptor writer
+instance passing in the global set
+
+1064
+00:20:02,549 --> 00:20:02,559
+instance passing in the global set
+ 
+
+1065
+00:20:02,559 --> 00:20:05,190
+instance passing in the global set
+layout and global pool as arguments we
+
+1066
+00:20:05,190 --> 00:20:05,200
+layout and global pool as arguments we
+ 
+
+1067
+00:20:05,200 --> 00:20:07,270
+layout and global pool as arguments we
+need to use the dereference operator
+
+1068
+00:20:07,270 --> 00:20:07,280
+need to use the dereference operator
+ 
+
+1069
+00:20:07,280 --> 00:20:08,870
+need to use the dereference operator
+since these variables are unique
+
+1070
+00:20:08,870 --> 00:20:08,880
+since these variables are unique
+ 
+
+1071
+00:20:08,880 --> 00:20:10,789
+since these variables are unique
+pointers and we want to access the
+
+1072
+00:20:10,789 --> 00:20:10,799
+pointers and we want to access the
+ 
+
+1073
+00:20:10,799 --> 00:20:13,110
+pointers and we want to access the
+contents in this case
+
+1074
+00:20:13,110 --> 00:20:13,120
+contents in this case
+ 
+
+1075
+00:20:13,120 --> 00:20:16,149
+contents in this case
+write the buffer info to binding 0 and
+
+1076
+00:20:16,149 --> 00:20:16,159
+write the buffer info to binding 0 and
+ 
+
+1077
+00:20:16,159 --> 00:20:18,310
+write the buffer info to binding 0 and
+then build and write the descriptor set
+
+1078
+00:20:18,310 --> 00:20:18,320
+then build and write the descriptor set
+ 
+
+1079
+00:20:18,320 --> 00:20:20,470
+then build and write the descriptor set
+storing the vulkan handle to the newly
+
+1080
+00:20:20,470 --> 00:20:20,480
+storing the vulkan handle to the newly
+ 
+
+1081
+00:20:20,480 --> 00:20:22,870
+storing the vulkan handle to the newly
+allocated descriptor set into the global
+
+1082
+00:20:22,870 --> 00:20:22,880
+allocated descriptor set into the global
+ 
+
+1083
+00:20:22,880 --> 00:20:25,830
+allocated descriptor set into the global
+descriptor sets array and index i
+
+1084
+00:20:25,830 --> 00:20:25,840
+descriptor sets array and index i
+ 
+
+1085
+00:20:25,840 --> 00:20:27,830
+descriptor sets array and index i
+now build and run to just check that
+
+1086
+00:20:27,830 --> 00:20:27,840
+now build and run to just check that
+ 
+
+1087
+00:20:27,840 --> 00:20:30,310
+now build and run to just check that
+things are still compiling correctly
+
+1088
+00:20:30,310 --> 00:20:30,320
+things are still compiling correctly
+ 
+
+1089
+00:20:30,320 --> 00:20:32,070
+things are still compiling correctly
+nothing should have changed as we still
+
+1090
+00:20:32,070 --> 00:20:32,080
+nothing should have changed as we still
+ 
+
+1091
+00:20:32,080 --> 00:20:34,470
+nothing should have changed as we still
+need to tell our simple render systems
+
+1092
+00:20:34,470 --> 00:20:34,480
+need to tell our simple render systems
+ 
+
+1093
+00:20:34,480 --> 00:20:36,390
+need to tell our simple render systems
+pipeline about this new descriptor set
+
+1094
+00:20:36,390 --> 00:20:36,400
+pipeline about this new descriptor set
+ 
+
+1095
+00:20:36,400 --> 00:20:38,310
+pipeline about this new descriptor set
+layout we'll also need to update our
+
+1096
+00:20:38,310 --> 00:20:38,320
+layout we'll also need to update our
+ 
+
+1097
+00:20:38,320 --> 00:20:41,430
+layout we'll also need to update our
+shaders to use the global ubo struct at
+
+1098
+00:20:41,430 --> 00:20:41,440
+shaders to use the global ubo struct at
+ 
+
+1099
+00:20:41,440 --> 00:20:45,029
+shaders to use the global ubo struct at
+binding0 so let's do that first though
+
+1100
+00:20:45,029 --> 00:20:45,039
+binding0 so let's do that first though
+ 
+
+1101
+00:20:45,039 --> 00:20:47,669
+binding0 so let's do that first though
+we'll update the frame info struct to
+
+1102
+00:20:47,669 --> 00:20:47,679
+we'll update the frame info struct to
+ 
+
+1103
+00:20:47,679 --> 00:20:49,909
+we'll update the frame info struct to
+also include a global descriptor set
+
+1104
+00:20:49,909 --> 00:20:49,919
+also include a global descriptor set
+ 
+
+1105
+00:20:49,919 --> 00:20:53,350
+also include a global descriptor set
+field with type vk descriptor set
+
+1106
+00:20:53,350 --> 00:20:53,360
+field with type vk descriptor set
+ 
+
+1107
+00:20:53,360 --> 00:20:55,350
+field with type vk descriptor set
+next in the simple render system header
+
+1108
+00:20:55,350 --> 00:20:55,360
+next in the simple render system header
+ 
+
+1109
+00:20:55,360 --> 00:20:57,270
+next in the simple render system header
+i'll add a vk descriptor set layout
+
+1110
+00:20:57,270 --> 00:20:57,280
+i'll add a vk descriptor set layout
+ 
+
+1111
+00:20:57,280 --> 00:21:01,029
+i'll add a vk descriptor set layout
+argument to its constructor
+
+1112
+00:21:01,029 --> 00:21:01,039
+argument to its constructor
+ 
+
+1113
+00:21:01,039 --> 00:21:03,430
+argument to its constructor
+this value needs to be passed in to the
+
+1114
+00:21:03,430 --> 00:21:03,440
+this value needs to be passed in to the
+ 
+
+1115
+00:21:03,440 --> 00:21:05,990
+this value needs to be passed in to the
+create pipeline layout function
+
+1116
+00:21:05,990 --> 00:21:06,000
+create pipeline layout function
+ 
+
+1117
+00:21:06,000 --> 00:21:07,990
+create pipeline layout function
+to tell the pipeline object what the
+
+1118
+00:21:07,990 --> 00:21:08,000
+to tell the pipeline object what the
+ 
+
+1119
+00:21:08,000 --> 00:21:10,789
+to tell the pipeline object what the
+layout of descriptor sets will be before
+
+1120
+00:21:10,789 --> 00:21:10,799
+layout of descriptor sets will be before
+ 
+
+1121
+00:21:10,799 --> 00:21:13,909
+layout of descriptor sets will be before
+it is created
+
+1122
+00:21:13,909 --> 00:21:13,919
+
+ 
+
+1123
+00:21:13,919 --> 00:21:15,750
+ 
+now in the simple render systems
+
+1124
+00:21:15,750 --> 00:21:15,760
+now in the simple render systems
+ 
+
+1125
+00:21:15,760 --> 00:21:17,909
+now in the simple render systems
+implementation we can update the
+
+1126
+00:21:17,909 --> 00:21:17,919
+implementation we can update the
+ 
+
+1127
+00:21:17,919 --> 00:21:20,230
+implementation we can update the
+constructor and the create pipeline
+
+1128
+00:21:20,230 --> 00:21:20,240
+constructor and the create pipeline
+ 
+
+1129
+00:21:20,240 --> 00:21:22,310
+constructor and the create pipeline
+layout functions with the additional
+
+1130
+00:21:22,310 --> 00:21:22,320
+layout functions with the additional
+ 
+
+1131
+00:21:22,320 --> 00:21:25,430
+layout functions with the additional
+argument and in the constructor pass the
+
+1132
+00:21:25,430 --> 00:21:25,440
+argument and in the constructor pass the
+ 
+
+1133
+00:21:25,440 --> 00:21:27,190
+argument and in the constructor pass the
+global set layout into the create
+
+1134
+00:21:27,190 --> 00:21:27,200
+global set layout into the create
+ 
+
+1135
+00:21:27,200 --> 00:21:29,350
+global set layout into the create
+pipeline layout function call
+
+1136
+00:21:29,350 --> 00:21:29,360
+pipeline layout function call
+ 
+
+1137
+00:21:29,360 --> 00:21:31,830
+pipeline layout function call
+so it's by setting the set layout count
+
+1138
+00:21:31,830 --> 00:21:31,840
+so it's by setting the set layout count
+ 
+
+1139
+00:21:31,840 --> 00:21:33,990
+so it's by setting the set layout count
+and pset layout fields that we tell the
+
+1140
+00:21:33,990 --> 00:21:34,000
+and pset layout fields that we tell the
+ 
+
+1141
+00:21:34,000 --> 00:21:35,750
+and pset layout fields that we tell the
+pipeline about the descriptor set
+
+1142
+00:21:35,750 --> 00:21:35,760
+pipeline about the descriptor set
+ 
+
+1143
+00:21:35,760 --> 00:21:37,029
+pipeline about the descriptor set
+layouts
+
+1144
+00:21:37,029 --> 00:21:37,039
+layouts
+ 
+
+1145
+00:21:37,039 --> 00:21:39,110
+layouts
+a pipeline can take a list of descriptor
+
+1146
+00:21:39,110 --> 00:21:39,120
+a pipeline can take a list of descriptor
+ 
+
+1147
+00:21:39,120 --> 00:21:41,110
+a pipeline can take a list of descriptor
+sets with the order of each set in the
+
+1148
+00:21:41,110 --> 00:21:41,120
+sets with the order of each set in the
+ 
+
+1149
+00:21:41,120 --> 00:21:43,830
+sets with the order of each set in the
+list being its set number so the first
+
+1150
+00:21:43,830 --> 00:21:43,840
+list being its set number so the first
+ 
+
+1151
+00:21:43,840 --> 00:21:46,390
+list being its set number so the first
+set in the list is set 0
+
+1152
+00:21:46,390 --> 00:21:46,400
+set in the list is set 0
+ 
+
+1153
+00:21:46,400 --> 00:21:48,950
+set in the list is set 0
+and the next set would be set 1 and so
+
+1154
+00:21:48,950 --> 00:21:48,960
+and the next set would be set 1 and so
+ 
+
+1155
+00:21:48,960 --> 00:21:51,590
+and the next set would be set 1 and so
+on here we only have one set so that's
+
+1156
+00:21:51,590 --> 00:21:51,600
+on here we only have one set so that's
+ 
+
+1157
+00:21:51,600 --> 00:21:53,510
+on here we only have one set so that's
+going to be at set 0.
+
+1158
+00:21:53,510 --> 00:21:53,520
+going to be at set 0.
+ 
+
+1159
+00:21:53,520 --> 00:21:55,270
+going to be at set 0.
+even though we just have the one global
+
+1160
+00:21:55,270 --> 00:21:55,280
+even though we just have the one global
+ 
+
+1161
+00:21:55,280 --> 00:21:57,430
+even though we just have the one global
+set layout value for now we'll create a
+
+1162
+00:21:57,430 --> 00:21:57,440
+set layout value for now we'll create a
+ 
+
+1163
+00:21:57,440 --> 00:21:59,669
+set layout value for now we'll create a
+local descriptor sets layout vector in
+
+1164
+00:21:59,669 --> 00:21:59,679
+local descriptor sets layout vector in
+ 
+
+1165
+00:21:59,679 --> 00:22:01,669
+local descriptor sets layout vector in
+anticipation for when we will have
+
+1166
+00:22:01,669 --> 00:22:01,679
+anticipation for when we will have
+ 
+
+1167
+00:22:01,679 --> 00:22:03,590
+anticipation for when we will have
+multiple sets
+
+1168
+00:22:03,590 --> 00:22:03,600
+multiple sets
+ 
+
+1169
+00:22:03,600 --> 00:22:05,830
+multiple sets
+then we can set the layout count to
+
+1170
+00:22:05,830 --> 00:22:05,840
+then we can set the layout count to
+ 
+
+1171
+00:22:05,840 --> 00:22:08,310
+then we can set the layout count to
+descriptorsetlayouts.size
+
+1172
+00:22:08,310 --> 00:22:08,320
+descriptorsetlayouts.size
+ 
+
+1173
+00:22:08,320 --> 00:22:11,350
+descriptorsetlayouts.size
+and first cast it to a uint32 type and
+
+1174
+00:22:11,350 --> 00:22:11,360
+and first cast it to a uint32 type and
+ 
+
+1175
+00:22:11,360 --> 00:22:13,110
+and first cast it to a uint32 type and
+the pset layouts field to
+
+1176
+00:22:13,110 --> 00:22:13,120
+the pset layouts field to
+ 
+
+1177
+00:22:13,120 --> 00:22:16,230
+the pset layouts field to
+descriptorsetlayouts.data
+
+1178
+00:22:16,230 --> 00:22:16,240
+
+ 
+
+1179
+00:22:16,240 --> 00:22:18,950
+ 
+now it was in our first app that we
+
+1180
+00:22:18,950 --> 00:22:18,960
+now it was in our first app that we
+ 
+
+1181
+00:22:18,960 --> 00:22:21,110
+now it was in our first app that we
+defined the global ubo that will contain
+
+1182
+00:22:21,110 --> 00:22:21,120
+defined the global ubo that will contain
+ 
+
+1183
+00:22:21,120 --> 00:22:23,590
+defined the global ubo that will contain
+the projection and view matrices so we
+
+1184
+00:22:23,590 --> 00:22:23,600
+the projection and view matrices so we
+ 
+
+1185
+00:22:23,600 --> 00:22:25,510
+the projection and view matrices so we
+no longer need to provide this in the
+
+1186
+00:22:25,510 --> 00:22:25,520
+no longer need to provide this in the
+ 
+
+1187
+00:22:25,520 --> 00:22:27,750
+no longer need to provide this in the
+simple push constant struct so i'm going
+
+1188
+00:22:27,750 --> 00:22:27,760
+simple push constant struct so i'm going
+ 
+
+1189
+00:22:27,760 --> 00:22:29,669
+simple push constant struct so i'm going
+to rename the transform field to make it
+
+1190
+00:22:29,669 --> 00:22:29,679
+to rename the transform field to make it
+ 
+
+1191
+00:22:29,679 --> 00:22:31,430
+to rename the transform field to make it
+clear that from now on this will just
+
+1192
+00:22:31,430 --> 00:22:31,440
+clear that from now on this will just
+ 
+
+1193
+00:22:31,440 --> 00:22:33,750
+clear that from now on this will just
+contain the model matrix
+
+1194
+00:22:33,750 --> 00:22:33,760
+contain the model matrix
+ 
+
+1195
+00:22:33,760 --> 00:22:35,669
+contain the model matrix
+scroll down to the render game objects
+
+1196
+00:22:35,669 --> 00:22:35,679
+scroll down to the render game objects
+ 
+
+1197
+00:22:35,679 --> 00:22:37,789
+scroll down to the render game objects
+function and we can update
+
+1198
+00:22:37,789 --> 00:22:37,799
+function and we can update
+ 
+
+1199
+00:22:37,799 --> 00:22:40,230
+function and we can update
+push.transform with the new variable and
+
+1200
+00:22:40,230 --> 00:22:40,240
+push.transform with the new variable and
+ 
+
+1201
+00:22:40,240 --> 00:22:42,149
+push.transform with the new variable and
+we also no longer need to be computing
+
+1202
+00:22:42,149 --> 00:22:42,159
+we also no longer need to be computing
+ 
+
+1203
+00:22:42,159 --> 00:22:44,230
+we also no longer need to be computing
+the projection view matrix here as we
+
+1204
+00:22:44,230 --> 00:22:44,240
+the projection view matrix here as we
+ 
+
+1205
+00:22:44,240 --> 00:22:47,110
+the projection view matrix here as we
+now do that in the app implementation
+
+1206
+00:22:47,110 --> 00:22:47,120
+now do that in the app implementation
+ 
+
+1207
+00:22:47,120 --> 00:22:49,350
+now do that in the app implementation
+as a last step before we call a draw
+
+1208
+00:22:49,350 --> 00:22:49,360
+as a last step before we call a draw
+ 
+
+1209
+00:22:49,360 --> 00:22:51,350
+as a last step before we call a draw
+command we need to bind the descriptor
+
+1210
+00:22:51,350 --> 00:22:51,360
+command we need to bind the descriptor
+ 
+
+1211
+00:22:51,360 --> 00:22:53,669
+command we need to bind the descriptor
+set to the pipeline we do this using the
+
+1212
+00:22:53,669 --> 00:22:53,679
+set to the pipeline we do this using the
+ 
+
+1213
+00:22:53,679 --> 00:22:56,390
+set to the pipeline we do this using the
+vk command bind descriptor sets function
+
+1214
+00:22:56,390 --> 00:22:56,400
+vk command bind descriptor sets function
+ 
+
+1215
+00:22:56,400 --> 00:22:58,710
+vk command bind descriptor sets function
+passing in the command buffer pipeline
+
+1216
+00:22:58,710 --> 00:22:58,720
+passing in the command buffer pipeline
+ 
+
+1217
+00:22:58,720 --> 00:23:01,350
+passing in the command buffer pipeline
+bind point graphics and pipeline layout
+
+1218
+00:23:01,350 --> 00:23:01,360
+bind point graphics and pipeline layout
+ 
+
+1219
+00:23:01,360 --> 00:23:03,110
+bind point graphics and pipeline layout
+the next fields are the first set and
+
+1220
+00:23:03,110 --> 00:23:03,120
+the next fields are the first set and
+ 
+
+1221
+00:23:03,120 --> 00:23:05,669
+the next fields are the first set and
+descriptor set count so this also
+
+1222
+00:23:05,669 --> 00:23:05,679
+descriptor set count so this also
+ 
+
+1223
+00:23:05,679 --> 00:23:08,390
+descriptor set count so this also
+relates back to binding frequency when
+
+1224
+00:23:08,390 --> 00:23:08,400
+relates back to binding frequency when
+ 
+
+1225
+00:23:08,400 --> 00:23:10,470
+relates back to binding frequency when
+you bind descriptor sets you can bind
+
+1226
+00:23:10,470 --> 00:23:10,480
+you bind descriptor sets you can bind
+ 
+
+1227
+00:23:10,480 --> 00:23:13,350
+you bind descriptor sets you can bind
+multiple sets at once but you must
+
+1228
+00:23:13,350 --> 00:23:13,360
+multiple sets at once but you must
+ 
+
+1229
+00:23:13,360 --> 00:23:16,149
+multiple sets at once but you must
+always specify the starting set every
+
+1230
+00:23:16,149 --> 00:23:16,159
+always specify the starting set every
+ 
+
+1231
+00:23:16,159 --> 00:23:18,310
+always specify the starting set every
+set after the starting set must then be
+
+1232
+00:23:18,310 --> 00:23:18,320
+set after the starting set must then be
+ 
+
+1233
+00:23:18,320 --> 00:23:20,710
+set after the starting set must then be
+rebound so if i have three descriptor
+
+1234
+00:23:20,710 --> 00:23:20,720
+rebound so if i have three descriptor
+ 
+
+1235
+00:23:20,720 --> 00:23:22,789
+rebound so if i have three descriptor
+sets for example and have already bound
+
+1236
+00:23:22,789 --> 00:23:22,799
+sets for example and have already bound
+ 
+
+1237
+00:23:22,799 --> 00:23:25,350
+sets for example and have already bound
+sets one and two if i wanted to bind set
+
+1238
+00:23:25,350 --> 00:23:25,360
+sets one and two if i wanted to bind set
+ 
+
+1239
+00:23:25,360 --> 00:23:27,909
+sets one and two if i wanted to bind set
+zero i must also then rebind every set
+
+1240
+00:23:27,909 --> 00:23:27,919
+zero i must also then rebind every set
+ 
+
+1241
+00:23:27,919 --> 00:23:29,990
+zero i must also then rebind every set
+that comes after zero so one and two
+
+1242
+00:23:29,990 --> 00:23:30,000
+that comes after zero so one and two
+ 
+
+1243
+00:23:30,000 --> 00:23:32,070
+that comes after zero so one and two
+again that's why you want sets that are
+
+1244
+00:23:32,070 --> 00:23:32,080
+again that's why you want sets that are
+ 
+
+1245
+00:23:32,080 --> 00:23:34,149
+again that's why you want sets that are
+shared more frequently to occupy the
+
+1246
+00:23:34,149 --> 00:23:34,159
+shared more frequently to occupy the
+ 
+
+1247
+00:23:34,159 --> 00:23:36,470
+shared more frequently to occupy the
+earlier set numbers so for now we are
+
+1248
+00:23:36,470 --> 00:23:36,480
+earlier set numbers so for now we are
+ 
+
+1249
+00:23:36,480 --> 00:23:39,190
+earlier set numbers so for now we are
+just using set 0 and a count of 1. then
+
+1250
+00:23:39,190 --> 00:23:39,200
+just using set 0 and a count of 1. then
+ 
+
+1251
+00:23:39,200 --> 00:23:41,029
+just using set 0 and a count of 1. then
+we specify the descriptor set being
+
+1252
+00:23:41,029 --> 00:23:41,039
+we specify the descriptor set being
+ 
+
+1253
+00:23:41,039 --> 00:23:43,190
+we specify the descriptor set being
+bound and then 0 and a null pointer as
+
+1254
+00:23:43,190 --> 00:23:43,200
+bound and then 0 and a null pointer as
+ 
+
+1255
+00:23:43,200 --> 00:23:45,029
+bound and then 0 and a null pointer as
+the last two arguments
+
+1256
+00:23:45,029 --> 00:23:45,039
+the last two arguments
+ 
+
+1257
+00:23:45,039 --> 00:23:47,269
+the last two arguments
+these last two fields are used for
+
+1258
+00:23:47,269 --> 00:23:47,279
+these last two fields are used for
+ 
+
+1259
+00:23:47,279 --> 00:23:49,669
+these last two fields are used for
+specifying dynamic offsets which i'll
+
+1260
+00:23:49,669 --> 00:23:49,679
+specifying dynamic offsets which i'll
+ 
+
+1261
+00:23:49,679 --> 00:23:52,149
+specifying dynamic offsets which i'll
+cover in a future tutorial
+
+1262
+00:23:52,149 --> 00:23:52,159
+cover in a future tutorial
+ 
+
+1263
+00:23:52,159 --> 00:23:54,230
+cover in a future tutorial
+note though how we bind the global
+
+1264
+00:23:54,230 --> 00:23:54,240
+note though how we bind the global
+ 
+
+1265
+00:23:54,240 --> 00:23:56,310
+note though how we bind the global
+descriptor set outside the for loop of
+
+1266
+00:23:56,310 --> 00:23:56,320
+descriptor set outside the for loop of
+ 
+
+1267
+00:23:56,320 --> 00:23:57,830
+descriptor set outside the for loop of
+game objects
+
+1268
+00:23:57,830 --> 00:23:57,840
+game objects
+ 
+
+1269
+00:23:57,840 --> 00:24:00,230
+game objects
+we only need to bind it once and then
+
+1270
+00:24:00,230 --> 00:24:00,240
+we only need to bind it once and then
+ 
+
+1271
+00:24:00,240 --> 00:24:02,789
+we only need to bind it once and then
+global ubiostrux values can be used by
+
+1272
+00:24:02,789 --> 00:24:02,799
+global ubiostrux values can be used by
+ 
+
+1273
+00:24:02,799 --> 00:24:04,549
+global ubiostrux values can be used by
+all game objects without the need for
+
+1274
+00:24:04,549 --> 00:24:04,559
+all game objects without the need for
+ 
+
+1275
+00:24:04,559 --> 00:24:07,590
+all game objects without the need for
+rebinding okay i know this has already
+
+1276
+00:24:07,590 --> 00:24:07,600
+rebinding okay i know this has already
+ 
+
+1277
+00:24:07,600 --> 00:24:09,830
+rebinding okay i know this has already
+been a long tutorial but we are almost
+
+1278
+00:24:09,830 --> 00:24:09,840
+been a long tutorial but we are almost
+ 
+
+1279
+00:24:09,840 --> 00:24:12,070
+been a long tutorial but we are almost
+finished this video took a lot of effort
+
+1280
+00:24:12,070 --> 00:24:12,080
+finished this video took a lot of effort
+ 
+
+1281
+00:24:12,080 --> 00:24:13,669
+finished this video took a lot of effort
+to make so if you can hit that thumbs up
+
+1282
+00:24:13,669 --> 00:24:13,679
+to make so if you can hit that thumbs up
+ 
+
+1283
+00:24:13,679 --> 00:24:15,669
+to make so if you can hit that thumbs up
+button below the video i actually would
+
+1284
+00:24:15,669 --> 00:24:15,679
+button below the video i actually would
+ 
+
+1285
+00:24:15,679 --> 00:24:17,510
+button below the video i actually would
+really appreciate it
+
+1286
+00:24:17,510 --> 00:24:17,520
+really appreciate it
+ 
+
+1287
+00:24:17,520 --> 00:24:19,750
+really appreciate it
+now open your vertex shader so we can
+
+1288
+00:24:19,750 --> 00:24:19,760
+now open your vertex shader so we can
+ 
+
+1289
+00:24:19,760 --> 00:24:22,230
+now open your vertex shader so we can
+define the global ubo struct and update
+
+1290
+00:24:22,230 --> 00:24:22,240
+define the global ubo struct and update
+ 
+
+1291
+00:24:22,240 --> 00:24:25,430
+define the global ubo struct and update
+our simple push constant data
+
+1292
+00:24:25,430 --> 00:24:25,440
+our simple push constant data
+ 
+
+1293
+00:24:25,440 --> 00:24:27,110
+our simple push constant data
+rename the transform field to make it
+
+1294
+00:24:27,110 --> 00:24:27,120
+rename the transform field to make it
+ 
+
+1295
+00:24:27,120 --> 00:24:28,789
+rename the transform field to make it
+clear that this is now just the model
+
+1296
+00:24:28,789 --> 00:24:28,799
+clear that this is now just the model
+ 
+
+1297
+00:24:28,799 --> 00:24:31,269
+clear that this is now just the model
+matrix
+
+1298
+00:24:31,269 --> 00:24:31,279
+matrix
+ 
+
+1299
+00:24:31,279 --> 00:24:33,269
+matrix
+and then to declare a descriptor set
+
+1300
+00:24:33,269 --> 00:24:33,279
+and then to declare a descriptor set
+ 
+
+1301
+00:24:33,279 --> 00:24:35,909
+and then to declare a descriptor set
+uniform we use layout with the arguments
+
+1302
+00:24:35,909 --> 00:24:35,919
+uniform we use layout with the arguments
+ 
+
+1303
+00:24:35,919 --> 00:24:39,190
+uniform we use layout with the arguments
+set equal to zero binding equal to zero
+
+1304
+00:24:39,190 --> 00:24:39,200
+set equal to zero binding equal to zero
+ 
+
+1305
+00:24:39,200 --> 00:24:41,430
+set equal to zero binding equal to zero
+followed by the uniform keyword and a
+
+1306
+00:24:41,430 --> 00:24:41,440
+followed by the uniform keyword and a
+ 
+
+1307
+00:24:41,440 --> 00:24:43,830
+followed by the uniform keyword and a
+type name for our struct inside we match
+
+1308
+00:24:43,830 --> 00:24:43,840
+type name for our struct inside we match
+ 
+
+1309
+00:24:43,840 --> 00:24:46,390
+type name for our struct inside we match
+the definition in the app class so add
+
+1310
+00:24:46,390 --> 00:24:46,400
+the definition in the app class so add
+ 
+
+1311
+00:24:46,400 --> 00:24:49,110
+the definition in the app class so add
+map4 projectionview matrix field and a
+
+1312
+00:24:49,110 --> 00:24:49,120
+map4 projectionview matrix field and a
+ 
+
+1313
+00:24:49,120 --> 00:24:51,990
+map4 projectionview matrix field and a
+vect3 direction to light field and then
+
+1314
+00:24:51,990 --> 00:24:52,000
+vect3 direction to light field and then
+ 
+
+1315
+00:24:52,000 --> 00:24:53,830
+vect3 direction to light field and then
+name the instance of the struct i'll
+
+1316
+00:24:53,830 --> 00:24:53,840
+name the instance of the struct i'll
+ 
+
+1317
+00:24:53,840 --> 00:24:55,830
+name the instance of the struct i'll
+call it ubo for now
+
+1318
+00:24:55,830 --> 00:24:55,840
+call it ubo for now
+ 
+
+1319
+00:24:55,840 --> 00:24:58,149
+call it ubo for now
+the set and binding number must match
+
+1320
+00:24:58,149 --> 00:24:58,159
+the set and binding number must match
+ 
+
+1321
+00:24:58,159 --> 00:24:59,669
+the set and binding number must match
+what we used when setting up our
+
+1322
+00:24:59,669 --> 00:24:59,679
+what we used when setting up our
+ 
+
+1323
+00:24:59,679 --> 00:25:02,470
+what we used when setting up our
+descriptor set layout
+
+1324
+00:25:02,470 --> 00:25:02,480
+descriptor set layout
+ 
+
+1325
+00:25:02,480 --> 00:25:04,230
+descriptor set layout
+update the code in the main function to
+
+1326
+00:25:04,230 --> 00:25:04,240
+update the code in the main function to
+ 
+
+1327
+00:25:04,240 --> 00:25:06,710
+update the code in the main function to
+make use of the ubo struct so multiply
+
+1328
+00:25:06,710 --> 00:25:06,720
+make use of the ubo struct so multiply
+ 
+
+1329
+00:25:06,720 --> 00:25:08,950
+make use of the ubo struct so multiply
+the projectionview matrix in the gl
+
+1330
+00:25:08,950 --> 00:25:08,960
+the projectionview matrix in the gl
+ 
+
+1331
+00:25:08,960 --> 00:25:11,669
+the projectionview matrix in the gl
+position calculation and don't forget
+
+1332
+00:25:11,669 --> 00:25:11,679
+position calculation and don't forget
+ 
+
+1333
+00:25:11,679 --> 00:25:13,669
+position calculation and don't forget
+that order for matrix multiplication
+
+1334
+00:25:13,669 --> 00:25:13,679
+that order for matrix multiplication
+ 
+
+1335
+00:25:13,679 --> 00:25:14,710
+that order for matrix multiplication
+matters
+
+1336
+00:25:14,710 --> 00:25:14,720
+matters
+ 
+
+1337
+00:25:14,720 --> 00:25:16,310
+matters
+and then we can remove the hard-coded
+
+1338
+00:25:16,310 --> 00:25:16,320
+and then we can remove the hard-coded
+ 
+
+1339
+00:25:16,320 --> 00:25:18,310
+and then we can remove the hard-coded
+direction to light value and instead use
+
+1340
+00:25:18,310 --> 00:25:18,320
+direction to light value and instead use
+ 
+
+1341
+00:25:18,320 --> 00:25:20,630
+direction to light value and instead use
+the ubo's value in the light intensity
+
+1342
+00:25:20,630 --> 00:25:20,640
+the ubo's value in the light intensity
+ 
+
+1343
+00:25:20,640 --> 00:25:22,070
+the ubo's value in the light intensity
+calculation
+
+1344
+00:25:22,070 --> 00:25:22,080
+calculation
+ 
+
+1345
+00:25:22,080 --> 00:25:23,750
+calculation
+i'll copy my push constant struct
+
+1346
+00:25:23,750 --> 00:25:23,760
+i'll copy my push constant struct
+ 
+
+1347
+00:25:23,760 --> 00:25:25,990
+i'll copy my push constant struct
+definition to the fragment shader just
+
+1348
+00:25:25,990 --> 00:25:26,000
+definition to the fragment shader just
+ 
+
+1349
+00:25:26,000 --> 00:25:28,230
+definition to the fragment shader just
+to keep them consistent with each other
+
+1350
+00:25:28,230 --> 00:25:28,240
+to keep them consistent with each other
+ 
+
+1351
+00:25:28,240 --> 00:25:30,710
+to keep them consistent with each other
+even though we're not using it here
+
+1352
+00:25:30,710 --> 00:25:30,720
+even though we're not using it here
+ 
+
+1353
+00:25:30,720 --> 00:25:33,669
+even though we're not using it here
+note that we don't have access to the
+
+1354
+00:25:33,669 --> 00:25:33,679
+note that we don't have access to the
+ 
+
+1355
+00:25:33,679 --> 00:25:35,990
+note that we don't have access to the
+uniform buffer object because when we
+
+1356
+00:25:35,990 --> 00:25:36,000
+uniform buffer object because when we
+ 
+
+1357
+00:25:36,000 --> 00:25:38,149
+uniform buffer object because when we
+first created the set layout we made it
+
+1358
+00:25:38,149 --> 00:25:38,159
+first created the set layout we made it
+ 
+
+1359
+00:25:38,159 --> 00:25:40,830
+first created the set layout we made it
+available only to the vertex shader
+
+1360
+00:25:40,830 --> 00:25:40,840
+available only to the vertex shader
+ 
+
+1361
+00:25:40,840 --> 00:25:43,190
+available only to the vertex shader
+stage okay
+
+1362
+00:25:43,190 --> 00:25:43,200
+stage okay
+ 
+
+1363
+00:25:43,200 --> 00:25:45,350
+stage okay
+almost finished we just need to fix up
+
+1364
+00:25:45,350 --> 00:25:45,360
+almost finished we just need to fix up
+ 
+
+1365
+00:25:45,360 --> 00:25:48,070
+almost finished we just need to fix up
+the app implementation a bit
+
+1366
+00:25:48,070 --> 00:25:48,080
+the app implementation a bit
+ 
+
+1367
+00:25:48,080 --> 00:25:50,230
+the app implementation a bit
+to the simple render system constructor
+
+1368
+00:25:50,230 --> 00:25:50,240
+to the simple render system constructor
+ 
+
+1369
+00:25:50,240 --> 00:25:53,190
+to the simple render system constructor
+we need to pass in the global set layout
+
+1370
+00:25:53,190 --> 00:25:53,200
+we need to pass in the global set layout
+ 
+
+1371
+00:25:53,200 --> 00:25:55,430
+we need to pass in the global set layout
+arrow get descriptor set layout to fetch
+
+1372
+00:25:55,430 --> 00:25:55,440
+arrow get descriptor set layout to fetch
+ 
+
+1373
+00:25:55,440 --> 00:25:57,990
+arrow get descriptor set layout to fetch
+the underlying vulcan handle
+
+1374
+00:25:57,990 --> 00:25:58,000
+the underlying vulcan handle
+ 
+
+1375
+00:25:58,000 --> 00:26:01,110
+the underlying vulcan handle
+and then in our frame info below we need
+
+1376
+00:26:01,110 --> 00:26:01,120
+and then in our frame info below we need
+ 
+
+1377
+00:26:01,120 --> 00:26:03,350
+and then in our frame info below we need
+to pass in the global descriptor set for
+
+1378
+00:26:03,350 --> 00:26:03,360
+to pass in the global descriptor set for
+ 
+
+1379
+00:26:03,360 --> 00:26:05,750
+to pass in the global descriptor set for
+the current frame and that's it build
+
+1380
+00:26:05,750 --> 00:26:05,760
+the current frame and that's it build
+ 
+
+1381
+00:26:05,760 --> 00:26:07,830
+the current frame and that's it build
+and run and again nothing on the surface
+
+1382
+00:26:07,830 --> 00:26:07,840
+and run and again nothing on the surface
+ 
+
+1383
+00:26:07,840 --> 00:26:09,590
+and run and again nothing on the surface
+should have appeared to change but we
+
+1384
+00:26:09,590 --> 00:26:09,600
+should have appeared to change but we
+ 
+
+1385
+00:26:09,600 --> 00:26:11,830
+should have appeared to change but we
+are now actually using the data stored
+
+1386
+00:26:11,830 --> 00:26:11,840
+are now actually using the data stored
+ 
+
+1387
+00:26:11,840 --> 00:26:13,669
+are now actually using the data stored
+in the ubo buffer
+
+1388
+00:26:13,669 --> 00:26:13,679
+in the ubo buffer
+ 
+
+1389
+00:26:13,679 --> 00:26:15,510
+in the ubo buffer
+you can test this by changing the light
+
+1390
+00:26:15,510 --> 00:26:15,520
+you can test this by changing the light
+ 
+
+1391
+00:26:15,520 --> 00:26:17,510
+you can test this by changing the light
+direction field that we hard coded in
+
+1392
+00:26:17,510 --> 00:26:17,520
+direction field that we hard coded in
+ 
+
+1393
+00:26:17,520 --> 00:26:19,909
+direction field that we hard coded in
+the top of the apple implementation
+
+1394
+00:26:19,909 --> 00:26:19,919
+the top of the apple implementation
+ 
+
+1395
+00:26:19,919 --> 00:26:22,390
+the top of the apple implementation
+this is probably one of the harder
+
+1396
+00:26:22,390 --> 00:26:22,400
+this is probably one of the harder
+ 
+
+1397
+00:26:22,400 --> 00:26:25,029
+this is probably one of the harder
+aspects of vulcan even though nothing
+
+1398
+00:26:25,029 --> 00:26:25,039
+aspects of vulcan even though nothing
+ 
+
+1399
+00:26:25,039 --> 00:26:27,350
+aspects of vulcan even though nothing
+has changed on the surface the buffer
+
+1400
+00:26:27,350 --> 00:26:27,360
+has changed on the surface the buffer
+ 
+
+1401
+00:26:27,360 --> 00:26:29,029
+has changed on the surface the buffer
+and descriptor set abstractions have
+
+1402
+00:26:29,029 --> 00:26:29,039
+and descriptor set abstractions have
+ 
+
+1403
+00:26:29,039 --> 00:26:31,110
+and descriptor set abstractions have
+opened up a world of possibilities for
+
+1404
+00:26:31,110 --> 00:26:31,120
+opened up a world of possibilities for
+ 
+
+1405
+00:26:31,120 --> 00:26:33,110
+opened up a world of possibilities for
+future tutorials
+
+1406
+00:26:33,110 --> 00:26:33,120
+future tutorials
+ 
+
+1407
+00:26:33,120 --> 00:26:35,590
+future tutorials
+we can now pass in pretty much as many
+
+1408
+00:26:35,590 --> 00:26:35,600
+we can now pass in pretty much as many
+ 
+
+1409
+00:26:35,600 --> 00:26:37,669
+we can now pass in pretty much as many
+fields as you may want into the global
+
+1410
+00:26:37,669 --> 00:26:37,679
+fields as you may want into the global
+ 
+
+1411
+00:26:37,679 --> 00:26:40,950
+fields as you may want into the global
+ubo struct such as multiple point lights
+
+1412
+00:26:40,950 --> 00:26:40,960
+ubo struct such as multiple point lights
+ 
+
+1413
+00:26:40,960 --> 00:26:42,549
+ubo struct such as multiple point lights
+and whatever else
+
+1414
+00:26:42,549 --> 00:26:42,559
+and whatever else
+ 
+
+1415
+00:26:42,559 --> 00:26:44,710
+and whatever else
+one thing to keep in mind is just
+
+1416
+00:26:44,710 --> 00:26:44,720
+one thing to keep in mind is just
+ 
+
+1417
+00:26:44,720 --> 00:26:46,950
+one thing to keep in mind is just
+remember that we have the same alignment
+
+1418
+00:26:46,950 --> 00:26:46,960
+remember that we have the same alignment
+ 
+
+1419
+00:26:46,960 --> 00:26:49,669
+remember that we have the same alignment
+requirements as push constants also one
+
+1420
+00:26:49,669 --> 00:26:49,679
+requirements as push constants also one
+ 
+
+1421
+00:26:49,679 --> 00:26:51,510
+requirements as push constants also one
+last thing you may have noticed is that
+
+1422
+00:26:51,510 --> 00:26:51,520
+last thing you may have noticed is that
+ 
+
+1423
+00:26:51,520 --> 00:26:53,990
+last thing you may have noticed is that
+i never cleaned up the global descriptor
+
+1424
+00:26:53,990 --> 00:26:54,000
+i never cleaned up the global descriptor
+ 
+
+1425
+00:26:54,000 --> 00:26:56,149
+i never cleaned up the global descriptor
+sad objects and this is because they'll
+
+1426
+00:26:56,149 --> 00:26:56,159
+sad objects and this is because they'll
+ 
+
+1427
+00:26:56,159 --> 00:26:58,470
+sad objects and this is because they'll
+be automatically destroyed for us when
+
+1428
+00:26:58,470 --> 00:26:58,480
+be automatically destroyed for us when
+ 
+
+1429
+00:26:58,480 --> 00:27:01,110
+be automatically destroyed for us when
+the global pool is destroyed so in this
+
+1430
+00:27:01,110 --> 00:27:01,120
+the global pool is destroyed so in this
+ 
+
+1431
+00:27:01,120 --> 00:27:03,590
+the global pool is destroyed so in this
+case it wasn't necessary and that's it
+
+1432
+00:27:03,590 --> 00:27:03,600
+case it wasn't necessary and that's it
+ 
+
+1433
+00:27:03,600 --> 00:27:05,430
+case it wasn't necessary and that's it
+thank you so much for watching and keep
+
+1434
+00:27:05,430 --> 00:27:05,440
+thank you so much for watching and keep
+ 
+
+1435
+00:27:05,440 --> 00:27:09,320
+thank you so much for watching and keep
+on coding cheers
+

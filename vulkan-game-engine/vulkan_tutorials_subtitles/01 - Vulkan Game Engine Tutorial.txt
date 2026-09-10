@@ -1,0 +1,1175 @@
+1
+00:00:00,399 --> 00:00:02,550
+ 
+hello welcome to this tutorial series
+
+2
+00:00:02,550 --> 00:00:02,560
+hello welcome to this tutorial series
+ 
+
+3
+00:00:02,560 --> 00:00:04,309
+hello welcome to this tutorial series
+and introduction to computer graphics
+
+4
+00:00:04,309 --> 00:00:04,319
+and introduction to computer graphics
+ 
+
+5
+00:00:04,319 --> 00:00:05,030
+and introduction to computer graphics
+with balkan
+
+6
+00:00:05,030 --> 00:00:05,040
+with balkan
+ 
+
+7
+00:00:05,040 --> 00:00:07,510
+with balkan
+using c plus plus this series is aimed
+
+8
+00:00:07,510 --> 00:00:07,520
+using c plus plus this series is aimed
+ 
+
+9
+00:00:07,520 --> 00:00:09,110
+using c plus plus this series is aimed
+at anyone interested in computer
+
+10
+00:00:09,110 --> 00:00:09,120
+at anyone interested in computer
+ 
+
+11
+00:00:09,120 --> 00:00:09,669
+at anyone interested in computer
+graphics
+
+12
+00:00:09,669 --> 00:00:09,679
+graphics
+ 
+
+13
+00:00:09,679 --> 00:00:11,589
+graphics
+game engines and truly understanding how
+
+14
+00:00:11,589 --> 00:00:11,599
+game engines and truly understanding how
+ 
+
+15
+00:00:11,599 --> 00:00:13,910
+game engines and truly understanding how
+the new generation of graphics apis work
+
+16
+00:00:13,910 --> 00:00:13,920
+the new generation of graphics apis work
+ 
+
+17
+00:00:13,920 --> 00:00:17,029
+the new generation of graphics apis work
+to generate 3d images in real time
+
+18
+00:00:17,029 --> 00:00:17,039
+to generate 3d images in real time
+ 
+
+19
+00:00:17,039 --> 00:00:19,349
+to generate 3d images in real time
+in the first 20 or so videos we'll cover
+
+20
+00:00:19,349 --> 00:00:19,359
+in the first 20 or so videos we'll cover
+ 
+
+21
+00:00:19,359 --> 00:00:21,349
+in the first 20 or so videos we'll cover
+topics like importing 3d models and
+
+22
+00:00:21,349 --> 00:00:21,359
+topics like importing 3d models and
+ 
+
+23
+00:00:21,359 --> 00:00:22,230
+topics like importing 3d models and
+texturing
+
+24
+00:00:22,230 --> 00:00:22,240
+texturing
+ 
+
+25
+00:00:22,240 --> 00:00:24,070
+texturing
+various lighting effects fog and
+
+26
+00:00:24,070 --> 00:00:24,080
+various lighting effects fog and
+ 
+
+27
+00:00:24,080 --> 00:00:25,910
+various lighting effects fog and
+atmosphere terrain generation
+
+28
+00:00:25,910 --> 00:00:25,920
+atmosphere terrain generation
+ 
+
+29
+00:00:25,920 --> 00:00:27,990
+atmosphere terrain generation
+game object movement and eventually much
+
+30
+00:00:27,990 --> 00:00:28,000
+game object movement and eventually much
+ 
+
+31
+00:00:28,000 --> 00:00:29,029
+game object movement and eventually much
+much more
+
+32
+00:00:29,029 --> 00:00:29,039
+much more
+ 
+
+33
+00:00:29,039 --> 00:00:30,710
+much more
+this is not going to be a language
+
+34
+00:00:30,710 --> 00:00:30,720
+this is not going to be a language
+ 
+
+35
+00:00:30,720 --> 00:00:32,150
+this is not going to be a language
+tutorial and i assume that you have
+
+36
+00:00:32,150 --> 00:00:32,160
+tutorial and i assume that you have
+ 
+
+37
+00:00:32,160 --> 00:00:32,790
+tutorial and i assume that you have
+worked with c
+
+38
+00:00:32,790 --> 00:00:32,800
+worked with c
+ 
+
+39
+00:00:32,800 --> 00:00:34,389
+worked with c
+plus plus and object oriented
+
+40
+00:00:34,389 --> 00:00:34,399
+plus plus and object oriented
+ 
+
+41
+00:00:34,399 --> 00:00:36,549
+plus plus and object oriented
+programming in the past
+
+42
+00:00:36,549 --> 00:00:36,559
+programming in the past
+ 
+
+43
+00:00:36,559 --> 00:00:38,630
+programming in the past
+so what is vulkan from the vulcan
+
+44
+00:00:38,630 --> 00:00:38,640
+so what is vulkan from the vulcan
+ 
+
+45
+00:00:38,640 --> 00:00:40,310
+so what is vulkan from the vulcan
+creators website vulkan is the new
+
+46
+00:00:40,310 --> 00:00:40,320
+creators website vulkan is the new
+ 
+
+47
+00:00:40,320 --> 00:00:42,630
+creators website vulkan is the new
+generation graphics and compute api that
+
+48
+00:00:42,630 --> 00:00:42,640
+generation graphics and compute api that
+ 
+
+49
+00:00:42,640 --> 00:00:43,990
+generation graphics and compute api that
+provides high efficiency
+
+50
+00:00:43,990 --> 00:00:44,000
+provides high efficiency
+ 
+
+51
+00:00:44,000 --> 00:00:46,389
+provides high efficiency
+cross-platform access to modern gpus
+
+52
+00:00:46,389 --> 00:00:46,399
+cross-platform access to modern gpus
+ 
+
+53
+00:00:46,399 --> 00:00:48,549
+cross-platform access to modern gpus
+used in a wide variety of devices from
+
+54
+00:00:48,549 --> 00:00:48,559
+used in a wide variety of devices from
+ 
+
+55
+00:00:48,559 --> 00:00:50,549
+used in a wide variety of devices from
+pcs and consoles to mobile phones and
+
+56
+00:00:50,549 --> 00:00:50,559
+pcs and consoles to mobile phones and
+ 
+
+57
+00:00:50,559 --> 00:00:51,750
+pcs and consoles to mobile phones and
+embedded platforms
+
+58
+00:00:51,750 --> 00:00:51,760
+embedded platforms
+ 
+
+59
+00:00:51,760 --> 00:00:53,750
+embedded platforms
+so what does this really mean and why do
+
+60
+00:00:53,750 --> 00:00:53,760
+so what does this really mean and why do
+ 
+
+61
+00:00:53,760 --> 00:00:55,590
+so what does this really mean and why do
+i recommend learning vulkan over older
+
+62
+00:00:55,590 --> 00:00:55,600
+i recommend learning vulkan over older
+ 
+
+63
+00:00:55,600 --> 00:00:58,150
+i recommend learning vulkan over older
+graphics apis like opengl
+
+64
+00:00:58,150 --> 00:00:58,160
+graphics apis like opengl
+ 
+
+65
+00:00:58,160 --> 00:01:00,950
+graphics apis like opengl
+opengl was released in 1992 and designed
+
+66
+00:01:00,950 --> 00:01:00,960
+opengl was released in 1992 and designed
+ 
+
+67
+00:01:00,960 --> 00:01:03,270
+opengl was released in 1992 and designed
+for graphics workstations at the time
+
+68
+00:01:03,270 --> 00:01:03,280
+for graphics workstations at the time
+ 
+
+69
+00:01:03,280 --> 00:01:05,350
+for graphics workstations at the time
+while it has seen numerous extensions
+
+70
+00:01:05,350 --> 00:01:05,360
+while it has seen numerous extensions
+ 
+
+71
+00:01:05,360 --> 00:01:06,630
+while it has seen numerous extensions
+modern hardware has evolved
+
+72
+00:01:06,630 --> 00:01:06,640
+modern hardware has evolved
+ 
+
+73
+00:01:06,640 --> 00:01:09,270
+modern hardware has evolved
+significantly in the past 28 years
+
+74
+00:01:09,270 --> 00:01:09,280
+significantly in the past 28 years
+ 
+
+75
+00:01:09,280 --> 00:01:11,109
+significantly in the past 28 years
+i don't think anyone at the time working
+
+76
+00:01:11,109 --> 00:01:11,119
+i don't think anyone at the time working
+ 
+
+77
+00:01:11,119 --> 00:01:12,950
+i don't think anyone at the time working
+at cronus group could have imagined we'd
+
+78
+00:01:12,950 --> 00:01:12,960
+at cronus group could have imagined we'd
+ 
+
+79
+00:01:12,960 --> 00:01:14,870
+at cronus group could have imagined we'd
+have devices capable of rendering
+
+80
+00:01:14,870 --> 00:01:14,880
+have devices capable of rendering
+ 
+
+81
+00:01:14,880 --> 00:01:16,469
+have devices capable of rendering
+millions of triangles that fit in the
+
+82
+00:01:16,469 --> 00:01:16,479
+millions of triangles that fit in the
+ 
+
+83
+00:01:16,479 --> 00:01:17,749
+millions of triangles that fit in the
+palm of a hand
+
+84
+00:01:17,749 --> 00:01:17,759
+palm of a hand
+ 
+
+85
+00:01:17,759 --> 00:01:19,590
+palm of a hand
+every year an increasing number of games
+
+86
+00:01:19,590 --> 00:01:19,600
+every year an increasing number of games
+ 
+
+87
+00:01:19,600 --> 00:01:21,510
+every year an increasing number of games
+are being made with vulcan and it seems
+
+88
+00:01:21,510 --> 00:01:21,520
+are being made with vulcan and it seems
+ 
+
+89
+00:01:21,520 --> 00:01:22,550
+are being made with vulcan and it seems
+to be the direction
+
+90
+00:01:22,550 --> 00:01:22,560
+to be the direction
+ 
+
+91
+00:01:22,560 --> 00:01:25,190
+to be the direction
+the video game industry is heading in if
+
+92
+00:01:25,190 --> 00:01:25,200
+the video game industry is heading in if
+ 
+
+93
+00:01:25,200 --> 00:01:27,270
+the video game industry is heading in if
+you're an aspiring game developer
+
+94
+00:01:27,270 --> 00:01:27,280
+you're an aspiring game developer
+ 
+
+95
+00:01:27,280 --> 00:01:29,030
+you're an aspiring game developer
+or interested in pursuing research and
+
+96
+00:01:29,030 --> 00:01:29,040
+or interested in pursuing research and
+ 
+
+97
+00:01:29,040 --> 00:01:30,789
+or interested in pursuing research and
+computer graphics i think a deep
+
+98
+00:01:30,789 --> 00:01:30,799
+computer graphics i think a deep
+ 
+
+99
+00:01:30,799 --> 00:01:32,710
+computer graphics i think a deep
+understanding of vulcan will be a very
+
+100
+00:01:32,710 --> 00:01:32,720
+understanding of vulcan will be a very
+ 
+
+101
+00:01:32,720 --> 00:01:35,109
+understanding of vulcan will be a very
+beneficial skill to have for many years
+
+102
+00:01:35,109 --> 00:01:35,119
+beneficial skill to have for many years
+ 
+
+103
+00:01:35,119 --> 00:01:37,270
+beneficial skill to have for many years
+while vulcan is seeing adoption within
+
+104
+00:01:37,270 --> 00:01:37,280
+while vulcan is seeing adoption within
+ 
+
+105
+00:01:37,280 --> 00:01:38,950
+while vulcan is seeing adoption within
+the video game industry
+
+106
+00:01:38,950 --> 00:01:38,960
+the video game industry
+ 
+
+107
+00:01:38,960 --> 00:01:40,950
+the video game industry
+it's developed a bit of a reputation for
+
+108
+00:01:40,950 --> 00:01:40,960
+it's developed a bit of a reputation for
+ 
+
+109
+00:01:40,960 --> 00:01:43,190
+it's developed a bit of a reputation for
+not being very beginner friendly
+
+110
+00:01:43,190 --> 00:01:43,200
+not being very beginner friendly
+ 
+
+111
+00:01:43,200 --> 00:01:44,870
+not being very beginner friendly
+this is really unfortunate because i
+
+112
+00:01:44,870 --> 00:01:44,880
+this is really unfortunate because i
+ 
+
+113
+00:01:44,880 --> 00:01:46,630
+this is really unfortunate because i
+believe a lot of people are being turned
+
+114
+00:01:46,630 --> 00:01:46,640
+believe a lot of people are being turned
+ 
+
+115
+00:01:46,640 --> 00:01:48,389
+believe a lot of people are being turned
+away by a steep learning curve
+
+116
+00:01:48,389 --> 00:01:48,399
+away by a steep learning curve
+ 
+
+117
+00:01:48,399 --> 00:01:51,510
+away by a steep learning curve
+and a lack of resources currently the
+
+118
+00:01:51,510 --> 00:01:51,520
+and a lack of resources currently the
+ 
+
+119
+00:01:51,520 --> 00:01:53,670
+and a lack of resources currently the
+most commonly recommended way i've seen
+
+120
+00:01:53,670 --> 00:01:53,680
+most commonly recommended way i've seen
+ 
+
+121
+00:01:53,680 --> 00:01:55,310
+most commonly recommended way i've seen
+for getting started is with
+
+122
+00:01:55,310 --> 00:01:55,320
+for getting started is with
+ 
+
+123
+00:01:55,320 --> 00:01:56,709
+for getting started is with
+vulcantutorial.com
+
+124
+00:01:56,709 --> 00:01:56,719
+vulcantutorial.com
+ 
+
+125
+00:01:56,719 --> 00:01:58,630
+vulcantutorial.com
+this is the resource that i used in a
+
+126
+00:01:58,630 --> 00:01:58,640
+this is the resource that i used in a
+ 
+
+127
+00:01:58,640 --> 00:02:00,950
+this is the resource that i used in a
+fantastic tutorial but in my opinion it
+
+128
+00:02:00,950 --> 00:02:00,960
+fantastic tutorial but in my opinion it
+ 
+
+129
+00:02:00,960 --> 00:02:03,109
+fantastic tutorial but in my opinion it
+would be difficult to follow if you lack
+
+130
+00:02:03,109 --> 00:02:03,119
+would be difficult to follow if you lack
+ 
+
+131
+00:02:03,119 --> 00:02:04,789
+would be difficult to follow if you lack
+previous experience working with
+
+132
+00:02:04,789 --> 00:02:04,799
+previous experience working with
+ 
+
+133
+00:02:04,799 --> 00:02:06,149
+previous experience working with
+computer graphics
+
+134
+00:02:06,149 --> 00:02:06,159
+computer graphics
+ 
+
+135
+00:02:06,159 --> 00:02:08,309
+computer graphics
+also once you finish that tutorial it's
+
+136
+00:02:08,309 --> 00:02:08,319
+also once you finish that tutorial it's
+ 
+
+137
+00:02:08,319 --> 00:02:10,070
+also once you finish that tutorial it's
+pretty hard to know what direction to go
+
+138
+00:02:10,070 --> 00:02:10,080
+pretty hard to know what direction to go
+ 
+
+139
+00:02:10,080 --> 00:02:11,350
+pretty hard to know what direction to go
+into next
+
+140
+00:02:11,350 --> 00:02:11,360
+into next
+ 
+
+141
+00:02:11,360 --> 00:02:12,869
+into next
+so this series is to start at the
+
+142
+00:02:12,869 --> 00:02:12,879
+so this series is to start at the
+ 
+
+143
+00:02:12,879 --> 00:02:14,390
+so this series is to start at the
+beginning and develop the required
+
+144
+00:02:14,390 --> 00:02:14,400
+beginning and develop the required
+ 
+
+145
+00:02:14,400 --> 00:02:15,910
+beginning and develop the required
+skills and knowledge to make amazing
+
+146
+00:02:15,910 --> 00:02:15,920
+skills and knowledge to make amazing
+ 
+
+147
+00:02:15,920 --> 00:02:16,630
+skills and knowledge to make amazing
+creations
+
+148
+00:02:16,630 --> 00:02:16,640
+creations
+ 
+
+149
+00:02:16,640 --> 00:02:18,470
+creations
+we will cover computer graphics theory
+
+150
+00:02:18,470 --> 00:02:18,480
+we will cover computer graphics theory
+ 
+
+151
+00:02:18,480 --> 00:02:20,229
+we will cover computer graphics theory
+and slowly introduce vulcan api
+
+152
+00:02:20,229 --> 00:02:20,239
+and slowly introduce vulcan api
+ 
+
+153
+00:02:20,239 --> 00:02:22,070
+and slowly introduce vulcan api
+functionality as we build a computer
+
+154
+00:02:22,070 --> 00:02:22,080
+functionality as we build a computer
+ 
+
+155
+00:02:22,080 --> 00:02:23,750
+functionality as we build a computer
+graphics game engine
+
+156
+00:02:23,750 --> 00:02:23,760
+graphics game engine
+ 
+
+157
+00:02:23,760 --> 00:02:26,229
+graphics game engine
+before we proceed it should be said that
+
+158
+00:02:26,229 --> 00:02:26,239
+before we proceed it should be said that
+ 
+
+159
+00:02:26,239 --> 00:02:28,070
+before we proceed it should be said that
+while we may be building a game engine
+
+160
+00:02:28,070 --> 00:02:28,080
+while we may be building a game engine
+ 
+
+161
+00:02:28,080 --> 00:02:28,710
+while we may be building a game engine
+which can
+
+162
+00:02:28,710 --> 00:02:28,720
+which can
+ 
+
+163
+00:02:28,720 --> 00:02:31,030
+which can
+eventually build games for us if your
+
+164
+00:02:31,030 --> 00:02:31,040
+eventually build games for us if your
+ 
+
+165
+00:02:31,040 --> 00:02:32,790
+eventually build games for us if your
+main goal is to make a video game as
+
+166
+00:02:32,790 --> 00:02:32,800
+main goal is to make a video game as
+ 
+
+167
+00:02:32,800 --> 00:02:33,990
+main goal is to make a video game as
+soon as possible
+
+168
+00:02:33,990 --> 00:02:34,000
+soon as possible
+ 
+
+169
+00:02:34,000 --> 00:02:35,910
+soon as possible
+you'd be better off learning an existing
+
+170
+00:02:35,910 --> 00:02:35,920
+you'd be better off learning an existing
+ 
+
+171
+00:02:35,920 --> 00:02:38,550
+you'd be better off learning an existing
+game engine like unity or godot
+
+172
+00:02:38,550 --> 00:02:38,560
+game engine like unity or godot
+ 
+
+173
+00:02:38,560 --> 00:02:40,550
+game engine like unity or godot
+however there is no shortage of videos
+
+174
+00:02:40,550 --> 00:02:40,560
+however there is no shortage of videos
+ 
+
+175
+00:02:40,560 --> 00:02:42,309
+however there is no shortage of videos
+from various game developers
+
+176
+00:02:42,309 --> 00:02:42,319
+from various game developers
+ 
+
+177
+00:02:42,319 --> 00:02:44,710
+from various game developers
+on mistakes they've made an oftenly
+
+178
+00:02:44,710 --> 00:02:44,720
+on mistakes they've made an oftenly
+ 
+
+179
+00:02:44,720 --> 00:02:46,309
+on mistakes they've made an oftenly
+shared device is trying to create too
+
+180
+00:02:46,309 --> 00:02:46,319
+shared device is trying to create too
+ 
+
+181
+00:02:46,319 --> 00:02:48,710
+shared device is trying to create too
+ambitious a project from the start
+
+182
+00:02:48,710 --> 00:02:48,720
+ambitious a project from the start
+ 
+
+183
+00:02:48,720 --> 00:02:50,550
+ambitious a project from the start
+so following this series focused on
+
+184
+00:02:50,550 --> 00:02:50,560
+so following this series focused on
+ 
+
+185
+00:02:50,560 --> 00:02:52,229
+so following this series focused on
+developing the fundamental skills
+
+186
+00:02:52,229 --> 00:02:52,239
+developing the fundamental skills
+ 
+
+187
+00:02:52,239 --> 00:02:54,470
+developing the fundamental skills
+required to eventually make great games
+
+188
+00:02:54,470 --> 00:02:54,480
+required to eventually make great games
+ 
+
+189
+00:02:54,480 --> 00:02:57,430
+required to eventually make great games
+may leave you better off in the long run
+
+190
+00:02:57,430 --> 00:02:57,440
+may leave you better off in the long run
+ 
+
+191
+00:02:57,440 --> 00:02:59,270
+may leave you better off in the long run
+now to get started we are going to need
+
+192
+00:02:59,270 --> 00:02:59,280
+now to get started we are going to need
+ 
+
+193
+00:02:59,280 --> 00:03:00,070
+now to get started we are going to need
+to have a new c
+
+194
+00:03:00,070 --> 00:03:00,080
+to have a new c
+ 
+
+195
+00:03:00,080 --> 00:03:02,949
+to have a new c
+plus project set up with the vulcan sdk
+
+196
+00:03:02,949 --> 00:03:02,959
+plus project set up with the vulcan sdk
+ 
+
+197
+00:03:02,959 --> 00:03:04,470
+plus project set up with the vulcan sdk
+the vector library glm
+
+198
+00:03:04,470 --> 00:03:04,480
+the vector library glm
+ 
+
+199
+00:03:04,480 --> 00:03:07,750
+the vector library glm
+and the windowing api glfw to avoid
+
+200
+00:03:07,750 --> 00:03:07,760
+and the windowing api glfw to avoid
+ 
+
+201
+00:03:07,760 --> 00:03:09,350
+and the windowing api glfw to avoid
+reinventing the wheel i've linked a
+
+202
+00:03:09,350 --> 00:03:09,360
+reinventing the wheel i've linked a
+ 
+
+203
+00:03:09,360 --> 00:03:11,430
+reinventing the wheel i've linked a
+guide from vulkantutorial.com in the
+
+204
+00:03:11,430 --> 00:03:11,440
+guide from vulkantutorial.com in the
+ 
+
+205
+00:03:11,440 --> 00:03:12,550
+guide from vulkantutorial.com in the
+description below
+
+206
+00:03:12,550 --> 00:03:12,560
+description below
+ 
+
+207
+00:03:12,560 --> 00:03:14,309
+description below
+that goes over the setup process for
+
+208
+00:03:14,309 --> 00:03:14,319
+that goes over the setup process for
+ 
+
+209
+00:03:14,319 --> 00:03:16,309
+that goes over the setup process for
+windows linux and mac
+
+210
+00:03:16,309 --> 00:03:16,319
+windows linux and mac
+ 
+
+211
+00:03:16,319 --> 00:03:18,149
+windows linux and mac
+on this page you just need to complete
+
+212
+00:03:18,149 --> 00:03:18,159
+on this page you just need to complete
+ 
+
+213
+00:03:18,159 --> 00:03:19,990
+on this page you just need to complete
+the steps specific to the operating
+
+214
+00:03:19,990 --> 00:03:20,000
+the steps specific to the operating
+ 
+
+215
+00:03:20,000 --> 00:03:21,509
+the steps specific to the operating
+system you are using
+
+216
+00:03:21,509 --> 00:03:21,519
+system you are using
+ 
+
+217
+00:03:21,519 --> 00:03:23,750
+system you are using
+i'll be on a mac using vs code and a
+
+218
+00:03:23,750 --> 00:03:23,760
+i'll be on a mac using vs code and a
+ 
+
+219
+00:03:23,760 --> 00:03:25,589
+i'll be on a mac using vs code and a
+simple make file but feel free to use
+
+220
+00:03:25,589 --> 00:03:25,599
+simple make file but feel free to use
+ 
+
+221
+00:03:25,599 --> 00:03:26,710
+simple make file but feel free to use
+your preferred c
+
+222
+00:03:26,710 --> 00:03:26,720
+your preferred c
+ 
+
+223
+00:03:26,720 --> 00:03:30,149
+your preferred c
+plus text editor or ide
+
+224
+00:03:30,149 --> 00:03:30,159
+plus text editor or ide
+ 
+
+225
+00:03:30,159 --> 00:03:32,149
+plus text editor or ide
+well thank you for getting this far and
+
+226
+00:03:32,149 --> 00:03:32,159
+well thank you for getting this far and
+ 
+
+227
+00:03:32,159 --> 00:03:33,670
+well thank you for getting this far and
+i hope you will continue on with these
+
+228
+00:03:33,670 --> 00:03:33,680
+i hope you will continue on with these
+ 
+
+229
+00:03:33,680 --> 00:03:34,390
+i hope you will continue on with these
+tutorials
+
+230
+00:03:34,390 --> 00:03:34,400
+tutorials
+ 
+
+231
+00:03:34,400 --> 00:03:36,309
+tutorials
+new videos will be released weekly and
+
+232
+00:03:36,309 --> 00:03:36,319
+new videos will be released weekly and
+ 
+
+233
+00:03:36,319 --> 00:03:37,509
+new videos will be released weekly and
+if you don't want to miss them
+
+234
+00:03:37,509 --> 00:03:37,519
+if you don't want to miss them
+ 
+
+235
+00:03:37,519 --> 00:03:40,560
+if you don't want to miss them
+please subscribe
+

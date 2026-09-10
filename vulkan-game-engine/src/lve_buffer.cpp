@@ -173,10 +173,11 @@ namespace lve {
    *
    */
   VkResult LveBuffer::flushIndex(int index) {
+    // Verifica che l'allineamento dell'istanza rispetti il limite nonCoherentAtomSize richiesto dal dispositivo per il flush
     assert(
-        alignmentSize % lveDevice.properties.limits.nonCoherentAtomSize == 0 &&
-        "Cannot use LveBuffer::flushIndex if alignmentSize isn't a multiple of Device Limits "
-        "nonCoherentAtomSize");
+      alignmentSize % lveDevice.properties.limits.nonCoherentAtomSize == 0 &&
+      "Cannot use LveBuffer::flushIndex if alignmentSize isn't a multiple of Device Limits "
+      "nonCoherentAtomSize");
     return flush(alignmentSize, index * alignmentSize);
   }
 

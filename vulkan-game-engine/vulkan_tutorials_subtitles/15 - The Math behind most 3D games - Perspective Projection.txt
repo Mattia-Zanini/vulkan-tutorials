@@ -1,0 +1,767 @@
+1
+00:00:00,440 --> 00:00:06,710
+Your eyes see in 2D, the retina is a two dimensional
+surface of cells that activate when photons
+
+2
+00:00:06,710 --> 00:00:11,950
+hit them. Whether those photons are bouncing
+off of a physical object, or being produced
+
+3
+00:00:11,950 --> 00:00:17,130
+by your display there isn’t too much of
+a difference to the neural circuitry that
+
+4
+00:00:17,130 --> 00:00:22,350
+makes up your vision system. So the brain
+is already doing the hard part. It takes a
+
+5
+00:00:22,350 --> 00:00:27,930
+2 dimensional image as input, and on the other
+end you somehow have a near instant understanding
+
+6
+00:00:27,930 --> 00:00:31,090
+of the 3 dimensional objects you are seeing.
+
+7
+00:00:31,090 --> 00:00:36,079
+We can create objects by constructing them
+out of many triangles. To create an accurate
+
+8
+00:00:36,079 --> 00:00:41,550
+2d representation, we need to project each
+of these triangles onto a flat plane from
+
+9
+00:00:41,550 --> 00:00:43,469
+the perspective of a viewer.
+
+10
+00:00:43,469 --> 00:00:50,370
+It can be helpful to think of a computer screen
+as a window, where light bounces off an object,
+
+11
+00:00:50,370 --> 00:00:53,390
+through the window and into your eye.
+
+12
+00:00:53,390 --> 00:00:59,030
+So to generate an image it’s almost as if
+we need to do the reverse operation. If you
+
+13
+00:00:59,030 --> 00:01:05,530
+shot a ray from your eye through each section
+of the window, what color would you hit?
+
+14
+00:01:05,530 --> 00:01:11,980
+And this is the basic idea behind 3D graphics.
+Each pixel of the display is like a little
+
+15
+00:01:11,980 --> 00:01:17,580
+window, and the more pixels the clearer the
+image. And it is up to our graphics engine
+
+16
+00:01:17,580 --> 00:01:22,610
+to figure out what color of light would be
+passing through that pixel as if the game
+
+17
+00:01:22,610 --> 00:01:25,700
+world actually existed on the other side.
+
+18
+00:01:25,700 --> 00:01:29,960
+The method I’ve explained, where rays are
+projected into the world and collide with
+
+19
+00:01:29,960 --> 00:01:36,350
+objects, is the foundation behind ray tracing.
+Ray tracing has only recently made its debut
+
+20
+00:01:36,350 --> 00:01:41,540
+into video games with the release of newer
+graphics cards containing dedicated ray tracing
+
+21
+00:01:41,540 --> 00:01:42,820
+hardware.
+
+22
+00:01:42,820 --> 00:01:48,420
+On the other hand CPU-based ray tracing has
+been around for a long time and has been used
+
+23
+00:01:48,420 --> 00:01:54,520
+extensively within the movie and animation
+industries, but is much too slow to be used
+
+24
+00:01:54,520 --> 00:01:59,750
+in real-time applications.
+A single frame in Toy story 4 could take anywhere
+
+25
+00:01:59,750 --> 00:02:06,020
+between 60 to 160 hours to render using CPU
+based ray tracing.
+
+26
+00:02:06,020 --> 00:02:11,990
+Ray tracing is known as image-order rendering,
+since each pixel is first considered, and
+
+27
+00:02:11,990 --> 00:02:16,590
+then on a per pixel basis we find all the
+objects that could influence it.
+
+28
+00:02:16,590 --> 00:02:22,020
+The alternative is object-order rendering
+which is much faster and what we have been
+
+29
+00:02:22,020 --> 00:02:27,640
+using. This is where we draw each object,
+one after the other. This approach maps much
+
+30
+00:02:27,640 --> 00:02:33,040
+better to the gpu, since we can apply the
+same instructions, but on different vertices
+
+31
+00:02:33,040 --> 00:02:34,320
+in parallel.
+
+32
+00:02:34,320 --> 00:02:40,550
+So we could find the location for each projected
+position within a vertex shader by calculating
+
+33
+00:02:40,550 --> 00:02:46,110
+the line and plane intersection, and this
+would work just fine! But a much more effective
+
+34
+00:02:46,110 --> 00:02:49,810
+way to do this is with a matrix transformation!
+
+35
+00:02:49,810 --> 00:02:54,040
+First though, I’ll start by explaining orthographic
+projection.
+
+36
+00:02:54,040 --> 00:02:59,780
+In the previous tutorial I talked about vulkan’s
+canonical viewing volume. Only the objects
+
+37
+00:02:59,780 --> 00:03:04,710
+that are within this 2 by 2 by 1 region will
+be displayed.
+
+38
+00:03:04,710 --> 00:03:10,020
+Note that the positive y axis points down,
+and positive z axis points into the screen.
+
+39
+00:03:10,020 --> 00:03:11,020
+An orthographic projection is a generalization
+of the view volume that keeps the view direction
+
+40
+00:03:11,020 --> 00:03:12,020
+and orientation fixed, but allows the view
+volume to be an axis-aligned box with any
+
+41
+00:03:12,020 --> 00:03:13,020
+dimensions and at any location we want.
+
+42
+00:03:13,020 --> 00:03:16,720
+An orthographic projection is a generalization
+of the view volume that allows us to specify
+
+43
+00:03:16,720 --> 00:03:22,530
+whatever dimensions and whatever location
+we want, but maintains the overall shape of
+
+44
+00:03:22,530 --> 00:03:27,180
+the view volume, and keeps the view direction
+and orientation fixed.
+
+45
+00:03:27,180 --> 00:03:32,620
+The orthographic view volume is defined by
+6 bounding planes, the left and right along
+
+46
+00:03:32,620 --> 00:03:41,220
+the x axis, the top and bottom along the y
+axis, and the near and far along the z axis.
+
+47
+00:03:41,220 --> 00:03:47,670
+So these 6 values, left bottom near, and right,
+top, far, define the orthographic viewing
+
+48
+00:03:47,670 --> 00:03:48,980
+volume
+
+49
+00:03:48,980 --> 00:03:55,120
+So to construct an orthographic projection
+matrix we need to solve the following problem:
+
+50
+00:03:55,120 --> 00:04:01,490
+how do you transform the orthographic view
+volume to vulkan’s canonical view volume?
+
+51
+00:04:01,490 --> 00:04:07,780
+And the good news is we already know how to
+do this. We can combine two basic transformations,
+
+52
+00:04:07,780 --> 00:04:14,760
+first translate the box so that the center
+of the near plane is at the origin. And then
+
+53
+00:04:14,760 --> 00:04:20,690
+follow that with a scale transformation so
+the boxes have the same dimensions.
+
+54
+00:04:20,690 --> 00:04:25,580
+So the numerator will be the canonical view
+volume’s dimensions, and the denominator
+
+55
+00:04:25,580 --> 00:04:29,220
+will be the dimensions of the orthographic
+view volume.
+
+56
+00:04:29,220 --> 00:04:34,740
+If we multiply the matrices and simplify,
+we get the orthographic projection matrix.
+
+57
+00:04:34,740 --> 00:04:40,250
+Note that this matrix differs slightly from
+most other online resources. The canonical
+
+58
+00:04:40,250 --> 00:04:47,440
+openGL view volume is a cube, with a z range
+of -1 to 1. Additionally openGL uses a left
+
+59
+00:04:47,440 --> 00:04:52,130
+handed coordinate system and looks down the
+negative z axis, but we’re using a right
+
+60
+00:04:52,130 --> 00:04:56,570
+handed coordinate system and looking down
+the positive z axis. So just keep this in
+
+61
+00:04:56,570 --> 00:05:00,350
+mind if you are following other resources
+with different conventions.
+
+62
+00:05:00,350 --> 00:05:05,430
+And that’s it. By applying this transformation
+to our objects, the objects that are within
+
+63
+00:05:05,430 --> 00:05:11,240
+the region occupied by the orthographic view
+volume, will be scaled and moved into the
+
+64
+00:05:11,240 --> 00:05:16,910
+region covered by canonical view volume, and
+therefore the objects will be displayed!
+
+65
+00:05:16,910 --> 00:05:22,070
+But the orthographic view volume doesn’t
+apply perspective, to do that we require a
+
+66
+00:05:22,070 --> 00:05:27,050
+viewing volume that is not box shaped, but
+a shape known as a square frustum
+
+67
+00:05:27,050 --> 00:05:32,889
+A frustum is the shape that captures a viewer’s
+line of sight as if they were looking through
+
+68
+00:05:32,889 --> 00:05:35,300
+a rectangular window.
+
+69
+00:05:35,300 --> 00:05:41,419
+So what we want is a perspective matrix that
+transforms the frustum and any object it contains
+
+70
+00:05:41,419 --> 00:05:43,960
+into the orthographic view volume.
+
+71
+00:05:43,960 --> 00:05:49,790
+Doing so would apply perspective to all objects
+within this space. The further away an object
+
+72
+00:05:49,790 --> 00:05:52,030
+is, the smaller it will appear!
+
+73
+00:05:52,030 --> 00:05:57,410
+To properly apply perspective, we need to
+project each point onto the viewing plane.
+
+74
+00:05:57,410 --> 00:06:02,780
+For example, to calculate the apparent height
+of an object on the screen, we can use the
+
+75
+00:06:02,780 --> 00:06:07,850
+property that the side lengths of two similar
+triangles are proportional to each other.
+
+76
+00:06:07,850 --> 00:06:12,520
+We can rearrange this equation to show that
+an object's apparent height on screen is equal
+
+77
+00:06:12,520 --> 00:06:18,210
+to distance to the screen over the distance
+to the object, multiplied by the object's
+
+78
+00:06:18,210 --> 00:06:24,000
+true height. This equally applies for the
+x direction when calculating an object's apparent
+
+79
+00:06:24,000 --> 00:06:25,860
+width on the screen.
+
+80
+00:06:25,860 --> 00:06:31,400
+Also note, that just as with the other viewing
+volumes, anything outside of the frustum will
+
+81
+00:06:31,400 --> 00:06:32,509
+be clipped.
+
+82
+00:06:32,509 --> 00:06:38,010
+Ok so what we would like to do is come up
+with some 4 by 4 matrix, that when applied
+
+83
+00:06:38,010 --> 00:06:44,960
+to a position vector, the resulting x and
+y values equal the projected xs and ys coordinates
+
+84
+00:06:44,960 --> 00:06:46,449
+on the viewing plane.
+
+85
+00:06:46,449 --> 00:06:51,301
+But there is a problem. We have a division
+by the z component, in the solution’s x
+
+86
+00:06:51,301 --> 00:06:57,620
+and y components, and a 4 by 4 matrix that
+can move a z value from here to a division
+
+87
+00:06:57,620 --> 00:07:03,669
+here, simply does not exist. It is just not
+possible with matrix multiplication alone.
+
+88
+00:07:03,669 --> 00:07:10,740
+But what’s that, it is homogeneous coordinates
+to the rescue! We have one more trick up our
+
+89
+00:07:10,740 --> 00:07:17,460
+sleeve. So far the 4th component of all position
+vectors has been fixed, with w always equal
+
+90
+00:07:17,460 --> 00:07:22,610
+to 1, to allow for matrix multiplication to
+implement translations.
+
+91
+00:07:22,610 --> 00:07:29,139
+We will now additionally define w to be the
+denominator of the x y and z components. This
+
+92
+00:07:29,139 --> 00:07:37,160
+means that the homogeneous vector [x, y, z,
+w] corresponds to the point at [x/w, y/w,
+
+93
+00:07:37,160 --> 00:07:41,690
+z/w].
+This also means that vector [1, 2, 3, 1],
+
+94
+00:07:41,690 --> 00:07:49,060
+is equal to the vector [10, 20, 30, 10] and
+also equal to [2, 4, 6, 2]. These all represent
+
+95
+00:07:49,060 --> 00:07:52,810
+the exact same position at 1, 2, 3.
+
+96
+00:07:52,810 --> 00:07:58,410
+This division is automatically applied on
+the gl_Position variable output from the vertex
+
+97
+00:07:58,410 --> 00:08:04,840
+shader and has always been occurring. If I
+go into the vertex shader and update the homogeneous
+
+98
+00:08:04,840 --> 00:08:09,729
+coordinate value to 2 and run my code, my
+object becomes half the size because we now
+
+99
+00:08:09,729 --> 00:08:12,889
+divide each position component by 2.
+
+100
+00:08:12,889 --> 00:08:18,120
+Therefore if the solution’s w component
+is equal to z, it will be possible to calculate
+
+101
+00:08:18,120 --> 00:08:22,720
+the projected coordinates of x and y onto
+the viewing plane
+
+102
+00:08:22,720 --> 00:08:27,960
+With this knowledge, we can start to construct
+the perspective matrix transformation.
+
+103
+00:08:27,960 --> 00:08:33,360
+The first two rows have the distance to the
+viewing plane on the main diagonal, and zeroes
+
+104
+00:08:33,360 --> 00:08:38,500
+elsewhere. This will have the effect of scaling
+the x and y components by the distance to
+
+105
+00:08:38,500 --> 00:08:46,020
+the near plane. Next the final row must be
+0, 0, 1, 0 to take the z component from the
+
+106
+00:08:46,020 --> 00:08:51,720
+input vector, and move it to the w component
+of the solution vector.
+
+107
+00:08:51,720 --> 00:08:56,270
+All that’s remaining is the third row, and
+an easy mistake to make is to think this can
+
+108
+00:08:56,270 --> 00:09:03,630
+also just be 0, 0, 1, 0, to copy the z depth
+value into the solution. The problem is, every
+
+109
+00:09:03,630 --> 00:09:07,990
+component will be divided by w including this
+one.
+
+110
+00:09:07,990 --> 00:09:14,350
+z over z is just 1 and now we’ve lost our
+depth information and won’t know which objects
+
+111
+00:09:14,350 --> 00:09:16,880
+should be drawn in front of others.
+
+112
+00:09:16,880 --> 00:09:24,180
+So rewind, and in reality we need the solutions
+z component to equal z squared, since z squared
+
+113
+00:09:24,180 --> 00:09:29,420
+over z is equal to z. But in our matrix we
+only have two remaining unknown values to
+
+114
+00:09:29,420 --> 00:09:36,730
+use. If we multiply this out we get the equation
+m1 times z plus m1 equals z squared. This
+
+115
+00:09:36,730 --> 00:09:42,600
+is a quadratic equation, meaning it has at
+most two real solutions and can’t be true
+
+116
+00:09:42,600 --> 00:09:44,690
+for other z values.
+
+117
+00:09:44,690 --> 00:09:50,380
+Therefore we add two constraints that this
+equation is only true when z equals n or z
+
+118
+00:09:50,380 --> 00:09:55,890
+equals f. This means that the transformation
+will not change the z values for points on
+
+119
+00:09:55,890 --> 00:10:02,000
+the near and far planes, but all other z values
+will be warped non-linearly.
+
+120
+00:10:02,000 --> 00:10:08,630
+This results in two equations that we can
+use to solve for m1 and m2. M1 times n + m2
+
+121
+00:10:08,630 --> 00:10:13,890
+equals n squared, and m1 times f plus m2 equals
+f squared
+
+122
+00:10:13,890 --> 00:10:18,450
+Solving these equations
+We get m1 is equal to f + n, and m2 is equal
+
+123
+00:10:18,450 --> 00:10:20,120
+to negative fn.
+
+124
+00:10:20,120 --> 00:10:26,670
+Let’s plug this in and the solution’s
+z component becomes f + n times z - fn.
+
+125
+00:10:26,670 --> 00:10:31,300
+So let's take a minute to go over what this
+really means. We wanted to have a one to one
+
+126
+00:10:31,300 --> 00:10:35,830
+linear relationship between the input z value
+and output z value.
+
+127
+00:10:35,830 --> 00:10:41,540
+But the best we could do is make this true
+for points at the near depth and far depth.
+
+128
+00:10:41,540 --> 00:10:46,269
+The z depth values on the near and far planes
+remain unchanged, but the relationship is
+
+129
+00:10:46,269 --> 00:10:48,240
+no longer linear.
+
+130
+00:10:48,240 --> 00:10:53,230
+However this is still useful because the relative
+ordering of the z values between the near
+
+131
+00:10:53,230 --> 00:10:58,380
+and far planes is preserved! This means we
+can still use z to determine the order of
+
+132
+00:10:58,380 --> 00:11:00,620
+objects within our scene.
+
+133
+00:11:00,620 --> 00:11:05,280
+An advantage to having the z depth values
+be non-linear is that calculations at the
+
+134
+00:11:05,280 --> 00:11:12,060
+near plane will be higher precision then calculations
+at the far plane, reducing observable Z fighting.
+
+135
+00:11:12,060 --> 00:11:18,070
+Z fighting, also known as stitching or depth
+fighting, occurs when two surfaces are very
+
+136
+00:11:18,070 --> 00:11:21,920
+close together.
+This visual artifact is caused by the rounding
+
+137
+00:11:21,920 --> 00:11:27,490
+errors of floating point calculations and
+can be avoided by reducing the distance between
+
+138
+00:11:27,490 --> 00:11:29,910
+the near and far planes.
+
+139
+00:11:29,910 --> 00:11:34,930
+Now back to the perspective matrix, if you
+apply the perspective transform followed by
+
+140
+00:11:34,930 --> 00:11:40,160
+the orthographic projection transform, the
+combined result is known as the perspective
+
+141
+00:11:40,160 --> 00:11:42,339
+projection transformation.
+
+142
+00:11:42,339 --> 00:11:47,120
+And this is what we’ve been after. This
+matrix will transform objects contained by
+
+143
+00:11:47,120 --> 00:11:52,610
+the viewing frustum, into the canonical view
+volume, and in doing so will make the objects
+
+144
+00:11:52,610 --> 00:11:54,649
+appear in perspective.
+
+145
+00:11:54,649 --> 00:12:00,550
+We define the perspective projection matrix
+with the same values as used by the orthographic
+
+146
+00:12:00,550 --> 00:12:07,540
+view volume, the 6 values r, l, b, t, n and
+f. But it’s often more convenient to use
+
+147
+00:12:07,540 --> 00:12:13,660
+a simpler system where we assume the frustum
+is aligned along the z axis, meaning that
+
+148
+00:12:13,660 --> 00:12:16,440
+we are looking through the center of the window.
+
+149
+00:12:16,440 --> 00:12:25,530
+This implies that l = -r, and t = -b, which
+can further simplify the matrix
+
+150
+00:12:25,530 --> 00:12:31,320
+Finally, it is common to specify a vertical
+field of view rather than the values for the
+
+151
+00:12:31,320 --> 00:12:33,240
+bottom and the right planes.
+
+152
+00:12:33,240 --> 00:12:38,880
+The vertical field of view is the angle from
+the bottom to the top of the near plane relative
+
+153
+00:12:38,880 --> 00:12:44,420
+to the viewer's line of sight. If we also
+know the aspect ratio of the window, we can
+
+154
+00:12:44,420 --> 00:12:49,510
+easily calculate values for the bottom right
+corner with some basic trigonometry.
+
+155
+00:12:49,510 --> 00:12:55,120
+So the bottom value is equal to the near plane
+distance times tan theta over two. And the
+
+156
+00:12:55,120 --> 00:12:59,690
+right value is equal to the windows aspect
+ratio, times the bottom.
+
+157
+00:12:59,690 --> 00:13:06,160
+Plug this in and simplify, and we get the
+final form of the perspective projection matrix.
+
+158
+00:13:06,160 --> 00:13:10,870
+If you enjoy computer graphics content like
+this, please consider subscribing.
+
+159
+00:13:10,870 --> 00:13:14,579
+Thanks for watching and keep on coding, cheers!
+

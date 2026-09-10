@@ -1,0 +1,3955 @@
+1
+00:00:00,160 --> 00:00:02,389
+ 
+in the previous video i showed how we
+
+2
+00:00:02,389 --> 00:00:02,399
+in the previous video i showed how we
+ 
+
+3
+00:00:02,399 --> 00:00:03,030
+in the previous video i showed how we
+can pass
+
+4
+00:00:03,030 --> 00:00:03,040
+can pass
+ 
+
+5
+00:00:03,040 --> 00:00:05,190
+can pass
+data into a vertex shader with the use
+
+6
+00:00:05,190 --> 00:00:05,200
+data into a vertex shader with the use
+ 
+
+7
+00:00:05,200 --> 00:00:06,789
+data into a vertex shader with the use
+of a vertex buffer
+
+8
+00:00:06,789 --> 00:00:06,799
+of a vertex buffer
+ 
+
+9
+00:00:06,799 --> 00:00:08,870
+of a vertex buffer
+and by declaring variables in our shader
+
+10
+00:00:08,870 --> 00:00:08,880
+and by declaring variables in our shader
+ 
+
+11
+00:00:08,880 --> 00:00:11,110
+and by declaring variables in our shader
+with the in storage qualifier
+
+12
+00:00:11,110 --> 00:00:11,120
+with the in storage qualifier
+ 
+
+13
+00:00:11,120 --> 00:00:13,910
+with the in storage qualifier
+it is also possible to pass values from
+
+14
+00:00:13,910 --> 00:00:13,920
+it is also possible to pass values from
+ 
+
+15
+00:00:13,920 --> 00:00:15,030
+it is also possible to pass values from
+the vertex shader
+
+16
+00:00:15,030 --> 00:00:15,040
+the vertex shader
+ 
+
+17
+00:00:15,040 --> 00:00:17,349
+the vertex shader
+to the fragment shader we do this by
+
+18
+00:00:17,349 --> 00:00:17,359
+to the fragment shader we do this by
+ 
+
+19
+00:00:17,359 --> 00:00:18,150
+to the fragment shader we do this by
+declaring
+
+20
+00:00:18,150 --> 00:00:18,160
+declaring
+ 
+
+21
+00:00:18,160 --> 00:00:19,990
+declaring
+and initializing a variable in the
+
+22
+00:00:19,990 --> 00:00:20,000
+and initializing a variable in the
+ 
+
+23
+00:00:20,000 --> 00:00:21,750
+and initializing a variable in the
+vertex shader with the out
+
+24
+00:00:21,750 --> 00:00:21,760
+vertex shader with the out
+ 
+
+25
+00:00:21,760 --> 00:00:24,390
+vertex shader with the out
+storage qualifier then for each out
+
+26
+00:00:24,390 --> 00:00:24,400
+storage qualifier then for each out
+ 
+
+27
+00:00:24,400 --> 00:00:26,550
+storage qualifier then for each out
+variable in the vertex shader we should
+
+28
+00:00:26,550 --> 00:00:26,560
+variable in the vertex shader we should
+ 
+
+29
+00:00:26,560 --> 00:00:28,710
+variable in the vertex shader we should
+have a corresponding in variable
+
+30
+00:00:28,710 --> 00:00:28,720
+have a corresponding in variable
+ 
+
+31
+00:00:28,720 --> 00:00:30,870
+have a corresponding in variable
+declared in the associated fragment
+
+32
+00:00:30,870 --> 00:00:30,880
+declared in the associated fragment
+ 
+
+33
+00:00:30,880 --> 00:00:33,350
+declared in the associated fragment
+shader note that what's important here
+
+34
+00:00:33,350 --> 00:00:33,360
+shader note that what's important here
+ 
+
+35
+00:00:33,360 --> 00:00:34,790
+shader note that what's important here
+is that the locations
+
+36
+00:00:34,790 --> 00:00:34,800
+is that the locations
+ 
+
+37
+00:00:34,800 --> 00:00:37,190
+is that the locations
+match the variable's name can actually
+
+38
+00:00:37,190 --> 00:00:37,200
+match the variable's name can actually
+ 
+
+39
+00:00:37,200 --> 00:00:39,110
+match the variable's name can actually
+differ between the vertex and fragment
+
+40
+00:00:39,110 --> 00:00:39,120
+differ between the vertex and fragment
+ 
+
+41
+00:00:39,120 --> 00:00:39,910
+differ between the vertex and fragment
+files
+
+42
+00:00:39,910 --> 00:00:39,920
+files
+ 
+
+43
+00:00:39,920 --> 00:00:42,549
+files
+but hey wait up our vertex shader runs
+
+44
+00:00:42,549 --> 00:00:42,559
+but hey wait up our vertex shader runs
+ 
+
+45
+00:00:42,559 --> 00:00:43,670
+but hey wait up our vertex shader runs
+per vertex
+
+46
+00:00:43,670 --> 00:00:43,680
+per vertex
+ 
+
+47
+00:00:43,680 --> 00:00:45,830
+per vertex
+but the fragment shader occurs after
+
+48
+00:00:45,830 --> 00:00:45,840
+but the fragment shader occurs after
+ 
+
+49
+00:00:45,840 --> 00:00:47,830
+but the fragment shader occurs after
+rasterization in our pipeline
+
+50
+00:00:47,830 --> 00:00:47,840
+rasterization in our pipeline
+ 
+
+51
+00:00:47,840 --> 00:00:50,549
+rasterization in our pipeline
+and runs per fragment how do we go from
+
+52
+00:00:50,549 --> 00:00:50,559
+and runs per fragment how do we go from
+ 
+
+53
+00:00:50,559 --> 00:00:52,389
+and runs per fragment how do we go from
+a per vertex value to a per
+
+54
+00:00:52,389 --> 00:00:52,399
+a per vertex value to a per
+ 
+
+55
+00:00:52,399 --> 00:00:54,790
+a per vertex value to a per
+fragment value each of our vertices can
+
+56
+00:00:54,790 --> 00:00:54,800
+fragment value each of our vertices can
+ 
+
+57
+00:00:54,800 --> 00:00:56,630
+fragment value each of our vertices can
+set the out variable to a different
+
+58
+00:00:56,630 --> 00:00:56,640
+set the out variable to a different
+ 
+
+59
+00:00:56,640 --> 00:00:57,189
+set the out variable to a different
+value
+
+60
+00:00:57,189 --> 00:00:57,199
+value
+ 
+
+61
+00:00:57,199 --> 00:00:59,590
+value
+so ideally what comes to mind is that we
+
+62
+00:00:59,590 --> 00:00:59,600
+so ideally what comes to mind is that we
+ 
+
+63
+00:00:59,600 --> 00:01:00,790
+so ideally what comes to mind is that we
+need to combine
+
+64
+00:01:00,790 --> 00:01:00,800
+need to combine
+ 
+
+65
+00:01:00,800 --> 00:01:03,670
+need to combine
+these values in some way the answer is
+
+66
+00:01:03,670 --> 00:01:03,680
+these values in some way the answer is
+ 
+
+67
+00:01:03,680 --> 00:01:05,670
+these values in some way the answer is
+linear interpolation
+
+68
+00:01:05,670 --> 00:01:05,680
+linear interpolation
+ 
+
+69
+00:01:05,680 --> 00:01:08,310
+linear interpolation
+interpolation simply put is the process
+
+70
+00:01:08,310 --> 00:01:08,320
+interpolation simply put is the process
+ 
+
+71
+00:01:08,320 --> 00:01:09,429
+interpolation simply put is the process
+of estimating an
+
+72
+00:01:09,429 --> 00:01:09,439
+of estimating an
+ 
+
+73
+00:01:09,439 --> 00:01:11,750
+of estimating an
+unknown value that falls between known
+
+74
+00:01:11,750 --> 00:01:11,760
+unknown value that falls between known
+ 
+
+75
+00:01:11,760 --> 00:01:12,630
+unknown value that falls between known
+values
+
+76
+00:01:12,630 --> 00:01:12,640
+values
+ 
+
+77
+00:01:12,640 --> 00:01:14,390
+values
+it's pretty much like connecting the
+
+78
+00:01:14,390 --> 00:01:14,400
+it's pretty much like connecting the
+ 
+
+79
+00:01:14,400 --> 00:01:16,550
+it's pretty much like connecting the
+dots there exists many different
+
+80
+00:01:16,550 --> 00:01:16,560
+dots there exists many different
+ 
+
+81
+00:01:16,560 --> 00:01:18,469
+dots there exists many different
+possible ways to do it linear
+
+82
+00:01:18,469 --> 00:01:18,479
+possible ways to do it linear
+ 
+
+83
+00:01:18,479 --> 00:01:20,310
+possible ways to do it linear
+interpolation just means that we do this
+
+84
+00:01:20,310 --> 00:01:20,320
+interpolation just means that we do this
+ 
+
+85
+00:01:20,320 --> 00:01:22,070
+interpolation just means that we do this
+by using straight lines
+
+86
+00:01:22,070 --> 00:01:22,080
+by using straight lines
+ 
+
+87
+00:01:22,080 --> 00:01:23,749
+by using straight lines
+this is perhaps the most common
+
+88
+00:01:23,749 --> 00:01:23,759
+this is perhaps the most common
+ 
+
+89
+00:01:23,759 --> 00:01:25,109
+this is perhaps the most common
+mathematical operation
+
+90
+00:01:25,109 --> 00:01:25,119
+mathematical operation
+ 
+
+91
+00:01:25,119 --> 00:01:27,030
+mathematical operation
+in computer graphics if we let a
+
+92
+00:01:27,030 --> 00:01:27,040
+in computer graphics if we let a
+ 
+
+93
+00:01:27,040 --> 00:01:29,109
+in computer graphics if we let a
+variable t correspond to the fractional
+
+94
+00:01:29,109 --> 00:01:29,119
+variable t correspond to the fractional
+ 
+
+95
+00:01:29,119 --> 00:01:30,789
+variable t correspond to the fractional
+distance between two points
+
+96
+00:01:30,789 --> 00:01:30,799
+distance between two points
+ 
+
+97
+00:01:30,799 --> 00:01:33,830
+distance between two points
+then for any value of t from 0 to 1 we
+
+98
+00:01:33,830 --> 00:01:33,840
+then for any value of t from 0 to 1 we
+ 
+
+99
+00:01:33,840 --> 00:01:35,830
+then for any value of t from 0 to 1 we
+get a point that falls along the line
+
+100
+00:01:35,830 --> 00:01:35,840
+get a point that falls along the line
+ 
+
+101
+00:01:35,840 --> 00:01:36,789
+get a point that falls along the line
+connecting the two
+
+102
+00:01:36,789 --> 00:01:36,799
+connecting the two
+ 
+
+103
+00:01:36,799 --> 00:01:39,510
+connecting the two
+endpoints the position of a point can
+
+104
+00:01:39,510 --> 00:01:39,520
+endpoints the position of a point can
+ 
+
+105
+00:01:39,520 --> 00:01:41,510
+endpoints the position of a point can
+easily be calculated by the sum
+
+106
+00:01:41,510 --> 00:01:41,520
+easily be calculated by the sum
+ 
+
+107
+00:01:41,520 --> 00:01:44,389
+easily be calculated by the sum
+of the endpoints weighted by t and one
+
+108
+00:01:44,389 --> 00:01:44,399
+of the endpoints weighted by t and one
+ 
+
+109
+00:01:44,399 --> 00:01:45,429
+of the endpoints weighted by t and one
+minus t
+
+110
+00:01:45,429 --> 00:01:45,439
+minus t
+ 
+
+111
+00:01:45,439 --> 00:01:48,469
+minus t
+for example a value one third of the way
+
+112
+00:01:48,469 --> 00:01:48,479
+for example a value one third of the way
+ 
+
+113
+00:01:48,479 --> 00:01:49,190
+for example a value one third of the way
+between a
+
+114
+00:01:49,190 --> 00:01:49,200
+between a
+ 
+
+115
+00:01:49,200 --> 00:01:51,749
+between a
+equals six and b equals twelve gives us
+
+116
+00:01:51,749 --> 00:01:51,759
+equals six and b equals twelve gives us
+ 
+
+117
+00:01:51,759 --> 00:01:53,350
+equals six and b equals twelve gives us
+the value of eight
+
+118
+00:01:53,350 --> 00:01:53,360
+the value of eight
+ 
+
+119
+00:01:53,360 --> 00:01:55,749
+the value of eight
+additionally this easily extends to
+
+120
+00:01:55,749 --> 00:01:55,759
+additionally this easily extends to
+ 
+
+121
+00:01:55,759 --> 00:01:57,270
+additionally this easily extends to
+multiple dimensions
+
+122
+00:01:57,270 --> 00:01:57,280
+multiple dimensions
+ 
+
+123
+00:01:57,280 --> 00:01:59,510
+multiple dimensions
+each component is just simply calculated
+
+124
+00:01:59,510 --> 00:01:59,520
+each component is just simply calculated
+ 
+
+125
+00:01:59,520 --> 00:02:00,389
+each component is just simply calculated
+separately
+
+126
+00:02:00,389 --> 00:02:00,399
+separately
+ 
+
+127
+00:02:00,399 --> 00:02:02,709
+separately
+so our new x is just the linearly
+
+128
+00:02:02,709 --> 00:02:02,719
+so our new x is just the linearly
+ 
+
+129
+00:02:02,719 --> 00:02:03,429
+so our new x is just the linearly
+weighted sum
+
+130
+00:02:03,429 --> 00:02:03,439
+weighted sum
+ 
+
+131
+00:02:03,439 --> 00:02:05,670
+weighted sum
+of our points x components and the y
+
+132
+00:02:05,670 --> 00:02:05,680
+of our points x components and the y
+ 
+
+133
+00:02:05,680 --> 00:02:07,510
+of our points x components and the y
+component is just the weighted sum of
+
+134
+00:02:07,510 --> 00:02:07,520
+component is just the weighted sum of
+ 
+
+135
+00:02:07,520 --> 00:02:09,990
+component is just the weighted sum of
+the two points y components
+
+136
+00:02:09,990 --> 00:02:10,000
+the two points y components
+ 
+
+137
+00:02:10,000 --> 00:02:12,229
+the two points y components
+therefore if we want to find the point
+
+138
+00:02:12,229 --> 00:02:12,239
+therefore if we want to find the point
+ 
+
+139
+00:02:12,239 --> 00:02:13,830
+therefore if we want to find the point
+halfway between points a
+
+140
+00:02:13,830 --> 00:02:13,840
+halfway between points a
+ 
+
+141
+00:02:13,840 --> 00:02:16,470
+halfway between points a
+and b we can just use the same formula
+
+142
+00:02:16,470 --> 00:02:16,480
+and b we can just use the same formula
+ 
+
+143
+00:02:16,480 --> 00:02:17,030
+and b we can just use the same formula
+with t
+
+144
+00:02:17,030 --> 00:02:17,040
+with t
+ 
+
+145
+00:02:17,040 --> 00:02:19,990
+with t
+equals 0.5 on the x component and on the
+
+146
+00:02:19,990 --> 00:02:20,000
+equals 0.5 on the x component and on the
+ 
+
+147
+00:02:20,000 --> 00:02:20,869
+equals 0.5 on the x component and on the
+y component
+
+148
+00:02:20,869 --> 00:02:20,879
+y component
+ 
+
+149
+00:02:20,879 --> 00:02:23,510
+y component
+therefore calculating p x and p y is
+
+150
+00:02:23,510 --> 00:02:23,520
+therefore calculating p x and p y is
+ 
+
+151
+00:02:23,520 --> 00:02:25,510
+therefore calculating p x and p y is
+quite straightforward
+
+152
+00:02:25,510 --> 00:02:25,520
+quite straightforward
+ 
+
+153
+00:02:25,520 --> 00:02:27,910
+quite straightforward
+you can interpolate any type of value
+
+154
+00:02:27,910 --> 00:02:27,920
+you can interpolate any type of value
+ 
+
+155
+00:02:27,920 --> 00:02:28,550
+you can interpolate any type of value
+you want
+
+156
+00:02:28,550 --> 00:02:28,560
+you want
+ 
+
+157
+00:02:28,560 --> 00:02:30,949
+you want
+not just positions this works just as
+
+158
+00:02:30,949 --> 00:02:30,959
+not just positions this works just as
+ 
+
+159
+00:02:30,959 --> 00:02:33,110
+not just positions this works just as
+well for colors if we have a red point
+
+160
+00:02:33,110 --> 00:02:33,120
+well for colors if we have a red point
+ 
+
+161
+00:02:33,120 --> 00:02:34,229
+well for colors if we have a red point
+and a blue point
+
+162
+00:02:34,229 --> 00:02:34,239
+and a blue point
+ 
+
+163
+00:02:34,239 --> 00:02:36,470
+and a blue point
+by interpolating each color component
+
+164
+00:02:36,470 --> 00:02:36,480
+by interpolating each color component
+ 
+
+165
+00:02:36,480 --> 00:02:37,270
+by interpolating each color component
+separately
+
+166
+00:02:37,270 --> 00:02:37,280
+separately
+ 
+
+167
+00:02:37,280 --> 00:02:39,430
+separately
+we get the range of colors between these
+
+168
+00:02:39,430 --> 00:02:39,440
+we get the range of colors between these
+ 
+
+169
+00:02:39,440 --> 00:02:40,630
+we get the range of colors between these
+two points
+
+170
+00:02:40,630 --> 00:02:40,640
+two points
+ 
+
+171
+00:02:40,640 --> 00:02:43,030
+two points
+so the red component will vary from 0 to
+
+172
+00:02:43,030 --> 00:02:43,040
+so the red component will vary from 0 to
+ 
+
+173
+00:02:43,040 --> 00:02:44,150
+so the red component will vary from 0 to
+255
+
+174
+00:02:44,150 --> 00:02:44,160
+255
+ 
+
+175
+00:02:44,160 --> 00:02:46,710
+255
+the green component will always be 0 and
+
+176
+00:02:46,710 --> 00:02:46,720
+the green component will always be 0 and
+ 
+
+177
+00:02:46,720 --> 00:02:49,430
+the green component will always be 0 and
+the blue component will vary from 255 to
+
+178
+00:02:49,430 --> 00:02:49,440
+the blue component will vary from 255 to
+ 
+
+179
+00:02:49,440 --> 00:02:50,710
+the blue component will vary from 255 to
+0.
+
+180
+00:02:50,710 --> 00:02:50,720
+0.
+ 
+
+181
+00:02:50,720 --> 00:02:53,110
+0.
+however this helps with lines but most
+
+182
+00:02:53,110 --> 00:02:53,120
+however this helps with lines but most
+ 
+
+183
+00:02:53,120 --> 00:02:55,750
+however this helps with lines but most
+often we will be working with triangles
+
+184
+00:02:55,750 --> 00:02:55,760
+often we will be working with triangles
+ 
+
+185
+00:02:55,760 --> 00:02:57,509
+often we will be working with triangles
+how do we smoothly interpolate a
+
+186
+00:02:57,509 --> 00:02:57,519
+how do we smoothly interpolate a
+ 
+
+187
+00:02:57,519 --> 00:02:59,750
+how do we smoothly interpolate a
+property's value across a triangle
+
+188
+00:02:59,750 --> 00:02:59,760
+property's value across a triangle
+ 
+
+189
+00:02:59,760 --> 00:03:01,990
+property's value across a triangle
+there exists a variety of ways to do
+
+190
+00:03:01,990 --> 00:03:02,000
+there exists a variety of ways to do
+ 
+
+191
+00:03:02,000 --> 00:03:03,350
+there exists a variety of ways to do
+this but the simplest
+
+192
+00:03:03,350 --> 00:03:03,360
+this but the simplest
+ 
+
+193
+00:03:03,360 --> 00:03:05,430
+this but the simplest
+is to use barycentric coordinates
+
+194
+00:03:05,430 --> 00:03:05,440
+is to use barycentric coordinates
+ 
+
+195
+00:03:05,440 --> 00:03:07,270
+is to use barycentric coordinates
+fortunately the graphics pipeline
+
+196
+00:03:07,270 --> 00:03:07,280
+fortunately the graphics pipeline
+ 
+
+197
+00:03:07,280 --> 00:03:09,190
+fortunately the graphics pipeline
+handles calculation of the barycentric
+
+198
+00:03:09,190 --> 00:03:09,200
+handles calculation of the barycentric
+ 
+
+199
+00:03:09,200 --> 00:03:10,309
+handles calculation of the barycentric
+coordinates for us
+
+200
+00:03:10,309 --> 00:03:10,319
+coordinates for us
+ 
+
+201
+00:03:10,319 --> 00:03:12,790
+coordinates for us
+automatically so in this video series i
+
+202
+00:03:12,790 --> 00:03:12,800
+automatically so in this video series i
+ 
+
+203
+00:03:12,800 --> 00:03:14,630
+automatically so in this video series i
+won't go through the full derivation
+
+204
+00:03:14,630 --> 00:03:14,640
+won't go through the full derivation
+ 
+
+205
+00:03:14,640 --> 00:03:17,509
+won't go through the full derivation
+since it is unnecessary for our purposes
+
+206
+00:03:17,509 --> 00:03:17,519
+since it is unnecessary for our purposes
+ 
+
+207
+00:03:17,519 --> 00:03:20,149
+since it is unnecessary for our purposes
+and we'll just go over the basic ideas
+
+208
+00:03:20,149 --> 00:03:20,159
+and we'll just go over the basic ideas
+ 
+
+209
+00:03:20,159 --> 00:03:23,190
+and we'll just go over the basic ideas
+if we have three points a b and c we can
+
+210
+00:03:23,190 --> 00:03:23,200
+if we have three points a b and c we can
+ 
+
+211
+00:03:23,200 --> 00:03:25,350
+if we have three points a b and c we can
+think of barycentric coordinates as a
+
+212
+00:03:25,350 --> 00:03:25,360
+think of barycentric coordinates as a
+ 
+
+213
+00:03:25,360 --> 00:03:26,070
+think of barycentric coordinates as a
+scaled
+
+214
+00:03:26,070 --> 00:03:26,080
+scaled
+ 
+
+215
+00:03:26,080 --> 00:03:28,390
+scaled
+non-orthogonal coordinate system with
+
+216
+00:03:28,390 --> 00:03:28,400
+non-orthogonal coordinate system with
+ 
+
+217
+00:03:28,400 --> 00:03:29,589
+non-orthogonal coordinate system with
+basis vectors b
+
+218
+00:03:29,589 --> 00:03:29,599
+basis vectors b
+ 
+
+219
+00:03:29,599 --> 00:03:32,630
+basis vectors b
+minus a and c minus a okay let's slow
+
+220
+00:03:32,630 --> 00:03:32,640
+minus a and c minus a okay let's slow
+ 
+
+221
+00:03:32,640 --> 00:03:33,270
+minus a and c minus a okay let's slow
+down
+
+222
+00:03:33,270 --> 00:03:33,280
+down
+ 
+
+223
+00:03:33,280 --> 00:03:34,949
+down
+if you're not familiar with linear
+
+224
+00:03:34,949 --> 00:03:34,959
+if you're not familiar with linear
+ 
+
+225
+00:03:34,959 --> 00:03:36,390
+if you're not familiar with linear
+algebra don't panic
+
+226
+00:03:36,390 --> 00:03:36,400
+algebra don't panic
+ 
+
+227
+00:03:36,400 --> 00:03:39,030
+algebra don't panic
+this is still pretty simple conceptually
+
+228
+00:03:39,030 --> 00:03:39,040
+this is still pretty simple conceptually
+ 
+
+229
+00:03:39,040 --> 00:03:40,390
+this is still pretty simple conceptually
+essentially it is kind of like
+
+230
+00:03:40,390 --> 00:03:40,400
+essentially it is kind of like
+ 
+
+231
+00:03:40,400 --> 00:03:42,309
+essentially it is kind of like
+performing a linear interpolation
+
+232
+00:03:42,309 --> 00:03:42,319
+performing a linear interpolation
+ 
+
+233
+00:03:42,319 --> 00:03:42,789
+performing a linear interpolation
+between
+
+234
+00:03:42,789 --> 00:03:42,799
+between
+ 
+
+235
+00:03:42,799 --> 00:03:45,430
+between
+a and b with the fractional distance
+
+236
+00:03:45,430 --> 00:03:45,440
+a and b with the fractional distance
+ 
+
+237
+00:03:45,440 --> 00:03:47,830
+a and b with the fractional distance
+being denoted by the beta symbol
+
+238
+00:03:47,830 --> 00:03:47,840
+being denoted by the beta symbol
+ 
+
+239
+00:03:47,840 --> 00:03:50,229
+being denoted by the beta symbol
+and then doing a second interpolation
+
+240
+00:03:50,229 --> 00:03:50,239
+and then doing a second interpolation
+ 
+
+241
+00:03:50,239 --> 00:03:51,030
+and then doing a second interpolation
+between a
+
+242
+00:03:51,030 --> 00:03:51,040
+between a
+ 
+
+243
+00:03:51,040 --> 00:03:53,350
+between a
+and c and denoting that weight with
+
+244
+00:03:53,350 --> 00:03:53,360
+and c and denoting that weight with
+ 
+
+245
+00:03:53,360 --> 00:03:54,470
+and c and denoting that weight with
+gamma
+
+246
+00:03:54,470 --> 00:03:54,480
+gamma
+ 
+
+247
+00:03:54,480 --> 00:03:56,550
+gamma
+then to calculate an interpolated value
+
+248
+00:03:56,550 --> 00:03:56,560
+then to calculate an interpolated value
+ 
+
+249
+00:03:56,560 --> 00:03:59,030
+then to calculate an interpolated value
+at point p anywhere within the triangle
+
+250
+00:03:59,030 --> 00:03:59,040
+at point p anywhere within the triangle
+ 
+
+251
+00:03:59,040 --> 00:04:01,750
+at point p anywhere within the triangle
+we can use beta gamma and one minus beta
+
+252
+00:04:01,750 --> 00:04:01,760
+we can use beta gamma and one minus beta
+ 
+
+253
+00:04:01,760 --> 00:04:02,789
+we can use beta gamma and one minus beta
+minus gamma
+
+254
+00:04:02,789 --> 00:04:02,799
+minus gamma
+ 
+
+255
+00:04:02,799 --> 00:04:04,550
+minus gamma
+as the linear weights for the three
+
+256
+00:04:04,550 --> 00:04:04,560
+as the linear weights for the three
+ 
+
+257
+00:04:04,560 --> 00:04:06,070
+as the linear weights for the three
+points b c and a
+
+258
+00:04:06,070 --> 00:04:06,080
+points b c and a
+ 
+
+259
+00:04:06,080 --> 00:04:08,710
+points b c and a
+respectively this is just like basic
+
+260
+00:04:08,710 --> 00:04:08,720
+respectively this is just like basic
+ 
+
+261
+00:04:08,720 --> 00:04:10,070
+respectively this is just like basic
+linear interpolation
+
+262
+00:04:10,070 --> 00:04:10,080
+linear interpolation
+ 
+
+263
+00:04:10,080 --> 00:04:12,470
+linear interpolation
+but instead of one t value parameter we
+
+264
+00:04:12,470 --> 00:04:12,480
+but instead of one t value parameter we
+ 
+
+265
+00:04:12,480 --> 00:04:13,589
+but instead of one t value parameter we
+have two parameters
+
+266
+00:04:13,589 --> 00:04:13,599
+have two parameters
+ 
+
+267
+00:04:13,599 --> 00:04:16,390
+have two parameters
+beta and gamma this also works just as
+
+268
+00:04:16,390 --> 00:04:16,400
+beta and gamma this also works just as
+ 
+
+269
+00:04:16,400 --> 00:04:18,469
+beta and gamma this also works just as
+well in three dimensions
+
+270
+00:04:18,469 --> 00:04:18,479
+well in three dimensions
+ 
+
+271
+00:04:18,479 --> 00:04:21,030
+well in three dimensions
+often we'll simplify one minus beta
+
+272
+00:04:21,030 --> 00:04:21,040
+often we'll simplify one minus beta
+ 
+
+273
+00:04:21,040 --> 00:04:21,990
+often we'll simplify one minus beta
+minus gamma
+
+274
+00:04:21,990 --> 00:04:22,000
+minus gamma
+ 
+
+275
+00:04:22,000 --> 00:04:25,270
+minus gamma
+to just alpha then we get the equation
+
+276
+00:04:25,270 --> 00:04:25,280
+to just alpha then we get the equation
+ 
+
+277
+00:04:25,280 --> 00:04:28,629
+to just alpha then we get the equation
+p equals a times alpha plus b times beta
+
+278
+00:04:28,629 --> 00:04:28,639
+p equals a times alpha plus b times beta
+ 
+
+279
+00:04:28,639 --> 00:04:31,030
+p equals a times alpha plus b times beta
+plus c times gamma with the additional
+
+280
+00:04:31,030 --> 00:04:31,040
+plus c times gamma with the additional
+ 
+
+281
+00:04:31,040 --> 00:04:33,110
+plus c times gamma with the additional
+constraint that alpha plus beta plus
+
+282
+00:04:33,110 --> 00:04:33,120
+constraint that alpha plus beta plus
+ 
+
+283
+00:04:33,120 --> 00:04:33,670
+constraint that alpha plus beta plus
+gamma
+
+284
+00:04:33,670 --> 00:04:33,680
+gamma
+ 
+
+285
+00:04:33,680 --> 00:04:36,710
+gamma
+equals one so hopefully i've explained
+
+286
+00:04:36,710 --> 00:04:36,720
+equals one so hopefully i've explained
+ 
+
+287
+00:04:36,720 --> 00:04:38,469
+equals one so hopefully i've explained
+well enough that conceptually you
+
+288
+00:04:38,469 --> 00:04:38,479
+well enough that conceptually you
+ 
+
+289
+00:04:38,479 --> 00:04:40,390
+well enough that conceptually you
+understand how this works
+
+290
+00:04:40,390 --> 00:04:40,400
+understand how this works
+ 
+
+291
+00:04:40,400 --> 00:04:41,909
+understand how this works
+one nice feature of barycentric
+
+292
+00:04:41,909 --> 00:04:41,919
+one nice feature of barycentric
+ 
+
+293
+00:04:41,919 --> 00:04:43,510
+one nice feature of barycentric
+coordinates is that a point
+
+294
+00:04:43,510 --> 00:04:43,520
+coordinates is that a point
+ 
+
+295
+00:04:43,520 --> 00:04:46,310
+coordinates is that a point
+is inside a triangle if and only if
+
+296
+00:04:46,310 --> 00:04:46,320
+is inside a triangle if and only if
+ 
+
+297
+00:04:46,320 --> 00:04:48,230
+is inside a triangle if and only if
+alpha beta and gamma are all
+
+298
+00:04:48,230 --> 00:04:48,240
+alpha beta and gamma are all
+ 
+
+299
+00:04:48,240 --> 00:04:51,350
+alpha beta and gamma are all
+greater than zero and less than one
+
+300
+00:04:51,350 --> 00:04:51,360
+greater than zero and less than one
+ 
+
+301
+00:04:51,360 --> 00:04:53,830
+greater than zero and less than one
+okay now back to vulcan in our graphics
+
+302
+00:04:53,830 --> 00:04:53,840
+okay now back to vulcan in our graphics
+ 
+
+303
+00:04:53,840 --> 00:04:54,469
+okay now back to vulcan in our graphics
+pipeline
+
+304
+00:04:54,469 --> 00:04:54,479
+pipeline
+ 
+
+305
+00:04:54,479 --> 00:04:56,550
+pipeline
+i've previously said the purpose of the
+
+306
+00:04:56,550 --> 00:04:56,560
+i've previously said the purpose of the
+ 
+
+307
+00:04:56,560 --> 00:04:58,150
+i've previously said the purpose of the
+rasterization stage
+
+308
+00:04:58,150 --> 00:04:58,160
+rasterization stage
+ 
+
+309
+00:04:58,160 --> 00:04:59,909
+rasterization stage
+is to break up our geometry into
+
+310
+00:04:59,909 --> 00:04:59,919
+is to break up our geometry into
+ 
+
+311
+00:04:59,919 --> 00:05:01,909
+is to break up our geometry into
+fragments for each pixel the triangle
+
+312
+00:05:01,909 --> 00:05:01,919
+fragments for each pixel the triangle
+ 
+
+313
+00:05:01,919 --> 00:05:03,270
+fragments for each pixel the triangle
+overlaps
+
+314
+00:05:03,270 --> 00:05:03,280
+overlaps
+ 
+
+315
+00:05:03,280 --> 00:05:05,430
+overlaps
+in addition to this for each fragment
+
+316
+00:05:05,430 --> 00:05:05,440
+in addition to this for each fragment
+ 
+
+317
+00:05:05,440 --> 00:05:06,950
+in addition to this for each fragment
+the rasterization stage will
+
+318
+00:05:06,950 --> 00:05:06,960
+the rasterization stage will
+ 
+
+319
+00:05:06,960 --> 00:05:08,790
+the rasterization stage will
+automatically interpolate any variables
+
+320
+00:05:08,790 --> 00:05:08,800
+automatically interpolate any variables
+ 
+
+321
+00:05:08,800 --> 00:05:10,310
+automatically interpolate any variables
+we've declared as outputs from the
+
+322
+00:05:10,310 --> 00:05:10,320
+we've declared as outputs from the
+ 
+
+323
+00:05:10,320 --> 00:05:11,909
+we've declared as outputs from the
+vertex to fragment shader
+
+324
+00:05:11,909 --> 00:05:11,919
+vertex to fragment shader
+ 
+
+325
+00:05:11,919 --> 00:05:14,310
+vertex to fragment shader
+using barycentric coordinates each
+
+326
+00:05:14,310 --> 00:05:14,320
+using barycentric coordinates each
+ 
+
+327
+00:05:14,320 --> 00:05:16,230
+using barycentric coordinates each
+fragment has different coordinates based
+
+328
+00:05:16,230 --> 00:05:16,240
+fragment has different coordinates based
+ 
+
+329
+00:05:16,240 --> 00:05:18,469
+fragment has different coordinates based
+on its position within the triangle
+
+330
+00:05:18,469 --> 00:05:18,479
+on its position within the triangle
+ 
+
+331
+00:05:18,479 --> 00:05:20,230
+on its position within the triangle
+so the input color to the fragment
+
+332
+00:05:20,230 --> 00:05:20,240
+so the input color to the fragment
+ 
+
+333
+00:05:20,240 --> 00:05:22,150
+so the input color to the fragment
+shader will be slightly different each
+
+334
+00:05:22,150 --> 00:05:22,160
+shader will be slightly different each
+ 
+
+335
+00:05:22,160 --> 00:05:25,029
+shader will be slightly different each
+time the fragment shader is run
+
+336
+00:05:25,029 --> 00:05:25,039
+time the fragment shader is run
+ 
+
+337
+00:05:25,039 --> 00:05:28,469
+time the fragment shader is run
+so now let's add a second attribute
+
+338
+00:05:28,469 --> 00:05:28,479
+so now let's add a second attribute
+ 
+
+339
+00:05:28,479 --> 00:05:30,950
+so now let's add a second attribute
+in your vertex shader add a new layout
+
+340
+00:05:30,950 --> 00:05:30,960
+in your vertex shader add a new layout
+ 
+
+341
+00:05:30,960 --> 00:05:31,670
+in your vertex shader add a new layout
+location
+
+342
+00:05:31,670 --> 00:05:31,680
+location
+ 
+
+343
+00:05:31,680 --> 00:05:34,710
+location
+equals 1 in
+
+344
+00:05:34,710 --> 00:05:34,720
+equals 1 in
+ 
+
+345
+00:05:34,720 --> 00:05:38,070
+equals 1 in
+vect3 color now what we want to do is
+
+346
+00:05:38,070 --> 00:05:38,080
+vect3 color now what we want to do is
+ 
+
+347
+00:05:38,080 --> 00:05:40,310
+vect3 color now what we want to do is
+pass this color from our vertex shader
+
+348
+00:05:40,310 --> 00:05:40,320
+pass this color from our vertex shader
+ 
+
+349
+00:05:40,320 --> 00:05:41,909
+pass this color from our vertex shader
+to the fragment shader
+
+350
+00:05:41,909 --> 00:05:41,919
+to the fragment shader
+ 
+
+351
+00:05:41,919 --> 00:05:44,469
+to the fragment shader
+we can do so by specifying an output
+
+352
+00:05:44,469 --> 00:05:44,479
+we can do so by specifying an output
+ 
+
+353
+00:05:44,479 --> 00:05:45,749
+we can do so by specifying an output
+attribute
+
+354
+00:05:45,749 --> 00:05:45,759
+attribute
+ 
+
+355
+00:05:45,759 --> 00:05:48,950
+attribute
+so we have layout location equals
+
+356
+00:05:48,950 --> 00:05:48,960
+so we have layout location equals
+ 
+
+357
+00:05:48,960 --> 00:05:53,189
+so we have layout location equals
+zero out color
+
+358
+00:05:53,189 --> 00:05:53,199
+zero out color
+ 
+
+359
+00:05:53,199 --> 00:05:55,909
+zero out color
+so there is no association between input
+
+360
+00:05:55,909 --> 00:05:55,919
+so there is no association between input
+ 
+
+361
+00:05:55,919 --> 00:05:56,710
+so there is no association between input
+locations
+
+362
+00:05:56,710 --> 00:05:56,720
+locations
+ 
+
+363
+00:05:56,720 --> 00:05:59,510
+locations
+and output locations so even though our
+
+364
+00:05:59,510 --> 00:05:59,520
+and output locations so even though our
+ 
+
+365
+00:05:59,520 --> 00:06:01,990
+and output locations so even though our
+position is at input location 0
+
+366
+00:06:01,990 --> 00:06:02,000
+position is at input location 0
+ 
+
+367
+00:06:02,000 --> 00:06:04,390
+position is at input location 0
+that has no effect at all on us setting
+
+368
+00:06:04,390 --> 00:06:04,400
+that has no effect at all on us setting
+ 
+
+369
+00:06:04,400 --> 00:06:06,710
+that has no effect at all on us setting
+the output location of freight color
+
+370
+00:06:06,710 --> 00:06:06,720
+the output location of freight color
+ 
+
+371
+00:06:06,720 --> 00:06:09,590
+the output location of freight color
+also to zero then in the main function
+
+372
+00:06:09,590 --> 00:06:09,600
+also to zero then in the main function
+ 
+
+373
+00:06:09,600 --> 00:06:11,749
+also to zero then in the main function
+just pass through the input color to the
+
+374
+00:06:11,749 --> 00:06:11,759
+just pass through the input color to the
+ 
+
+375
+00:06:11,759 --> 00:06:12,710
+just pass through the input color to the
+fret color
+
+376
+00:06:12,710 --> 00:06:12,720
+fret color
+ 
+
+377
+00:06:12,720 --> 00:06:15,510
+fret color
+with bright color equals color next in
+
+378
+00:06:15,510 --> 00:06:15,520
+with bright color equals color next in
+ 
+
+379
+00:06:15,520 --> 00:06:16,710
+with bright color equals color next in
+the fragment shader
+
+380
+00:06:16,710 --> 00:06:16,720
+the fragment shader
+ 
+
+381
+00:06:16,720 --> 00:06:18,790
+the fragment shader
+we need to add the corresponding input
+
+382
+00:06:18,790 --> 00:06:18,800
+we need to add the corresponding input
+ 
+
+383
+00:06:18,800 --> 00:06:20,230
+we need to add the corresponding input
+to this output
+
+384
+00:06:20,230 --> 00:06:20,240
+to this output
+ 
+
+385
+00:06:20,240 --> 00:06:23,350
+to this output
+so layout location equals zero in
+
+386
+00:06:23,350 --> 00:06:23,360
+so layout location equals zero in
+ 
+
+387
+00:06:23,360 --> 00:06:26,870
+so layout location equals zero in
+vect3 right color
+
+388
+00:06:26,870 --> 00:06:26,880
+vect3 right color
+ 
+
+389
+00:06:26,880 --> 00:06:29,189
+vect3 right color
+all that matters is that the locations
+
+390
+00:06:29,189 --> 00:06:29,199
+all that matters is that the locations
+ 
+
+391
+00:06:29,199 --> 00:06:30,950
+all that matters is that the locations
+and the data types match
+
+392
+00:06:30,950 --> 00:06:30,960
+and the data types match
+ 
+
+393
+00:06:30,960 --> 00:06:32,950
+and the data types match
+the variable's name can differ between
+
+394
+00:06:32,950 --> 00:06:32,960
+the variable's name can differ between
+ 
+
+395
+00:06:32,960 --> 00:06:34,950
+the variable's name can differ between
+the shader files
+
+396
+00:06:34,950 --> 00:06:34,960
+the shader files
+ 
+
+397
+00:06:34,960 --> 00:06:37,430
+the shader files
+then just replace the hard-coded rgb
+
+398
+00:06:37,430 --> 00:06:37,440
+then just replace the hard-coded rgb
+ 
+
+399
+00:06:37,440 --> 00:06:38,070
+then just replace the hard-coded rgb
+values
+
+400
+00:06:38,070 --> 00:06:38,080
+values
+ 
+
+401
+00:06:38,080 --> 00:06:40,390
+values
+with our freight color variable so
+
+402
+00:06:40,390 --> 00:06:40,400
+with our freight color variable so
+ 
+
+403
+00:06:40,400 --> 00:06:42,550
+with our freight color variable so
+constructing a vec like this is valid it
+
+404
+00:06:42,550 --> 00:06:42,560
+constructing a vec like this is valid it
+ 
+
+405
+00:06:42,560 --> 00:06:44,870
+constructing a vec like this is valid it
+uses the three values from our vect3
+
+406
+00:06:44,870 --> 00:06:44,880
+uses the three values from our vect3
+ 
+
+407
+00:06:44,880 --> 00:06:46,309
+uses the three values from our vect3
+frag color
+
+408
+00:06:46,309 --> 00:06:46,319
+frag color
+ 
+
+409
+00:06:46,319 --> 00:06:49,749
+frag color
+and one as the fourth component
+
+410
+00:06:49,749 --> 00:06:49,759
+and one as the fourth component
+ 
+
+411
+00:06:49,759 --> 00:06:52,230
+and one as the fourth component
+now back in the model class let's update
+
+412
+00:06:52,230 --> 00:06:52,240
+now back in the model class let's update
+ 
+
+413
+00:06:52,240 --> 00:06:53,510
+now back in the model class let's update
+the vertex struct
+
+414
+00:06:53,510 --> 00:06:53,520
+the vertex struct
+ 
+
+415
+00:06:53,520 --> 00:06:55,830
+the vertex struct
+to have a color attribute now there's
+
+416
+00:06:55,830 --> 00:06:55,840
+to have a color attribute now there's
+ 
+
+417
+00:06:55,840 --> 00:06:57,430
+to have a color attribute now there's
+two ways we can structure this
+
+418
+00:06:57,430 --> 00:06:57,440
+two ways we can structure this
+ 
+
+419
+00:06:57,440 --> 00:06:59,670
+two ways we can structure this
+we could create a second separate
+
+420
+00:06:59,670 --> 00:06:59,680
+we could create a second separate
+ 
+
+421
+00:06:59,680 --> 00:07:01,830
+we could create a second separate
+binding for the color attribute
+
+422
+00:07:01,830 --> 00:07:01,840
+binding for the color attribute
+ 
+
+423
+00:07:01,840 --> 00:07:03,830
+binding for the color attribute
+or we could interleave the color or
+
+424
+00:07:03,830 --> 00:07:03,840
+or we could interleave the color or
+ 
+
+425
+00:07:03,840 --> 00:07:05,670
+or we could interleave the color or
+tribute with the position
+
+426
+00:07:05,670 --> 00:07:05,680
+tribute with the position
+ 
+
+427
+00:07:05,680 --> 00:07:07,990
+tribute with the position
+in the existing binding the
+
+428
+00:07:07,990 --> 00:07:08,000
+in the existing binding the
+ 
+
+429
+00:07:08,000 --> 00:07:09,670
+in the existing binding the
+implementation is simpler
+
+430
+00:07:09,670 --> 00:07:09,680
+implementation is simpler
+ 
+
+431
+00:07:09,680 --> 00:07:12,150
+implementation is simpler
+for interleaving so we will go with that
+
+432
+00:07:12,150 --> 00:07:12,160
+for interleaving so we will go with that
+ 
+
+433
+00:07:12,160 --> 00:07:13,270
+for interleaving so we will go with that
+option
+
+434
+00:07:13,270 --> 00:07:13,280
+option
+ 
+
+435
+00:07:13,280 --> 00:07:16,150
+option
+all we need to do is add the line glm
+
+436
+00:07:16,150 --> 00:07:16,160
+all we need to do is add the line glm
+ 
+
+437
+00:07:16,160 --> 00:07:16,950
+all we need to do is add the line glm
+vect3
+
+438
+00:07:16,950 --> 00:07:16,960
+vect3
+ 
+
+439
+00:07:16,960 --> 00:07:20,070
+vect3
+color to the vertex struct now in the
+
+440
+00:07:20,070 --> 00:07:20,080
+color to the vertex struct now in the
+ 
+
+441
+00:07:20,080 --> 00:07:21,589
+color to the vertex struct now in the
+implementation file
+
+442
+00:07:21,589 --> 00:07:21,599
+implementation file
+ 
+
+443
+00:07:21,599 --> 00:07:23,589
+implementation file
+the binding description doesn't need to
+
+444
+00:07:23,589 --> 00:07:23,599
+the binding description doesn't need to
+ 
+
+445
+00:07:23,599 --> 00:07:25,830
+the binding description doesn't need to
+change since by using the size of
+
+446
+00:07:25,830 --> 00:07:25,840
+change since by using the size of
+ 
+
+447
+00:07:25,840 --> 00:07:27,430
+change since by using the size of
+operator on vertex
+
+448
+00:07:27,430 --> 00:07:27,440
+operator on vertex
+ 
+
+449
+00:07:27,440 --> 00:07:29,430
+operator on vertex
+the stride will already be adjusted to
+
+450
+00:07:29,430 --> 00:07:29,440
+the stride will already be adjusted to
+ 
+
+451
+00:07:29,440 --> 00:07:31,029
+the stride will already be adjusted to
+account for the additional color
+
+452
+00:07:31,029 --> 00:07:31,039
+account for the additional color
+ 
+
+453
+00:07:31,039 --> 00:07:33,589
+account for the additional color
+attribute but we do have an additional
+
+454
+00:07:33,589 --> 00:07:33,599
+attribute but we do have an additional
+ 
+
+455
+00:07:33,599 --> 00:07:34,390
+attribute but we do have an additional
+attribute now
+
+456
+00:07:34,390 --> 00:07:34,400
+attribute now
+ 
+
+457
+00:07:34,400 --> 00:07:36,150
+attribute now
+so we will need to update the get
+
+458
+00:07:36,150 --> 00:07:36,160
+so we will need to update the get
+ 
+
+459
+00:07:36,160 --> 00:07:38,390
+so we will need to update the get
+attribute descriptions function
+
+460
+00:07:38,390 --> 00:07:38,400
+attribute descriptions function
+ 
+
+461
+00:07:38,400 --> 00:07:40,469
+attribute descriptions function
+first update the attribute descriptions
+
+462
+00:07:40,469 --> 00:07:40,479
+first update the attribute descriptions
+ 
+
+463
+00:07:40,479 --> 00:07:42,469
+first update the attribute descriptions
+vector to size 2.
+
+464
+00:07:42,469 --> 00:07:42,479
+vector to size 2.
+ 
+
+465
+00:07:42,479 --> 00:07:44,950
+vector to size 2.
+copy and paste these four lines and make
+
+466
+00:07:44,950 --> 00:07:44,960
+copy and paste these four lines and make
+ 
+
+467
+00:07:44,960 --> 00:07:46,869
+copy and paste these four lines and make
+sure to update the indices
+
+468
+00:07:46,869 --> 00:07:46,879
+sure to update the indices
+ 
+
+469
+00:07:46,879 --> 00:07:49,430
+sure to update the indices
+otherwise you won't get a compiler error
+
+470
+00:07:49,430 --> 00:07:49,440
+otherwise you won't get a compiler error
+ 
+
+471
+00:07:49,440 --> 00:07:52,230
+otherwise you won't get a compiler error
+but will get weird behavior at runtime
+
+472
+00:07:52,230 --> 00:07:52,240
+but will get weird behavior at runtime
+ 
+
+473
+00:07:52,240 --> 00:07:54,869
+but will get weird behavior at runtime
+so the binding is still zero because we
+
+474
+00:07:54,869 --> 00:07:54,879
+so the binding is still zero because we
+ 
+
+475
+00:07:54,879 --> 00:07:57,110
+so the binding is still zero because we
+are interleaving both position and color
+
+476
+00:07:57,110 --> 00:07:57,120
+are interleaving both position and color
+ 
+
+477
+00:07:57,120 --> 00:07:58,950
+are interleaving both position and color
+together in the one binding
+
+478
+00:07:58,950 --> 00:07:58,960
+together in the one binding
+ 
+
+479
+00:07:58,960 --> 00:08:01,270
+together in the one binding
+next the color location is one because
+
+480
+00:08:01,270 --> 00:08:01,280
+next the color location is one because
+ 
+
+481
+00:08:01,280 --> 00:08:02,469
+next the color location is one because
+this needs to match
+
+482
+00:08:02,469 --> 00:08:02,479
+this needs to match
+ 
+
+483
+00:08:02,479 --> 00:08:05,110
+this needs to match
+the location used in the vertex shader
+
+484
+00:08:05,110 --> 00:08:05,120
+the location used in the vertex shader
+ 
+
+485
+00:08:05,120 --> 00:08:07,189
+the location used in the vertex shader
+don't forget that it's the location that
+
+486
+00:08:07,189 --> 00:08:07,199
+don't forget that it's the location that
+ 
+
+487
+00:08:07,199 --> 00:08:07,909
+don't forget that it's the location that
+matters
+
+488
+00:08:07,909 --> 00:08:07,919
+matters
+ 
+
+489
+00:08:07,919 --> 00:08:10,150
+matters
+not the variable name we could call the
+
+490
+00:08:10,150 --> 00:08:10,160
+not the variable name we could call the
+ 
+
+491
+00:08:10,160 --> 00:08:12,070
+not the variable name we could call the
+color attribute one thing in our vertex
+
+492
+00:08:12,070 --> 00:08:12,080
+color attribute one thing in our vertex
+ 
+
+493
+00:08:12,080 --> 00:08:13,749
+color attribute one thing in our vertex
+struct and something completely
+
+494
+00:08:13,749 --> 00:08:13,759
+struct and something completely
+ 
+
+495
+00:08:13,759 --> 00:08:15,430
+struct and something completely
+different in our vertex shader
+
+496
+00:08:15,430 --> 00:08:15,440
+different in our vertex shader
+ 
+
+497
+00:08:15,440 --> 00:08:17,909
+different in our vertex shader
+and it wouldn't be a problem so long as
+
+498
+00:08:17,909 --> 00:08:17,919
+and it wouldn't be a problem so long as
+ 
+
+499
+00:08:17,919 --> 00:08:20,070
+and it wouldn't be a problem so long as
+the locations match
+
+500
+00:08:20,070 --> 00:08:20,080
+the locations match
+ 
+
+501
+00:08:20,080 --> 00:08:22,070
+the locations match
+then the format needs an additional
+
+502
+00:08:22,070 --> 00:08:22,080
+then the format needs an additional
+ 
+
+503
+00:08:22,080 --> 00:08:24,469
+then the format needs an additional
+component because color is a vect3
+
+504
+00:08:24,469 --> 00:08:24,479
+component because color is a vect3
+ 
+
+505
+00:08:24,479 --> 00:08:29,350
+component because color is a vect3
+rather than evec2 so add b32
+
+506
+00:08:29,350 --> 00:08:29,360
+rather than evec2 so add b32
+ 
+
+507
+00:08:29,360 --> 00:08:31,510
+rather than evec2 so add b32
+and now our offset can easily be
+
+508
+00:08:31,510 --> 00:08:31,520
+and now our offset can easily be
+ 
+
+509
+00:08:31,520 --> 00:08:33,589
+and now our offset can easily be
+calculated using the offset of
+
+510
+00:08:33,589 --> 00:08:33,599
+calculated using the offset of
+ 
+
+511
+00:08:33,599 --> 00:08:36,550
+calculated using the offset of
+operator which takes a type as the first
+
+512
+00:08:36,550 --> 00:08:36,560
+operator which takes a type as the first
+ 
+
+513
+00:08:36,560 --> 00:08:37,110
+operator which takes a type as the first
+argument
+
+514
+00:08:37,110 --> 00:08:37,120
+argument
+ 
+
+515
+00:08:37,120 --> 00:08:39,990
+argument
+and a member name as the second so we
+
+516
+00:08:39,990 --> 00:08:40,000
+and a member name as the second so we
+ 
+
+517
+00:08:40,000 --> 00:08:40,310
+and a member name as the second so we
+have
+
+518
+00:08:40,310 --> 00:08:40,320
+have
+ 
+
+519
+00:08:40,320 --> 00:08:43,430
+have
+offset of vertex and then color
+
+520
+00:08:43,430 --> 00:08:43,440
+offset of vertex and then color
+ 
+
+521
+00:08:43,440 --> 00:08:45,430
+offset of vertex and then color
+so this macro will automatically
+
+522
+00:08:45,430 --> 00:08:45,440
+so this macro will automatically
+ 
+
+523
+00:08:45,440 --> 00:08:47,750
+so this macro will automatically
+calculate the byte offset of the color
+
+524
+00:08:47,750 --> 00:08:47,760
+calculate the byte offset of the color
+ 
+
+525
+00:08:47,760 --> 00:08:49,750
+calculate the byte offset of the color
+member in the vertex struct
+
+526
+00:08:49,750 --> 00:08:49,760
+member in the vertex struct
+ 
+
+527
+00:08:49,760 --> 00:08:51,829
+member in the vertex struct
+it would actually be a good idea to do
+
+528
+00:08:51,829 --> 00:08:51,839
+it would actually be a good idea to do
+ 
+
+529
+00:08:51,839 --> 00:08:54,150
+it would actually be a good idea to do
+this for our position member as well
+
+530
+00:08:54,150 --> 00:08:54,160
+this for our position member as well
+ 
+
+531
+00:08:54,160 --> 00:08:55,910
+this for our position member as well
+since not only does it make it more
+
+532
+00:08:55,910 --> 00:08:55,920
+since not only does it make it more
+ 
+
+533
+00:08:55,920 --> 00:08:57,829
+since not only does it make it more
+clear that this description is for the
+
+534
+00:08:57,829 --> 00:08:57,839
+clear that this description is for the
+ 
+
+535
+00:08:57,839 --> 00:08:59,430
+clear that this description is for the
+position member variable
+
+536
+00:08:59,430 --> 00:08:59,440
+position member variable
+ 
+
+537
+00:08:59,440 --> 00:09:01,430
+position member variable
+but it also makes it so the order we've
+
+538
+00:09:01,430 --> 00:09:01,440
+but it also makes it so the order we've
+ 
+
+539
+00:09:01,440 --> 00:09:03,110
+but it also makes it so the order we've
+declared the members in our vertex
+
+540
+00:09:03,110 --> 00:09:03,120
+declared the members in our vertex
+ 
+
+541
+00:09:03,120 --> 00:09:03,590
+declared the members in our vertex
+struct
+
+542
+00:09:03,590 --> 00:09:03,600
+struct
+ 
+
+543
+00:09:03,600 --> 00:09:06,389
+struct
+does not matter alternatively you may
+
+544
+00:09:06,389 --> 00:09:06,399
+does not matter alternatively you may
+ 
+
+545
+00:09:06,399 --> 00:09:08,630
+does not matter alternatively you may
+prefer this construction just remember
+
+546
+00:09:08,630 --> 00:09:08,640
+prefer this construction just remember
+ 
+
+547
+00:09:08,640 --> 00:09:10,550
+prefer this construction just remember
+the proper order of arguments is
+
+548
+00:09:10,550 --> 00:09:10,560
+the proper order of arguments is
+ 
+
+549
+00:09:10,560 --> 00:09:11,350
+the proper order of arguments is
+location
+
+550
+00:09:11,350 --> 00:09:11,360
+location
+ 
+
+551
+00:09:11,360 --> 00:09:15,190
+location
+then binding format and offset
+
+552
+00:09:15,190 --> 00:09:15,200
+then binding format and offset
+ 
+
+553
+00:09:15,200 --> 00:09:17,509
+then binding format and offset
+and we don't actually require any other
+
+554
+00:09:17,509 --> 00:09:17,519
+and we don't actually require any other
+ 
+
+555
+00:09:17,519 --> 00:09:19,670
+and we don't actually require any other
+changes in the model class
+
+556
+00:09:19,670 --> 00:09:19,680
+changes in the model class
+ 
+
+557
+00:09:19,680 --> 00:09:21,750
+changes in the model class
+when we create our vertex buffer the new
+
+558
+00:09:21,750 --> 00:09:21,760
+when we create our vertex buffer the new
+ 
+
+559
+00:09:21,760 --> 00:09:23,910
+when we create our vertex buffer the new
+size is already accounted for
+
+560
+00:09:23,910 --> 00:09:23,920
+size is already accounted for
+ 
+
+561
+00:09:23,920 --> 00:09:25,829
+size is already accounted for
+and when we copy our data over the
+
+562
+00:09:25,829 --> 00:09:25,839
+and when we copy our data over the
+ 
+
+563
+00:09:25,839 --> 00:09:27,430
+and when we copy our data over the
+interleaved color data
+
+564
+00:09:27,430 --> 00:09:27,440
+interleaved color data
+ 
+
+565
+00:09:27,440 --> 00:09:30,230
+interleaved color data
+will be copied automatically as well if
+
+566
+00:09:30,230 --> 00:09:30,240
+will be copied automatically as well if
+ 
+
+567
+00:09:30,240 --> 00:09:30,949
+will be copied automatically as well if
+any of this
+
+568
+00:09:30,949 --> 00:09:30,959
+any of this
+ 
+
+569
+00:09:30,959 --> 00:09:33,509
+any of this
+is confusing i'd recommend re-watching
+
+570
+00:09:33,509 --> 00:09:33,519
+is confusing i'd recommend re-watching
+ 
+
+571
+00:09:33,519 --> 00:09:36,550
+is confusing i'd recommend re-watching
+the first five minutes of tutorial six
+
+572
+00:09:36,550 --> 00:09:36,560
+the first five minutes of tutorial six
+ 
+
+573
+00:09:36,560 --> 00:09:38,230
+the first five minutes of tutorial six
+this is where i explain binding and
+
+574
+00:09:38,230 --> 00:09:38,240
+this is where i explain binding and
+ 
+
+575
+00:09:38,240 --> 00:09:40,070
+this is where i explain binding and
+attribute descriptions in much more
+
+576
+00:09:40,070 --> 00:09:40,080
+attribute descriptions in much more
+ 
+
+577
+00:09:40,080 --> 00:09:41,430
+attribute descriptions in much more
+detail
+
+578
+00:09:41,430 --> 00:09:41,440
+detail
+ 
+
+579
+00:09:41,440 --> 00:09:43,829
+detail
+so all that's left to do is to provide
+
+580
+00:09:43,829 --> 00:09:43,839
+so all that's left to do is to provide
+ 
+
+581
+00:09:43,839 --> 00:09:47,030
+so all that's left to do is to provide
+rgb values for each of the vertices
+
+582
+00:09:47,030 --> 00:09:47,040
+rgb values for each of the vertices
+ 
+
+583
+00:09:47,040 --> 00:09:49,030
+rgb values for each of the vertices
+note that we don't get any errors right
+
+584
+00:09:49,030 --> 00:09:49,040
+note that we don't get any errors right
+ 
+
+585
+00:09:49,040 --> 00:09:51,030
+note that we don't get any errors right
+now and if you build and run you get a
+
+586
+00:09:51,030 --> 00:09:51,040
+now and if you build and run you get a
+ 
+
+587
+00:09:51,040 --> 00:09:51,590
+now and if you build and run you get a
+black
+
+588
+00:09:51,590 --> 00:09:51,600
+black
+ 
+
+589
+00:09:51,600 --> 00:09:53,590
+black
+triangle because the default
+
+590
+00:09:53,590 --> 00:09:53,600
+triangle because the default
+ 
+
+591
+00:09:53,600 --> 00:09:56,070
+triangle because the default
+initialization here will set our glm
+
+592
+00:09:56,070 --> 00:09:56,080
+initialization here will set our glm
+ 
+
+593
+00:09:56,080 --> 00:09:59,350
+initialization here will set our glm
+vect3 color to zero zero zero
+
+594
+00:09:59,350 --> 00:09:59,360
+vect3 color to zero zero zero
+ 
+
+595
+00:09:59,360 --> 00:10:01,829
+vect3 color to zero zero zero
+in the first app implementation file
+
+596
+00:10:01,829 --> 00:10:01,839
+in the first app implementation file
+ 
+
+597
+00:10:01,839 --> 00:10:03,190
+in the first app implementation file
+load models function
+
+598
+00:10:03,190 --> 00:10:03,200
+load models function
+ 
+
+599
+00:10:03,200 --> 00:10:05,829
+load models function
+navigate to the vertices initialization
+
+600
+00:10:05,829 --> 00:10:05,839
+navigate to the vertices initialization
+ 
+
+601
+00:10:05,839 --> 00:10:08,150
+navigate to the vertices initialization
+and set the first vertex to red
+
+602
+00:10:08,150 --> 00:10:08,160
+and set the first vertex to red
+ 
+
+603
+00:10:08,160 --> 00:10:11,110
+and set the first vertex to red
+so in between the two braces here add 1
+
+604
+00:10:11,110 --> 00:10:11,120
+so in between the two braces here add 1
+ 
+
+605
+00:10:11,120 --> 00:10:11,670
+so in between the two braces here add 1
+0
+
+606
+00:10:11,670 --> 00:10:11,680
+0
+ 
+
+607
+00:10:11,680 --> 00:10:15,269
+0
+0 then the second vertex
+
+608
+00:10:15,269 --> 00:10:15,279
+0 then the second vertex
+ 
+
+609
+00:10:15,279 --> 00:10:18,630
+0 then the second vertex
+to green so 0 1 zero and finally set the
+
+610
+00:10:18,630 --> 00:10:18,640
+to green so 0 1 zero and finally set the
+ 
+
+611
+00:10:18,640 --> 00:10:19,990
+to green so 0 1 zero and finally set the
+last vertex to blue
+
+612
+00:10:19,990 --> 00:10:20,000
+last vertex to blue
+ 
+
+613
+00:10:20,000 --> 00:10:22,870
+last vertex to blue
+so zero zero one let's build and run and
+
+614
+00:10:22,870 --> 00:10:22,880
+so zero zero one let's build and run and
+ 
+
+615
+00:10:22,880 --> 00:10:24,949
+so zero zero one let's build and run and
+we get a multi-colored triangle
+
+616
+00:10:24,949 --> 00:10:24,959
+we get a multi-colored triangle
+ 
+
+617
+00:10:24,959 --> 00:10:26,790
+we get a multi-colored triangle
+so the graphics pipeline automatically
+
+618
+00:10:26,790 --> 00:10:26,800
+so the graphics pipeline automatically
+ 
+
+619
+00:10:26,800 --> 00:10:28,630
+so the graphics pipeline automatically
+handles calculating the barycentric
+
+620
+00:10:28,630 --> 00:10:28,640
+handles calculating the barycentric
+ 
+
+621
+00:10:28,640 --> 00:10:30,550
+handles calculating the barycentric
+coordinates of each fragment
+
+622
+00:10:30,550 --> 00:10:30,560
+coordinates of each fragment
+ 
+
+623
+00:10:30,560 --> 00:10:32,949
+coordinates of each fragment
+and the vertex shader will be run once
+
+624
+00:10:32,949 --> 00:10:32,959
+and the vertex shader will be run once
+ 
+
+625
+00:10:32,959 --> 00:10:34,870
+and the vertex shader will be run once
+for each corner of the triangle
+
+626
+00:10:34,870 --> 00:10:34,880
+for each corner of the triangle
+ 
+
+627
+00:10:34,880 --> 00:10:37,110
+for each corner of the triangle
+so only three times in this case because
+
+628
+00:10:37,110 --> 00:10:37,120
+so only three times in this case because
+ 
+
+629
+00:10:37,120 --> 00:10:39,750
+so only three times in this case because
+we only have one triangle
+
+630
+00:10:39,750 --> 00:10:39,760
+we only have one triangle
+ 
+
+631
+00:10:39,760 --> 00:10:41,910
+we only have one triangle
+the fragment shader is run once for
+
+632
+00:10:41,910 --> 00:10:41,920
+the fragment shader is run once for
+ 
+
+633
+00:10:41,920 --> 00:10:44,069
+the fragment shader is run once for
+every pixel within the triangle
+
+634
+00:10:44,069 --> 00:10:44,079
+every pixel within the triangle
+ 
+
+635
+00:10:44,079 --> 00:10:47,190
+every pixel within the triangle
+which if your window is still 800 by 600
+
+636
+00:10:47,190 --> 00:10:47,200
+which if your window is still 800 by 600
+ 
+
+637
+00:10:47,200 --> 00:10:50,230
+which if your window is still 800 by 600
+our triangle covers 1 8 of the window so
+
+638
+00:10:50,230 --> 00:10:50,240
+our triangle covers 1 8 of the window so
+ 
+
+639
+00:10:50,240 --> 00:10:51,190
+our triangle covers 1 8 of the window so
+that would be
+
+640
+00:10:51,190 --> 00:10:51,200
+that would be
+ 
+
+641
+00:10:51,200 --> 00:10:55,030
+that would be
+60 000 pixels each time the fragment
+
+642
+00:10:55,030 --> 00:10:55,040
+60 000 pixels each time the fragment
+ 
+
+643
+00:10:55,040 --> 00:10:55,990
+60 000 pixels each time the fragment
+shader is run
+
+644
+00:10:55,990 --> 00:10:56,000
+shader is run
+ 
+
+645
+00:10:56,000 --> 00:10:57,590
+shader is run
+the freight color input will have a
+
+646
+00:10:57,590 --> 00:10:57,600
+the freight color input will have a
+ 
+
+647
+00:10:57,600 --> 00:10:59,670
+the freight color input will have a
+different value based on the location of
+
+648
+00:10:59,670 --> 00:10:59,680
+different value based on the location of
+ 
+
+649
+00:10:59,680 --> 00:11:00,389
+different value based on the location of
+the pixel
+
+650
+00:11:00,389 --> 00:11:00,399
+the pixel
+ 
+
+651
+00:11:00,399 --> 00:11:02,949
+the pixel
+relative to the containing triangle
+
+652
+00:11:02,949 --> 00:11:02,959
+relative to the containing triangle
+ 
+
+653
+00:11:02,959 --> 00:11:05,030
+relative to the containing triangle
+these interpolation calculations
+
+654
+00:11:05,030 --> 00:11:05,040
+these interpolation calculations
+ 
+
+655
+00:11:05,040 --> 00:11:07,670
+these interpolation calculations
+are done blindingly fast using dedicated
+
+656
+00:11:07,670 --> 00:11:07,680
+are done blindingly fast using dedicated
+ 
+
+657
+00:11:07,680 --> 00:11:09,590
+are done blindingly fast using dedicated
+hardware on your graphics device in
+
+658
+00:11:09,590 --> 00:11:09,600
+hardware on your graphics device in
+ 
+
+659
+00:11:09,600 --> 00:11:10,710
+hardware on your graphics device in
+parallel
+
+660
+00:11:10,710 --> 00:11:10,720
+parallel
+ 
+
+661
+00:11:10,720 --> 00:11:13,910
+parallel
+gpus use what is called a simd model
+
+662
+00:11:13,910 --> 00:11:13,920
+gpus use what is called a simd model
+ 
+
+663
+00:11:13,920 --> 00:11:15,110
+gpus use what is called a simd model
+single instruction
+
+664
+00:11:15,110 --> 00:11:15,120
+single instruction
+ 
+
+665
+00:11:15,120 --> 00:11:18,150
+single instruction
+multiple data what this means is that it
+
+666
+00:11:18,150 --> 00:11:18,160
+multiple data what this means is that it
+ 
+
+667
+00:11:18,160 --> 00:11:20,710
+multiple data what this means is that it
+is able to execute the same instruction
+
+668
+00:11:20,710 --> 00:11:20,720
+is able to execute the same instruction
+ 
+
+669
+00:11:20,720 --> 00:11:22,710
+is able to execute the same instruction
+on multiple different input values
+
+670
+00:11:22,710 --> 00:11:22,720
+on multiple different input values
+ 
+
+671
+00:11:22,720 --> 00:11:24,870
+on multiple different input values
+but all at the same time rather than
+
+672
+00:11:24,870 --> 00:11:24,880
+but all at the same time rather than
+ 
+
+673
+00:11:24,880 --> 00:11:26,150
+but all at the same time rather than
+sequentially
+
+674
+00:11:26,150 --> 00:11:26,160
+sequentially
+ 
+
+675
+00:11:26,160 --> 00:11:28,949
+sequentially
+so for example imagine it takes a group
+
+676
+00:11:28,949 --> 00:11:28,959
+so for example imagine it takes a group
+ 
+
+677
+00:11:28,959 --> 00:11:29,829
+so for example imagine it takes a group
+of fragments
+
+678
+00:11:29,829 --> 00:11:29,839
+of fragments
+ 
+
+679
+00:11:29,839 --> 00:11:31,910
+of fragments
+the size of this group is dependent on
+
+680
+00:11:31,910 --> 00:11:31,920
+the size of this group is dependent on
+ 
+
+681
+00:11:31,920 --> 00:11:33,590
+the size of this group is dependent on
+your specific hardware
+
+682
+00:11:33,590 --> 00:11:33,600
+your specific hardware
+ 
+
+683
+00:11:33,600 --> 00:11:35,590
+your specific hardware
+each fragment has a different input of
+
+684
+00:11:35,590 --> 00:11:35,600
+each fragment has a different input of
+ 
+
+685
+00:11:35,600 --> 00:11:37,190
+each fragment has a different input of
+barycentric coordinates
+
+686
+00:11:37,190 --> 00:11:37,200
+barycentric coordinates
+ 
+
+687
+00:11:37,200 --> 00:11:39,509
+barycentric coordinates
+the device can first calculate a times
+
+688
+00:11:39,509 --> 00:11:39,519
+the device can first calculate a times
+ 
+
+689
+00:11:39,519 --> 00:11:41,590
+the device can first calculate a times
+alpha but for the entire group
+
+690
+00:11:41,590 --> 00:11:41,600
+alpha but for the entire group
+ 
+
+691
+00:11:41,600 --> 00:11:42,949
+alpha but for the entire group
+simultaneously
+
+692
+00:11:42,949 --> 00:11:42,959
+simultaneously
+ 
+
+693
+00:11:42,959 --> 00:11:45,430
+simultaneously
+then in lockstep it proceeds to the next
+
+694
+00:11:45,430 --> 00:11:45,440
+then in lockstep it proceeds to the next
+ 
+
+695
+00:11:45,440 --> 00:11:46,230
+then in lockstep it proceeds to the next
+instruction
+
+696
+00:11:46,230 --> 00:11:46,240
+instruction
+ 
+
+697
+00:11:46,240 --> 00:11:49,430
+instruction
+b times beta for the entire group then c
+
+698
+00:11:49,430 --> 00:11:49,440
+b times beta for the entire group then c
+ 
+
+699
+00:11:49,440 --> 00:11:50,230
+b times beta for the entire group then c
+times gamma
+
+700
+00:11:50,230 --> 00:11:50,240
+times gamma
+ 
+
+701
+00:11:50,240 --> 00:11:52,710
+times gamma
+and so on until the entire interpolation
+
+702
+00:11:52,710 --> 00:11:52,720
+and so on until the entire interpolation
+ 
+
+703
+00:11:52,720 --> 00:11:53,750
+and so on until the entire interpolation
+calculation
+
+704
+00:11:53,750 --> 00:11:53,760
+calculation
+ 
+
+705
+00:11:53,760 --> 00:11:55,509
+calculation
+has been completed for all of the
+
+706
+00:11:55,509 --> 00:11:55,519
+has been completed for all of the
+ 
+
+707
+00:11:55,519 --> 00:11:57,509
+has been completed for all of the
+fragments within the group
+
+708
+00:11:57,509 --> 00:11:57,519
+fragments within the group
+ 
+
+709
+00:11:57,519 --> 00:11:59,829
+fragments within the group
+this is one of the main reasons why gpus
+
+710
+00:11:59,829 --> 00:11:59,839
+this is one of the main reasons why gpus
+ 
+
+711
+00:11:59,839 --> 00:12:01,750
+this is one of the main reasons why gpus
+can process large amounts of data
+
+712
+00:12:01,750 --> 00:12:01,760
+can process large amounts of data
+ 
+
+713
+00:12:01,760 --> 00:12:04,790
+can process large amounts of data
+much quicker than a cpu it's a trade-off
+
+714
+00:12:04,790 --> 00:12:04,800
+much quicker than a cpu it's a trade-off
+ 
+
+715
+00:12:04,800 --> 00:12:08,230
+much quicker than a cpu it's a trade-off
+gpus sacrifice flexibility for volume
+
+716
+00:12:08,230 --> 00:12:08,240
+gpus sacrifice flexibility for volume
+ 
+
+717
+00:12:08,240 --> 00:12:09,910
+gpus sacrifice flexibility for volume
+of course this is a drastic
+
+718
+00:12:09,910 --> 00:12:09,920
+of course this is a drastic
+ 
+
+719
+00:12:09,920 --> 00:12:12,550
+of course this is a drastic
+simplification of gpu architecture
+
+720
+00:12:12,550 --> 00:12:12,560
+simplification of gpu architecture
+ 
+
+721
+00:12:12,560 --> 00:12:14,629
+simplification of gpu architecture
+and i only have a novice understanding
+
+722
+00:12:14,629 --> 00:12:14,639
+and i only have a novice understanding
+ 
+
+723
+00:12:14,639 --> 00:12:16,870
+and i only have a novice understanding
+on this specific topic myself
+
+724
+00:12:16,870 --> 00:12:16,880
+on this specific topic myself
+ 
+
+725
+00:12:16,880 --> 00:12:18,629
+on this specific topic myself
+i think this is a good enough view for
+
+726
+00:12:18,629 --> 00:12:18,639
+i think this is a good enough view for
+ 
+
+727
+00:12:18,639 --> 00:12:21,509
+i think this is a good enough view for
+getting started with computer graphics
+
+728
+00:12:21,509 --> 00:12:21,519
+getting started with computer graphics
+ 
+
+729
+00:12:21,519 --> 00:12:23,829
+getting started with computer graphics
+if you navigate to your swap chain class
+
+730
+00:12:23,829 --> 00:12:23,839
+if you navigate to your swap chain class
+ 
+
+731
+00:12:23,839 --> 00:12:24,870
+if you navigate to your swap chain class
+implementation
+
+732
+00:12:24,870 --> 00:12:24,880
+implementation
+ 
+
+733
+00:12:24,880 --> 00:12:26,629
+implementation
+you will see in the choose swap surface
+
+734
+00:12:26,629 --> 00:12:26,639
+you will see in the choose swap surface
+ 
+
+735
+00:12:26,639 --> 00:12:28,150
+you will see in the choose swap surface
+function i am using
+
+736
+00:12:28,150 --> 00:12:28,160
+function i am using
+ 
+
+737
+00:12:28,160 --> 00:12:30,949
+function i am using
+u-norm as our first choice but with a
+
+738
+00:12:30,949 --> 00:12:30,959
+u-norm as our first choice but with a
+ 
+
+739
+00:12:30,959 --> 00:12:32,949
+u-norm as our first choice but with a
+non-linear color space
+
+740
+00:12:32,949 --> 00:12:32,959
+non-linear color space
+ 
+
+741
+00:12:32,959 --> 00:12:35,990
+non-linear color space
+change u-norm to srgb so that gamma
+
+742
+00:12:35,990 --> 00:12:36,000
+change u-norm to srgb so that gamma
+ 
+
+743
+00:12:36,000 --> 00:12:37,990
+change u-norm to srgb so that gamma
+correction is applied
+
+744
+00:12:37,990 --> 00:12:38,000
+correction is applied
+ 
+
+745
+00:12:38,000 --> 00:12:39,910
+correction is applied
+explaining this mistake could be its
+
+746
+00:12:39,910 --> 00:12:39,920
+explaining this mistake could be its
+ 
+
+747
+00:12:39,920 --> 00:12:41,110
+explaining this mistake could be its
+whole own video
+
+748
+00:12:41,110 --> 00:12:41,120
+whole own video
+ 
+
+749
+00:12:41,120 --> 00:12:43,829
+whole own video
+so i can't really go through it here the
+
+750
+00:12:43,829 --> 00:12:43,839
+so i can't really go through it here the
+ 
+
+751
+00:12:43,839 --> 00:12:45,750
+so i can't really go through it here the
+appearance of this triangle will differ
+
+752
+00:12:45,750 --> 00:12:45,760
+appearance of this triangle will differ
+ 
+
+753
+00:12:45,760 --> 00:12:47,910
+appearance of this triangle will differ
+depending on the color space and format
+
+754
+00:12:47,910 --> 00:12:47,920
+depending on the color space and format
+ 
+
+755
+00:12:47,920 --> 00:12:48,870
+depending on the color space and format
+being used
+
+756
+00:12:48,870 --> 00:12:48,880
+being used
+ 
+
+757
+00:12:48,880 --> 00:12:50,870
+being used
+i wrote up an explanation and have
+
+758
+00:12:50,870 --> 00:12:50,880
+i wrote up an explanation and have
+ 
+
+759
+00:12:50,880 --> 00:12:52,550
+i wrote up an explanation and have
+linked it in the description
+
+760
+00:12:52,550 --> 00:12:52,560
+linked it in the description
+ 
+
+761
+00:12:52,560 --> 00:12:54,550
+linked it in the description
+it's an optional read since none of it's
+
+762
+00:12:54,550 --> 00:12:54,560
+it's an optional read since none of it's
+ 
+
+763
+00:12:54,560 --> 00:12:56,310
+it's an optional read since none of it's
+really relevant until we're farther
+
+764
+00:12:56,310 --> 00:12:56,320
+really relevant until we're farther
+ 
+
+765
+00:12:56,320 --> 00:12:58,069
+really relevant until we're farther
+along in the series
+
+766
+00:12:58,069 --> 00:12:58,079
+along in the series
+ 
+
+767
+00:12:58,079 --> 00:13:00,389
+along in the series
+and that's it for today this was mostly
+
+768
+00:13:00,389 --> 00:13:00,399
+and that's it for today this was mostly
+ 
+
+769
+00:13:00,399 --> 00:13:01,670
+and that's it for today this was mostly
+a theory based video
+
+770
+00:13:01,670 --> 00:13:01,680
+a theory based video
+ 
+
+771
+00:13:01,680 --> 00:13:03,910
+a theory based video
+and we didn't get to do too much coding
+
+772
+00:13:03,910 --> 00:13:03,920
+and we didn't get to do too much coding
+ 
+
+773
+00:13:03,920 --> 00:13:05,670
+and we didn't get to do too much coding
+the next couple videos should be more
+
+774
+00:13:05,670 --> 00:13:05,680
+the next couple videos should be more
+ 
+
+775
+00:13:05,680 --> 00:13:05,990
+the next couple videos should be more
+coding
+
+776
+00:13:05,990 --> 00:13:06,000
+coding
+ 
+
+777
+00:13:06,000 --> 00:13:08,389
+coding
+focused though let me know how you feel
+
+778
+00:13:08,389 --> 00:13:08,399
+focused though let me know how you feel
+ 
+
+779
+00:13:08,399 --> 00:13:10,310
+focused though let me know how you feel
+about the balance of things so far
+
+780
+00:13:10,310 --> 00:13:10,320
+about the balance of things so far
+ 
+
+781
+00:13:10,320 --> 00:13:12,470
+about the balance of things so far
+do you want future tutorials to be more
+
+782
+00:13:12,470 --> 00:13:12,480
+do you want future tutorials to be more
+ 
+
+783
+00:13:12,480 --> 00:13:14,629
+do you want future tutorials to be more
+coding focused or should i continue with
+
+784
+00:13:14,629 --> 00:13:14,639
+coding focused or should i continue with
+ 
+
+785
+00:13:14,639 --> 00:13:16,470
+coding focused or should i continue with
+the current balance between theory and
+
+786
+00:13:16,470 --> 00:13:16,480
+the current balance between theory and
+ 
+
+787
+00:13:16,480 --> 00:13:17,190
+the current balance between theory and
+code
+
+788
+00:13:17,190 --> 00:13:17,200
+code
+ 
+
+789
+00:13:17,200 --> 00:13:19,509
+code
+please like and subscribe it goes a long
+
+790
+00:13:19,509 --> 00:13:19,519
+please like and subscribe it goes a long
+ 
+
+791
+00:13:19,519 --> 00:13:27,120
+please like and subscribe it goes a long
+way and thank you for watching
+

@@ -1,0 +1,3665 @@
+1
+00:00:00,880 --> 00:00:02,950
+ 
+push constants are a way to pass a small
+
+2
+00:00:02,950 --> 00:00:02,960
+push constants are a way to pass a small
+ 
+
+3
+00:00:02,960 --> 00:00:05,349
+push constants are a way to pass a small
+amount of constant data to a shader
+
+4
+00:00:05,349 --> 00:00:05,359
+amount of constant data to a shader
+ 
+
+5
+00:00:05,359 --> 00:00:07,510
+amount of constant data to a shader
+via a vulcan command buffer rather than
+
+6
+00:00:07,510 --> 00:00:07,520
+via a vulcan command buffer rather than
+ 
+
+7
+00:00:07,520 --> 00:00:10,390
+via a vulcan command buffer rather than
+writes to memory or copy commands
+
+8
+00:00:10,390 --> 00:00:10,400
+writes to memory or copy commands
+ 
+
+9
+00:00:10,400 --> 00:00:12,470
+writes to memory or copy commands
+in previous tutorials i've shown how
+
+10
+00:00:12,470 --> 00:00:12,480
+in previous tutorials i've shown how
+ 
+
+11
+00:00:12,480 --> 00:00:14,470
+in previous tutorials i've shown how
+various commands can be recorded to a
+
+12
+00:00:14,470 --> 00:00:14,480
+various commands can be recorded to a
+ 
+
+13
+00:00:14,480 --> 00:00:17,109
+various commands can be recorded to a
+command buffer for example
+
+14
+00:00:17,109 --> 00:00:17,119
+command buffer for example
+ 
+
+15
+00:00:17,119 --> 00:00:19,670
+command buffer for example
+currently we begin the render pass bind
+
+16
+00:00:19,670 --> 00:00:19,680
+currently we begin the render pass bind
+ 
+
+17
+00:00:19,680 --> 00:00:21,349
+currently we begin the render pass bind
+our simple graphics pipeline
+
+18
+00:00:21,349 --> 00:00:21,359
+our simple graphics pipeline
+ 
+
+19
+00:00:21,359 --> 00:00:23,590
+our simple graphics pipeline
+bind the model which in turn binds the
+
+20
+00:00:23,590 --> 00:00:23,600
+bind the model which in turn binds the
+ 
+
+21
+00:00:23,600 --> 00:00:25,990
+bind the model which in turn binds the
+associated vertex buffer data
+
+22
+00:00:25,990 --> 00:00:26,000
+associated vertex buffer data
+ 
+
+23
+00:00:26,000 --> 00:00:28,310
+associated vertex buffer data
+and finally we record a command to draw
+
+24
+00:00:28,310 --> 00:00:28,320
+and finally we record a command to draw
+ 
+
+25
+00:00:28,320 --> 00:00:30,550
+and finally we record a command to draw
+the vertex buffer data before ending the
+
+26
+00:00:30,550 --> 00:00:30,560
+the vertex buffer data before ending the
+ 
+
+27
+00:00:30,560 --> 00:00:31,990
+the vertex buffer data before ending the
+render pass
+
+28
+00:00:31,990 --> 00:00:32,000
+render pass
+ 
+
+29
+00:00:32,000 --> 00:00:34,389
+render pass
+we can use the vk command push constants
+
+30
+00:00:34,389 --> 00:00:34,399
+we can use the vk command push constants
+ 
+
+31
+00:00:34,399 --> 00:00:36,549
+we can use the vk command push constants
+function to update arbitrary data to our
+
+32
+00:00:36,549 --> 00:00:36,559
+function to update arbitrary data to our
+ 
+
+33
+00:00:36,559 --> 00:00:37,350
+function to update arbitrary data to our
+command buffer
+
+34
+00:00:37,350 --> 00:00:37,360
+command buffer
+ 
+
+35
+00:00:37,360 --> 00:00:40,869
+command buffer
+before issuing a draw call for example
+
+36
+00:00:40,869 --> 00:00:40,879
+before issuing a draw call for example
+ 
+
+37
+00:00:40,879 --> 00:00:42,790
+before issuing a draw call for example
+we could use it to store an object's
+
+38
+00:00:42,790 --> 00:00:42,800
+we could use it to store an object's
+ 
+
+39
+00:00:42,800 --> 00:00:43,990
+we could use it to store an object's
+color or an x
+
+40
+00:00:43,990 --> 00:00:44,000
+color or an x
+ 
+
+41
+00:00:44,000 --> 00:00:46,150
+color or an x
+and y offset to apply to each vertex in
+
+42
+00:00:46,150 --> 00:00:46,160
+and y offset to apply to each vertex in
+ 
+
+43
+00:00:46,160 --> 00:00:47,670
+and y offset to apply to each vertex in
+the vertex shader
+
+44
+00:00:47,670 --> 00:00:47,680
+the vertex shader
+ 
+
+45
+00:00:47,680 --> 00:00:49,910
+the vertex shader
+note that all vertices in the draw call
+
+46
+00:00:49,910 --> 00:00:49,920
+note that all vertices in the draw call
+ 
+
+47
+00:00:49,920 --> 00:00:53,189
+note that all vertices in the draw call
+must share the same push constant data
+
+48
+00:00:53,189 --> 00:00:53,199
+must share the same push constant data
+ 
+
+49
+00:00:53,199 --> 00:00:55,590
+must share the same push constant data
+additionally it becomes really easy to
+
+50
+00:00:55,590 --> 00:00:55,600
+additionally it becomes really easy to
+ 
+
+51
+00:00:55,600 --> 00:00:57,510
+additionally it becomes really easy to
+draw multiple copies of the same
+
+52
+00:00:57,510 --> 00:00:57,520
+draw multiple copies of the same
+ 
+
+53
+00:00:57,520 --> 00:00:59,910
+draw multiple copies of the same
+object in our command buffer we first
+
+54
+00:00:59,910 --> 00:00:59,920
+object in our command buffer we first
+ 
+
+55
+00:00:59,920 --> 00:01:01,670
+object in our command buffer we first
+record the push constant data
+
+56
+00:01:01,670 --> 00:01:01,680
+record the push constant data
+ 
+
+57
+00:01:01,680 --> 00:01:04,149
+record the push constant data
+followed by a draw command and simply by
+
+58
+00:01:04,149 --> 00:01:04,159
+followed by a draw command and simply by
+ 
+
+59
+00:01:04,159 --> 00:01:05,910
+followed by a draw command and simply by
+overwriting the push constant data with
+
+60
+00:01:05,910 --> 00:01:05,920
+overwriting the push constant data with
+ 
+
+61
+00:01:05,920 --> 00:01:06,870
+overwriting the push constant data with
+a different offset
+
+62
+00:01:06,870 --> 00:01:06,880
+a different offset
+ 
+
+63
+00:01:06,880 --> 00:01:08,870
+a different offset
+and a second draw command we will have
+
+64
+00:01:08,870 --> 00:01:08,880
+and a second draw command we will have
+ 
+
+65
+00:01:08,880 --> 00:01:10,870
+and a second draw command we will have
+drawn our object twice but at two
+
+66
+00:01:10,870 --> 00:01:10,880
+drawn our object twice but at two
+ 
+
+67
+00:01:10,880 --> 00:01:12,630
+drawn our object twice but at two
+different positions
+
+68
+00:01:12,630 --> 00:01:12,640
+different positions
+ 
+
+69
+00:01:12,640 --> 00:01:14,710
+different positions
+push constants have one major drawback
+
+70
+00:01:14,710 --> 00:01:14,720
+push constants have one major drawback
+ 
+
+71
+00:01:14,720 --> 00:01:16,630
+push constants have one major drawback
+and that's their limited size
+
+72
+00:01:16,630 --> 00:01:16,640
+and that's their limited size
+ 
+
+73
+00:01:16,640 --> 00:01:19,910
+and that's their limited size
+the vulcan spec only guarantees 128
+
+74
+00:01:19,910 --> 00:01:19,920
+the vulcan spec only guarantees 128
+ 
+
+75
+00:01:19,920 --> 00:01:21,030
+the vulcan spec only guarantees 128
+bytes of space
+
+76
+00:01:21,030 --> 00:01:21,040
+bytes of space
+ 
+
+77
+00:01:21,040 --> 00:01:23,030
+bytes of space
+some devices may provide more space
+
+78
+00:01:23,030 --> 00:01:23,040
+some devices may provide more space
+ 
+
+79
+00:01:23,040 --> 00:01:24,710
+some devices may provide more space
+which can be checked using the max
+
+80
+00:01:24,710 --> 00:01:24,720
+which can be checked using the max
+ 
+
+81
+00:01:24,720 --> 00:01:27,270
+which can be checked using the max
+push constant size variable somewhat
+
+82
+00:01:27,270 --> 00:01:27,280
+push constant size variable somewhat
+ 
+
+83
+00:01:27,280 --> 00:01:29,190
+push constant size variable somewhat
+akin to how we need to provide binding
+
+84
+00:01:29,190 --> 00:01:29,200
+akin to how we need to provide binding
+ 
+
+85
+00:01:29,200 --> 00:01:30,950
+akin to how we need to provide binding
+and attribute descriptions to our
+
+86
+00:01:30,950 --> 00:01:30,960
+and attribute descriptions to our
+ 
+
+87
+00:01:30,960 --> 00:01:31,990
+and attribute descriptions to our
+graphics pipeline
+
+88
+00:01:31,990 --> 00:01:32,000
+graphics pipeline
+ 
+
+89
+00:01:32,000 --> 00:01:33,830
+graphics pipeline
+so that it knows what to expect for the
+
+90
+00:01:33,830 --> 00:01:33,840
+so that it knows what to expect for the
+ 
+
+91
+00:01:33,840 --> 00:01:36,230
+so that it knows what to expect for the
+format of the vertex buffer data
+
+92
+00:01:36,230 --> 00:01:36,240
+format of the vertex buffer data
+ 
+
+93
+00:01:36,240 --> 00:01:38,310
+format of the vertex buffer data
+in the case of push constants we need to
+
+94
+00:01:38,310 --> 00:01:38,320
+in the case of push constants we need to
+ 
+
+95
+00:01:38,320 --> 00:01:40,230
+in the case of push constants we need to
+provide push constant ranges to our
+
+96
+00:01:40,230 --> 00:01:40,240
+provide push constant ranges to our
+ 
+
+97
+00:01:40,240 --> 00:01:41,749
+provide push constant ranges to our
+pipeline layout
+
+98
+00:01:41,749 --> 00:01:41,759
+pipeline layout
+ 
+
+99
+00:01:41,759 --> 00:01:44,310
+pipeline layout
+a push constant range is very simple and
+
+100
+00:01:44,310 --> 00:01:44,320
+a push constant range is very simple and
+ 
+
+101
+00:01:44,320 --> 00:01:46,230
+a push constant range is very simple and
+only contains three fields
+
+102
+00:01:46,230 --> 00:01:46,240
+only contains three fields
+ 
+
+103
+00:01:46,240 --> 00:01:48,630
+only contains three fields
+the stage flags field specifies what
+
+104
+00:01:48,630 --> 00:01:48,640
+the stage flags field specifies what
+ 
+
+105
+00:01:48,640 --> 00:01:50,789
+the stage flags field specifies what
+shader stages will have access to this
+
+106
+00:01:50,789 --> 00:01:50,799
+shader stages will have access to this
+ 
+
+107
+00:01:50,799 --> 00:01:52,389
+shader stages will have access to this
+push constant range
+
+108
+00:01:52,389 --> 00:01:52,399
+push constant range
+ 
+
+109
+00:01:52,399 --> 00:01:54,469
+push constant range
+for example if i wanted this push
+
+110
+00:01:54,469 --> 00:01:54,479
+for example if i wanted this push
+ 
+
+111
+00:01:54,479 --> 00:01:56,389
+for example if i wanted this push
+constant range to be accessible only by
+
+112
+00:01:56,389 --> 00:01:56,399
+constant range to be accessible only by
+ 
+
+113
+00:01:56,399 --> 00:01:57,429
+constant range to be accessible only by
+the vertex shader
+
+114
+00:01:57,429 --> 00:01:57,439
+the vertex shader
+ 
+
+115
+00:01:57,439 --> 00:01:59,590
+the vertex shader
+then i just used the vk shader stage
+
+116
+00:01:59,590 --> 00:01:59,600
+then i just used the vk shader stage
+ 
+
+117
+00:01:59,600 --> 00:02:01,109
+then i just used the vk shader stage
+vertex bit
+
+118
+00:02:01,109 --> 00:02:01,119
+vertex bit
+ 
+
+119
+00:02:01,119 --> 00:02:03,429
+vertex bit
+the offset and size fields are the start
+
+120
+00:02:03,429 --> 00:02:03,439
+the offset and size fields are the start
+ 
+
+121
+00:02:03,439 --> 00:02:05,030
+the offset and size fields are the start
+offset and size and bytes
+
+122
+00:02:05,030 --> 00:02:05,040
+offset and size and bytes
+ 
+
+123
+00:02:05,040 --> 00:02:07,429
+offset and size and bytes
+consumed by the range note that the
+
+124
+00:02:07,429 --> 00:02:07,439
+consumed by the range note that the
+ 
+
+125
+00:02:07,439 --> 00:02:09,749
+consumed by the range note that the
+small capacity for push constants isn't
+
+126
+00:02:09,749 --> 00:02:09,759
+small capacity for push constants isn't
+ 
+
+127
+00:02:09,759 --> 00:02:10,550
+small capacity for push constants isn't
+per shader
+
+128
+00:02:10,550 --> 00:02:10,560
+per shader
+ 
+
+129
+00:02:10,560 --> 00:02:12,869
+per shader
+so you can't get additional capacity by
+
+130
+00:02:12,869 --> 00:02:12,879
+so you can't get additional capacity by
+ 
+
+131
+00:02:12,879 --> 00:02:14,790
+so you can't get additional capacity by
+creating a different push constant range
+
+132
+00:02:14,790 --> 00:02:14,800
+creating a different push constant range
+ 
+
+133
+00:02:14,800 --> 00:02:16,390
+creating a different push constant range
+for each shader stage
+
+134
+00:02:16,390 --> 00:02:16,400
+for each shader stage
+ 
+
+135
+00:02:16,400 --> 00:02:18,790
+for each shader stage
+the vulcan spec only guarantees 128
+
+136
+00:02:18,790 --> 00:02:18,800
+the vulcan spec only guarantees 128
+ 
+
+137
+00:02:18,800 --> 00:02:19,750
+the vulcan spec only guarantees 128
+bytes of space
+
+138
+00:02:19,750 --> 00:02:19,760
+bytes of space
+ 
+
+139
+00:02:19,760 --> 00:02:22,550
+bytes of space
+shared between all shader stages so you
+
+140
+00:02:22,550 --> 00:02:22,560
+shared between all shader stages so you
+ 
+
+141
+00:02:22,560 --> 00:02:24,309
+shared between all shader stages so you
+could do something like create a range
+
+142
+00:02:24,309 --> 00:02:24,319
+could do something like create a range
+ 
+
+143
+00:02:24,319 --> 00:02:26,710
+could do something like create a range
+with the first 64 bytes for the vertex
+
+144
+00:02:26,710 --> 00:02:26,720
+with the first 64 bytes for the vertex
+ 
+
+145
+00:02:26,720 --> 00:02:27,350
+with the first 64 bytes for the vertex
+shader
+
+146
+00:02:27,350 --> 00:02:27,360
+shader
+ 
+
+147
+00:02:27,360 --> 00:02:29,589
+shader
+and the second range with the latter 64
+
+148
+00:02:29,589 --> 00:02:29,599
+and the second range with the latter 64
+ 
+
+149
+00:02:29,599 --> 00:02:31,430
+and the second range with the latter 64
+bytes for the fragment shader
+
+150
+00:02:31,430 --> 00:02:31,440
+bytes for the fragment shader
+ 
+
+151
+00:02:31,440 --> 00:02:32,949
+bytes for the fragment shader
+but unless you have a reason to
+
+152
+00:02:32,949 --> 00:02:32,959
+but unless you have a reason to
+ 
+
+153
+00:02:32,959 --> 00:02:35,270
+but unless you have a reason to
+specifically do so i find it much more
+
+154
+00:02:35,270 --> 00:02:35,280
+specifically do so i find it much more
+ 
+
+155
+00:02:35,280 --> 00:02:35,990
+specifically do so i find it much more
+straightforward to
+
+156
+00:02:35,990 --> 00:02:36,000
+straightforward to
+ 
+
+157
+00:02:36,000 --> 00:02:38,309
+straightforward to
+use one shared push constant range for
+
+158
+00:02:38,309 --> 00:02:38,319
+use one shared push constant range for
+ 
+
+159
+00:02:38,319 --> 00:02:40,550
+use one shared push constant range for
+all shader stages
+
+160
+00:02:40,550 --> 00:02:40,560
+all shader stages
+ 
+
+161
+00:02:40,560 --> 00:02:43,670
+all shader stages
+okay let's get to coding first i'm going
+
+162
+00:02:43,670 --> 00:02:43,680
+okay let's get to coding first i'm going
+ 
+
+163
+00:02:43,680 --> 00:02:45,670
+okay let's get to coding first i'm going
+to open the lve model header
+
+164
+00:02:45,670 --> 00:02:45,680
+to open the lve model header
+ 
+
+165
+00:02:45,680 --> 00:02:47,509
+to open the lve model header
+and just copy these three lines
+
+166
+00:02:47,509 --> 00:02:47,519
+and just copy these three lines
+ 
+
+167
+00:02:47,519 --> 00:02:50,550
+and just copy these three lines
+including the glm library
+
+168
+00:02:50,550 --> 00:02:50,560
+including the glm library
+ 
+
+169
+00:02:50,560 --> 00:02:52,309
+including the glm library
+then i'll open the application
+
+170
+00:02:52,309 --> 00:02:52,319
+then i'll open the application
+ 
+
+171
+00:02:52,319 --> 00:02:54,390
+then i'll open the application
+implementation and paste them in near
+
+172
+00:02:54,390 --> 00:02:54,400
+implementation and paste them in near
+ 
+
+173
+00:02:54,400 --> 00:02:56,229
+implementation and paste them in near
+the top
+
+174
+00:02:56,229 --> 00:02:56,239
+the top
+ 
+
+175
+00:02:56,239 --> 00:02:58,229
+the top
+now just inside the namespace i'll
+
+176
+00:02:58,229 --> 00:02:58,239
+now just inside the namespace i'll
+ 
+
+177
+00:02:58,239 --> 00:02:59,830
+now just inside the namespace i'll
+declare a new struct
+
+178
+00:02:59,830 --> 00:02:59,840
+declare a new struct
+ 
+
+179
+00:02:59,840 --> 00:03:04,869
+declare a new struct
+called simple push constant data
+
+180
+00:03:04,869 --> 00:03:04,879
+called simple push constant data
+ 
+
+181
+00:03:04,879 --> 00:03:08,630
+called simple push constant data
+with a glm vect2 offset field
+
+182
+00:03:08,630 --> 00:03:08,640
+with a glm vect2 offset field
+ 
+
+183
+00:03:08,640 --> 00:03:11,589
+with a glm vect2 offset field
+and a glm vect3 color field i'm
+
+184
+00:03:11,589 --> 00:03:11,599
+and a glm vect3 color field i'm
+ 
+
+185
+00:03:11,599 --> 00:03:13,830
+and a glm vect3 color field i'm
+declaring this in the app implementation
+
+186
+00:03:13,830 --> 00:03:13,840
+declaring this in the app implementation
+ 
+
+187
+00:03:13,840 --> 00:03:15,509
+declaring this in the app implementation
+because this is temporary and will
+
+188
+00:03:15,509 --> 00:03:15,519
+because this is temporary and will
+ 
+
+189
+00:03:15,519 --> 00:03:17,750
+because this is temporary and will
+eventually be restructured
+
+190
+00:03:17,750 --> 00:03:17,760
+eventually be restructured
+ 
+
+191
+00:03:17,760 --> 00:03:19,509
+eventually be restructured
+next in the create pipeline layout
+
+192
+00:03:19,509 --> 00:03:19,519
+next in the create pipeline layout
+ 
+
+193
+00:03:19,519 --> 00:03:21,270
+next in the create pipeline layout
+function we need to provide a push
+
+194
+00:03:21,270 --> 00:03:21,280
+function we need to provide a push
+ 
+
+195
+00:03:21,280 --> 00:03:23,750
+function we need to provide a push
+constant range
+
+196
+00:03:23,750 --> 00:03:23,760
+constant range
+ 
+
+197
+00:03:23,760 --> 00:03:26,309
+constant range
+so declare and initialize an empty vk
+
+198
+00:03:26,309 --> 00:03:26,319
+so declare and initialize an empty vk
+ 
+
+199
+00:03:26,319 --> 00:03:27,670
+so declare and initialize an empty vk
+push constant range
+
+200
+00:03:27,670 --> 00:03:27,680
+push constant range
+ 
+
+201
+00:03:27,680 --> 00:03:31,190
+push constant range
+called push constant range
+
+202
+00:03:31,190 --> 00:03:31,200
+
+ 
+
+203
+00:03:31,200 --> 00:03:33,430
+ 
+then set push constant range dot stage
+
+204
+00:03:33,430 --> 00:03:33,440
+then set push constant range dot stage
+ 
+
+205
+00:03:33,440 --> 00:03:37,670
+then set push constant range dot stage
+flags to vk shader stage vertex bit
+
+206
+00:03:37,670 --> 00:03:37,680
+flags to vk shader stage vertex bit
+ 
+
+207
+00:03:37,680 --> 00:03:40,229
+flags to vk shader stage vertex bit
+bitwise or operator followed by vk
+
+208
+00:03:40,229 --> 00:03:40,239
+bitwise or operator followed by vk
+ 
+
+209
+00:03:40,239 --> 00:03:41,030
+bitwise or operator followed by vk
+shader stage
+
+210
+00:03:41,030 --> 00:03:41,040
+shader stage
+ 
+
+211
+00:03:41,040 --> 00:03:44,149
+shader stage
+fragment bit this signals that we want
+
+212
+00:03:44,149 --> 00:03:44,159
+fragment bit this signals that we want
+ 
+
+213
+00:03:44,159 --> 00:03:46,070
+fragment bit this signals that we want
+access to the push constant data
+
+214
+00:03:46,070 --> 00:03:46,080
+access to the push constant data
+ 
+
+215
+00:03:46,080 --> 00:03:54,949
+access to the push constant data
+in both the vertex and fragment shaders
+
+216
+00:03:54,949 --> 00:03:54,959
+
+ 
+
+217
+00:03:54,959 --> 00:03:57,350
+ 
+then set pushconstantrange.size to
+
+218
+00:03:57,350 --> 00:03:57,360
+then set pushconstantrange.size to
+ 
+
+219
+00:03:57,360 --> 00:03:58,070
+then set pushconstantrange.size to
+sizeof
+
+220
+00:03:58,070 --> 00:03:58,080
+sizeof
+ 
+
+221
+00:03:58,080 --> 00:04:01,270
+sizeof
+simple push constant data you could also
+
+222
+00:04:01,270 --> 00:04:01,280
+simple push constant data you could also
+ 
+
+223
+00:04:01,280 --> 00:04:03,190
+simple push constant data you could also
+initialize the fields directly in the
+
+224
+00:04:03,190 --> 00:04:03,200
+initialize the fields directly in the
+ 
+
+225
+00:04:03,200 --> 00:04:04,710
+initialize the fields directly in the
+braces
+
+226
+00:04:04,710 --> 00:04:04,720
+braces
+ 
+
+227
+00:04:04,720 --> 00:04:06,949
+braces
+just below update the pipeline layout
+
+228
+00:04:06,949 --> 00:04:06,959
+just below update the pipeline layout
+ 
+
+229
+00:04:06,959 --> 00:04:09,190
+just below update the pipeline layout
+info to have a push constant range count
+
+230
+00:04:09,190 --> 00:04:09,200
+info to have a push constant range count
+ 
+
+231
+00:04:09,200 --> 00:04:10,550
+info to have a push constant range count
+of 1
+
+232
+00:04:10,550 --> 00:04:10,560
+of 1
+ 
+
+233
+00:04:10,560 --> 00:04:13,190
+of 1
+and set the p push constant ranges field
+
+234
+00:04:13,190 --> 00:04:13,200
+and set the p push constant ranges field
+ 
+
+235
+00:04:13,200 --> 00:04:15,190
+and set the p push constant ranges field
+to equal the address of the local push
+
+236
+00:04:15,190 --> 00:04:15,200
+to equal the address of the local push
+ 
+
+237
+00:04:15,200 --> 00:04:17,430
+to equal the address of the local push
+constant range variable
+
+238
+00:04:17,430 --> 00:04:17,440
+constant range variable
+ 
+
+239
+00:04:17,440 --> 00:04:19,509
+constant range variable
+then scroll down to the record command
+
+240
+00:04:19,509 --> 00:04:19,519
+then scroll down to the record command
+ 
+
+241
+00:04:19,519 --> 00:04:21,030
+then scroll down to the record command
+buffer function
+
+242
+00:04:21,030 --> 00:04:21,040
+buffer function
+ 
+
+243
+00:04:21,040 --> 00:04:23,270
+buffer function
+and underneath the model bind function
+
+244
+00:04:23,270 --> 00:04:23,280
+and underneath the model bind function
+ 
+
+245
+00:04:23,280 --> 00:04:25,830
+and underneath the model bind function
+call create a for loop with in j
+
+246
+00:04:25,830 --> 00:04:25,840
+call create a for loop with in j
+ 
+
+247
+00:04:25,840 --> 00:04:29,030
+call create a for loop with in j
+equal to 0 j is less than four and j
+
+248
+00:04:29,030 --> 00:04:29,040
+equal to 0 j is less than four and j
+ 
+
+249
+00:04:29,040 --> 00:04:32,390
+equal to 0 j is less than four and j
+plus plus then create a local simple
+
+250
+00:04:32,390 --> 00:04:32,400
+plus plus then create a local simple
+ 
+
+251
+00:04:32,400 --> 00:04:32,790
+plus plus then create a local simple
+push
+
+252
+00:04:32,790 --> 00:04:32,800
+push
+ 
+
+253
+00:04:32,800 --> 00:04:36,390
+push
+constant data instance called push
+
+254
+00:04:36,390 --> 00:04:36,400
+constant data instance called push
+ 
+
+255
+00:04:36,400 --> 00:04:38,870
+constant data instance called push
+and initialize the push dot offset field
+
+256
+00:04:38,870 --> 00:04:38,880
+and initialize the push dot offset field
+ 
+
+257
+00:04:38,880 --> 00:04:39,430
+and initialize the push dot offset field
+to equal
+
+258
+00:04:39,430 --> 00:04:39,440
+to equal
+ 
+
+259
+00:04:39,440 --> 00:04:43,189
+to equal
+zero for the x offset and negative 0.4
+
+260
+00:04:43,189 --> 00:04:43,199
+zero for the x offset and negative 0.4
+ 
+
+261
+00:04:43,199 --> 00:04:48,230
+zero for the x offset and negative 0.4
+plus j times 0.25 for the y component
+
+262
+00:04:48,230 --> 00:04:48,240
+plus j times 0.25 for the y component
+ 
+
+263
+00:04:48,240 --> 00:04:51,590
+plus j times 0.25 for the y component
+next set push dot color equal to 0 comma
+
+264
+00:04:51,590 --> 00:04:51,600
+next set push dot color equal to 0 comma
+ 
+
+265
+00:04:51,600 --> 00:04:56,469
+next set push dot color equal to 0 comma
+0 comma 0.2 plus 0.2 times j
+
+266
+00:04:56,469 --> 00:04:56,479
+0 comma 0.2 plus 0.2 times j
+ 
+
+267
+00:04:56,479 --> 00:04:58,469
+0 comma 0.2 plus 0.2 times j
+so essentially we're going to draw a
+
+268
+00:04:58,469 --> 00:04:58,479
+so essentially we're going to draw a
+ 
+
+269
+00:04:58,479 --> 00:05:00,870
+so essentially we're going to draw a
+vertical column of copies of our model
+
+270
+00:05:00,870 --> 00:05:00,880
+vertical column of copies of our model
+ 
+
+271
+00:05:00,880 --> 00:05:03,189
+vertical column of copies of our model
+that vary in color from dark to light or
+
+272
+00:05:03,189 --> 00:05:03,199
+that vary in color from dark to light or
+ 
+
+273
+00:05:03,199 --> 00:05:04,310
+that vary in color from dark to light or
+blue
+
+274
+00:05:04,310 --> 00:05:04,320
+blue
+ 
+
+275
+00:05:04,320 --> 00:05:06,469
+blue
+now we need to record or push constant
+
+276
+00:05:06,469 --> 00:05:06,479
+now we need to record or push constant
+ 
+
+277
+00:05:06,479 --> 00:05:09,110
+now we need to record or push constant
+data to the command buffer
+
+278
+00:05:09,110 --> 00:05:09,120
+data to the command buffer
+ 
+
+279
+00:05:09,120 --> 00:05:12,469
+data to the command buffer
+so-called vk command push constants data
+
+280
+00:05:12,469 --> 00:05:12,479
+so-called vk command push constants data
+ 
+
+281
+00:05:12,479 --> 00:05:14,550
+so-called vk command push constants data
+with arguments command buffer at image
+
+282
+00:05:14,550 --> 00:05:14,560
+with arguments command buffer at image
+ 
+
+283
+00:05:14,560 --> 00:05:16,710
+with arguments command buffer at image
+index pipeline layout
+
+284
+00:05:16,710 --> 00:05:16,720
+index pipeline layout
+ 
+
+285
+00:05:16,720 --> 00:05:19,350
+index pipeline layout
+followed by the stage flags so both the
+
+286
+00:05:19,350 --> 00:05:19,360
+followed by the stage flags so both the
+ 
+
+287
+00:05:19,360 --> 00:05:22,390
+followed by the stage flags so both the
+vertex and fragment bits
+
+288
+00:05:22,390 --> 00:05:22,400
+vertex and fragment bits
+ 
+
+289
+00:05:22,400 --> 00:05:26,310
+vertex and fragment bits
+0 for the offset then size of simple
+
+290
+00:05:26,310 --> 00:05:26,320
+0 for the offset then size of simple
+ 
+
+291
+00:05:26,320 --> 00:05:28,310
+0 for the offset then size of simple
+push constant data
+
+292
+00:05:28,310 --> 00:05:28,320
+push constant data
+ 
+
+293
+00:05:28,320 --> 00:05:31,749
+push constant data
+and lastly the address of the push data
+
+294
+00:05:31,749 --> 00:05:31,759
+and lastly the address of the push data
+ 
+
+295
+00:05:31,759 --> 00:05:33,830
+and lastly the address of the push data
+finally move the model draw function
+
+296
+00:05:33,830 --> 00:05:33,840
+finally move the model draw function
+ 
+
+297
+00:05:33,840 --> 00:05:36,150
+finally move the model draw function
+call to inside the for loop
+
+298
+00:05:36,150 --> 00:05:36,160
+call to inside the for loop
+ 
+
+299
+00:05:36,160 --> 00:05:38,150
+call to inside the for loop
+this way our command buffer will now
+
+300
+00:05:38,150 --> 00:05:38,160
+this way our command buffer will now
+ 
+
+301
+00:05:38,160 --> 00:05:40,390
+this way our command buffer will now
+draw four copies of our model
+
+302
+00:05:40,390 --> 00:05:40,400
+draw four copies of our model
+ 
+
+303
+00:05:40,400 --> 00:05:42,870
+draw four copies of our model
+with each copy using slightly different
+
+304
+00:05:42,870 --> 00:05:42,880
+with each copy using slightly different
+ 
+
+305
+00:05:42,880 --> 00:05:44,070
+with each copy using slightly different
+push data
+
+306
+00:05:44,070 --> 00:05:44,080
+push data
+ 
+
+307
+00:05:44,080 --> 00:05:45,909
+push data
+the next step is to update the shader
+
+308
+00:05:45,909 --> 00:05:45,919
+the next step is to update the shader
+ 
+
+309
+00:05:45,919 --> 00:05:48,870
+the next step is to update the shader
+files to expect the push data
+
+310
+00:05:48,870 --> 00:05:48,880
+files to expect the push data
+ 
+
+311
+00:05:48,880 --> 00:05:51,749
+files to expect the push data
+so navigate to your vertex shader file
+
+312
+00:05:51,749 --> 00:05:51,759
+so navigate to your vertex shader file
+ 
+
+313
+00:05:51,759 --> 00:05:52,870
+so navigate to your vertex shader file
+and just above
+
+314
+00:05:52,870 --> 00:05:52,880
+and just above
+ 
+
+315
+00:05:52,880 --> 00:05:55,029
+and just above
+the main function add layout followed by
+
+316
+00:05:55,029 --> 00:05:55,039
+the main function add layout followed by
+ 
+
+317
+00:05:55,039 --> 00:05:58,230
+the main function add layout followed by
+push underscore constant in brackets
+
+318
+00:05:58,230 --> 00:05:58,240
+push underscore constant in brackets
+ 
+
+319
+00:05:58,240 --> 00:06:01,110
+push underscore constant in brackets
+uniform push with a capital p curly
+
+320
+00:06:01,110 --> 00:06:01,120
+uniform push with a capital p curly
+ 
+
+321
+00:06:01,120 --> 00:06:03,430
+uniform push with a capital p curly
+braces push with a lowercase p
+
+322
+00:06:03,430 --> 00:06:03,440
+braces push with a lowercase p
+ 
+
+323
+00:06:03,440 --> 00:06:06,550
+braces push with a lowercase p
+semicolon then inside the braces add
+
+324
+00:06:06,550 --> 00:06:06,560
+semicolon then inside the braces add
+ 
+
+325
+00:06:06,560 --> 00:06:10,150
+semicolon then inside the braces add
+vect2 offset and vect3 color
+
+326
+00:06:10,150 --> 00:06:10,160
+vect2 offset and vect3 color
+ 
+
+327
+00:06:10,160 --> 00:06:12,150
+vect2 offset and vect3 color
+note that the order here must match the
+
+328
+00:06:12,150 --> 00:06:12,160
+note that the order here must match the
+ 
+
+329
+00:06:12,160 --> 00:06:14,230
+note that the order here must match the
+order specified in the simple push
+
+330
+00:06:14,230 --> 00:06:14,240
+order specified in the simple push
+ 
+
+331
+00:06:14,240 --> 00:06:16,070
+order specified in the simple push
+constant data struct
+
+332
+00:06:16,070 --> 00:06:16,080
+constant data struct
+ 
+
+333
+00:06:16,080 --> 00:06:18,469
+constant data struct
+as far as i know the name of the uniform
+
+334
+00:06:18,469 --> 00:06:18,479
+as far as i know the name of the uniform
+ 
+
+335
+00:06:18,479 --> 00:06:19,909
+as far as i know the name of the uniform
+doesn't really matter and can be
+
+336
+00:06:19,909 --> 00:06:19,919
+doesn't really matter and can be
+ 
+
+337
+00:06:19,919 --> 00:06:21,350
+doesn't really matter and can be
+whatever you want
+
+338
+00:06:21,350 --> 00:06:21,360
+whatever you want
+ 
+
+339
+00:06:21,360 --> 00:06:23,749
+whatever you want
+i usually just use the same name as my
+
+340
+00:06:23,749 --> 00:06:23,759
+i usually just use the same name as my
+ 
+
+341
+00:06:23,759 --> 00:06:24,390
+i usually just use the same name as my
+instance
+
+342
+00:06:24,390 --> 00:06:24,400
+instance
+ 
+
+343
+00:06:24,400 --> 00:06:26,870
+instance
+starting with a capital also note that
+
+344
+00:06:26,870 --> 00:06:26,880
+starting with a capital also note that
+ 
+
+345
+00:06:26,880 --> 00:06:28,710
+starting with a capital also note that
+only one push constant block
+
+346
+00:06:28,710 --> 00:06:28,720
+only one push constant block
+ 
+
+347
+00:06:28,720 --> 00:06:32,070
+only one push constant block
+can be used per shader entry point
+
+348
+00:06:32,070 --> 00:06:32,080
+can be used per shader entry point
+ 
+
+349
+00:06:32,080 --> 00:06:34,390
+can be used per shader entry point
+anyway next let's update the position
+
+350
+00:06:34,390 --> 00:06:34,400
+anyway next let's update the position
+ 
+
+351
+00:06:34,400 --> 00:06:36,790
+anyway next let's update the position
+value by adding push dot offset
+
+352
+00:06:36,790 --> 00:06:36,800
+value by adding push dot offset
+ 
+
+353
+00:06:36,800 --> 00:06:38,870
+value by adding push dot offset
+so within the draw call this means that
+
+354
+00:06:38,870 --> 00:06:38,880
+so within the draw call this means that
+ 
+
+355
+00:06:38,880 --> 00:06:41,350
+so within the draw call this means that
+each vertex will be shifted by the same
+
+356
+00:06:41,350 --> 00:06:41,360
+each vertex will be shifted by the same
+ 
+
+357
+00:06:41,360 --> 00:06:42,150
+each vertex will be shifted by the same
+amount
+
+358
+00:06:42,150 --> 00:06:42,160
+amount
+ 
+
+359
+00:06:42,160 --> 00:06:45,430
+amount
+effectively moving the entire model next
+
+360
+00:06:45,430 --> 00:06:45,440
+effectively moving the entire model next
+ 
+
+361
+00:06:45,440 --> 00:06:47,909
+effectively moving the entire model next
+we could just set right color equal to
+
+362
+00:06:47,909 --> 00:06:47,919
+we could just set right color equal to
+ 
+
+363
+00:06:47,919 --> 00:06:49,350
+we could just set right color equal to
+push dot color
+
+364
+00:06:49,350 --> 00:06:49,360
+push dot color
+ 
+
+365
+00:06:49,360 --> 00:06:51,270
+push dot color
+and then we wouldn't have needed to use
+
+366
+00:06:51,270 --> 00:06:51,280
+and then we wouldn't have needed to use
+ 
+
+367
+00:06:51,280 --> 00:06:54,150
+and then we wouldn't have needed to use
+the vk shader stage fragment bit
+
+368
+00:06:54,150 --> 00:06:54,160
+the vk shader stage fragment bit
+ 
+
+369
+00:06:54,160 --> 00:06:56,390
+the vk shader stage fragment bit
+but instead i'll remove this line as
+
+370
+00:06:56,390 --> 00:06:56,400
+but instead i'll remove this line as
+ 
+
+371
+00:06:56,400 --> 00:06:58,150
+but instead i'll remove this line as
+well as the line declaring the right
+
+372
+00:06:58,150 --> 00:06:58,160
+well as the line declaring the right
+ 
+
+373
+00:06:58,160 --> 00:06:58,629
+well as the line declaring the right
+color
+
+374
+00:06:58,629 --> 00:06:58,639
+color
+ 
+
+375
+00:06:58,639 --> 00:07:01,270
+color
+output variable then select and copy the
+
+376
+00:07:01,270 --> 00:07:01,280
+output variable then select and copy the
+ 
+
+377
+00:07:01,280 --> 00:07:03,029
+output variable then select and copy the
+entire layout definition
+
+378
+00:07:03,029 --> 00:07:03,039
+entire layout definition
+ 
+
+379
+00:07:03,039 --> 00:07:04,950
+entire layout definition
+and navigate to your fragment shader
+
+380
+00:07:04,950 --> 00:07:04,960
+and navigate to your fragment shader
+ 
+
+381
+00:07:04,960 --> 00:07:06,550
+and navigate to your fragment shader
+file
+
+382
+00:07:06,550 --> 00:07:06,560
+file
+ 
+
+383
+00:07:06,560 --> 00:07:08,469
+file
+first remove this line declaring the
+
+384
+00:07:08,469 --> 00:07:08,479
+first remove this line declaring the
+ 
+
+385
+00:07:08,479 --> 00:07:10,309
+first remove this line declaring the
+frag color input variable
+
+386
+00:07:10,309 --> 00:07:10,319
+frag color input variable
+ 
+
+387
+00:07:10,319 --> 00:07:12,710
+frag color input variable
+and then above the main function paste
+
+388
+00:07:12,710 --> 00:07:12,720
+and then above the main function paste
+ 
+
+389
+00:07:12,720 --> 00:07:15,270
+and then above the main function paste
+the push constant layout definition
+
+390
+00:07:15,270 --> 00:07:15,280
+the push constant layout definition
+ 
+
+391
+00:07:15,280 --> 00:07:17,510
+the push constant layout definition
+the only remaining change is to update
+
+392
+00:07:17,510 --> 00:07:17,520
+the only remaining change is to update
+ 
+
+393
+00:07:17,520 --> 00:07:19,749
+the only remaining change is to update
+frag color to instead be push
+
+394
+00:07:19,749 --> 00:07:19,759
+frag color to instead be push
+ 
+
+395
+00:07:19,759 --> 00:07:22,710
+frag color to instead be push
+dot color also i'm not sure if i
+
+396
+00:07:22,710 --> 00:07:22,720
+dot color also i'm not sure if i
+ 
+
+397
+00:07:22,720 --> 00:07:24,629
+dot color also i'm not sure if i
+mentioned this in a previous video
+
+398
+00:07:24,629 --> 00:07:24,639
+mentioned this in a previous video
+ 
+
+399
+00:07:24,639 --> 00:07:26,790
+mentioned this in a previous video
+but whatever build system you are using
+
+400
+00:07:26,790 --> 00:07:26,800
+but whatever build system you are using
+ 
+
+401
+00:07:26,800 --> 00:07:28,790
+but whatever build system you are using
+i recommend setting it up so that your
+
+402
+00:07:28,790 --> 00:07:28,800
+i recommend setting it up so that your
+ 
+
+403
+00:07:28,800 --> 00:07:31,029
+i recommend setting it up so that your
+shader files are automatically compiled
+
+404
+00:07:31,029 --> 00:07:31,039
+shader files are automatically compiled
+ 
+
+405
+00:07:31,039 --> 00:07:33,430
+shader files are automatically compiled
+when you build the rest of your code
+
+406
+00:07:33,430 --> 00:07:33,440
+when you build the rest of your code
+ 
+
+407
+00:07:33,440 --> 00:07:35,670
+when you build the rest of your code
+for example in my makefile i have a
+
+408
+00:07:35,670 --> 00:07:35,680
+for example in my makefile i have a
+ 
+
+409
+00:07:35,680 --> 00:07:37,110
+for example in my makefile i have a
+build step that compiles
+
+410
+00:07:37,110 --> 00:07:37,120
+build step that compiles
+ 
+
+411
+00:07:37,120 --> 00:07:40,550
+build step that compiles
+any source shader file to an spv file
+
+412
+00:07:40,550 --> 00:07:40,560
+any source shader file to an spv file
+ 
+
+413
+00:07:40,560 --> 00:07:43,189
+any source shader file to an spv file
+it does this by finding all vert and dot
+
+414
+00:07:43,189 --> 00:07:43,199
+it does this by finding all vert and dot
+ 
+
+415
+00:07:43,199 --> 00:07:45,909
+it does this by finding all vert and dot
+frag files within the shaders directory
+
+416
+00:07:45,909 --> 00:07:45,919
+frag files within the shaders directory
+ 
+
+417
+00:07:45,919 --> 00:07:48,230
+frag files within the shaders directory
+and then uses pattern sub to append the
+
+418
+00:07:48,230 --> 00:07:48,240
+and then uses pattern sub to append the
+ 
+
+419
+00:07:48,240 --> 00:07:50,309
+and then uses pattern sub to append the
+dot spv suffix
+
+420
+00:07:50,309 --> 00:07:50,319
+dot spv suffix
+ 
+
+421
+00:07:50,319 --> 00:07:52,790
+dot spv suffix
+then these spv file names are provided
+
+422
+00:07:52,790 --> 00:07:52,800
+then these spv file names are provided
+ 
+
+423
+00:07:52,800 --> 00:07:54,869
+then these spv file names are provided
+as dependencies for the target
+
+424
+00:07:54,869 --> 00:07:54,879
+as dependencies for the target
+ 
+
+425
+00:07:54,879 --> 00:07:57,749
+as dependencies for the target
+whether you use xcode visual studio or
+
+426
+00:07:57,749 --> 00:07:57,759
+whether you use xcode visual studio or
+ 
+
+427
+00:07:57,759 --> 00:07:57,990
+whether you use xcode visual studio or
+any
+
+428
+00:07:57,990 --> 00:07:58,000
+any
+ 
+
+429
+00:07:58,000 --> 00:08:00,629
+any
+other build system it is possible to set
+
+430
+00:08:00,629 --> 00:08:00,639
+other build system it is possible to set
+ 
+
+431
+00:08:00,639 --> 00:08:02,390
+other build system it is possible to set
+up something similar and i recommend
+
+432
+00:08:02,390 --> 00:08:02,400
+up something similar and i recommend
+ 
+
+433
+00:08:02,400 --> 00:08:03,270
+up something similar and i recommend
+doing so
+
+434
+00:08:03,270 --> 00:08:03,280
+doing so
+ 
+
+435
+00:08:03,280 --> 00:08:05,510
+doing so
+it's really frustrating to waste a bunch
+
+436
+00:08:05,510 --> 00:08:05,520
+it's really frustrating to waste a bunch
+ 
+
+437
+00:08:05,520 --> 00:08:06,629
+it's really frustrating to waste a bunch
+of time debugging
+
+438
+00:08:06,629 --> 00:08:06,639
+of time debugging
+ 
+
+439
+00:08:06,639 --> 00:08:08,469
+of time debugging
+only to realize that you haven't been
+
+440
+00:08:08,469 --> 00:08:08,479
+only to realize that you haven't been
+ 
+
+441
+00:08:08,479 --> 00:08:10,309
+only to realize that you haven't been
+compiling your shaders
+
+442
+00:08:10,309 --> 00:08:10,319
+compiling your shaders
+ 
+
+443
+00:08:10,319 --> 00:08:12,629
+compiling your shaders
+so i'm going to build and run my code
+
+444
+00:08:12,629 --> 00:08:12,639
+so i'm going to build and run my code
+ 
+
+445
+00:08:12,639 --> 00:08:14,309
+so i'm going to build and run my code
+and you can see here that these two
+
+446
+00:08:14,309 --> 00:08:14,319
+and you can see here that these two
+ 
+
+447
+00:08:14,319 --> 00:08:16,309
+and you can see here that these two
+lines echo that my shader files have
+
+448
+00:08:16,309 --> 00:08:16,319
+lines echo that my shader files have
+ 
+
+449
+00:08:16,319 --> 00:08:18,550
+lines echo that my shader files have
+been automatically recompiled
+
+450
+00:08:18,550 --> 00:08:18,560
+been automatically recompiled
+ 
+
+451
+00:08:18,560 --> 00:08:21,909
+been automatically recompiled
+and huh that's weird the triangle is red
+
+452
+00:08:21,909 --> 00:08:21,919
+and huh that's weird the triangle is red
+ 
+
+453
+00:08:21,919 --> 00:08:23,670
+and huh that's weird the triangle is red
+but i could have swore that we'd set the
+
+454
+00:08:23,670 --> 00:08:23,680
+but i could have swore that we'd set the
+ 
+
+455
+00:08:23,680 --> 00:08:25,110
+but i could have swore that we'd set the
+color to blue
+
+456
+00:08:25,110 --> 00:08:25,120
+color to blue
+ 
+
+457
+00:08:25,120 --> 00:08:27,350
+color to blue
+to understand what is going wrong here i
+
+458
+00:08:27,350 --> 00:08:27,360
+to understand what is going wrong here i
+ 
+
+459
+00:08:27,360 --> 00:08:28,950
+to understand what is going wrong here i
+need to talk about alignment
+
+460
+00:08:28,950 --> 00:08:28,960
+need to talk about alignment
+ 
+
+461
+00:08:28,960 --> 00:08:30,469
+need to talk about alignment
+requirements
+
+462
+00:08:30,469 --> 00:08:30,479
+requirements
+ 
+
+463
+00:08:30,479 --> 00:08:32,709
+requirements
+certain objects such as uniforms and
+
+464
+00:08:32,709 --> 00:08:32,719
+certain objects such as uniforms and
+ 
+
+465
+00:08:32,719 --> 00:08:33,990
+certain objects such as uniforms and
+push constants
+
+466
+00:08:33,990 --> 00:08:34,000
+push constants
+ 
+
+467
+00:08:34,000 --> 00:08:35,670
+push constants
+must be laid out to meet certain
+
+468
+00:08:35,670 --> 00:08:35,680
+must be laid out to meet certain
+ 
+
+469
+00:08:35,680 --> 00:08:38,389
+must be laid out to meet certain
+requirements scalars of size n
+
+470
+00:08:38,389 --> 00:08:38,399
+requirements scalars of size n
+ 
+
+471
+00:08:38,399 --> 00:08:41,190
+requirements scalars of size n
+have a scalar alignment of n a vector
+
+472
+00:08:41,190 --> 00:08:41,200
+have a scalar alignment of n a vector
+ 
+
+473
+00:08:41,200 --> 00:08:43,269
+have a scalar alignment of n a vector
+has to be aligned by 2n
+
+474
+00:08:43,269 --> 00:08:43,279
+has to be aligned by 2n
+ 
+
+475
+00:08:43,279 --> 00:08:45,509
+has to be aligned by 2n
+vector3 and vectors must be aligned to a
+
+476
+00:08:45,509 --> 00:08:45,519
+vector3 and vectors must be aligned to a
+ 
+
+477
+00:08:45,519 --> 00:08:46,710
+vector3 and vectors must be aligned to a
+multiple 4n
+
+478
+00:08:46,710 --> 00:08:46,720
+multiple 4n
+ 
+
+479
+00:08:46,720 --> 00:08:49,509
+multiple 4n
+and so on this is easier to understand
+
+480
+00:08:49,509 --> 00:08:49,519
+and so on this is easier to understand
+ 
+
+481
+00:08:49,519 --> 00:08:51,590
+and so on this is easier to understand
+by looking at an example
+
+482
+00:08:51,590 --> 00:08:51,600
+by looking at an example
+ 
+
+483
+00:08:51,600 --> 00:08:54,550
+by looking at an example
+when using a float precision of 32 bits
+
+484
+00:08:54,550 --> 00:08:54,560
+when using a float precision of 32 bits
+ 
+
+485
+00:08:54,560 --> 00:08:55,829
+when using a float precision of 32 bits
+then our scalar value
+
+486
+00:08:55,829 --> 00:08:55,839
+then our scalar value
+ 
+
+487
+00:08:55,839 --> 00:08:59,269
+then our scalar value
+n equals 4 bytes therefore event 2
+
+488
+00:08:59,269 --> 00:08:59,279
+n equals 4 bytes therefore event 2
+ 
+
+489
+00:08:59,279 --> 00:09:01,910
+n equals 4 bytes therefore event 2
+must be aligned by 8 bytes and effect 3
+
+490
+00:09:01,910 --> 00:09:01,920
+must be aligned by 8 bytes and effect 3
+ 
+
+491
+00:09:01,920 --> 00:09:03,990
+must be aligned by 8 bytes and effect 3
+must be aligned by 16 bytes
+
+492
+00:09:03,990 --> 00:09:04,000
+must be aligned by 16 bytes
+ 
+
+493
+00:09:04,000 --> 00:09:05,990
+must be aligned by 16 bytes
+by default the struct memory in the
+
+494
+00:09:05,990 --> 00:09:06,000
+by default the struct memory in the
+ 
+
+495
+00:09:06,000 --> 00:09:07,030
+by default the struct memory in the
+hosts code
+
+496
+00:09:07,030 --> 00:09:07,040
+hosts code
+ 
+
+497
+00:09:07,040 --> 00:09:09,430
+hosts code
+is packed together tightly therefore on
+
+498
+00:09:09,430 --> 00:09:09,440
+is packed together tightly therefore on
+ 
+
+499
+00:09:09,440 --> 00:09:11,269
+is packed together tightly therefore on
+the host the memory looks something like
+
+500
+00:09:11,269 --> 00:09:11,279
+the host the memory looks something like
+ 
+
+501
+00:09:11,279 --> 00:09:11,670
+the host the memory looks something like
+this
+
+502
+00:09:11,670 --> 00:09:11,680
+this
+ 
+
+503
+00:09:11,680 --> 00:09:13,269
+this
+where there is no space between the
+
+504
+00:09:13,269 --> 00:09:13,279
+where there is no space between the
+ 
+
+505
+00:09:13,279 --> 00:09:15,030
+where there is no space between the
+offset and color fields
+
+506
+00:09:15,030 --> 00:09:15,040
+offset and color fields
+ 
+
+507
+00:09:15,040 --> 00:09:17,590
+offset and color fields
+but in device memory the push constant
+
+508
+00:09:17,590 --> 00:09:17,600
+but in device memory the push constant
+ 
+
+509
+00:09:17,600 --> 00:09:20,230
+but in device memory the push constant
+struct layout requires the vect3 color
+
+510
+00:09:20,230 --> 00:09:20,240
+struct layout requires the vect3 color
+ 
+
+511
+00:09:20,240 --> 00:09:23,110
+struct layout requires the vect3 color
+to be aligned to a multiple of 16 bytes
+
+512
+00:09:23,110 --> 00:09:23,120
+to be aligned to a multiple of 16 bytes
+ 
+
+513
+00:09:23,120 --> 00:09:25,030
+to be aligned to a multiple of 16 bytes
+so 8 bytes of padding will be
+
+514
+00:09:25,030 --> 00:09:25,040
+so 8 bytes of padding will be
+ 
+
+515
+00:09:25,040 --> 00:09:27,190
+so 8 bytes of padding will be
+automatically inserted between offset
+
+516
+00:09:27,190 --> 00:09:27,200
+automatically inserted between offset
+ 
+
+517
+00:09:27,200 --> 00:09:28,230
+automatically inserted between offset
+and color
+
+518
+00:09:28,230 --> 00:09:28,240
+and color
+ 
+
+519
+00:09:28,240 --> 00:09:30,710
+and color
+therefore when we send over our data the
+
+520
+00:09:30,710 --> 00:09:30,720
+therefore when we send over our data the
+ 
+
+521
+00:09:30,720 --> 00:09:32,790
+therefore when we send over our data the
+red and green channels are being ignored
+
+522
+00:09:32,790 --> 00:09:32,800
+red and green channels are being ignored
+ 
+
+523
+00:09:32,800 --> 00:09:34,710
+red and green channels are being ignored
+and the blue channel is being read into
+
+524
+00:09:34,710 --> 00:09:34,720
+and the blue channel is being read into
+ 
+
+525
+00:09:34,720 --> 00:09:36,710
+and the blue channel is being read into
+the push constant's red channel
+
+526
+00:09:36,710 --> 00:09:36,720
+the push constant's red channel
+ 
+
+527
+00:09:36,720 --> 00:09:39,190
+the push constant's red channel
+and that's why the blue triangle is
+
+528
+00:09:39,190 --> 00:09:39,200
+and that's why the blue triangle is
+ 
+
+529
+00:09:39,200 --> 00:09:40,630
+and that's why the blue triangle is
+appearing red
+
+530
+00:09:40,630 --> 00:09:40,640
+appearing red
+ 
+
+531
+00:09:40,640 --> 00:09:42,630
+appearing red
+alignment mistakes can be tricky to
+
+532
+00:09:42,630 --> 00:09:42,640
+alignment mistakes can be tricky to
+ 
+
+533
+00:09:42,640 --> 00:09:44,949
+alignment mistakes can be tricky to
+debug since you won't likely ever
+
+534
+00:09:44,949 --> 00:09:44,959
+debug since you won't likely ever
+ 
+
+535
+00:09:44,959 --> 00:09:47,590
+debug since you won't likely ever
+see an error message we can fix this by
+
+536
+00:09:47,590 --> 00:09:47,600
+see an error message we can fix this by
+ 
+
+537
+00:09:47,600 --> 00:09:48,150
+see an error message we can fix this by
+using c
+
+538
+00:09:48,150 --> 00:09:48,160
+using c
+ 
+
+539
+00:09:48,160 --> 00:09:51,590
+using c
+plus plus 11s 11's align as specifier
+
+540
+00:09:51,590 --> 00:09:51,600
+plus plus 11s 11's align as specifier
+ 
+
+541
+00:09:51,600 --> 00:09:53,670
+plus plus 11s 11's align as specifier
+just before the color decoration in the
+
+542
+00:09:53,670 --> 00:09:53,680
+just before the color decoration in the
+ 
+
+543
+00:09:53,680 --> 00:09:55,350
+just before the color decoration in the
+push constants data struct
+
+544
+00:09:55,350 --> 00:09:55,360
+push constants data struct
+ 
+
+545
+00:09:55,360 --> 00:09:58,790
+push constants data struct
+add a line as 16 then build and run
+
+546
+00:09:58,790 --> 00:09:58,800
+add a line as 16 then build and run
+ 
+
+547
+00:09:58,800 --> 00:10:00,630
+add a line as 16 then build and run
+and your triangles should now be blue
+
+548
+00:10:00,630 --> 00:10:00,640
+and your triangles should now be blue
+ 
+
+549
+00:10:00,640 --> 00:10:02,870
+and your triangles should now be blue
+since the host memory layout now matches
+
+550
+00:10:02,870 --> 00:10:02,880
+since the host memory layout now matches
+ 
+
+551
+00:10:02,880 --> 00:10:04,949
+since the host memory layout now matches
+the push constants memory layout in the
+
+552
+00:10:04,949 --> 00:10:04,959
+the push constants memory layout in the
+ 
+
+553
+00:10:04,959 --> 00:10:06,069
+the push constants memory layout in the
+shader
+
+554
+00:10:06,069 --> 00:10:06,079
+shader
+ 
+
+555
+00:10:06,079 --> 00:10:08,310
+shader
+finally for some fun let's add a bit of
+
+556
+00:10:08,310 --> 00:10:08,320
+finally for some fun let's add a bit of
+ 
+
+557
+00:10:08,320 --> 00:10:09,430
+finally for some fun let's add a bit of
+motion
+
+558
+00:10:09,430 --> 00:10:09,440
+motion
+ 
+
+559
+00:10:09,440 --> 00:10:11,590
+motion
+this will be easy to do because as of
+
+560
+00:10:11,590 --> 00:10:11,600
+this will be easy to do because as of
+ 
+
+561
+00:10:11,600 --> 00:10:13,190
+this will be easy to do because as of
+the last tutorial we've started
+
+562
+00:10:13,190 --> 00:10:13,200
+the last tutorial we've started
+ 
+
+563
+00:10:13,200 --> 00:10:14,870
+the last tutorial we've started
+recording to a command buffer every
+
+564
+00:10:14,870 --> 00:10:14,880
+recording to a command buffer every
+ 
+
+565
+00:10:14,880 --> 00:10:15,670
+recording to a command buffer every
+frame
+
+566
+00:10:15,670 --> 00:10:15,680
+frame
+ 
+
+567
+00:10:15,680 --> 00:10:17,910
+frame
+by varying the push constant data each
+
+568
+00:10:17,910 --> 00:10:17,920
+by varying the push constant data each
+ 
+
+569
+00:10:17,920 --> 00:10:20,069
+by varying the push constant data each
+frame we can create animations
+
+570
+00:10:20,069 --> 00:10:20,079
+frame we can create animations
+ 
+
+571
+00:10:20,079 --> 00:10:21,990
+frame we can create animations
+so back in the record command buffer
+
+572
+00:10:21,990 --> 00:10:22,000
+so back in the record command buffer
+ 
+
+573
+00:10:22,000 --> 00:10:24,310
+so back in the record command buffer
+function i'm going to declare a variable
+
+574
+00:10:24,310 --> 00:10:24,320
+function i'm going to declare a variable
+ 
+
+575
+00:10:24,320 --> 00:10:25,190
+function i'm going to declare a variable
+with static
+
+576
+00:10:25,190 --> 00:10:25,200
+with static
+ 
+
+577
+00:10:25,200 --> 00:10:28,150
+with static
+int frame equal to zero followed by
+
+578
+00:10:28,150 --> 00:10:28,160
+int frame equal to zero followed by
+ 
+
+579
+00:10:28,160 --> 00:10:30,069
+int frame equal to zero followed by
+frame is equal to frame plus one in
+
+580
+00:10:30,069 --> 00:10:30,079
+frame is equal to frame plus one in
+ 
+
+581
+00:10:30,079 --> 00:10:30,949
+frame is equal to frame plus one in
+brackets
+
+582
+00:10:30,949 --> 00:10:30,959
+brackets
+ 
+
+583
+00:10:30,959 --> 00:10:34,870
+brackets
+mod let's say a thousand so this way our
+
+584
+00:10:34,870 --> 00:10:34,880
+mod let's say a thousand so this way our
+ 
+
+585
+00:10:34,880 --> 00:10:36,630
+mod let's say a thousand so this way our
+animation will loop every thousand
+
+586
+00:10:36,630 --> 00:10:36,640
+animation will loop every thousand
+ 
+
+587
+00:10:36,640 --> 00:10:37,430
+animation will loop every thousand
+frames
+
+588
+00:10:37,430 --> 00:10:37,440
+frames
+ 
+
+589
+00:10:37,440 --> 00:10:39,509
+frames
+next i'm going to change my clear color
+
+590
+00:10:39,509 --> 00:10:39,519
+next i'm going to change my clear color
+ 
+
+591
+00:10:39,519 --> 00:10:41,590
+next i'm going to change my clear color
+to be 0.01
+
+592
+00:10:41,590 --> 00:10:41,600
+to be 0.01
+ 
+
+593
+00:10:41,600 --> 00:10:43,590
+to be 0.01
+to set a darker background color and
+
+594
+00:10:43,590 --> 00:10:43,600
+to set a darker background color and
+ 
+
+595
+00:10:43,600 --> 00:10:45,509
+to set a darker background color and
+then update the x component of
+
+596
+00:10:45,509 --> 00:10:45,519
+then update the x component of
+ 
+
+597
+00:10:45,519 --> 00:10:47,030
+then update the x component of
+push.offset to be
+
+598
+00:10:47,030 --> 00:10:47,040
+push.offset to be
+ 
+
+599
+00:10:47,040 --> 00:10:52,470
+push.offset to be
+negative 0.5 plus frame times 0.002
+
+600
+00:10:52,470 --> 00:10:52,480
+negative 0.5 plus frame times 0.002
+ 
+
+601
+00:10:52,480 --> 00:10:55,670
+negative 0.5 plus frame times 0.002
+so i'm going to build and run my code
+
+602
+00:10:55,670 --> 00:10:55,680
+so i'm going to build and run my code
+ 
+
+603
+00:10:55,680 --> 00:10:57,670
+so i'm going to build and run my code
+that seems a bit slow so i'll make
+
+604
+00:10:57,670 --> 00:10:57,680
+that seems a bit slow so i'll make
+ 
+
+605
+00:10:57,680 --> 00:10:59,110
+that seems a bit slow so i'll make
+things quicker
+
+606
+00:10:59,110 --> 00:10:59,120
+things quicker
+ 
+
+607
+00:10:59,120 --> 00:11:01,350
+things quicker
+but note this is just a temporary method
+
+608
+00:11:01,350 --> 00:11:01,360
+but note this is just a temporary method
+ 
+
+609
+00:11:01,360 --> 00:11:04,069
+but note this is just a temporary method
+i'm using to demonstrate animations
+
+610
+00:11:04,069 --> 00:11:04,079
+i'm using to demonstrate animations
+ 
+
+611
+00:11:04,079 --> 00:11:06,550
+i'm using to demonstrate animations
+game loop timing is a whole topic in its
+
+612
+00:11:06,550 --> 00:11:06,560
+game loop timing is a whole topic in its
+ 
+
+613
+00:11:06,560 --> 00:11:08,150
+game loop timing is a whole topic in its
+own right with trade-offs between
+
+614
+00:11:08,150 --> 00:11:08,160
+own right with trade-offs between
+ 
+
+615
+00:11:08,160 --> 00:11:10,230
+own right with trade-offs between
+pinning animations to the frame rate
+
+616
+00:11:10,230 --> 00:11:10,240
+pinning animations to the frame rate
+ 
+
+617
+00:11:10,240 --> 00:11:13,350
+pinning animations to the frame rate
+or the system's real-time clock etc
+
+618
+00:11:13,350 --> 00:11:13,360
+or the system's real-time clock etc
+ 
+
+619
+00:11:13,360 --> 00:11:15,670
+or the system's real-time clock etc
+in summary push constants are an easy
+
+620
+00:11:15,670 --> 00:11:15,680
+in summary push constants are an easy
+ 
+
+621
+00:11:15,680 --> 00:11:17,990
+in summary push constants are an easy
+and performant way to pass dynamic data
+
+622
+00:11:17,990 --> 00:11:18,000
+and performant way to pass dynamic data
+ 
+
+623
+00:11:18,000 --> 00:11:19,030
+and performant way to pass dynamic data
+to a shader
+
+624
+00:11:19,030 --> 00:11:19,040
+to a shader
+ 
+
+625
+00:11:19,040 --> 00:11:21,030
+to a shader
+compared to the alternative method of
+
+626
+00:11:21,030 --> 00:11:21,040
+compared to the alternative method of
+ 
+
+627
+00:11:21,040 --> 00:11:22,870
+compared to the alternative method of
+using descriptor sets and uniform
+
+628
+00:11:22,870 --> 00:11:22,880
+using descriptor sets and uniform
+ 
+
+629
+00:11:22,880 --> 00:11:23,509
+using descriptor sets and uniform
+buffers
+
+630
+00:11:23,509 --> 00:11:23,519
+buffers
+ 
+
+631
+00:11:23,519 --> 00:11:25,430
+buffers
+push constants are much simpler for us
+
+632
+00:11:25,430 --> 00:11:25,440
+push constants are much simpler for us
+ 
+
+633
+00:11:25,440 --> 00:11:27,590
+push constants are much simpler for us
+to implement and will typically perform
+
+634
+00:11:27,590 --> 00:11:27,600
+to implement and will typically perform
+ 
+
+635
+00:11:27,600 --> 00:11:30,230
+to implement and will typically perform
+better for data that updates frequently
+
+636
+00:11:30,230 --> 00:11:30,240
+better for data that updates frequently
+ 
+
+637
+00:11:30,240 --> 00:11:32,710
+better for data that updates frequently
+however besides the obvious disadvantage
+
+638
+00:11:32,710 --> 00:11:32,720
+however besides the obvious disadvantage
+ 
+
+639
+00:11:32,720 --> 00:11:34,310
+however besides the obvious disadvantage
+of being limited in size
+
+640
+00:11:34,310 --> 00:11:34,320
+of being limited in size
+ 
+
+641
+00:11:34,320 --> 00:11:36,389
+of being limited in size
+they are not always the best way for
+
+642
+00:11:36,389 --> 00:11:36,399
+they are not always the best way for
+ 
+
+643
+00:11:36,399 --> 00:11:38,470
+they are not always the best way for
+passing data that updates on a per frame
+
+644
+00:11:38,470 --> 00:11:38,480
+passing data that updates on a per frame
+ 
+
+645
+00:11:38,480 --> 00:11:39,269
+passing data that updates on a per frame
+basis
+
+646
+00:11:39,269 --> 00:11:39,279
+basis
+ 
+
+647
+00:11:39,279 --> 00:11:41,829
+basis
+this is because minimizing draw calls is
+
+648
+00:11:41,829 --> 00:11:41,839
+this is because minimizing draw calls is
+ 
+
+649
+00:11:41,839 --> 00:11:44,550
+this is because minimizing draw calls is
+also a great way to increase performance
+
+650
+00:11:44,550 --> 00:11:44,560
+also a great way to increase performance
+ 
+
+651
+00:11:44,560 --> 00:11:47,030
+also a great way to increase performance
+one way to do this is by grouping models
+
+652
+00:11:47,030 --> 00:11:47,040
+one way to do this is by grouping models
+ 
+
+653
+00:11:47,040 --> 00:11:47,829
+one way to do this is by grouping models
+into a single
+
+654
+00:11:47,829 --> 00:11:47,839
+into a single
+ 
+
+655
+00:11:47,839 --> 00:11:50,949
+into a single
+vertex buffer so for example instead of
+
+656
+00:11:50,949 --> 00:11:50,959
+vertex buffer so for example instead of
+ 
+
+657
+00:11:50,959 --> 00:11:51,990
+vertex buffer so for example instead of
+bind model 1
+
+658
+00:11:51,990 --> 00:11:52,000
+bind model 1
+ 
+
+659
+00:11:52,000 --> 00:11:55,509
+bind model 1
+draw model 1 bind model 2 draw model 2
+
+660
+00:11:55,509 --> 00:11:55,519
+draw model 1 bind model 2 draw model 2
+ 
+
+661
+00:11:55,519 --> 00:11:58,949
+draw model 1 bind model 2 draw model 2
+and so on if i put models 1 2 and 3
+
+662
+00:11:58,949 --> 00:11:58,959
+and so on if i put models 1 2 and 3
+ 
+
+663
+00:11:58,959 --> 00:12:01,590
+and so on if i put models 1 2 and 3
+all into a single vertex buffer then i
+
+664
+00:12:01,590 --> 00:12:01,600
+all into a single vertex buffer then i
+ 
+
+665
+00:12:01,600 --> 00:12:02,310
+all into a single vertex buffer then i
+would only need
+
+666
+00:12:02,310 --> 00:12:02,320
+would only need
+ 
+
+667
+00:12:02,320 --> 00:12:04,629
+would only need
+one bind and one draw command to draw
+
+668
+00:12:04,629 --> 00:12:04,639
+one bind and one draw command to draw
+ 
+
+669
+00:12:04,639 --> 00:12:06,150
+one bind and one draw command to draw
+all three models
+
+670
+00:12:06,150 --> 00:12:06,160
+all three models
+ 
+
+671
+00:12:06,160 --> 00:12:08,230
+all three models
+however this would not be possible if
+
+672
+00:12:08,230 --> 00:12:08,240
+however this would not be possible if
+ 
+
+673
+00:12:08,240 --> 00:12:09,670
+however this would not be possible if
+using a push constant
+
+674
+00:12:09,670 --> 00:12:09,680
+using a push constant
+ 
+
+675
+00:12:09,680 --> 00:12:12,470
+using a push constant
+per model reducing three draw calls
+
+676
+00:12:12,470 --> 00:12:12,480
+per model reducing three draw calls
+ 
+
+677
+00:12:12,480 --> 00:12:13,990
+per model reducing three draw calls
+wouldn't affect performance
+
+678
+00:12:13,990 --> 00:12:14,000
+wouldn't affect performance
+ 
+
+679
+00:12:14,000 --> 00:12:16,150
+wouldn't affect performance
+but reducing hundreds or thousands of
+
+680
+00:12:16,150 --> 00:12:16,160
+but reducing hundreds or thousands of
+ 
+
+681
+00:12:16,160 --> 00:12:18,470
+but reducing hundreds or thousands of
+draw calls will start to add up
+
+682
+00:12:18,470 --> 00:12:18,480
+draw calls will start to add up
+ 
+
+683
+00:12:18,480 --> 00:12:20,550
+draw calls will start to add up
+finally one of the most common uses for
+
+684
+00:12:20,550 --> 00:12:20,560
+finally one of the most common uses for
+ 
+
+685
+00:12:20,560 --> 00:12:22,230
+finally one of the most common uses for
+push constants is to store a
+
+686
+00:12:22,230 --> 00:12:22,240
+push constants is to store a
+ 
+
+687
+00:12:22,240 --> 00:12:24,069
+push constants is to store a
+transformation matrix
+
+688
+00:12:24,069 --> 00:12:24,079
+transformation matrix
+ 
+
+689
+00:12:24,079 --> 00:12:26,710
+transformation matrix
+a transformation matrix is a rectangular
+
+690
+00:12:26,710 --> 00:12:26,720
+a transformation matrix is a rectangular
+ 
+
+691
+00:12:26,720 --> 00:12:28,870
+a transformation matrix is a rectangular
+array of numbers that can represent a
+
+692
+00:12:28,870 --> 00:12:28,880
+array of numbers that can represent a
+ 
+
+693
+00:12:28,880 --> 00:12:31,110
+array of numbers that can represent a
+variety of transforming operations such
+
+694
+00:12:31,110 --> 00:12:31,120
+variety of transforming operations such
+ 
+
+695
+00:12:31,120 --> 00:12:32,230
+variety of transforming operations such
+as rotations
+
+696
+00:12:32,230 --> 00:12:32,240
+as rotations
+ 
+
+697
+00:12:32,240 --> 00:12:35,350
+as rotations
+scaling translations and so on we will
+
+698
+00:12:35,350 --> 00:12:35,360
+scaling translations and so on we will
+ 
+
+699
+00:12:35,360 --> 00:12:37,269
+scaling translations and so on we will
+cover transformation matrices in the
+
+700
+00:12:37,269 --> 00:12:37,279
+cover transformation matrices in the
+ 
+
+701
+00:12:37,279 --> 00:12:38,310
+cover transformation matrices in the
+next tutorial
+
+702
+00:12:38,310 --> 00:12:38,320
+next tutorial
+ 
+
+703
+00:12:38,320 --> 00:12:40,310
+next tutorial
+as we prepare for three-dimensional
+
+704
+00:12:40,310 --> 00:12:40,320
+as we prepare for three-dimensional
+ 
+
+705
+00:12:40,320 --> 00:12:42,949
+as we prepare for three-dimensional
+rendering so i extremely recommend
+
+706
+00:12:42,949 --> 00:12:42,959
+rendering so i extremely recommend
+ 
+
+707
+00:12:42,959 --> 00:12:44,389
+rendering so i extremely recommend
+watching at least the first
+
+708
+00:12:44,389 --> 00:12:44,399
+watching at least the first
+ 
+
+709
+00:12:44,399 --> 00:12:46,790
+watching at least the first
+five episodes of this wonderful series
+
+710
+00:12:46,790 --> 00:12:46,800
+five episodes of this wonderful series
+ 
+
+711
+00:12:46,800 --> 00:12:49,190
+five episodes of this wonderful series
+introducing the mathematics of linear
+
+712
+00:12:49,190 --> 00:12:49,200
+introducing the mathematics of linear
+ 
+
+713
+00:12:49,200 --> 00:12:51,829
+introducing the mathematics of linear
+algebra by three blue one brown
+
+714
+00:12:51,829 --> 00:12:51,839
+algebra by three blue one brown
+ 
+
+715
+00:12:51,839 --> 00:12:54,069
+algebra by three blue one brown
+having a good geometric understanding of
+
+716
+00:12:54,069 --> 00:12:54,079
+having a good geometric understanding of
+ 
+
+717
+00:12:54,079 --> 00:12:56,470
+having a good geometric understanding of
+linear transformations is a requirement
+
+718
+00:12:56,470 --> 00:12:56,480
+linear transformations is a requirement
+ 
+
+719
+00:12:56,480 --> 00:12:57,590
+linear transformations is a requirement
+for understanding how
+
+720
+00:12:57,590 --> 00:12:57,600
+for understanding how
+ 
+
+721
+00:12:57,600 --> 00:13:00,230
+for understanding how
+3d graphics actually works a link to
+
+722
+00:13:00,230 --> 00:13:00,240
+3d graphics actually works a link to
+ 
+
+723
+00:13:00,240 --> 00:13:01,190
+3d graphics actually works a link to
+this as well as
+
+724
+00:13:01,190 --> 00:13:01,200
+this as well as
+ 
+
+725
+00:13:01,200 --> 00:13:02,710
+this as well as
+all the other resources are in the
+
+726
+00:13:02,710 --> 00:13:02,720
+all the other resources are in the
+ 
+
+727
+00:13:02,720 --> 00:13:04,470
+all the other resources are in the
+description below
+
+728
+00:13:04,470 --> 00:13:04,480
+description below
+ 
+
+729
+00:13:04,480 --> 00:13:06,629
+description below
+and thank you for watching please like
+
+730
+00:13:06,629 --> 00:13:06,639
+and thank you for watching please like
+ 
+
+731
+00:13:06,639 --> 00:13:14,829
+and thank you for watching please like
+and subscribe
+
+732
+00:13:14,829 --> 00:13:14,839
+
+ 
+
+733
+00:13:14,839 --> 00:13:17,839
+
+cheers
+

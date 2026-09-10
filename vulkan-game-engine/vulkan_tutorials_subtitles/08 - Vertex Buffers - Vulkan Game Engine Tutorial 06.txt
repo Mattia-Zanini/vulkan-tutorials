@@ -1,0 +1,6795 @@
+1
+00:00:00,399 --> 00:00:03,030
+ 
+in previous tutorials we've hard-coded
+
+2
+00:00:03,030 --> 00:00:03,040
+in previous tutorials we've hard-coded
+ 
+
+3
+00:00:03,040 --> 00:00:04,150
+in previous tutorials we've hard-coded
+vertex data
+
+4
+00:00:04,150 --> 00:00:04,160
+vertex data
+ 
+
+5
+00:00:04,160 --> 00:00:07,190
+vertex data
+directly into our vertex shader however
+
+6
+00:00:07,190 --> 00:00:07,200
+directly into our vertex shader however
+ 
+
+7
+00:00:07,200 --> 00:00:09,509
+directly into our vertex shader however
+this is clearly not a feasible solution
+
+8
+00:00:09,509 --> 00:00:09,519
+this is clearly not a feasible solution
+ 
+
+9
+00:00:09,519 --> 00:00:11,190
+this is clearly not a feasible solution
+for drawing anything remotely
+
+10
+00:00:11,190 --> 00:00:11,200
+for drawing anything remotely
+ 
+
+11
+00:00:11,200 --> 00:00:12,470
+for drawing anything remotely
+complicated
+
+12
+00:00:12,470 --> 00:00:12,480
+complicated
+ 
+
+13
+00:00:12,480 --> 00:00:14,629
+complicated
+3d models for modern games typically
+
+14
+00:00:14,629 --> 00:00:14,639
+3d models for modern games typically
+ 
+
+15
+00:00:14,639 --> 00:00:16,150
+3d models for modern games typically
+have thousands of triangles
+
+16
+00:00:16,150 --> 00:00:16,160
+have thousands of triangles
+ 
+
+17
+00:00:16,160 --> 00:00:18,790
+have thousands of triangles
+if not more so in this tutorial we will
+
+18
+00:00:18,790 --> 00:00:18,800
+if not more so in this tutorial we will
+ 
+
+19
+00:00:18,800 --> 00:00:21,189
+if not more so in this tutorial we will
+cover how vertex buffers store data
+
+20
+00:00:21,189 --> 00:00:21,199
+cover how vertex buffers store data
+ 
+
+21
+00:00:21,199 --> 00:00:23,990
+cover how vertex buffers store data
+and can be bound to graphics pipelines a
+
+22
+00:00:23,990 --> 00:00:24,000
+and can be bound to graphics pipelines a
+ 
+
+23
+00:00:24,000 --> 00:00:25,109
+and can be bound to graphics pipelines a
+vertex buffer
+
+24
+00:00:25,109 --> 00:00:25,119
+vertex buffer
+ 
+
+25
+00:00:25,119 --> 00:00:27,269
+vertex buffer
+is really just the chunk of memory that
+
+26
+00:00:27,269 --> 00:00:27,279
+is really just the chunk of memory that
+ 
+
+27
+00:00:27,279 --> 00:00:29,589
+is really just the chunk of memory that
+we pass into our vertex shader
+
+28
+00:00:29,589 --> 00:00:29,599
+we pass into our vertex shader
+ 
+
+29
+00:00:29,599 --> 00:00:31,910
+we pass into our vertex shader
+we can put whatever data we would like
+
+30
+00:00:31,910 --> 00:00:31,920
+we can put whatever data we would like
+ 
+
+31
+00:00:31,920 --> 00:00:33,270
+we can put whatever data we would like
+into this memory
+
+32
+00:00:33,270 --> 00:00:33,280
+into this memory
+ 
+
+33
+00:00:33,280 --> 00:00:35,910
+into this memory
+as long as we tell our graphics pipeline
+
+34
+00:00:35,910 --> 00:00:35,920
+as long as we tell our graphics pipeline
+ 
+
+35
+00:00:35,920 --> 00:00:37,510
+as long as we tell our graphics pipeline
+how it is structured
+
+36
+00:00:37,510 --> 00:00:37,520
+how it is structured
+ 
+
+37
+00:00:37,520 --> 00:00:39,990
+how it is structured
+the first way we structure this data is
+
+38
+00:00:39,990 --> 00:00:40,000
+the first way we structure this data is
+ 
+
+39
+00:00:40,000 --> 00:00:41,270
+the first way we structure this data is
+by grouping it into
+
+40
+00:00:41,270 --> 00:00:41,280
+by grouping it into
+ 
+
+41
+00:00:41,280 --> 00:00:44,630
+by grouping it into
+attributes a vertex attribute is just an
+
+42
+00:00:44,630 --> 00:00:44,640
+attributes a vertex attribute is just an
+ 
+
+43
+00:00:44,640 --> 00:00:46,869
+attributes a vertex attribute is just an
+input variable that is specified on a
+
+44
+00:00:46,869 --> 00:00:46,879
+input variable that is specified on a
+ 
+
+45
+00:00:46,879 --> 00:00:47,990
+input variable that is specified on a
+per-vertex
+
+46
+00:00:47,990 --> 00:00:48,000
+per-vertex
+ 
+
+47
+00:00:48,000 --> 00:00:51,510
+per-vertex
+basis so for example we could create a
+
+48
+00:00:51,510 --> 00:00:51,520
+basis so for example we could create a
+ 
+
+49
+00:00:51,520 --> 00:00:53,750
+basis so for example we could create a
+vertex attribute for our two-dimensional
+
+50
+00:00:53,750 --> 00:00:53,760
+vertex attribute for our two-dimensional
+ 
+
+51
+00:00:53,760 --> 00:00:55,029
+vertex attribute for our two-dimensional
+position
+
+52
+00:00:55,029 --> 00:00:55,039
+position
+ 
+
+53
+00:00:55,039 --> 00:00:57,510
+position
+if this was our only vertex attribute
+
+54
+00:00:57,510 --> 00:00:57,520
+if this was our only vertex attribute
+ 
+
+55
+00:00:57,520 --> 00:00:59,590
+if this was our only vertex attribute
+then our vertex buffer would look like
+
+56
+00:00:59,590 --> 00:00:59,600
+then our vertex buffer would look like
+ 
+
+57
+00:00:59,600 --> 00:01:00,470
+then our vertex buffer would look like
+this
+
+58
+00:01:00,470 --> 00:01:00,480
+this
+ 
+
+59
+00:01:00,480 --> 00:01:02,069
+this
+where every two numbers are grouped
+
+60
+00:01:02,069 --> 00:01:02,079
+where every two numbers are grouped
+ 
+
+61
+00:01:02,079 --> 00:01:03,910
+where every two numbers are grouped
+together to make up the x
+
+62
+00:01:03,910 --> 00:01:03,920
+together to make up the x
+ 
+
+63
+00:01:03,920 --> 00:01:06,230
+together to make up the x
+and y position of our vector input
+
+64
+00:01:06,230 --> 00:01:06,240
+and y position of our vector input
+ 
+
+65
+00:01:06,240 --> 00:01:07,030
+and y position of our vector input
+variable
+
+66
+00:01:07,030 --> 00:01:07,040
+variable
+ 
+
+67
+00:01:07,040 --> 00:01:10,230
+variable
+now let's say we want to specify an rgb
+
+68
+00:01:10,230 --> 00:01:10,240
+now let's say we want to specify an rgb
+ 
+
+69
+00:01:10,240 --> 00:01:13,429
+now let's say we want to specify an rgb
+color for each vertex we could
+
+70
+00:01:13,429 --> 00:01:13,439
+color for each vertex we could
+ 
+
+71
+00:01:13,439 --> 00:01:16,149
+color for each vertex we could
+add a second vertex attribute this time
+
+72
+00:01:16,149 --> 00:01:16,159
+add a second vertex attribute this time
+ 
+
+73
+00:01:16,159 --> 00:01:17,830
+add a second vertex attribute this time
+of f3
+
+74
+00:01:17,830 --> 00:01:17,840
+of f3
+ 
+
+75
+00:01:17,840 --> 00:01:20,469
+of f3
+if we add this to our vertex buffer then
+
+76
+00:01:20,469 --> 00:01:20,479
+if we add this to our vertex buffer then
+ 
+
+77
+00:01:20,479 --> 00:01:22,550
+if we add this to our vertex buffer then
+our buffer would look like this
+
+78
+00:01:22,550 --> 00:01:22,560
+our buffer would look like this
+ 
+
+79
+00:01:22,560 --> 00:01:24,550
+our buffer would look like this
+the first two values in the buffer are
+
+80
+00:01:24,550 --> 00:01:24,560
+the first two values in the buffer are
+ 
+
+81
+00:01:24,560 --> 00:01:26,550
+the first two values in the buffer are
+grouped together to make up the position
+
+82
+00:01:26,550 --> 00:01:26,560
+grouped together to make up the position
+ 
+
+83
+00:01:26,560 --> 00:01:28,710
+grouped together to make up the position
+attribute for the first vertex
+
+84
+00:01:28,710 --> 00:01:28,720
+attribute for the first vertex
+ 
+
+85
+00:01:28,720 --> 00:01:30,950
+attribute for the first vertex
+the next three values are the red green
+
+86
+00:01:30,950 --> 00:01:30,960
+the next three values are the red green
+ 
+
+87
+00:01:30,960 --> 00:01:32,469
+the next three values are the red green
+and blue values
+
+88
+00:01:32,469 --> 00:01:32,479
+and blue values
+ 
+
+89
+00:01:32,479 --> 00:01:34,630
+and blue values
+these will be grouped together to form
+
+90
+00:01:34,630 --> 00:01:34,640
+these will be grouped together to form
+ 
+
+91
+00:01:34,640 --> 00:01:36,069
+these will be grouped together to form
+the color attribute
+
+92
+00:01:36,069 --> 00:01:36,079
+the color attribute
+ 
+
+93
+00:01:36,079 --> 00:01:37,910
+the color attribute
+the next five values are used for the
+
+94
+00:01:37,910 --> 00:01:37,920
+the next five values are used for the
+ 
+
+95
+00:01:37,920 --> 00:01:39,590
+the next five values are used for the
+second vertex and so on
+
+96
+00:01:39,590 --> 00:01:39,600
+second vertex and so on
+ 
+
+97
+00:01:39,600 --> 00:01:41,350
+second vertex and so on
+the other way this data can be
+
+98
+00:01:41,350 --> 00:01:41,360
+the other way this data can be
+ 
+
+99
+00:01:41,360 --> 00:01:43,670
+the other way this data can be
+structured is by grouping attributes
+
+100
+00:01:43,670 --> 00:01:43,680
+structured is by grouping attributes
+ 
+
+101
+00:01:43,680 --> 00:01:45,830
+structured is by grouping attributes
+into separate bindings
+
+102
+00:01:45,830 --> 00:01:45,840
+into separate bindings
+ 
+
+103
+00:01:45,840 --> 00:01:48,950
+into separate bindings
+for example if we add a third attribute
+
+104
+00:01:48,950 --> 00:01:48,960
+for example if we add a third attribute
+ 
+
+105
+00:01:48,960 --> 00:01:51,270
+for example if we add a third attribute
+we could interleave all three attributes
+
+106
+00:01:51,270 --> 00:01:51,280
+we could interleave all three attributes
+ 
+
+107
+00:01:51,280 --> 00:01:53,109
+we could interleave all three attributes
+into a single binding
+
+108
+00:01:53,109 --> 00:01:53,119
+into a single binding
+ 
+
+109
+00:01:53,119 --> 00:01:56,389
+into a single binding
+or have one binding per attribute
+
+110
+00:01:56,389 --> 00:01:56,399
+or have one binding per attribute
+ 
+
+111
+00:01:56,399 --> 00:01:59,270
+or have one binding per attribute
+really any combination we would like for
+
+112
+00:01:59,270 --> 00:01:59,280
+really any combination we would like for
+ 
+
+113
+00:01:59,280 --> 00:02:00,149
+really any combination we would like for
+each binding
+
+114
+00:02:00,149 --> 00:02:00,159
+each binding
+ 
+
+115
+00:02:00,159 --> 00:02:02,149
+each binding
+we need to provide a vertex binding
+
+116
+00:02:02,149 --> 00:02:02,159
+we need to provide a vertex binding
+ 
+
+117
+00:02:02,159 --> 00:02:04,550
+we need to provide a vertex binding
+description at pipeline creation
+
+118
+00:02:04,550 --> 00:02:04,560
+description at pipeline creation
+ 
+
+119
+00:02:04,560 --> 00:02:06,550
+description at pipeline creation
+in the description we need to specify
+
+120
+00:02:06,550 --> 00:02:06,560
+in the description we need to specify
+ 
+
+121
+00:02:06,560 --> 00:02:07,749
+in the description we need to specify
+the binding index
+
+122
+00:02:07,749 --> 00:02:07,759
+the binding index
+ 
+
+123
+00:02:07,759 --> 00:02:10,229
+the binding index
+the input rate and the stride we can
+
+124
+00:02:10,229 --> 00:02:10,239
+the input rate and the stride we can
+ 
+
+125
+00:02:10,239 --> 00:02:11,190
+the input rate and the stride we can
+mostly ignore
+
+126
+00:02:11,190 --> 00:02:11,200
+mostly ignore
+ 
+
+127
+00:02:11,200 --> 00:02:13,350
+mostly ignore
+input rate for now this will always be
+
+128
+00:02:13,350 --> 00:02:13,360
+input rate for now this will always be
+ 
+
+129
+00:02:13,360 --> 00:02:14,790
+input rate for now this will always be
+input rate vertex
+
+130
+00:02:14,790 --> 00:02:14,800
+input rate vertex
+ 
+
+131
+00:02:14,800 --> 00:02:16,710
+input rate vertex
+with the alternative being input rate
+
+132
+00:02:16,710 --> 00:02:16,720
+with the alternative being input rate
+ 
+
+133
+00:02:16,720 --> 00:02:19,030
+with the alternative being input rate
+instance for when working with instanced
+
+134
+00:02:19,030 --> 00:02:19,040
+instance for when working with instanced
+ 
+
+135
+00:02:19,040 --> 00:02:22,229
+instance for when working with instanced
+data the stride specifies the interval
+
+136
+00:02:22,229 --> 00:02:22,239
+data the stride specifies the interval
+ 
+
+137
+00:02:22,239 --> 00:02:24,869
+data the stride specifies the interval
+in bytes from one entry to the next
+
+138
+00:02:24,869 --> 00:02:24,879
+in bytes from one entry to the next
+ 
+
+139
+00:02:24,879 --> 00:02:26,630
+in bytes from one entry to the next
+so you can imagine a pointer at the
+
+140
+00:02:26,630 --> 00:02:26,640
+so you can imagine a pointer at the
+ 
+
+141
+00:02:26,640 --> 00:02:28,470
+so you can imagine a pointer at the
+start of a vertex buffer
+
+142
+00:02:28,470 --> 00:02:28,480
+start of a vertex buffer
+ 
+
+143
+00:02:28,480 --> 00:02:30,790
+start of a vertex buffer
+the stride indicates how many bytes it
+
+144
+00:02:30,790 --> 00:02:30,800
+the stride indicates how many bytes it
+ 
+
+145
+00:02:30,800 --> 00:02:31,910
+the stride indicates how many bytes it
+needs to advance
+
+146
+00:02:31,910 --> 00:02:31,920
+needs to advance
+ 
+
+147
+00:02:31,920 --> 00:02:33,670
+needs to advance
+each time to get to the start of the
+
+148
+00:02:33,670 --> 00:02:33,680
+each time to get to the start of the
+ 
+
+149
+00:02:33,680 --> 00:02:37,190
+each time to get to the start of the
+next vertices data for each attribute we
+
+150
+00:02:37,190 --> 00:02:37,200
+next vertices data for each attribute we
+ 
+
+151
+00:02:37,200 --> 00:02:39,110
+next vertices data for each attribute we
+must provide a vertex attribute
+
+152
+00:02:39,110 --> 00:02:39,120
+must provide a vertex attribute
+ 
+
+153
+00:02:39,120 --> 00:02:40,309
+must provide a vertex attribute
+description
+
+154
+00:02:40,309 --> 00:02:40,319
+description
+ 
+
+155
+00:02:40,319 --> 00:02:42,630
+description
+attribute descriptions need four pieces
+
+156
+00:02:42,630 --> 00:02:42,640
+attribute descriptions need four pieces
+ 
+
+157
+00:02:42,640 --> 00:02:43,830
+attribute descriptions need four pieces
+of information
+
+158
+00:02:43,830 --> 00:02:43,840
+of information
+ 
+
+159
+00:02:43,840 --> 00:02:45,990
+of information
+the binding index for the vertex buffer
+
+160
+00:02:45,990 --> 00:02:46,000
+the binding index for the vertex buffer
+ 
+
+161
+00:02:46,000 --> 00:02:48,150
+the binding index for the vertex buffer
+the attribute is located in
+
+162
+00:02:48,150 --> 00:02:48,160
+the attribute is located in
+ 
+
+163
+00:02:48,160 --> 00:02:50,070
+the attribute is located in
+the location value for the input in the
+
+164
+00:02:50,070 --> 00:02:50,080
+the location value for the input in the
+ 
+
+165
+00:02:50,080 --> 00:02:51,270
+the location value for the input in the
+vertex shader
+
+166
+00:02:51,270 --> 00:02:51,280
+vertex shader
+ 
+
+167
+00:02:51,280 --> 00:02:53,110
+vertex shader
+the offset of the attribute in bytes
+
+168
+00:02:53,110 --> 00:02:53,120
+the offset of the attribute in bytes
+ 
+
+169
+00:02:53,120 --> 00:02:54,710
+the offset of the attribute in bytes
+from the vertex start
+
+170
+00:02:54,710 --> 00:02:54,720
+from the vertex start
+ 
+
+171
+00:02:54,720 --> 00:02:57,270
+from the vertex start
+and a vk format value describing the
+
+172
+00:02:57,270 --> 00:02:57,280
+and a vk format value describing the
+ 
+
+173
+00:02:57,280 --> 00:02:58,470
+and a vk format value describing the
+type of data
+
+174
+00:02:58,470 --> 00:02:58,480
+type of data
+ 
+
+175
+00:02:58,480 --> 00:03:00,949
+type of data
+for example our color attribute could be
+
+176
+00:03:00,949 --> 00:03:00,959
+for example our color attribute could be
+ 
+
+177
+00:03:00,959 --> 00:03:02,229
+for example our color attribute could be
+in our first buffer
+
+178
+00:03:02,229 --> 00:03:02,239
+in our first buffer
+ 
+
+179
+00:03:02,239 --> 00:03:05,190
+in our first buffer
+at binding index zero and the location
+
+180
+00:03:05,190 --> 00:03:05,200
+at binding index zero and the location
+ 
+
+181
+00:03:05,200 --> 00:03:06,710
+at binding index zero and the location
+we specified in the vertex
+
+182
+00:03:06,710 --> 00:03:06,720
+we specified in the vertex
+ 
+
+183
+00:03:06,720 --> 00:03:09,830
+we specified in the vertex
+shader is location one the offset would
+
+184
+00:03:09,830 --> 00:03:09,840
+shader is location one the offset would
+ 
+
+185
+00:03:09,840 --> 00:03:10,390
+shader is location one the offset would
+be eight
+
+186
+00:03:10,390 --> 00:03:10,400
+be eight
+ 
+
+187
+00:03:10,400 --> 00:03:12,229
+be eight
+because the position has four bytes for
+
+188
+00:03:12,229 --> 00:03:12,239
+because the position has four bytes for
+ 
+
+189
+00:03:12,239 --> 00:03:13,430
+because the position has four bytes for
+the x component
+
+190
+00:03:13,430 --> 00:03:13,440
+the x component
+ 
+
+191
+00:03:13,440 --> 00:03:15,190
+the x component
+plus another four bytes for the y
+
+192
+00:03:15,190 --> 00:03:15,200
+plus another four bytes for the y
+ 
+
+193
+00:03:15,200 --> 00:03:17,750
+plus another four bytes for the y
+component therefore the color attribute
+
+194
+00:03:17,750 --> 00:03:17,760
+component therefore the color attribute
+ 
+
+195
+00:03:17,760 --> 00:03:20,070
+component therefore the color attribute
+values start at an offset of 8 bytes
+
+196
+00:03:20,070 --> 00:03:20,080
+values start at an offset of 8 bytes
+ 
+
+197
+00:03:20,080 --> 00:03:22,390
+values start at an offset of 8 bytes
+from the start of the vertex data
+
+198
+00:03:22,390 --> 00:03:22,400
+from the start of the vertex data
+ 
+
+199
+00:03:22,400 --> 00:03:24,630
+from the start of the vertex data
+and finally the format specifies the
+
+200
+00:03:24,630 --> 00:03:24,640
+and finally the format specifies the
+ 
+
+201
+00:03:24,640 --> 00:03:25,430
+and finally the format specifies the
+data type
+
+202
+00:03:25,430 --> 00:03:25,440
+data type
+ 
+
+203
+00:03:25,440 --> 00:03:27,910
+data type
+of the attribute so the color attribute
+
+204
+00:03:27,910 --> 00:03:27,920
+of the attribute so the color attribute
+ 
+
+205
+00:03:27,920 --> 00:03:29,430
+of the attribute so the color attribute
+is a vect3
+
+206
+00:03:29,430 --> 00:03:29,440
+is a vect3
+ 
+
+207
+00:03:29,440 --> 00:03:32,949
+is a vect3
+which corresponds to vk format r32
+
+208
+00:03:32,949 --> 00:03:32,959
+which corresponds to vk format r32
+ 
+
+209
+00:03:32,959 --> 00:03:36,070
+which corresponds to vk format r32
+g32 b32 s float
+
+210
+00:03:36,070 --> 00:03:36,080
+g32 b32 s float
+ 
+
+211
+00:03:36,080 --> 00:03:38,070
+g32 b32 s float
+these are some commonly used data types
+
+212
+00:03:38,070 --> 00:03:38,080
+these are some commonly used data types
+ 
+
+213
+00:03:38,080 --> 00:03:39,270
+these are some commonly used data types
+and formats
+
+214
+00:03:39,270 --> 00:03:39,280
+and formats
+ 
+
+215
+00:03:39,280 --> 00:03:41,670
+and formats
+note that even though the format implies
+
+216
+00:03:41,670 --> 00:03:41,680
+note that even though the format implies
+ 
+
+217
+00:03:41,680 --> 00:03:42,309
+note that even though the format implies
+a color
+
+218
+00:03:42,309 --> 00:03:42,319
+a color
+ 
+
+219
+00:03:42,319 --> 00:03:45,030
+a color
+like structure we use the same format
+
+220
+00:03:45,030 --> 00:03:45,040
+like structure we use the same format
+ 
+
+221
+00:03:45,040 --> 00:03:45,990
+like structure we use the same format
+even if we
+
+222
+00:03:45,990 --> 00:03:46,000
+even if we
+ 
+
+223
+00:03:46,000 --> 00:03:48,550
+even if we
+are representing non-color data for
+
+224
+00:03:48,550 --> 00:03:48,560
+are representing non-color data for
+ 
+
+225
+00:03:48,560 --> 00:03:49,270
+are representing non-color data for
+example
+
+226
+00:03:49,270 --> 00:03:49,280
+example
+ 
+
+227
+00:03:49,280 --> 00:03:51,910
+example
+the vect2 position attribute would still
+
+228
+00:03:51,910 --> 00:03:51,920
+the vect2 position attribute would still
+ 
+
+229
+00:03:51,920 --> 00:03:54,270
+the vect2 position attribute would still
+use a vk format
+
+230
+00:03:54,270 --> 00:03:54,280
+use a vk format
+ 
+
+231
+00:03:54,280 --> 00:03:57,190
+use a vk format
+r32g32s float even though it's not a
+
+232
+00:03:57,190 --> 00:03:57,200
+r32g32s float even though it's not a
+ 
+
+233
+00:03:57,200 --> 00:03:57,990
+r32g32s float even though it's not a
+color
+
+234
+00:03:57,990 --> 00:03:58,000
+color
+ 
+
+235
+00:03:58,000 --> 00:03:59,910
+color
+so far i've been using binding and
+
+236
+00:03:59,910 --> 00:03:59,920
+so far i've been using binding and
+ 
+
+237
+00:03:59,920 --> 00:04:01,750
+so far i've been using binding and
+buffer interchangeably
+
+238
+00:04:01,750 --> 00:04:01,760
+buffer interchangeably
+ 
+
+239
+00:04:01,760 --> 00:04:03,830
+buffer interchangeably
+which might imply that for each binding
+
+240
+00:04:03,830 --> 00:04:03,840
+which might imply that for each binding
+ 
+
+241
+00:04:03,840 --> 00:04:05,350
+which might imply that for each binding
+we have a separate buffer
+
+242
+00:04:05,350 --> 00:04:05,360
+we have a separate buffer
+ 
+
+243
+00:04:05,360 --> 00:04:07,589
+we have a separate buffer
+but typically you will want to minimize
+
+244
+00:04:07,589 --> 00:04:07,599
+but typically you will want to minimize
+ 
+
+245
+00:04:07,599 --> 00:04:10,149
+but typically you will want to minimize
+the amount of memory allocations
+
+246
+00:04:10,149 --> 00:04:10,159
+the amount of memory allocations
+ 
+
+247
+00:04:10,159 --> 00:04:13,030
+the amount of memory allocations
+so often for something like vertex data
+
+248
+00:04:13,030 --> 00:04:13,040
+so often for something like vertex data
+ 
+
+249
+00:04:13,040 --> 00:04:13,990
+so often for something like vertex data
+even if we have
+
+250
+00:04:13,990 --> 00:04:14,000
+even if we have
+ 
+
+251
+00:04:14,000 --> 00:04:16,949
+even if we have
+multiple bindings we will only allocate
+
+252
+00:04:16,949 --> 00:04:16,959
+multiple bindings we will only allocate
+ 
+
+253
+00:04:16,959 --> 00:04:17,430
+multiple bindings we will only allocate
+one
+
+254
+00:04:17,430 --> 00:04:17,440
+one
+ 
+
+255
+00:04:17,440 --> 00:04:19,830
+one
+large vertex buffer and have each
+
+256
+00:04:19,830 --> 00:04:19,840
+large vertex buffer and have each
+ 
+
+257
+00:04:19,840 --> 00:04:21,270
+large vertex buffer and have each
+binding mapped to a different
+
+258
+00:04:21,270 --> 00:04:21,280
+binding mapped to a different
+ 
+
+259
+00:04:21,280 --> 00:04:24,070
+binding mapped to a different
+region of the same buffer so is it
+
+260
+00:04:24,070 --> 00:04:24,080
+region of the same buffer so is it
+ 
+
+261
+00:04:24,080 --> 00:04:26,150
+region of the same buffer so is it
+better to use a single interleaved
+
+262
+00:04:26,150 --> 00:04:26,160
+better to use a single interleaved
+ 
+
+263
+00:04:26,160 --> 00:04:27,189
+better to use a single interleaved
+binding
+
+264
+00:04:27,189 --> 00:04:27,199
+binding
+ 
+
+265
+00:04:27,199 --> 00:04:29,990
+binding
+or one binding per tribute or something
+
+266
+00:04:29,990 --> 00:04:30,000
+or one binding per tribute or something
+ 
+
+267
+00:04:30,000 --> 00:04:31,030
+or one binding per tribute or something
+in between
+
+268
+00:04:31,030 --> 00:04:31,040
+in between
+ 
+
+269
+00:04:31,040 --> 00:04:33,110
+in between
+i won't delve into this topic too much
+
+270
+00:04:33,110 --> 00:04:33,120
+i won't delve into this topic too much
+ 
+
+271
+00:04:33,120 --> 00:04:34,150
+i won't delve into this topic too much
+right now as
+
+272
+00:04:34,150 --> 00:04:34,160
+right now as
+ 
+
+273
+00:04:34,160 --> 00:04:35,749
+right now as
+performance differences tend to be
+
+274
+00:04:35,749 --> 00:04:35,759
+performance differences tend to be
+ 
+
+275
+00:04:35,759 --> 00:04:38,230
+performance differences tend to be
+modest anyway and there is no one right
+
+276
+00:04:38,230 --> 00:04:38,240
+modest anyway and there is no one right
+ 
+
+277
+00:04:38,240 --> 00:04:39,110
+modest anyway and there is no one right
+answer
+
+278
+00:04:39,110 --> 00:04:39,120
+answer
+ 
+
+279
+00:04:39,120 --> 00:04:41,270
+answer
+typically a single interleaved binding
+
+280
+00:04:41,270 --> 00:04:41,280
+typically a single interleaved binding
+ 
+
+281
+00:04:41,280 --> 00:04:43,830
+typically a single interleaved binding
+would be the recommended way to go
+
+282
+00:04:43,830 --> 00:04:43,840
+would be the recommended way to go
+ 
+
+283
+00:04:43,840 --> 00:04:45,830
+would be the recommended way to go
+and for simpler pipelines and basic
+
+284
+00:04:45,830 --> 00:04:45,840
+and for simpler pipelines and basic
+ 
+
+285
+00:04:45,840 --> 00:04:48,150
+and for simpler pipelines and basic
+algorithms this is usually true
+
+286
+00:04:48,150 --> 00:04:48,160
+algorithms this is usually true
+ 
+
+287
+00:04:48,160 --> 00:04:50,150
+algorithms this is usually true
+however depending on your overall
+
+288
+00:04:50,150 --> 00:04:50,160
+however depending on your overall
+ 
+
+289
+00:04:50,160 --> 00:04:51,350
+however depending on your overall
+rendering pipeline
+
+290
+00:04:51,350 --> 00:04:51,360
+rendering pipeline
+ 
+
+291
+00:04:51,360 --> 00:04:53,909
+rendering pipeline
+the algorithms being used and even your
+
+292
+00:04:53,909 --> 00:04:53,919
+the algorithms being used and even your
+ 
+
+293
+00:04:53,919 --> 00:04:55,350
+the algorithms being used and even your
+specific hardware
+
+294
+00:04:55,350 --> 00:04:55,360
+specific hardware
+ 
+
+295
+00:04:55,360 --> 00:04:57,749
+specific hardware
+using separate buffers may yield better
+
+296
+00:04:57,749 --> 00:04:57,759
+using separate buffers may yield better
+ 
+
+297
+00:04:57,759 --> 00:04:58,710
+using separate buffers may yield better
+performance
+
+298
+00:04:58,710 --> 00:04:58,720
+performance
+ 
+
+299
+00:04:58,720 --> 00:05:01,029
+performance
+so for now don't worry about it just
+
+300
+00:05:01,029 --> 00:05:01,039
+so for now don't worry about it just
+ 
+
+301
+00:05:01,039 --> 00:05:02,710
+so for now don't worry about it just
+keep this in the back of your mind
+
+302
+00:05:02,710 --> 00:05:02,720
+keep this in the back of your mind
+ 
+
+303
+00:05:02,720 --> 00:05:04,710
+keep this in the back of your mind
+that in the future if you're working on
+
+304
+00:05:04,710 --> 00:05:04,720
+that in the future if you're working on
+ 
+
+305
+00:05:04,720 --> 00:05:07,189
+that in the future if you're working on
+some specific rendering implementation
+
+306
+00:05:07,189 --> 00:05:07,199
+some specific rendering implementation
+ 
+
+307
+00:05:07,199 --> 00:05:09,830
+some specific rendering implementation
+and need to squeeze every millisecond of
+
+308
+00:05:09,830 --> 00:05:09,840
+and need to squeeze every millisecond of
+ 
+
+309
+00:05:09,840 --> 00:05:10,870
+and need to squeeze every millisecond of
+performance out
+
+310
+00:05:10,870 --> 00:05:10,880
+performance out
+ 
+
+311
+00:05:10,880 --> 00:05:13,189
+performance out
+that restructuring your vertex data may
+
+312
+00:05:13,189 --> 00:05:13,199
+that restructuring your vertex data may
+ 
+
+313
+00:05:13,199 --> 00:05:14,390
+that restructuring your vertex data may
+be beneficial
+
+314
+00:05:14,390 --> 00:05:14,400
+be beneficial
+ 
+
+315
+00:05:14,400 --> 00:05:17,029
+be beneficial
+okay let's get to coding the first thing
+
+316
+00:05:17,029 --> 00:05:17,039
+okay let's get to coding the first thing
+ 
+
+317
+00:05:17,039 --> 00:05:18,070
+okay let's get to coding the first thing
+we're going to do
+
+318
+00:05:18,070 --> 00:05:18,080
+we're going to do
+ 
+
+319
+00:05:18,080 --> 00:05:20,230
+we're going to do
+is create a new header file for our
+
+320
+00:05:20,230 --> 00:05:20,240
+is create a new header file for our
+ 
+
+321
+00:05:20,240 --> 00:05:21,990
+is create a new header file for our
+model class
+
+322
+00:05:21,990 --> 00:05:22,000
+model class
+ 
+
+323
+00:05:22,000 --> 00:05:24,150
+model class
+so i'm going to call my file lve
+
+324
+00:05:24,150 --> 00:05:24,160
+so i'm going to call my file lve
+ 
+
+325
+00:05:24,160 --> 00:05:27,430
+so i'm going to call my file lve
+underscore model.hpp
+
+326
+00:05:27,430 --> 00:05:27,440
+underscore model.hpp
+ 
+
+327
+00:05:27,440 --> 00:05:29,830
+underscore model.hpp
+i'll use pragma once to create a header
+
+328
+00:05:29,830 --> 00:05:29,840
+i'll use pragma once to create a header
+ 
+
+329
+00:05:29,840 --> 00:05:32,070
+i'll use pragma once to create a header
+guard and then add the lve
+
+330
+00:05:32,070 --> 00:05:32,080
+guard and then add the lve
+ 
+
+331
+00:05:32,080 --> 00:05:35,029
+guard and then add the lve
+namespace i've been using then make a
+
+332
+00:05:35,029 --> 00:05:35,039
+namespace i've been using then make a
+ 
+
+333
+00:05:35,039 --> 00:05:35,749
+namespace i've been using then make a
+new class
+
+334
+00:05:35,749 --> 00:05:35,759
+new class
+ 
+
+335
+00:05:35,759 --> 00:05:39,029
+new class
+lve model within the namespace so the
+
+336
+00:05:39,029 --> 00:05:39,039
+lve model within the namespace so the
+ 
+
+337
+00:05:39,039 --> 00:05:40,390
+lve model within the namespace so the
+purpose of this class
+
+338
+00:05:40,390 --> 00:05:40,400
+purpose of this class
+ 
+
+339
+00:05:40,400 --> 00:05:42,469
+purpose of this class
+is to be able to take vertex data
+
+340
+00:05:42,469 --> 00:05:42,479
+is to be able to take vertex data
+ 
+
+341
+00:05:42,479 --> 00:05:43,510
+is to be able to take vertex data
+created by
+
+342
+00:05:43,510 --> 00:05:43,520
+created by
+ 
+
+343
+00:05:43,520 --> 00:05:46,390
+created by
+or right in a file on the cpu and then
+
+344
+00:05:46,390 --> 00:05:46,400
+or right in a file on the cpu and then
+ 
+
+345
+00:05:46,400 --> 00:05:48,469
+or right in a file on the cpu and then
+allocate the memory and copy the data
+
+346
+00:05:48,469 --> 00:05:48,479
+allocate the memory and copy the data
+ 
+
+347
+00:05:48,479 --> 00:05:50,150
+allocate the memory and copy the data
+over to our device gpu
+
+348
+00:05:50,150 --> 00:05:50,160
+over to our device gpu
+ 
+
+349
+00:05:50,160 --> 00:05:52,710
+over to our device gpu
+so it can be rendered efficiently so
+
+350
+00:05:52,710 --> 00:05:52,720
+so it can be rendered efficiently so
+ 
+
+351
+00:05:52,720 --> 00:05:54,710
+so it can be rendered efficiently so
+like with most of the other classes
+
+352
+00:05:54,710 --> 00:05:54,720
+like with most of the other classes
+ 
+
+353
+00:05:54,720 --> 00:05:56,309
+like with most of the other classes
+we've created so far
+
+354
+00:05:56,309 --> 00:05:56,319
+we've created so far
+ 
+
+355
+00:05:56,319 --> 00:05:58,790
+we've created so far
+we need a device reference to work with
+
+356
+00:05:58,790 --> 00:05:58,800
+we need a device reference to work with
+ 
+
+357
+00:05:58,800 --> 00:05:59,590
+we need a device reference to work with
+it
+
+358
+00:05:59,590 --> 00:05:59,600
+it
+ 
+
+359
+00:05:59,600 --> 00:06:02,390
+it
+so create a private lve device reference
+
+360
+00:06:02,390 --> 00:06:02,400
+so create a private lve device reference
+ 
+
+361
+00:06:02,400 --> 00:06:03,110
+so create a private lve device reference
+variable
+
+362
+00:06:03,110 --> 00:06:03,120
+variable
+ 
+
+363
+00:06:03,120 --> 00:06:05,909
+variable
+called lve device and at the top of the
+
+364
+00:06:05,909 --> 00:06:05,919
+called lve device and at the top of the
+ 
+
+365
+00:06:05,919 --> 00:06:06,790
+called lve device and at the top of the
+file add an
+
+366
+00:06:06,790 --> 00:06:06,800
+file add an
+ 
+
+367
+00:06:06,800 --> 00:06:12,070
+file add an
+include for lve device
+
+368
+00:06:12,070 --> 00:06:12,080
+
+ 
+
+369
+00:06:12,080 --> 00:06:14,870
+ 
+next add three more private variables vk
+
+370
+00:06:14,870 --> 00:06:14,880
+next add three more private variables vk
+ 
+
+371
+00:06:14,880 --> 00:06:15,510
+next add three more private variables vk
+buffer
+
+372
+00:06:15,510 --> 00:06:15,520
+buffer
+ 
+
+373
+00:06:15,520 --> 00:06:19,270
+buffer
+vertex buffer
+
+374
+00:06:19,270 --> 00:06:19,280
+
+ 
+
+375
+00:06:19,280 --> 00:06:23,909
+ 
+vk device memory vertex buffer memory
+
+376
+00:06:23,909 --> 00:06:23,919
+vk device memory vertex buffer memory
+ 
+
+377
+00:06:23,919 --> 00:06:28,469
+vk device memory vertex buffer memory
+and a un32 type vertex count
+
+378
+00:06:28,469 --> 00:06:28,479
+and a un32 type vertex count
+ 
+
+379
+00:06:28,479 --> 00:06:30,710
+and a un32 type vertex count
+moving on for the public portion of the
+
+380
+00:06:30,710 --> 00:06:30,720
+moving on for the public portion of the
+ 
+
+381
+00:06:30,720 --> 00:06:31,749
+moving on for the public portion of the
+model class
+
+382
+00:06:31,749 --> 00:06:31,759
+model class
+ 
+
+383
+00:06:31,759 --> 00:06:34,469
+model class
+i'm going to go to my first app header
+
+384
+00:06:34,469 --> 00:06:34,479
+i'm going to go to my first app header
+ 
+
+385
+00:06:34,479 --> 00:06:35,510
+i'm going to go to my first app header
+and just copy
+
+386
+00:06:35,510 --> 00:06:35,520
+and just copy
+ 
+
+387
+00:06:35,520 --> 00:06:37,990
+and just copy
+these four lines paste them in and
+
+388
+00:06:37,990 --> 00:06:38,000
+these four lines paste them in and
+ 
+
+389
+00:06:38,000 --> 00:06:39,510
+these four lines paste them in and
+replace the class name with
+
+390
+00:06:39,510 --> 00:06:39,520
+replace the class name with
+ 
+
+391
+00:06:39,520 --> 00:06:42,710
+replace the class name with
+lve model we must delete
+
+392
+00:06:42,710 --> 00:06:42,720
+lve model we must delete
+ 
+
+393
+00:06:42,720 --> 00:06:44,710
+lve model we must delete
+the copy constructors because the model
+
+394
+00:06:44,710 --> 00:06:44,720
+the copy constructors because the model
+ 
+
+395
+00:06:44,720 --> 00:06:46,790
+the copy constructors because the model
+class manages the vulkan buffer and
+
+396
+00:06:46,790 --> 00:06:46,800
+class manages the vulkan buffer and
+ 
+
+397
+00:06:46,800 --> 00:06:49,029
+class manages the vulkan buffer and
+memory objects
+
+398
+00:06:49,029 --> 00:06:49,039
+memory objects
+ 
+
+399
+00:06:49,039 --> 00:06:51,350
+memory objects
+now take notice that for buffer objects
+
+400
+00:06:51,350 --> 00:06:51,360
+now take notice that for buffer objects
+ 
+
+401
+00:06:51,360 --> 00:06:52,150
+now take notice that for buffer objects
+in vulcan
+
+402
+00:06:52,150 --> 00:06:52,160
+in vulcan
+ 
+
+403
+00:06:52,160 --> 00:06:54,390
+in vulcan
+the buffer and its assigned memory are
+
+404
+00:06:54,390 --> 00:06:54,400
+the buffer and its assigned memory are
+ 
+
+405
+00:06:54,400 --> 00:06:56,710
+the buffer and its assigned memory are
+two separate objects
+
+406
+00:06:56,710 --> 00:06:56,720
+two separate objects
+ 
+
+407
+00:06:56,720 --> 00:06:58,790
+two separate objects
+rather than memory being automatically
+
+408
+00:06:58,790 --> 00:06:58,800
+rather than memory being automatically
+ 
+
+409
+00:06:58,800 --> 00:07:00,390
+rather than memory being automatically
+assigned for the buffer
+
+410
+00:07:00,390 --> 00:07:00,400
+assigned for the buffer
+ 
+
+411
+00:07:00,400 --> 00:07:02,950
+assigned for the buffer
+this puts us the programmer in control
+
+412
+00:07:02,950 --> 00:07:02,960
+this puts us the programmer in control
+ 
+
+413
+00:07:02,960 --> 00:07:05,350
+this puts us the programmer in control
+of memory management
+
+414
+00:07:05,350 --> 00:07:05,360
+of memory management
+ 
+
+415
+00:07:05,360 --> 00:07:08,309
+of memory management
+now add a public function void bind that
+
+416
+00:07:08,309 --> 00:07:08,319
+now add a public function void bind that
+ 
+
+417
+00:07:08,319 --> 00:07:10,390
+now add a public function void bind that
+takes a vk command buffer as the
+
+418
+00:07:10,390 --> 00:07:10,400
+takes a vk command buffer as the
+ 
+
+419
+00:07:10,400 --> 00:07:11,350
+takes a vk command buffer as the
+argument
+
+420
+00:07:11,350 --> 00:07:11,360
+argument
+ 
+
+421
+00:07:11,360 --> 00:07:13,589
+argument
+then duplicate this line and rename the
+
+422
+00:07:13,589 --> 00:07:13,599
+then duplicate this line and rename the
+ 
+
+423
+00:07:13,599 --> 00:07:14,550
+then duplicate this line and rename the
+second function
+
+424
+00:07:14,550 --> 00:07:14,560
+second function
+ 
+
+425
+00:07:14,560 --> 00:07:20,629
+second function
+to draw
+
+426
+00:07:20,629 --> 00:07:20,639
+
+ 
+
+427
+00:07:20,639 --> 00:07:23,510
+ 
+now jumping over to the vertex shader
+
+428
+00:07:23,510 --> 00:07:23,520
+now jumping over to the vertex shader
+ 
+
+429
+00:07:23,520 --> 00:07:23,990
+now jumping over to the vertex shader
+first
+
+430
+00:07:23,990 --> 00:07:24,000
+first
+ 
+
+431
+00:07:24,000 --> 00:07:25,830
+first
+completely remove the hard-coded
+
+432
+00:07:25,830 --> 00:07:25,840
+completely remove the hard-coded
+ 
+
+433
+00:07:25,840 --> 00:07:27,350
+completely remove the hard-coded
+positions variable
+
+434
+00:07:27,350 --> 00:07:27,360
+positions variable
+ 
+
+435
+00:07:27,360 --> 00:07:29,589
+positions variable
+we're going to replace this with layout
+
+436
+00:07:29,589 --> 00:07:29,599
+we're going to replace this with layout
+ 
+
+437
+00:07:29,599 --> 00:07:31,990
+we're going to replace this with layout
+bracket location equals zero
+
+438
+00:07:31,990 --> 00:07:32,000
+bracket location equals zero
+ 
+
+439
+00:07:32,000 --> 00:07:35,510
+bracket location equals zero
+closing bracket in back to position
+
+440
+00:07:35,510 --> 00:07:35,520
+closing bracket in back to position
+ 
+
+441
+00:07:35,520 --> 00:07:38,710
+closing bracket in back to position
+so here we've specified our first vertex
+
+442
+00:07:38,710 --> 00:07:38,720
+so here we've specified our first vertex
+ 
+
+443
+00:07:38,720 --> 00:07:39,749
+so here we've specified our first vertex
+attribute
+
+444
+00:07:39,749 --> 00:07:39,759
+attribute
+ 
+
+445
+00:07:39,759 --> 00:07:41,670
+attribute
+like before the data type is still a
+
+446
+00:07:41,670 --> 00:07:41,680
+like before the data type is still a
+ 
+
+447
+00:07:41,680 --> 00:07:44,150
+like before the data type is still a
+vec2 but note that now we have this
+
+448
+00:07:44,150 --> 00:07:44,160
+vec2 but note that now we have this
+ 
+
+449
+00:07:44,160 --> 00:07:46,629
+vec2 but note that now we have this
+in keyword that signifies that this
+
+450
+00:07:46,629 --> 00:07:46,639
+in keyword that signifies that this
+ 
+
+451
+00:07:46,639 --> 00:07:48,790
+in keyword that signifies that this
+variable takes its value from a vertex
+
+452
+00:07:48,790 --> 00:07:48,800
+variable takes its value from a vertex
+ 
+
+453
+00:07:48,800 --> 00:07:49,670
+variable takes its value from a vertex
+buffer
+
+454
+00:07:49,670 --> 00:07:49,680
+buffer
+ 
+
+455
+00:07:49,680 --> 00:07:52,230
+buffer
+the layout location sets the storage of
+
+456
+00:07:52,230 --> 00:07:52,240
+the layout location sets the storage of
+ 
+
+457
+00:07:52,240 --> 00:07:54,790
+the layout location sets the storage of
+where this variable value will come from
+
+458
+00:07:54,790 --> 00:07:54,800
+where this variable value will come from
+ 
+
+459
+00:07:54,800 --> 00:07:56,629
+where this variable value will come from
+this is how we connect the attribute
+
+460
+00:07:56,629 --> 00:07:56,639
+this is how we connect the attribute
+ 
+
+461
+00:07:56,639 --> 00:07:57,990
+this is how we connect the attribute
+description to the variable
+
+462
+00:07:57,990 --> 00:07:58,000
+description to the variable
+ 
+
+463
+00:07:58,000 --> 00:08:01,189
+description to the variable
+we mean to reference in the shader and
+
+464
+00:08:01,189 --> 00:08:01,199
+we mean to reference in the shader and
+ 
+
+465
+00:08:01,199 --> 00:08:02,070
+we mean to reference in the shader and
+now replace
+
+466
+00:08:02,070 --> 00:08:02,080
+now replace
+ 
+
+467
+00:08:02,080 --> 00:08:05,189
+now replace
+positions at gl vertex index with just
+
+468
+00:08:05,189 --> 00:08:05,199
+positions at gl vertex index with just
+ 
+
+469
+00:08:05,199 --> 00:08:06,469
+positions at gl vertex index with just
+position
+
+470
+00:08:06,469 --> 00:08:06,479
+position
+ 
+
+471
+00:08:06,479 --> 00:08:08,869
+position
+we don't need to use gl vertex index
+
+472
+00:08:08,869 --> 00:08:08,879
+we don't need to use gl vertex index
+ 
+
+473
+00:08:08,879 --> 00:08:11,110
+we don't need to use gl vertex index
+anymore because the position attribute
+
+474
+00:08:11,110 --> 00:08:11,120
+anymore because the position attribute
+ 
+
+475
+00:08:11,120 --> 00:08:12,790
+anymore because the position attribute
+will automatically be set with the
+
+476
+00:08:12,790 --> 00:08:12,800
+will automatically be set with the
+ 
+
+477
+00:08:12,800 --> 00:08:15,589
+will automatically be set with the
+values from the vertex buffer
+
+478
+00:08:15,589 --> 00:08:15,599
+values from the vertex buffer
+ 
+
+479
+00:08:15,599 --> 00:08:18,469
+values from the vertex buffer
+so remember that the vertex shader runs
+
+480
+00:08:18,469 --> 00:08:18,479
+so remember that the vertex shader runs
+ 
+
+481
+00:08:18,479 --> 00:08:20,710
+so remember that the vertex shader runs
+once for each vertex we provide
+
+482
+00:08:20,710 --> 00:08:20,720
+once for each vertex we provide
+ 
+
+483
+00:08:20,720 --> 00:08:23,029
+once for each vertex we provide
+and each time this position variable
+
+484
+00:08:23,029 --> 00:08:23,039
+and each time this position variable
+ 
+
+485
+00:08:23,039 --> 00:08:24,790
+and each time this position variable
+will contain a different x and y
+
+486
+00:08:24,790 --> 00:08:24,800
+will contain a different x and y
+ 
+
+487
+00:08:24,800 --> 00:08:25,589
+will contain a different x and y
+component
+
+488
+00:08:25,589 --> 00:08:25,599
+component
+ 
+
+489
+00:08:25,599 --> 00:08:29,270
+component
+from the vertex buffer and that's it for
+
+490
+00:08:29,270 --> 00:08:29,280
+from the vertex buffer and that's it for
+ 
+
+491
+00:08:29,280 --> 00:08:30,790
+from the vertex buffer and that's it for
+the vertex shader
+
+492
+00:08:30,790 --> 00:08:30,800
+the vertex shader
+ 
+
+493
+00:08:30,800 --> 00:08:32,790
+the vertex shader
+back in the model header we are going to
+
+494
+00:08:32,790 --> 00:08:32,800
+back in the model header we are going to
+ 
+
+495
+00:08:32,800 --> 00:08:35,029
+back in the model header we are going to
+create a representation of our vertex
+
+496
+00:08:35,029 --> 00:08:35,039
+create a representation of our vertex
+ 
+
+497
+00:08:35,039 --> 00:08:35,750
+create a representation of our vertex
+attributes
+
+498
+00:08:35,750 --> 00:08:35,760
+attributes
+ 
+
+499
+00:08:35,760 --> 00:08:39,029
+attributes
+that's easy to work with first let's
+
+500
+00:08:39,029 --> 00:08:39,039
+that's easy to work with first let's
+ 
+
+501
+00:08:39,039 --> 00:08:39,990
+that's easy to work with first let's
+include the vector
+
+502
+00:08:39,990 --> 00:08:40,000
+include the vector
+ 
+
+503
+00:08:40,000 --> 00:08:42,949
+include the vector
+library glm you should have already
+
+504
+00:08:42,949 --> 00:08:42,959
+library glm you should have already
+ 
+
+505
+00:08:42,959 --> 00:08:43,829
+library glm you should have already
+downloaded this
+
+506
+00:08:43,829 --> 00:08:43,839
+downloaded this
+ 
+
+507
+00:08:43,839 --> 00:08:45,750
+downloaded this
+and connected it to your project way
+
+508
+00:08:45,750 --> 00:08:45,760
+and connected it to your project way
+ 
+
+509
+00:08:45,760 --> 00:08:47,590
+and connected it to your project way
+back in tutorial 1
+
+510
+00:08:47,590 --> 00:08:47,600
+back in tutorial 1
+ 
+
+511
+00:08:47,600 --> 00:08:51,829
+back in tutorial 1
+when we also set up glfw for windowing
+
+512
+00:08:51,829 --> 00:08:51,839
+when we also set up glfw for windowing
+ 
+
+513
+00:08:51,839 --> 00:08:54,949
+when we also set up glfw for windowing
+just above the include for glm add the
+
+514
+00:08:54,949 --> 00:08:54,959
+just above the include for glm add the
+ 
+
+515
+00:08:54,959 --> 00:08:55,350
+just above the include for glm add the
+line
+
+516
+00:08:55,350 --> 00:08:55,360
+line
+ 
+
+517
+00:08:55,360 --> 00:08:58,389
+line
+define glm force radians
+
+518
+00:08:58,389 --> 00:08:58,399
+define glm force radians
+ 
+
+519
+00:08:58,399 --> 00:09:00,150
+define glm force radians
+this makes sure that no matter what
+
+520
+00:09:00,150 --> 00:09:00,160
+this makes sure that no matter what
+ 
+
+521
+00:09:00,160 --> 00:09:02,949
+this makes sure that no matter what
+system you're on the glm functions will
+
+522
+00:09:02,949 --> 00:09:02,959
+system you're on the glm functions will
+ 
+
+523
+00:09:02,959 --> 00:09:03,430
+system you're on the glm functions will
+expect
+
+524
+00:09:03,430 --> 00:09:03,440
+expect
+ 
+
+525
+00:09:03,440 --> 00:09:05,829
+expect
+angles to be specified in radians not
+
+526
+00:09:05,829 --> 00:09:05,839
+angles to be specified in radians not
+ 
+
+527
+00:09:05,839 --> 00:09:06,870
+angles to be specified in radians not
+degrees
+
+528
+00:09:06,870 --> 00:09:06,880
+degrees
+ 
+
+529
+00:09:06,880 --> 00:09:08,870
+degrees
+back in university in a computer
+
+530
+00:09:08,870 --> 00:09:08,880
+back in university in a computer
+ 
+
+531
+00:09:08,880 --> 00:09:10,949
+back in university in a computer
+graphics course i must have wasted two
+
+532
+00:09:10,949 --> 00:09:10,959
+graphics course i must have wasted two
+ 
+
+533
+00:09:10,959 --> 00:09:12,070
+graphics course i must have wasted two
+hours debugging an
+
+534
+00:09:12,070 --> 00:09:12,080
+hours debugging an
+ 
+
+535
+00:09:12,080 --> 00:09:13,990
+hours debugging an
+assignment because i was thinking in
+
+536
+00:09:13,990 --> 00:09:14,000
+assignment because i was thinking in
+ 
+
+537
+00:09:14,000 --> 00:09:15,509
+assignment because i was thinking in
+degrees when i should have been working
+
+538
+00:09:15,509 --> 00:09:15,519
+degrees when i should have been working
+ 
+
+539
+00:09:15,519 --> 00:09:16,550
+degrees when i should have been working
+in radians
+
+540
+00:09:16,550 --> 00:09:16,560
+in radians
+ 
+
+541
+00:09:16,560 --> 00:09:19,590
+in radians
+don't make the same mistake additionally
+
+542
+00:09:19,590 --> 00:09:19,600
+don't make the same mistake additionally
+ 
+
+543
+00:09:19,600 --> 00:09:20,630
+don't make the same mistake additionally
+at a define
+
+544
+00:09:20,630 --> 00:09:20,640
+at a define
+ 
+
+545
+00:09:20,640 --> 00:09:23,910
+at a define
+glm force depth 0 to 1.
+
+546
+00:09:23,910 --> 00:09:23,920
+glm force depth 0 to 1.
+ 
+
+547
+00:09:23,920 --> 00:09:26,550
+glm force depth 0 to 1.
+this will affect some glm functions we
+
+548
+00:09:26,550 --> 00:09:26,560
+this will affect some glm functions we
+ 
+
+549
+00:09:26,560 --> 00:09:28,550
+this will affect some glm functions we
+will eventually use
+
+550
+00:09:28,550 --> 00:09:28,560
+will eventually use
+ 
+
+551
+00:09:28,560 --> 00:09:31,030
+will eventually use
+this tells glm to expect our depth
+
+552
+00:09:31,030 --> 00:09:31,040
+this tells glm to expect our depth
+ 
+
+553
+00:09:31,040 --> 00:09:33,750
+this tells glm to expect our depth
+buffer values to range from 0 to 1
+
+554
+00:09:33,750 --> 00:09:33,760
+buffer values to range from 0 to 1
+ 
+
+555
+00:09:33,760 --> 00:09:36,550
+buffer values to range from 0 to 1
+opposed to negative 1 to 1 which is if
+
+556
+00:09:36,550 --> 00:09:36,560
+opposed to negative 1 to 1 which is if
+ 
+
+557
+00:09:36,560 --> 00:09:38,790
+opposed to negative 1 to 1 which is if
+i'm remembering correctly what opengl
+
+558
+00:09:38,790 --> 00:09:38,800
+i'm remembering correctly what opengl
+ 
+
+559
+00:09:38,800 --> 00:09:42,230
+i'm remembering correctly what opengl
+uses so now just underneath the public
+
+560
+00:09:42,230 --> 00:09:42,240
+uses so now just underneath the public
+ 
+
+561
+00:09:42,240 --> 00:09:44,150
+uses so now just underneath the public
+annotation in the model class
+
+562
+00:09:44,150 --> 00:09:44,160
+annotation in the model class
+ 
+
+563
+00:09:44,160 --> 00:09:47,269
+annotation in the model class
+create a struct vertex so for now
+
+564
+00:09:47,269 --> 00:09:47,279
+create a struct vertex so for now
+ 
+
+565
+00:09:47,279 --> 00:09:54,550
+create a struct vertex so for now
+all we have is a glm vect2 position
+
+566
+00:09:54,550 --> 00:09:54,560
+
+ 
+
+567
+00:09:54,560 --> 00:09:57,750
+ 
+also add a static function std vector
+
+568
+00:09:57,750 --> 00:09:57,760
+also add a static function std vector
+ 
+
+569
+00:09:57,760 --> 00:10:00,230
+also add a static function std vector
+angle bracket vk vertex input binding
+
+570
+00:10:00,230 --> 00:10:00,240
+angle bracket vk vertex input binding
+ 
+
+571
+00:10:00,240 --> 00:10:01,350
+angle bracket vk vertex input binding
+description
+
+572
+00:10:01,350 --> 00:10:01,360
+description
+ 
+
+573
+00:10:01,360 --> 00:10:03,509
+description
+closing bracket get binding descriptions
+
+574
+00:10:03,509 --> 00:10:03,519
+closing bracket get binding descriptions
+ 
+
+575
+00:10:03,519 --> 00:10:04,949
+closing bracket get binding descriptions
+function
+
+576
+00:10:04,949 --> 00:10:04,959
+function
+ 
+
+577
+00:10:04,959 --> 00:10:07,190
+function
+and then also include vector at the top
+
+578
+00:10:07,190 --> 00:10:07,200
+and then also include vector at the top
+ 
+
+579
+00:10:07,200 --> 00:10:11,350
+and then also include vector at the top
+of the file
+
+580
+00:10:11,350 --> 00:10:11,360
+
+ 
+
+581
+00:10:11,360 --> 00:10:13,509
+ 
+copy this line and paste it to add a
+
+582
+00:10:13,509 --> 00:10:13,519
+copy this line and paste it to add a
+ 
+
+583
+00:10:13,519 --> 00:10:14,550
+copy this line and paste it to add a
+second function
+
+584
+00:10:14,550 --> 00:10:14,560
+second function
+ 
+
+585
+00:10:14,560 --> 00:10:16,710
+second function
+but this time it will be get attribute
+
+586
+00:10:16,710 --> 00:10:16,720
+but this time it will be get attribute
+ 
+
+587
+00:10:16,720 --> 00:10:17,750
+but this time it will be get attribute
+descriptions
+
+588
+00:10:17,750 --> 00:10:17,760
+descriptions
+ 
+
+589
+00:10:17,760 --> 00:10:20,150
+descriptions
+and instead return vk vertex input
+
+590
+00:10:20,150 --> 00:10:20,160
+and instead return vk vertex input
+ 
+
+591
+00:10:20,160 --> 00:10:23,030
+and instead return vk vertex input
+attribute description type
+
+592
+00:10:23,030 --> 00:10:23,040
+attribute description type
+ 
+
+593
+00:10:23,040 --> 00:10:25,030
+attribute description type
+oh and these should be descriptions with
+
+594
+00:10:25,030 --> 00:10:25,040
+oh and these should be descriptions with
+ 
+
+595
+00:10:25,040 --> 00:10:28,389
+oh and these should be descriptions with
+an s
+
+596
+00:10:28,389 --> 00:10:28,399
+
+ 
+
+597
+00:10:28,399 --> 00:10:30,949
+ 
+then add a private function void create
+
+598
+00:10:30,949 --> 00:10:30,959
+then add a private function void create
+ 
+
+599
+00:10:30,959 --> 00:10:33,590
+then add a private function void create
+vertex buffers
+
+600
+00:10:33,590 --> 00:10:33,600
+vertex buffers
+ 
+
+601
+00:10:33,600 --> 00:10:35,670
+vertex buffers
+that takes a const standard vector
+
+602
+00:10:35,670 --> 00:10:35,680
+that takes a const standard vector
+ 
+
+603
+00:10:35,680 --> 00:10:37,509
+that takes a const standard vector
+reference of type vertex
+
+604
+00:10:37,509 --> 00:10:37,519
+reference of type vertex
+ 
+
+605
+00:10:37,519 --> 00:10:41,590
+reference of type vertex
+vertices argument now finally for our
+
+606
+00:10:41,590 --> 00:10:41,600
+vertices argument now finally for our
+ 
+
+607
+00:10:41,600 --> 00:10:42,310
+vertices argument now finally for our
+header
+
+608
+00:10:42,310 --> 00:10:42,320
+header
+ 
+
+609
+00:10:42,320 --> 00:10:44,230
+header
+update the model class constructor to
+
+610
+00:10:44,230 --> 00:10:44,240
+update the model class constructor to
+ 
+
+611
+00:10:44,240 --> 00:10:48,870
+update the model class constructor to
+take a lve device reference device
+
+612
+00:10:48,870 --> 00:10:48,880
+
+ 
+
+613
+00:10:48,880 --> 00:10:51,269
+ 
+and const standard vector vertices
+
+614
+00:10:51,269 --> 00:10:51,279
+and const standard vector vertices
+ 
+
+615
+00:10:51,279 --> 00:10:52,069
+and const standard vector vertices
+reference as
+
+616
+00:10:52,069 --> 00:10:52,079
+reference as
+ 
+
+617
+00:10:52,079 --> 00:10:55,590
+reference as
+arguments okay now
+
+618
+00:10:55,590 --> 00:10:55,600
+arguments okay now
+ 
+
+619
+00:10:55,600 --> 00:10:58,150
+arguments okay now
+let's add our implementation create a
+
+620
+00:10:58,150 --> 00:10:58,160
+let's add our implementation create a
+ 
+
+621
+00:10:58,160 --> 00:10:58,870
+let's add our implementation create a
+new file
+
+622
+00:10:58,870 --> 00:10:58,880
+new file
+ 
+
+623
+00:10:58,880 --> 00:11:03,990
+new file
+lve underscore model.cpp
+
+624
+00:11:03,990 --> 00:11:04,000
+
+ 
+
+625
+00:11:04,000 --> 00:11:07,990
+ 
+and then include the model header
+
+626
+00:11:07,990 --> 00:11:08,000
+
+ 
+
+627
+00:11:08,000 --> 00:11:12,470
+ 
+and add your namespace
+
+628
+00:11:12,470 --> 00:11:12,480
+
+ 
+
+629
+00:11:12,480 --> 00:11:15,030
+ 
+copy your constructor signature and the
+
+630
+00:11:15,030 --> 00:11:15,040
+copy your constructor signature and the
+ 
+
+631
+00:11:15,040 --> 00:11:15,910
+copy your constructor signature and the
+destructor
+
+632
+00:11:15,910 --> 00:11:15,920
+destructor
+ 
+
+633
+00:11:15,920 --> 00:11:19,910
+destructor
+and paste them in
+
+634
+00:11:19,910 --> 00:11:19,920
+
+ 
+
+635
+00:11:19,920 --> 00:11:21,670
+ 
+add your class name scope and then
+
+636
+00:11:21,670 --> 00:11:21,680
+add your class name scope and then
+ 
+
+637
+00:11:21,680 --> 00:11:25,269
+add your class name scope and then
+initialize the device member variable
+
+638
+00:11:25,269 --> 00:11:25,279
+initialize the device member variable
+ 
+
+639
+00:11:25,279 --> 00:11:28,389
+initialize the device member variable
+lve device curly brace device
+
+640
+00:11:28,389 --> 00:11:28,399
+lve device curly brace device
+ 
+
+641
+00:11:28,399 --> 00:11:30,470
+lve device curly brace device
+for the constructor body just call
+
+642
+00:11:30,470 --> 00:11:30,480
+for the constructor body just call
+ 
+
+643
+00:11:30,480 --> 00:11:32,790
+for the constructor body just call
+create vertex buffers and pass through
+
+644
+00:11:32,790 --> 00:11:32,800
+create vertex buffers and pass through
+ 
+
+645
+00:11:32,800 --> 00:11:35,990
+create vertex buffers and pass through
+the vertices argument next
+
+646
+00:11:35,990 --> 00:11:36,000
+the vertices argument next
+ 
+
+647
+00:11:36,000 --> 00:11:37,750
+the vertices argument next
+add the class name scope to the
+
+648
+00:11:37,750 --> 00:11:37,760
+add the class name scope to the
+ 
+
+649
+00:11:37,760 --> 00:11:40,150
+add the class name scope to the
+destructor
+
+650
+00:11:40,150 --> 00:11:40,160
+destructor
+ 
+
+651
+00:11:40,160 --> 00:11:42,710
+destructor
+and for the destructor body we have vk
+
+652
+00:11:42,710 --> 00:11:42,720
+and for the destructor body we have vk
+ 
+
+653
+00:11:42,720 --> 00:11:45,269
+and for the destructor body we have vk
+destroy buffer
+
+654
+00:11:45,269 --> 00:11:45,279
+destroy buffer
+ 
+
+655
+00:11:45,279 --> 00:11:48,790
+destroy buffer
+lve device dot device vertex buffer
+
+656
+00:11:48,790 --> 00:11:48,800
+lve device dot device vertex buffer
+ 
+
+657
+00:11:48,800 --> 00:11:51,350
+lve device dot device vertex buffer
+and null pointer for our allocation
+
+658
+00:11:51,350 --> 00:11:51,360
+and null pointer for our allocation
+ 
+
+659
+00:11:51,360 --> 00:11:53,509
+and null pointer for our allocation
+callback
+
+660
+00:11:53,509 --> 00:11:53,519
+callback
+ 
+
+661
+00:11:53,519 --> 00:11:56,629
+callback
+then vk free memory lve device dot
+
+662
+00:11:56,629 --> 00:11:56,639
+then vk free memory lve device dot
+ 
+
+663
+00:11:56,639 --> 00:11:59,269
+then vk free memory lve device dot
+device
+
+664
+00:11:59,269 --> 00:11:59,279
+
+ 
+
+665
+00:11:59,279 --> 00:12:02,550
+ 
+vertex buffer memory
+
+666
+00:12:02,550 --> 00:12:02,560
+vertex buffer memory
+ 
+
+667
+00:12:02,560 --> 00:12:05,990
+vertex buffer memory
+and null pointer okay
+
+668
+00:12:05,990 --> 00:12:06,000
+and null pointer okay
+ 
+
+669
+00:12:06,000 --> 00:12:07,910
+and null pointer okay
+let's quickly talk about these
+
+670
+00:12:07,910 --> 00:12:07,920
+let's quickly talk about these
+ 
+
+671
+00:12:07,920 --> 00:12:09,509
+let's quickly talk about these
+allocation callbacks that we've
+
+672
+00:12:09,509 --> 00:12:09,519
+allocation callbacks that we've
+ 
+
+673
+00:12:09,519 --> 00:12:10,550
+allocation callbacks that we've
+routinely passed
+
+674
+00:12:10,550 --> 00:12:10,560
+routinely passed
+ 
+
+675
+00:12:10,560 --> 00:12:12,550
+routinely passed
+null pointers to so we've seen that
+
+676
+00:12:12,550 --> 00:12:12,560
+null pointers to so we've seen that
+ 
+
+677
+00:12:12,560 --> 00:12:14,629
+null pointers to so we've seen that
+vulkan lets us manage our buffers and
+
+678
+00:12:14,629 --> 00:12:14,639
+vulkan lets us manage our buffers and
+ 
+
+679
+00:12:14,639 --> 00:12:15,910
+vulkan lets us manage our buffers and
+memory separately
+
+680
+00:12:15,910 --> 00:12:15,920
+memory separately
+ 
+
+681
+00:12:15,920 --> 00:12:17,910
+memory separately
+and the main reason for this is that
+
+682
+00:12:17,910 --> 00:12:17,920
+and the main reason for this is that
+ 
+
+683
+00:12:17,920 --> 00:12:19,990
+and the main reason for this is that
+allocating memory takes time
+
+684
+00:12:19,990 --> 00:12:20,000
+allocating memory takes time
+ 
+
+685
+00:12:20,000 --> 00:12:21,829
+allocating memory takes time
+and there's a hard limit to the total
+
+686
+00:12:21,829 --> 00:12:21,839
+and there's a hard limit to the total
+ 
+
+687
+00:12:21,839 --> 00:12:24,150
+and there's a hard limit to the total
+number of active allocations that varies
+
+688
+00:12:24,150 --> 00:12:24,160
+number of active allocations that varies
+ 
+
+689
+00:12:24,160 --> 00:12:25,110
+number of active allocations that varies
+by gpu
+
+690
+00:12:25,110 --> 00:12:25,120
+by gpu
+ 
+
+691
+00:12:25,120 --> 00:12:27,509
+by gpu
+typically only in the thousands though
+
+692
+00:12:27,509 --> 00:12:27,519
+typically only in the thousands though
+ 
+
+693
+00:12:27,519 --> 00:12:29,030
+typically only in the thousands though
+so if we continue on
+
+694
+00:12:29,030 --> 00:12:29,040
+so if we continue on
+ 
+
+695
+00:12:29,040 --> 00:12:31,430
+so if we continue on
+as we have been as soon as you want to
+
+696
+00:12:31,430 --> 00:12:31,440
+as we have been as soon as you want to
+ 
+
+697
+00:12:31,440 --> 00:12:33,509
+as we have been as soon as you want to
+create a scene of high complexity
+
+698
+00:12:33,509 --> 00:12:33,519
+create a scene of high complexity
+ 
+
+699
+00:12:33,519 --> 00:12:35,750
+create a scene of high complexity
+with many different types of models this
+
+700
+00:12:35,750 --> 00:12:35,760
+with many different types of models this
+ 
+
+701
+00:12:35,760 --> 00:12:36,790
+with many different types of models this
+model class will
+
+702
+00:12:36,790 --> 00:12:36,800
+model class will
+ 
+
+703
+00:12:36,800 --> 00:12:39,110
+model class will
+quickly run into those max allocation
+
+704
+00:12:39,110 --> 00:12:39,120
+quickly run into those max allocation
+ 
+
+705
+00:12:39,120 --> 00:12:39,829
+quickly run into those max allocation
+limits
+
+706
+00:12:39,829 --> 00:12:39,839
+limits
+ 
+
+707
+00:12:39,839 --> 00:12:41,910
+limits
+so the recommended solution is to
+
+708
+00:12:41,910 --> 00:12:41,920
+so the recommended solution is to
+ 
+
+709
+00:12:41,920 --> 00:12:43,910
+so the recommended solution is to
+allocate bigger chunks of memory
+
+710
+00:12:43,910 --> 00:12:43,920
+allocate bigger chunks of memory
+ 
+
+711
+00:12:43,920 --> 00:12:46,069
+allocate bigger chunks of memory
+and assign parts of them to particular
+
+712
+00:12:46,069 --> 00:12:46,079
+and assign parts of them to particular
+ 
+
+713
+00:12:46,079 --> 00:12:47,350
+and assign parts of them to particular
+resources
+
+714
+00:12:47,350 --> 00:12:47,360
+resources
+ 
+
+715
+00:12:47,360 --> 00:12:49,030
+resources
+so just for the short term to
+
+716
+00:12:49,030 --> 00:12:49,040
+so just for the short term to
+ 
+
+717
+00:12:49,040 --> 00:12:50,790
+so just for the short term to
+demonstrate and learn the basics of
+
+718
+00:12:50,790 --> 00:12:50,800
+demonstrate and learn the basics of
+ 
+
+719
+00:12:50,800 --> 00:12:53,030
+demonstrate and learn the basics of
+memory allocation we will continue to do
+
+720
+00:12:53,030 --> 00:12:53,040
+memory allocation we will continue to do
+ 
+
+721
+00:12:53,040 --> 00:12:54,629
+memory allocation we will continue to do
+so manually
+
+722
+00:12:54,629 --> 00:12:54,639
+so manually
+ 
+
+723
+00:12:54,639 --> 00:12:56,870
+so manually
+but i think eventually we will integrate
+
+724
+00:12:56,870 --> 00:12:56,880
+but i think eventually we will integrate
+ 
+
+725
+00:12:56,880 --> 00:12:58,870
+but i think eventually we will integrate
+a well-established allocator library
+
+726
+00:12:58,870 --> 00:12:58,880
+a well-established allocator library
+ 
+
+727
+00:12:58,880 --> 00:13:00,230
+a well-established allocator library
+like vma
+
+728
+00:13:00,230 --> 00:13:00,240
+like vma
+ 
+
+729
+00:13:00,240 --> 00:13:01,829
+like vma
+if you would like to read about what
+
+730
+00:13:01,829 --> 00:13:01,839
+if you would like to read about what
+ 
+
+731
+00:13:01,839 --> 00:13:03,269
+if you would like to read about what
+might go into creating a memory
+
+732
+00:13:03,269 --> 00:13:03,279
+might go into creating a memory
+ 
+
+733
+00:13:03,279 --> 00:13:04,870
+might go into creating a memory
+allocator yourself
+
+734
+00:13:04,870 --> 00:13:04,880
+allocator yourself
+ 
+
+735
+00:13:04,880 --> 00:13:07,030
+allocator yourself
+i've provided a link to a blog post by
+
+736
+00:13:07,030 --> 00:13:07,040
+i've provided a link to a blog post by
+ 
+
+737
+00:13:07,040 --> 00:13:09,590
+i've provided a link to a blog post by
+kyle holliday where he does just that
+
+738
+00:13:09,590 --> 00:13:09,600
+kyle holliday where he does just that
+ 
+
+739
+00:13:09,600 --> 00:13:12,069
+kyle holliday where he does just that
+now moving on let's implement the create
+
+740
+00:13:12,069 --> 00:13:12,079
+now moving on let's implement the create
+ 
+
+741
+00:13:12,079 --> 00:13:15,990
+now moving on let's implement the create
+vertex buffers function
+
+742
+00:13:15,990 --> 00:13:16,000
+
+ 
+
+743
+00:13:16,000 --> 00:13:17,990
+ 
+grab the function signature add your
+
+744
+00:13:17,990 --> 00:13:18,000
+grab the function signature add your
+ 
+
+745
+00:13:18,000 --> 00:13:19,350
+grab the function signature add your
+class name scope
+
+746
+00:13:19,350 --> 00:13:19,360
+class name scope
+ 
+
+747
+00:13:19,360 --> 00:13:21,509
+class name scope
+and then in the function body the first
+
+748
+00:13:21,509 --> 00:13:21,519
+and then in the function body the first
+ 
+
+749
+00:13:21,519 --> 00:13:23,430
+and then in the function body the first
+thing we'll do is set the vertex count
+
+750
+00:13:23,430 --> 00:13:23,440
+thing we'll do is set the vertex count
+ 
+
+751
+00:13:23,440 --> 00:13:27,110
+thing we'll do is set the vertex count
+member variable to static cast
+
+752
+00:13:27,110 --> 00:13:27,120
+member variable to static cast
+ 
+
+753
+00:13:27,120 --> 00:13:32,389
+member variable to static cast
+uint32 type vertices.size
+
+754
+00:13:32,389 --> 00:13:32,399
+
+ 
+
+755
+00:13:32,399 --> 00:13:34,470
+ 
+now let's add an assertion that the
+
+756
+00:13:34,470 --> 00:13:34,480
+now let's add an assertion that the
+ 
+
+757
+00:13:34,480 --> 00:13:36,069
+now let's add an assertion that the
+vertex count is at least
+
+758
+00:13:36,069 --> 00:13:36,079
+vertex count is at least
+ 
+
+759
+00:13:36,079 --> 00:13:38,230
+vertex count is at least
+three so that we know our model class
+
+760
+00:13:38,230 --> 00:13:38,240
+three so that we know our model class
+ 
+
+761
+00:13:38,240 --> 00:13:40,790
+three so that we know our model class
+consists of at least one triangle
+
+762
+00:13:40,790 --> 00:13:40,800
+consists of at least one triangle
+ 
+
+763
+00:13:40,800 --> 00:13:43,189
+consists of at least one triangle
+so first include c assert and then add a
+
+764
+00:13:43,189 --> 00:13:43,199
+so first include c assert and then add a
+ 
+
+765
+00:13:43,199 --> 00:13:45,350
+so first include c assert and then add a
+cert vertex count is greater than or
+
+766
+00:13:45,350 --> 00:13:45,360
+cert vertex count is greater than or
+ 
+
+767
+00:13:45,360 --> 00:13:47,030
+cert vertex count is greater than or
+equal to three with the label
+
+768
+00:13:47,030 --> 00:13:47,040
+equal to three with the label
+ 
+
+769
+00:13:47,040 --> 00:13:52,470
+equal to three with the label
+vertex count must be at least 3.
+
+770
+00:13:52,470 --> 00:13:52,480
+
+ 
+
+771
+00:13:52,480 --> 00:13:55,189
+ 
+next create a local variable of type vk
+
+772
+00:13:55,189 --> 00:13:55,199
+next create a local variable of type vk
+ 
+
+773
+00:13:55,199 --> 00:13:56,230
+next create a local variable of type vk
+device size
+
+774
+00:13:56,230 --> 00:13:56,240
+device size
+ 
+
+775
+00:13:56,240 --> 00:13:58,949
+device size
+called buffer size equal to sizeof
+
+776
+00:13:58,949 --> 00:13:58,959
+called buffer size equal to sizeof
+ 
+
+777
+00:13:58,959 --> 00:13:59,829
+called buffer size equal to sizeof
+vertices
+
+778
+00:13:59,829 --> 00:13:59,839
+vertices
+ 
+
+779
+00:13:59,839 --> 00:14:03,350
+vertices
+index 0 times the vertex count
+
+780
+00:14:03,350 --> 00:14:03,360
+index 0 times the vertex count
+ 
+
+781
+00:14:03,360 --> 00:14:05,670
+index 0 times the vertex count
+so the size of operator returns the
+
+782
+00:14:05,670 --> 00:14:05,680
+so the size of operator returns the
+ 
+
+783
+00:14:05,680 --> 00:14:08,310
+so the size of operator returns the
+number of bytes required per vertex
+
+784
+00:14:08,310 --> 00:14:08,320
+number of bytes required per vertex
+ 
+
+785
+00:14:08,320 --> 00:14:10,389
+number of bytes required per vertex
+and then multiplying by the vertex count
+
+786
+00:14:10,389 --> 00:14:10,399
+and then multiplying by the vertex count
+ 
+
+787
+00:14:10,399 --> 00:14:12,629
+and then multiplying by the vertex count
+gives us the total number of bytes
+
+788
+00:14:12,629 --> 00:14:12,639
+gives us the total number of bytes
+ 
+
+789
+00:14:12,639 --> 00:14:14,870
+gives us the total number of bytes
+required for our vertex buffer to store
+
+790
+00:14:14,870 --> 00:14:14,880
+required for our vertex buffer to store
+ 
+
+791
+00:14:14,880 --> 00:14:17,590
+required for our vertex buffer to store
+all the vertices of the model
+
+792
+00:14:17,590 --> 00:14:17,600
+all the vertices of the model
+ 
+
+793
+00:14:17,600 --> 00:14:19,590
+all the vertices of the model
+next we're going to call the create
+
+794
+00:14:19,590 --> 00:14:19,600
+next we're going to call the create
+ 
+
+795
+00:14:19,600 --> 00:14:20,790
+next we're going to call the create
+buffer function
+
+796
+00:14:20,790 --> 00:14:20,800
+buffer function
+ 
+
+797
+00:14:20,800 --> 00:14:22,870
+buffer function
+this is a helper function i wrote that
+
+798
+00:14:22,870 --> 00:14:22,880
+this is a helper function i wrote that
+ 
+
+799
+00:14:22,880 --> 00:14:25,269
+this is a helper function i wrote that
+is in the lve device class
+
+800
+00:14:25,269 --> 00:14:25,279
+is in the lve device class
+ 
+
+801
+00:14:25,279 --> 00:14:28,069
+is in the lve device class
+let's go over this now so the create
+
+802
+00:14:28,069 --> 00:14:28,079
+let's go over this now so the create
+ 
+
+803
+00:14:28,079 --> 00:14:28,949
+let's go over this now so the create
+buffer function
+
+804
+00:14:28,949 --> 00:14:28,959
+buffer function
+ 
+
+805
+00:14:28,959 --> 00:14:31,269
+buffer function
+takes the buffer's size usage and
+
+806
+00:14:31,269 --> 00:14:31,279
+takes the buffer's size usage and
+ 
+
+807
+00:14:31,279 --> 00:14:33,430
+takes the buffer's size usage and
+properties as arguments
+
+808
+00:14:33,430 --> 00:14:33,440
+properties as arguments
+ 
+
+809
+00:14:33,440 --> 00:14:35,269
+properties as arguments
+and then returns a buffer and its
+
+810
+00:14:35,269 --> 00:14:35,279
+and then returns a buffer and its
+ 
+
+811
+00:14:35,279 --> 00:14:36,550
+and then returns a buffer and its
+associated memory
+
+812
+00:14:36,550 --> 00:14:36,560
+associated memory
+ 
+
+813
+00:14:36,560 --> 00:14:38,389
+associated memory
+by initializing the buffer and buffer
+
+814
+00:14:38,389 --> 00:14:38,399
+by initializing the buffer and buffer
+ 
+
+815
+00:14:38,399 --> 00:14:40,550
+by initializing the buffer and buffer
+memory references
+
+816
+00:14:40,550 --> 00:14:40,560
+memory references
+ 
+
+817
+00:14:40,560 --> 00:14:42,470
+memory references
+this code here should seem somewhat
+
+818
+00:14:42,470 --> 00:14:42,480
+this code here should seem somewhat
+ 
+
+819
+00:14:42,480 --> 00:14:45,110
+this code here should seem somewhat
+familiar we have a create infostruct
+
+820
+00:14:45,110 --> 00:14:45,120
+familiar we have a create infostruct
+ 
+
+821
+00:14:45,120 --> 00:14:46,949
+familiar we have a create infostruct
+where we set some members such as the
+
+822
+00:14:46,949 --> 00:14:46,959
+where we set some members such as the
+ 
+
+823
+00:14:46,959 --> 00:14:49,670
+where we set some members such as the
+size and how we plan to use this buffer
+
+824
+00:14:49,670 --> 00:14:49,680
+size and how we plan to use this buffer
+ 
+
+825
+00:14:49,680 --> 00:14:52,470
+size and how we plan to use this buffer
+and then call our vkcreate function we
+
+826
+00:14:52,470 --> 00:14:52,480
+and then call our vkcreate function we
+ 
+
+827
+00:14:52,480 --> 00:14:54,230
+and then call our vkcreate function we
+then query the buffer's memory
+
+828
+00:14:54,230 --> 00:14:54,240
+then query the buffer's memory
+ 
+
+829
+00:14:54,240 --> 00:14:56,230
+then query the buffer's memory
+requirements so that we can allocate
+
+830
+00:14:56,230 --> 00:14:56,240
+requirements so that we can allocate
+ 
+
+831
+00:14:56,240 --> 00:14:57,590
+requirements so that we can allocate
+memory of the proper
+
+832
+00:14:57,590 --> 00:14:57,600
+memory of the proper
+ 
+
+833
+00:14:57,600 --> 00:14:59,910
+memory of the proper
+size that also has the required
+
+834
+00:14:59,910 --> 00:14:59,920
+size that also has the required
+ 
+
+835
+00:14:59,920 --> 00:15:01,990
+size that also has the required
+properties that we specified as an
+
+836
+00:15:01,990 --> 00:15:02,000
+properties that we specified as an
+ 
+
+837
+00:15:02,000 --> 00:15:05,509
+properties that we specified as an
+argument finally if that was successful
+
+838
+00:15:05,509 --> 00:15:05,519
+argument finally if that was successful
+ 
+
+839
+00:15:05,519 --> 00:15:07,750
+argument finally if that was successful
+we bind the buffer to the memory we just
+
+840
+00:15:07,750 --> 00:15:07,760
+we bind the buffer to the memory we just
+ 
+
+841
+00:15:07,760 --> 00:15:09,269
+we bind the buffer to the memory we just
+allocated
+
+842
+00:15:09,269 --> 00:15:09,279
+allocated
+ 
+
+843
+00:15:09,279 --> 00:15:11,110
+allocated
+eventually we will have to rewrite this
+
+844
+00:15:11,110 --> 00:15:11,120
+eventually we will have to rewrite this
+ 
+
+845
+00:15:11,120 --> 00:15:13,030
+eventually we will have to rewrite this
+function once we integrate a memory
+
+846
+00:15:13,030 --> 00:15:13,040
+function once we integrate a memory
+ 
+
+847
+00:15:13,040 --> 00:15:14,069
+function once we integrate a memory
+allocator
+
+848
+00:15:14,069 --> 00:15:14,079
+allocator
+ 
+
+849
+00:15:14,079 --> 00:15:16,389
+allocator
+okay so back in our create vertex
+
+850
+00:15:16,389 --> 00:15:16,399
+okay so back in our create vertex
+ 
+
+851
+00:15:16,399 --> 00:15:17,590
+okay so back in our create vertex
+buffers function
+
+852
+00:15:17,590 --> 00:15:17,600
+buffers function
+ 
+
+853
+00:15:17,600 --> 00:15:20,310
+buffers function
+we have our buffer size so now call lve
+
+854
+00:15:20,310 --> 00:15:20,320
+we have our buffer size so now call lve
+ 
+
+855
+00:15:20,320 --> 00:15:23,269
+we have our buffer size so now call lve
+device dot create buffer
+
+856
+00:15:23,269 --> 00:15:23,279
+device dot create buffer
+ 
+
+857
+00:15:23,279 --> 00:15:25,269
+device dot create buffer
+the first argument is the buffer size
+
+858
+00:15:25,269 --> 00:15:25,279
+the first argument is the buffer size
+ 
+
+859
+00:15:25,279 --> 00:15:26,310
+the first argument is the buffer size
+then next we have
+
+860
+00:15:26,310 --> 00:15:26,320
+then next we have
+ 
+
+861
+00:15:26,320 --> 00:15:29,590
+then next we have
+vk buffer usage vertex buffer bit this
+
+862
+00:15:29,590 --> 00:15:29,600
+vk buffer usage vertex buffer bit this
+ 
+
+863
+00:15:29,600 --> 00:15:31,509
+vk buffer usage vertex buffer bit this
+just tells our device that we want to
+
+864
+00:15:31,509 --> 00:15:31,519
+just tells our device that we want to
+ 
+
+865
+00:15:31,519 --> 00:15:33,670
+just tells our device that we want to
+create a buffer that is going to be used
+
+866
+00:15:33,670 --> 00:15:33,680
+create a buffer that is going to be used
+ 
+
+867
+00:15:33,680 --> 00:15:35,910
+create a buffer that is going to be used
+to hold vertex input data
+
+868
+00:15:35,910 --> 00:15:35,920
+to hold vertex input data
+ 
+
+869
+00:15:35,920 --> 00:15:37,990
+to hold vertex input data
+following that we need to specify our
+
+870
+00:15:37,990 --> 00:15:38,000
+following that we need to specify our
+ 
+
+871
+00:15:38,000 --> 00:15:40,069
+following that we need to specify our
+memory properties with vk memory
+
+872
+00:15:40,069 --> 00:15:40,079
+memory properties with vk memory
+ 
+
+873
+00:15:40,079 --> 00:15:41,030
+memory properties with vk memory
+property
+
+874
+00:15:41,030 --> 00:15:41,040
+property
+ 
+
+875
+00:15:41,040 --> 00:15:44,389
+property
+host visible bit and vk memory property
+
+876
+00:15:44,389 --> 00:15:44,399
+host visible bit and vk memory property
+ 
+
+877
+00:15:44,399 --> 00:15:47,350
+host visible bit and vk memory property
+host coherent bit so make sure to use
+
+878
+00:15:47,350 --> 00:15:47,360
+host coherent bit so make sure to use
+ 
+
+879
+00:15:47,360 --> 00:15:48,310
+host coherent bit so make sure to use
+the bitwise or
+
+880
+00:15:48,310 --> 00:15:48,320
+the bitwise or
+ 
+
+881
+00:15:48,320 --> 00:15:50,389
+the bitwise or
+operator here which combines the bit
+
+882
+00:15:50,389 --> 00:15:50,399
+operator here which combines the bit
+ 
+
+883
+00:15:50,399 --> 00:15:52,389
+operator here which combines the bit
+flags together
+
+884
+00:15:52,389 --> 00:15:52,399
+flags together
+ 
+
+885
+00:15:52,399 --> 00:15:54,790
+flags together
+the host visible bit memory property
+
+886
+00:15:54,790 --> 00:15:54,800
+the host visible bit memory property
+ 
+
+887
+00:15:54,800 --> 00:15:56,790
+the host visible bit memory property
+tells vulcan that we want the allocated
+
+888
+00:15:56,790 --> 00:15:56,800
+tells vulcan that we want the allocated
+ 
+
+889
+00:15:56,800 --> 00:15:59,269
+tells vulcan that we want the allocated
+memory to be accessible from our host
+
+890
+00:15:59,269 --> 00:15:59,279
+memory to be accessible from our host
+ 
+
+891
+00:15:59,279 --> 00:16:02,790
+memory to be accessible from our host
+aka the cpu this is necessary for our
+
+892
+00:16:02,790 --> 00:16:02,800
+aka the cpu this is necessary for our
+ 
+
+893
+00:16:02,800 --> 00:16:05,110
+aka the cpu this is necessary for our
+host to be able to write to the device
+
+894
+00:16:05,110 --> 00:16:05,120
+host to be able to write to the device
+ 
+
+895
+00:16:05,120 --> 00:16:06,069
+host to be able to write to the device
+memory
+
+896
+00:16:06,069 --> 00:16:06,079
+memory
+ 
+
+897
+00:16:06,079 --> 00:16:08,470
+memory
+the host coherent memory property keeps
+
+898
+00:16:08,470 --> 00:16:08,480
+the host coherent memory property keeps
+ 
+
+899
+00:16:08,480 --> 00:16:10,629
+the host coherent memory property keeps
+the host and device memory regions
+
+900
+00:16:10,629 --> 00:16:10,639
+the host and device memory regions
+ 
+
+901
+00:16:10,639 --> 00:16:13,189
+the host and device memory regions
+consistent with each other if this
+
+902
+00:16:13,189 --> 00:16:13,199
+consistent with each other if this
+ 
+
+903
+00:16:13,199 --> 00:16:14,629
+consistent with each other if this
+property is absent
+
+904
+00:16:14,629 --> 00:16:14,639
+property is absent
+ 
+
+905
+00:16:14,639 --> 00:16:17,350
+property is absent
+then we are required to call vk flashed
+
+906
+00:16:17,350 --> 00:16:17,360
+then we are required to call vk flashed
+ 
+
+907
+00:16:17,360 --> 00:16:18,629
+then we are required to call vk flashed
+mapped memory ranges
+
+908
+00:16:18,629 --> 00:16:18,639
+mapped memory ranges
+ 
+
+909
+00:16:18,639 --> 00:16:21,110
+mapped memory ranges
+in order to propagate changes from host
+
+910
+00:16:21,110 --> 00:16:21,120
+in order to propagate changes from host
+ 
+
+911
+00:16:21,120 --> 00:16:22,949
+in order to propagate changes from host
+to device memory
+
+912
+00:16:22,949 --> 00:16:22,959
+to device memory
+ 
+
+913
+00:16:22,959 --> 00:16:24,870
+to device memory
+then the final two arguments are the
+
+914
+00:16:24,870 --> 00:16:24,880
+then the final two arguments are the
+ 
+
+915
+00:16:24,880 --> 00:16:25,990
+then the final two arguments are the
+vertex buffer
+
+916
+00:16:25,990 --> 00:16:26,000
+vertex buffer
+ 
+
+917
+00:16:26,000 --> 00:16:27,829
+vertex buffer
+and vertex buffer memory member
+
+918
+00:16:27,829 --> 00:16:27,839
+and vertex buffer memory member
+ 
+
+919
+00:16:27,839 --> 00:16:30,310
+and vertex buffer memory member
+variables
+
+920
+00:16:30,310 --> 00:16:30,320
+variables
+ 
+
+921
+00:16:30,320 --> 00:16:32,710
+variables
+now finally declare a local variable
+
+922
+00:16:32,710 --> 00:16:32,720
+now finally declare a local variable
+ 
+
+923
+00:16:32,720 --> 00:16:34,710
+now finally declare a local variable
+void pointer data
+
+924
+00:16:34,710 --> 00:16:34,720
+void pointer data
+ 
+
+925
+00:16:34,720 --> 00:16:38,470
+void pointer data
+then call vkmap memory lvedevice.device
+
+926
+00:16:38,470 --> 00:16:38,480
+then call vkmap memory lvedevice.device
+ 
+
+927
+00:16:38,480 --> 00:16:41,829
+then call vkmap memory lvedevice.device
+vertex buffer memory 0 as the offset
+
+928
+00:16:41,829 --> 00:16:41,839
+vertex buffer memory 0 as the offset
+ 
+
+929
+00:16:41,839 --> 00:16:44,710
+vertex buffer memory 0 as the offset
+buffer size then 0 for not providing any
+
+930
+00:16:44,710 --> 00:16:44,720
+buffer size then 0 for not providing any
+ 
+
+931
+00:16:44,720 --> 00:16:46,710
+buffer size then 0 for not providing any
+vk memory mapped flags
+
+932
+00:16:46,710 --> 00:16:46,720
+vk memory mapped flags
+ 
+
+933
+00:16:46,720 --> 00:16:49,829
+vk memory mapped flags
+and finally a pointer to data this
+
+934
+00:16:49,829 --> 00:16:49,839
+and finally a pointer to data this
+ 
+
+935
+00:16:49,839 --> 00:16:50,389
+and finally a pointer to data this
+function
+
+936
+00:16:50,389 --> 00:16:50,399
+function
+ 
+
+937
+00:16:50,399 --> 00:16:53,189
+function
+creates a region of host memory mapped
+
+938
+00:16:53,189 --> 00:16:53,199
+creates a region of host memory mapped
+ 
+
+939
+00:16:53,199 --> 00:16:54,550
+creates a region of host memory mapped
+to device memory
+
+940
+00:16:54,550 --> 00:16:54,560
+to device memory
+ 
+
+941
+00:16:54,560 --> 00:16:56,710
+to device memory
+and sets data to point to the beginning
+
+942
+00:16:56,710 --> 00:16:56,720
+and sets data to point to the beginning
+ 
+
+943
+00:16:56,720 --> 00:16:58,790
+and sets data to point to the beginning
+of the mapped memory range
+
+944
+00:16:58,790 --> 00:16:58,800
+of the mapped memory range
+ 
+
+945
+00:16:58,800 --> 00:17:01,030
+of the mapped memory range
+then next we need to use the memcopy
+
+946
+00:17:01,030 --> 00:17:01,040
+then next we need to use the memcopy
+ 
+
+947
+00:17:01,040 --> 00:17:02,230
+then next we need to use the memcopy
+function so first
+
+948
+00:17:02,230 --> 00:17:02,240
+function so first
+ 
+
+949
+00:17:02,240 --> 00:17:05,470
+function so first
+include c-string then call mem copy data
+
+950
+00:17:05,470 --> 00:17:05,480
+include c-string then call mem copy data
+ 
+
+951
+00:17:05,480 --> 00:17:08,470
+include c-string then call mem copy data
+vertices.data static cast size t buffer
+
+952
+00:17:08,470 --> 00:17:08,480
+vertices.data static cast size t buffer
+ 
+
+953
+00:17:08,480 --> 00:17:09,990
+vertices.data static cast size t buffer
+size
+
+954
+00:17:09,990 --> 00:17:10,000
+size
+ 
+
+955
+00:17:10,000 --> 00:17:13,069
+size
+and finally call vk unmapped memory lve
+
+956
+00:17:13,069 --> 00:17:13,079
+and finally call vk unmapped memory lve
+ 
+
+957
+00:17:13,079 --> 00:17:14,230
+and finally call vk unmapped memory lve
+device.device
+
+958
+00:17:14,230 --> 00:17:14,240
+device.device
+ 
+
+959
+00:17:14,240 --> 00:17:20,069
+device.device
+vertex buffer memory
+
+960
+00:17:20,069 --> 00:17:20,079
+
+ 
+
+961
+00:17:20,079 --> 00:17:23,110
+ 
+so mem copy takes the vertices data
+
+962
+00:17:23,110 --> 00:17:23,120
+so mem copy takes the vertices data
+ 
+
+963
+00:17:23,120 --> 00:17:25,350
+so mem copy takes the vertices data
+and copies it into the host mapped
+
+964
+00:17:25,350 --> 00:17:25,360
+and copies it into the host mapped
+ 
+
+965
+00:17:25,360 --> 00:17:26,710
+and copies it into the host mapped
+memory region
+
+966
+00:17:26,710 --> 00:17:26,720
+memory region
+ 
+
+967
+00:17:26,720 --> 00:17:28,870
+memory region
+now because we have this host coherent
+
+968
+00:17:28,870 --> 00:17:28,880
+now because we have this host coherent
+ 
+
+969
+00:17:28,880 --> 00:17:31,190
+now because we have this host coherent
+bit the host memory will automatically
+
+970
+00:17:31,190 --> 00:17:31,200
+bit the host memory will automatically
+ 
+
+971
+00:17:31,200 --> 00:17:33,990
+bit the host memory will automatically
+be flushed to update the device memory
+
+972
+00:17:33,990 --> 00:17:34,000
+be flushed to update the device memory
+ 
+
+973
+00:17:34,000 --> 00:17:36,070
+be flushed to update the device memory
+if this bit is absent we'd be required
+
+974
+00:17:36,070 --> 00:17:36,080
+if this bit is absent we'd be required
+ 
+
+975
+00:17:36,080 --> 00:17:37,430
+if this bit is absent we'd be required
+to call vk flush
+
+976
+00:17:37,430 --> 00:17:37,440
+to call vk flush
+ 
+
+977
+00:17:37,440 --> 00:17:39,669
+to call vk flush
+mapped memory ranges in order for the
+
+978
+00:17:39,669 --> 00:17:39,679
+mapped memory ranges in order for the
+ 
+
+979
+00:17:39,679 --> 00:17:41,909
+mapped memory ranges in order for the
+changes to propagate
+
+980
+00:17:41,909 --> 00:17:41,919
+changes to propagate
+ 
+
+981
+00:17:41,919 --> 00:17:43,750
+changes to propagate
+okay now the draw function
+
+982
+00:17:43,750 --> 00:17:43,760
+okay now the draw function
+ 
+
+983
+00:17:43,760 --> 00:17:45,990
+okay now the draw function
+implementation is very simple
+
+984
+00:17:45,990 --> 00:17:46,000
+implementation is very simple
+ 
+
+985
+00:17:46,000 --> 00:17:48,070
+implementation is very simple
+copy and paste the function signature
+
+986
+00:17:48,070 --> 00:17:48,080
+copy and paste the function signature
+ 
+
+987
+00:17:48,080 --> 00:17:49,430
+copy and paste the function signature
+and add the class name
+
+988
+00:17:49,430 --> 00:17:49,440
+and add the class name
+ 
+
+989
+00:17:49,440 --> 00:17:52,630
+and add the class name
+scope
+
+990
+00:17:52,630 --> 00:17:52,640
+
+ 
+
+991
+00:17:52,640 --> 00:17:54,630
+ 
+then inside the body just call vk
+
+992
+00:17:54,630 --> 00:17:54,640
+then inside the body just call vk
+ 
+
+993
+00:17:54,640 --> 00:17:56,630
+then inside the body just call vk
+command draw
+
+994
+00:17:56,630 --> 00:17:56,640
+command draw
+ 
+
+995
+00:17:56,640 --> 00:17:58,950
+command draw
+command buffer vertex count and then one
+
+996
+00:17:58,950 --> 00:17:58,960
+command buffer vertex count and then one
+ 
+
+997
+00:17:58,960 --> 00:18:00,710
+command buffer vertex count and then one
+for instance
+
+998
+00:18:00,710 --> 00:18:00,720
+for instance
+ 
+
+999
+00:18:00,720 --> 00:18:03,909
+for instance
+zero for first vertex index and zero for
+
+1000
+00:18:03,909 --> 00:18:03,919
+zero for first vertex index and zero for
+ 
+
+1001
+00:18:03,919 --> 00:18:07,029
+zero for first vertex index and zero for
+first in first instance index and that's
+
+1002
+00:18:07,029 --> 00:18:07,039
+first in first instance index and that's
+ 
+
+1003
+00:18:07,039 --> 00:18:07,990
+first in first instance index and that's
+it
+
+1004
+00:18:07,990 --> 00:18:08,000
+it
+ 
+
+1005
+00:18:08,000 --> 00:18:10,390
+it
+the bind function is pretty similar copy
+
+1006
+00:18:10,390 --> 00:18:10,400
+the bind function is pretty similar copy
+ 
+
+1007
+00:18:10,400 --> 00:18:12,390
+the bind function is pretty similar copy
+and paste the function signature and add
+
+1008
+00:18:12,390 --> 00:18:12,400
+and paste the function signature and add
+ 
+
+1009
+00:18:12,400 --> 00:18:14,710
+and paste the function signature and add
+the class name scope
+
+1010
+00:18:14,710 --> 00:18:14,720
+the class name scope
+ 
+
+1011
+00:18:14,720 --> 00:18:17,430
+the class name scope
+make a local variable vk buffer buffers
+
+1012
+00:18:17,430 --> 00:18:17,440
+make a local variable vk buffer buffers
+ 
+
+1013
+00:18:17,440 --> 00:18:18,230
+make a local variable vk buffer buffers
+array
+
+1014
+00:18:18,230 --> 00:18:18,240
+array
+ 
+
+1015
+00:18:18,240 --> 00:18:22,710
+array
+equal to curly braces vertex buffer
+
+1016
+00:18:22,710 --> 00:18:22,720
+
+ 
+
+1017
+00:18:22,720 --> 00:18:25,430
+ 
+and then vk device size offsets array
+
+1018
+00:18:25,430 --> 00:18:25,440
+and then vk device size offsets array
+ 
+
+1019
+00:18:25,440 --> 00:18:26,070
+and then vk device size offsets array
+equal to
+
+1020
+00:18:26,070 --> 00:18:26,080
+equal to
+ 
+
+1021
+00:18:26,080 --> 00:18:30,549
+equal to
+curly braces 0
+
+1022
+00:18:30,549 --> 00:18:30,559
+
+ 
+
+1023
+00:18:30,559 --> 00:18:33,510
+ 
+then just call vk command bind vertex
+
+1024
+00:18:33,510 --> 00:18:33,520
+then just call vk command bind vertex
+ 
+
+1025
+00:18:33,520 --> 00:18:34,390
+then just call vk command bind vertex
+buffers
+
+1026
+00:18:34,390 --> 00:18:34,400
+buffers
+ 
+
+1027
+00:18:34,400 --> 00:18:37,430
+buffers
+command buffer first binding at 0
+
+1028
+00:18:37,430 --> 00:18:37,440
+command buffer first binding at 0
+ 
+
+1029
+00:18:37,440 --> 00:18:40,230
+command buffer first binding at 0
+binding count of 1 then buffers and
+
+1030
+00:18:40,230 --> 00:18:40,240
+binding count of 1 then buffers and
+ 
+
+1031
+00:18:40,240 --> 00:18:41,510
+binding count of 1 then buffers and
+offsets
+
+1032
+00:18:41,510 --> 00:18:41,520
+offsets
+ 
+
+1033
+00:18:41,520 --> 00:18:43,270
+offsets
+so this function will record to our
+
+1034
+00:18:43,270 --> 00:18:43,280
+so this function will record to our
+ 
+
+1035
+00:18:43,280 --> 00:18:45,909
+so this function will record to our
+command buffer to bind one vertex buffer
+
+1036
+00:18:45,909 --> 00:18:45,919
+command buffer to bind one vertex buffer
+ 
+
+1037
+00:18:45,919 --> 00:18:47,350
+command buffer to bind one vertex buffer
+starting at binding zero
+
+1038
+00:18:47,350 --> 00:18:47,360
+starting at binding zero
+ 
+
+1039
+00:18:47,360 --> 00:18:50,310
+starting at binding zero
+with an offset of zero into the buffer
+
+1040
+00:18:50,310 --> 00:18:50,320
+with an offset of zero into the buffer
+ 
+
+1041
+00:18:50,320 --> 00:18:52,070
+with an offset of zero into the buffer
+and when we eventually might want to add
+
+1042
+00:18:52,070 --> 00:18:52,080
+and when we eventually might want to add
+ 
+
+1043
+00:18:52,080 --> 00:18:54,390
+and when we eventually might want to add
+multiple bindings we can easily do so by
+
+1044
+00:18:54,390 --> 00:18:54,400
+multiple bindings we can easily do so by
+ 
+
+1045
+00:18:54,400 --> 00:18:56,230
+multiple bindings we can easily do so by
+adding additional elements to these
+
+1046
+00:18:56,230 --> 00:18:56,240
+adding additional elements to these
+ 
+
+1047
+00:18:56,240 --> 00:18:57,590
+adding additional elements to these
+arrays
+
+1048
+00:18:57,590 --> 00:18:57,600
+arrays
+ 
+
+1049
+00:18:57,600 --> 00:18:59,669
+arrays
+next let's implement the get binding
+
+1050
+00:18:59,669 --> 00:18:59,679
+next let's implement the get binding
+ 
+
+1051
+00:18:59,679 --> 00:19:03,350
+next let's implement the get binding
+descriptions function
+
+1052
+00:19:03,350 --> 00:19:03,360
+
+ 
+
+1053
+00:19:03,360 --> 00:19:05,990
+ 
+for its scope we have lve model scope
+
+1054
+00:19:05,990 --> 00:19:06,000
+for its scope we have lve model scope
+ 
+
+1055
+00:19:06,000 --> 00:19:08,830
+for its scope we have lve model scope
+then vertex scope get binding
+
+1056
+00:19:08,830 --> 00:19:08,840
+then vertex scope get binding
+ 
+
+1057
+00:19:08,840 --> 00:19:10,150
+then vertex scope get binding
+descriptions
+
+1058
+00:19:10,150 --> 00:19:10,160
+descriptions
+ 
+
+1059
+00:19:10,160 --> 00:19:12,870
+descriptions
+make a vector vk vertex input binding
+
+1060
+00:19:12,870 --> 00:19:12,880
+make a vector vk vertex input binding
+ 
+
+1061
+00:19:12,880 --> 00:19:13,669
+make a vector vk vertex input binding
+description
+
+1062
+00:19:13,669 --> 00:19:13,679
+description
+ 
+
+1063
+00:19:13,679 --> 00:19:15,830
+description
+local variable binding descriptions of
+
+1064
+00:19:15,830 --> 00:19:15,840
+local variable binding descriptions of
+ 
+
+1065
+00:19:15,840 --> 00:19:20,950
+local variable binding descriptions of
+size 1.
+
+1066
+00:19:20,950 --> 00:19:20,960
+
+ 
+
+1067
+00:19:20,960 --> 00:19:23,430
+ 
+then binding descriptions index 0 dot
+
+1068
+00:19:23,430 --> 00:19:23,440
+then binding descriptions index 0 dot
+ 
+
+1069
+00:19:23,440 --> 00:19:23,990
+then binding descriptions index 0 dot
+binding
+
+1070
+00:19:23,990 --> 00:19:24,000
+binding
+ 
+
+1071
+00:19:24,000 --> 00:19:27,190
+binding
+equals zero
+
+1072
+00:19:27,190 --> 00:19:27,200
+
+ 
+
+1073
+00:19:27,200 --> 00:19:34,789
+ 
+then dot stride equals size of vertex
+
+1074
+00:19:34,789 --> 00:19:34,799
+
+ 
+
+1075
+00:19:34,799 --> 00:19:38,470
+ 
+and dot input rate equals vk vertex
+
+1076
+00:19:38,470 --> 00:19:38,480
+and dot input rate equals vk vertex
+ 
+
+1077
+00:19:38,480 --> 00:19:41,909
+and dot input rate equals vk vertex
+input rate vertex
+
+1078
+00:19:41,909 --> 00:19:41,919
+
+ 
+
+1079
+00:19:41,919 --> 00:19:45,029
+ 
+then return the binding description
+
+1080
+00:19:45,029 --> 00:19:45,039
+then return the binding description
+ 
+
+1081
+00:19:45,039 --> 00:19:47,510
+then return the binding description
+alternatively if you prefer you can just
+
+1082
+00:19:47,510 --> 00:19:47,520
+alternatively if you prefer you can just
+ 
+
+1083
+00:19:47,520 --> 00:19:49,190
+alternatively if you prefer you can just
+use a brace construction
+
+1084
+00:19:49,190 --> 00:19:49,200
+use a brace construction
+ 
+
+1085
+00:19:49,200 --> 00:19:50,789
+use a brace construction
+but i've done it this way to make the
+
+1086
+00:19:50,789 --> 00:19:50,799
+but i've done it this way to make the
+ 
+
+1087
+00:19:50,799 --> 00:19:53,350
+but i've done it this way to make the
+code more readable
+
+1088
+00:19:53,350 --> 00:19:53,360
+code more readable
+ 
+
+1089
+00:19:53,360 --> 00:19:55,430
+code more readable
+so this binding description corresponds
+
+1090
+00:19:55,430 --> 00:19:55,440
+so this binding description corresponds
+ 
+
+1091
+00:19:55,440 --> 00:19:57,270
+so this binding description corresponds
+to our single vertex buffer
+
+1092
+00:19:57,270 --> 00:19:57,280
+to our single vertex buffer
+ 
+
+1093
+00:19:57,280 --> 00:19:59,190
+to our single vertex buffer
+it will occupy the first binding at
+
+1094
+00:19:59,190 --> 00:19:59,200
+it will occupy the first binding at
+ 
+
+1095
+00:19:59,200 --> 00:20:01,430
+it will occupy the first binding at
+index 0 the stride advances by
+
+1096
+00:20:01,430 --> 00:20:01,440
+index 0 the stride advances by
+ 
+
+1097
+00:20:01,440 --> 00:20:04,710
+index 0 the stride advances by
+size of vertex bytes per vertex now
+
+1098
+00:20:04,710 --> 00:20:04,720
+size of vertex bytes per vertex now
+ 
+
+1099
+00:20:04,720 --> 00:20:05,270
+size of vertex bytes per vertex now
+finally
+
+1100
+00:20:05,270 --> 00:20:05,280
+finally
+ 
+
+1101
+00:20:05,280 --> 00:20:07,990
+finally
+for get attributes descriptions copy the
+
+1102
+00:20:07,990 --> 00:20:08,000
+for get attributes descriptions copy the
+ 
+
+1103
+00:20:08,000 --> 00:20:09,830
+for get attributes descriptions copy the
+function signature and add your model
+
+1104
+00:20:09,830 --> 00:20:09,840
+function signature and add your model
+ 
+
+1105
+00:20:09,840 --> 00:20:11,190
+function signature and add your model
+and vertex scopes
+
+1106
+00:20:11,190 --> 00:20:11,200
+and vertex scopes
+ 
+
+1107
+00:20:11,200 --> 00:20:13,110
+and vertex scopes
+don't forget to remove the static
+
+1108
+00:20:13,110 --> 00:20:13,120
+don't forget to remove the static
+ 
+
+1109
+00:20:13,120 --> 00:20:14,390
+don't forget to remove the static
+keyword
+
+1110
+00:20:14,390 --> 00:20:14,400
+keyword
+ 
+
+1111
+00:20:14,400 --> 00:20:16,870
+keyword
+so similarly create a local variable
+
+1112
+00:20:16,870 --> 00:20:16,880
+so similarly create a local variable
+ 
+
+1113
+00:20:16,880 --> 00:20:19,430
+so similarly create a local variable
+with type vector of vk vertex input
+
+1114
+00:20:19,430 --> 00:20:19,440
+with type vector of vk vertex input
+ 
+
+1115
+00:20:19,440 --> 00:20:21,029
+with type vector of vk vertex input
+attribute descriptions
+
+1116
+00:20:21,029 --> 00:20:21,039
+attribute descriptions
+ 
+
+1117
+00:20:21,039 --> 00:20:24,390
+attribute descriptions
+called attribute descriptions then
+
+1118
+00:20:24,390 --> 00:20:24,400
+called attribute descriptions then
+ 
+
+1119
+00:20:24,400 --> 00:20:27,669
+called attribute descriptions then
+attributes index zero dot binding equals
+
+1120
+00:20:27,669 --> 00:20:27,679
+attributes index zero dot binding equals
+ 
+
+1121
+00:20:27,679 --> 00:20:29,029
+attributes index zero dot binding equals
+zero
+
+1122
+00:20:29,029 --> 00:20:29,039
+zero
+ 
+
+1123
+00:20:29,039 --> 00:20:31,750
+zero
+next dot location equals zero this
+
+1124
+00:20:31,750 --> 00:20:31,760
+next dot location equals zero this
+ 
+
+1125
+00:20:31,760 --> 00:20:34,070
+next dot location equals zero this
+corresponds to the location specified
+
+1126
+00:20:34,070 --> 00:20:34,080
+corresponds to the location specified
+ 
+
+1127
+00:20:34,080 --> 00:20:37,590
+corresponds to the location specified
+in the vertex shader next dot format
+
+1128
+00:20:37,590 --> 00:20:37,600
+in the vertex shader next dot format
+ 
+
+1129
+00:20:37,600 --> 00:20:39,830
+in the vertex shader next dot format
+equals vk format r32
+
+1130
+00:20:39,830 --> 00:20:39,840
+equals vk format r32
+ 
+
+1131
+00:20:39,840 --> 00:20:43,990
+equals vk format r32
+g32 s float this specifies the data type
+
+1132
+00:20:43,990 --> 00:20:44,000
+g32 s float this specifies the data type
+ 
+
+1133
+00:20:44,000 --> 00:20:44,710
+g32 s float this specifies the data type
+that we have a
+
+1134
+00:20:44,710 --> 00:20:44,720
+that we have a
+ 
+
+1135
+00:20:44,720 --> 00:20:47,750
+that we have a
+two components that are each 32-bit sign
+
+1136
+00:20:47,750 --> 00:20:47,760
+two components that are each 32-bit sign
+ 
+
+1137
+00:20:47,760 --> 00:20:51,590
+two components that are each 32-bit sign
+floats finally dot offset equals zero
+
+1138
+00:20:51,590 --> 00:20:51,600
+floats finally dot offset equals zero
+ 
+
+1139
+00:20:51,600 --> 00:20:55,750
+floats finally dot offset equals zero
+and return attribute descriptions
+
+1140
+00:20:55,750 --> 00:20:55,760
+
+ 
+
+1141
+00:20:55,760 --> 00:20:57,750
+ 
+next we need to provide our pipeline
+
+1142
+00:20:57,750 --> 00:20:57,760
+next we need to provide our pipeline
+ 
+
+1143
+00:20:57,760 --> 00:20:59,110
+next we need to provide our pipeline
+with these descriptions
+
+1144
+00:20:59,110 --> 00:20:59,120
+with these descriptions
+ 
+
+1145
+00:20:59,120 --> 00:21:00,950
+with these descriptions
+so it actually knows how to read our
+
+1146
+00:21:00,950 --> 00:21:00,960
+so it actually knows how to read our
+ 
+
+1147
+00:21:00,960 --> 00:21:03,350
+so it actually knows how to read our
+vertex buffer data
+
+1148
+00:21:03,350 --> 00:21:03,360
+vertex buffer data
+ 
+
+1149
+00:21:03,360 --> 00:21:06,950
+vertex buffer data
+first we need to include our model class
+
+1150
+00:21:06,950 --> 00:21:06,960
+first we need to include our model class
+ 
+
+1151
+00:21:06,960 --> 00:21:08,549
+first we need to include our model class
+now currently in our create graphics
+
+1152
+00:21:08,549 --> 00:21:08,559
+now currently in our create graphics
+ 
+
+1153
+00:21:08,559 --> 00:21:10,789
+now currently in our create graphics
+pipeline function our vertex input info
+
+1154
+00:21:10,789 --> 00:21:10,799
+pipeline function our vertex input info
+ 
+
+1155
+00:21:10,799 --> 00:21:11,909
+pipeline function our vertex input info
+struct was pretty much
+
+1156
+00:21:11,909 --> 00:21:11,919
+struct was pretty much
+ 
+
+1157
+00:21:11,919 --> 00:21:15,270
+struct was pretty much
+empty start by adding two local
+
+1158
+00:21:15,270 --> 00:21:15,280
+empty start by adding two local
+ 
+
+1159
+00:21:15,280 --> 00:21:16,230
+empty start by adding two local
+variables
+
+1160
+00:21:16,230 --> 00:21:16,240
+variables
+ 
+
+1161
+00:21:16,240 --> 00:21:18,630
+variables
+auto binding descriptions is equal to
+
+1162
+00:21:18,630 --> 00:21:18,640
+auto binding descriptions is equal to
+ 
+
+1163
+00:21:18,640 --> 00:21:19,750
+auto binding descriptions is equal to
+lve model
+
+1164
+00:21:19,750 --> 00:21:19,760
+lve model
+ 
+
+1165
+00:21:19,760 --> 00:21:26,630
+lve model
+vertex get binding descriptions
+
+1166
+00:21:26,630 --> 00:21:26,640
+
+ 
+
+1167
+00:21:26,640 --> 00:21:29,190
+ 
+and auto attribute descriptions is equal
+
+1168
+00:21:29,190 --> 00:21:29,200
+and auto attribute descriptions is equal
+ 
+
+1169
+00:21:29,200 --> 00:21:29,990
+and auto attribute descriptions is equal
+to lve
+
+1170
+00:21:29,990 --> 00:21:30,000
+to lve
+ 
+
+1171
+00:21:30,000 --> 00:21:36,230
+to lve
+model vertex get attribute descriptions
+
+1172
+00:21:36,230 --> 00:21:36,240
+
+ 
+
+1173
+00:21:36,240 --> 00:21:38,070
+ 
+then update the attribute description
+
+1174
+00:21:38,070 --> 00:21:38,080
+then update the attribute description
+ 
+
+1175
+00:21:38,080 --> 00:21:39,350
+then update the attribute description
+count to equal
+
+1176
+00:21:39,350 --> 00:21:39,360
+count to equal
+ 
+
+1177
+00:21:39,360 --> 00:21:49,669
+count to equal
+static cast uin32 type attributes.size
+
+1178
+00:21:49,669 --> 00:21:49,679
+
+ 
+
+1179
+00:21:49,679 --> 00:21:51,750
+ 
+and binding description count to equal
+
+1180
+00:21:51,750 --> 00:21:51,760
+and binding description count to equal
+ 
+
+1181
+00:21:51,760 --> 00:21:56,830
+and binding description count to equal
+to staticast uint32 type
+
+1182
+00:21:56,830 --> 00:21:56,840
+
+ 
+
+1183
+00:21:56,840 --> 00:21:58,710
+
+bindingdescriptions.size
+
+1184
+00:21:58,710 --> 00:21:58,720
+bindingdescriptions.size
+ 
+
+1185
+00:21:58,720 --> 00:22:00,870
+bindingdescriptions.size
+then set p vertex attribute descriptions
+
+1186
+00:22:00,870 --> 00:22:00,880
+then set p vertex attribute descriptions
+ 
+
+1187
+00:22:00,880 --> 00:22:02,270
+then set p vertex attribute descriptions
+to attributes
+
+1188
+00:22:02,270 --> 00:22:02,280
+to attributes
+ 
+
+1189
+00:22:02,280 --> 00:22:04,789
+to attributes
+descriptions.data and p vertex binding
+
+1190
+00:22:04,789 --> 00:22:04,799
+descriptions.data and p vertex binding
+ 
+
+1191
+00:22:04,799 --> 00:22:11,830
+descriptions.data and p vertex binding
+descriptions to bindingdescriptions.data
+
+1192
+00:22:11,830 --> 00:22:11,840
+
+ 
+
+1193
+00:22:11,840 --> 00:22:13,990
+ 
+now all that's left to do is create an
+
+1194
+00:22:13,990 --> 00:22:14,000
+now all that's left to do is create an
+ 
+
+1195
+00:22:14,000 --> 00:22:16,070
+now all that's left to do is create an
+instance of our model and draw it
+
+1196
+00:22:16,070 --> 00:22:16,080
+instance of our model and draw it
+ 
+
+1197
+00:22:16,080 --> 00:22:18,630
+instance of our model and draw it
+so open your first header include lve
+
+1198
+00:22:18,630 --> 00:22:18,640
+so open your first header include lve
+ 
+
+1199
+00:22:18,640 --> 00:22:21,190
+so open your first header include lve
+model and then create a lve model unique
+
+1200
+00:22:21,190 --> 00:22:21,200
+model and then create a lve model unique
+ 
+
+1201
+00:22:21,200 --> 00:22:21,750
+model and then create a lve model unique
+pointer
+
+1202
+00:22:21,750 --> 00:22:21,760
+pointer
+ 
+
+1203
+00:22:21,760 --> 00:22:26,630
+pointer
+lve model
+
+1204
+00:22:26,630 --> 00:22:26,640
+lve model
+ 
+
+1205
+00:22:26,640 --> 00:22:29,669
+lve model
+then add a private load models function
+
+1206
+00:22:29,669 --> 00:22:29,679
+then add a private load models function
+ 
+
+1207
+00:22:29,679 --> 00:22:32,230
+then add a private load models function
+now in the first app implementation file
+
+1208
+00:22:32,230 --> 00:22:32,240
+now in the first app implementation file
+ 
+
+1209
+00:22:32,240 --> 00:22:33,270
+now in the first app implementation file
+implement the function
+
+1210
+00:22:33,270 --> 00:22:33,280
+implement the function
+ 
+
+1211
+00:22:33,280 --> 00:22:40,149
+implement the function
+void first app load models
+
+1212
+00:22:40,149 --> 00:22:40,159
+void first app load models
+ 
+
+1213
+00:22:40,159 --> 00:22:42,470
+void first app load models
+inside its body create a vector of type
+
+1214
+00:22:42,470 --> 00:22:42,480
+inside its body create a vector of type
+ 
+
+1215
+00:22:42,480 --> 00:22:43,990
+inside its body create a vector of type
+lve model vertex
+
+1216
+00:22:43,990 --> 00:22:44,000
+lve model vertex
+ 
+
+1217
+00:22:44,000 --> 00:22:45,830
+lve model vertex
+and we will use this to initialize the
+
+1218
+00:22:45,830 --> 00:22:45,840
+and we will use this to initialize the
+ 
+
+1219
+00:22:45,840 --> 00:22:48,149
+and we will use this to initialize the
+vertex data positions
+
+1220
+00:22:48,149 --> 00:22:48,159
+vertex data positions
+ 
+
+1221
+00:22:48,159 --> 00:22:50,230
+vertex data positions
+so i'm going to use the same positions
+
+1222
+00:22:50,230 --> 00:22:50,240
+so i'm going to use the same positions
+ 
+
+1223
+00:22:50,240 --> 00:22:52,149
+so i'm going to use the same positions
+values we had before
+
+1224
+00:22:52,149 --> 00:22:52,159
+values we had before
+ 
+
+1225
+00:22:52,159 --> 00:22:54,870
+values we had before
+of 0 negative point five point five
+
+1226
+00:22:54,870 --> 00:22:54,880
+of 0 negative point five point five
+ 
+
+1227
+00:22:54,880 --> 00:22:55,750
+of 0 negative point five point five
+point five
+
+1228
+00:22:55,750 --> 00:22:55,760
+point five
+ 
+
+1229
+00:22:55,760 --> 00:22:58,710
+point five
+and negative point five point five make
+
+1230
+00:22:58,710 --> 00:22:58,720
+and negative point five point five make
+ 
+
+1231
+00:22:58,720 --> 00:23:00,789
+and negative point five point five make
+sure to get your braces correct here
+
+1232
+00:23:00,789 --> 00:23:00,799
+sure to get your braces correct here
+ 
+
+1233
+00:23:00,799 --> 00:23:02,789
+sure to get your braces correct here
+we have three levels the outermost
+
+1234
+00:23:02,789 --> 00:23:02,799
+we have three levels the outermost
+ 
+
+1235
+00:23:02,799 --> 00:23:04,310
+we have three levels the outermost
+initializes the vector
+
+1236
+00:23:04,310 --> 00:23:04,320
+initializes the vector
+ 
+
+1237
+00:23:04,320 --> 00:23:06,789
+initializes the vector
+then we initialize each model vertex and
+
+1238
+00:23:06,789 --> 00:23:06,799
+then we initialize each model vertex and
+ 
+
+1239
+00:23:06,799 --> 00:23:08,870
+then we initialize each model vertex and
+then the innermost braces initialize the
+
+1240
+00:23:08,870 --> 00:23:08,880
+then the innermost braces initialize the
+ 
+
+1241
+00:23:08,880 --> 00:23:09,669
+then the innermost braces initialize the
+glm
+
+1242
+00:23:09,669 --> 00:23:09,679
+glm
+ 
+
+1243
+00:23:09,679 --> 00:23:13,190
+glm
+vect2 position member next initialize
+
+1244
+00:23:13,190 --> 00:23:13,200
+vect2 position member next initialize
+ 
+
+1245
+00:23:13,200 --> 00:23:13,990
+vect2 position member next initialize
+the model with
+
+1246
+00:23:13,990 --> 00:23:14,000
+the model with
+ 
+
+1247
+00:23:14,000 --> 00:23:17,350
+the model with
+lve model equals std make unique
+
+1248
+00:23:17,350 --> 00:23:17,360
+lve model equals std make unique
+ 
+
+1249
+00:23:17,360 --> 00:23:20,390
+lve model equals std make unique
+lve model with lve device as the first
+
+1250
+00:23:20,390 --> 00:23:20,400
+lve model with lve device as the first
+ 
+
+1251
+00:23:20,400 --> 00:23:21,270
+lve model with lve device as the first
+argument
+
+1252
+00:23:21,270 --> 00:23:21,280
+argument
+ 
+
+1253
+00:23:21,280 --> 00:23:24,549
+argument
+and vertices as the second then in your
+
+1254
+00:23:24,549 --> 00:23:24,559
+and vertices as the second then in your
+ 
+
+1255
+00:23:24,559 --> 00:23:26,549
+and vertices as the second then in your
+first app constructor call the load
+
+1256
+00:23:26,549 --> 00:23:26,559
+first app constructor call the load
+ 
+
+1257
+00:23:26,559 --> 00:23:27,510
+first app constructor call the load
+models function
+
+1258
+00:23:27,510 --> 00:23:27,520
+models function
+ 
+
+1259
+00:23:27,520 --> 00:23:30,710
+models function
+as the first line then in the create
+
+1260
+00:23:30,710 --> 00:23:30,720
+as the first line then in the create
+ 
+
+1261
+00:23:30,720 --> 00:23:32,390
+as the first line then in the create
+command buffers function
+
+1262
+00:23:32,390 --> 00:23:32,400
+command buffers function
+ 
+
+1263
+00:23:32,400 --> 00:23:34,549
+command buffers function
+remove the command draw function call
+
+1264
+00:23:34,549 --> 00:23:34,559
+remove the command draw function call
+ 
+
+1265
+00:23:34,559 --> 00:23:36,070
+remove the command draw function call
+and add lve model
+
+1266
+00:23:36,070 --> 00:23:36,080
+and add lve model
+ 
+
+1267
+00:23:36,080 --> 00:23:39,029
+and add lve model
+arrow bind command buffers at index i
+
+1268
+00:23:39,029 --> 00:23:39,039
+arrow bind command buffers at index i
+ 
+
+1269
+00:23:39,039 --> 00:23:39,350
+arrow bind command buffers at index i
+and
+
+1270
+00:23:39,350 --> 00:23:39,360
+and
+ 
+
+1271
+00:23:39,360 --> 00:23:42,230
+and
+lve model arrow draw command buffers at
+
+1272
+00:23:42,230 --> 00:23:42,240
+lve model arrow draw command buffers at
+ 
+
+1273
+00:23:42,240 --> 00:23:42,710
+lve model arrow draw command buffers at
+index
+
+1274
+00:23:42,710 --> 00:23:42,720
+index
+ 
+
+1275
+00:23:42,720 --> 00:23:46,310
+index
+i and that's it our command buffer
+
+1276
+00:23:46,310 --> 00:23:46,320
+i and that's it our command buffer
+ 
+
+1277
+00:23:46,320 --> 00:23:47,750
+i and that's it our command buffer
+in each render pass will bind our
+
+1278
+00:23:47,750 --> 00:23:47,760
+in each render pass will bind our
+ 
+
+1279
+00:23:47,760 --> 00:23:49,750
+in each render pass will bind our
+graphics pipeline then binder model
+
+1280
+00:23:49,750 --> 00:23:49,760
+graphics pipeline then binder model
+ 
+
+1281
+00:23:49,760 --> 00:23:51,750
+graphics pipeline then binder model
+which contains the vertex data
+
+1282
+00:23:51,750 --> 00:23:51,760
+which contains the vertex data
+ 
+
+1283
+00:23:51,760 --> 00:23:53,909
+which contains the vertex data
+and then record a command buffer to draw
+
+1284
+00:23:53,909 --> 00:23:53,919
+and then record a command buffer to draw
+ 
+
+1285
+00:23:53,919 --> 00:23:57,110
+and then record a command buffer to draw
+every vertex contained by the model
+
+1286
+00:23:57,110 --> 00:23:57,120
+every vertex contained by the model
+ 
+
+1287
+00:23:57,120 --> 00:24:00,470
+every vertex contained by the model
+now build and run and okay
+
+1288
+00:24:00,470 --> 00:24:00,480
+now build and run and okay
+ 
+
+1289
+00:24:00,480 --> 00:24:03,110
+now build and run and okay
+i've done something wrong it's an easy
+
+1290
+00:24:03,110 --> 00:24:03,120
+i've done something wrong it's an easy
+ 
+
+1291
+00:24:03,120 --> 00:24:03,590
+i've done something wrong it's an easy
+fix
+
+1292
+00:24:03,590 --> 00:24:03,600
+fix
+ 
+
+1293
+00:24:03,600 --> 00:24:05,990
+fix
+i swap the names of the bind and draw
+
+1294
+00:24:05,990 --> 00:24:06,000
+i swap the names of the bind and draw
+ 
+
+1295
+00:24:06,000 --> 00:24:07,269
+i swap the names of the bind and draw
+functions
+
+1296
+00:24:07,269 --> 00:24:07,279
+functions
+ 
+
+1297
+00:24:07,279 --> 00:24:09,190
+functions
+also make sure that your vertex shader
+
+1298
+00:24:09,190 --> 00:24:09,200
+also make sure that your vertex shader
+ 
+
+1299
+00:24:09,200 --> 00:24:11,110
+also make sure that your vertex shader
+has been recompiled if you haven't set
+
+1300
+00:24:11,110 --> 00:24:11,120
+has been recompiled if you haven't set
+ 
+
+1301
+00:24:11,120 --> 00:24:11,830
+has been recompiled if you haven't set
+it to
+
+1302
+00:24:11,830 --> 00:24:11,840
+it to
+ 
+
+1303
+00:24:11,840 --> 00:24:14,710
+it to
+automatically do so if i fix that and
+
+1304
+00:24:14,710 --> 00:24:14,720
+automatically do so if i fix that and
+ 
+
+1305
+00:24:14,720 --> 00:24:15,750
+automatically do so if i fix that and
+now build and run
+
+1306
+00:24:15,750 --> 00:24:15,760
+now build and run
+ 
+
+1307
+00:24:15,760 --> 00:24:18,789
+now build and run
+our familiar triangle appears
+
+1308
+00:24:18,789 --> 00:24:18,799
+our familiar triangle appears
+ 
+
+1309
+00:24:18,799 --> 00:24:21,190
+our familiar triangle appears
+but what's different this time is that
+
+1310
+00:24:21,190 --> 00:24:21,200
+but what's different this time is that
+ 
+
+1311
+00:24:21,200 --> 00:24:22,630
+but what's different this time is that
+the vertex positions
+
+1312
+00:24:22,630 --> 00:24:22,640
+the vertex positions
+ 
+
+1313
+00:24:22,640 --> 00:24:25,110
+the vertex positions
+are no longer hard coded into the vertex
+
+1314
+00:24:25,110 --> 00:24:25,120
+are no longer hard coded into the vertex
+ 
+
+1315
+00:24:25,120 --> 00:24:26,149
+are no longer hard coded into the vertex
+shader
+
+1316
+00:24:26,149 --> 00:24:26,159
+shader
+ 
+
+1317
+00:24:26,159 --> 00:24:28,149
+shader
+finally as a completely optional
+
+1318
+00:24:28,149 --> 00:24:28,159
+finally as a completely optional
+ 
+
+1319
+00:24:28,159 --> 00:24:30,310
+finally as a completely optional
+exercise now that we can provide any
+
+1320
+00:24:30,310 --> 00:24:30,320
+exercise now that we can provide any
+ 
+
+1321
+00:24:30,320 --> 00:24:32,630
+exercise now that we can provide any
+position data we want see if you can
+
+1322
+00:24:32,630 --> 00:24:32,640
+position data we want see if you can
+ 
+
+1323
+00:24:32,640 --> 00:24:34,549
+position data we want see if you can
+create something like the sierpinski
+
+1324
+00:24:34,549 --> 00:24:34,559
+create something like the sierpinski
+ 
+
+1325
+00:24:34,559 --> 00:24:36,230
+create something like the sierpinski
+triangle that's displayed in the
+
+1326
+00:24:36,230 --> 00:24:36,240
+triangle that's displayed in the
+ 
+
+1327
+00:24:36,240 --> 00:24:37,990
+triangle that's displayed in the
+tutorials thumbnail
+
+1328
+00:24:37,990 --> 00:24:38,000
+tutorials thumbnail
+ 
+
+1329
+00:24:38,000 --> 00:24:39,669
+tutorials thumbnail
+you will probably want to create a
+
+1330
+00:24:39,669 --> 00:24:39,679
+you will probably want to create a
+ 
+
+1331
+00:24:39,679 --> 00:24:41,590
+you will probably want to create a
+recursive function that generates a
+
+1332
+00:24:41,590 --> 00:24:41,600
+recursive function that generates a
+ 
+
+1333
+00:24:41,600 --> 00:24:43,430
+recursive function that generates a
+vector list of vertices
+
+1334
+00:24:43,430 --> 00:24:43,440
+vector list of vertices
+ 
+
+1335
+00:24:43,440 --> 00:24:45,350
+vector list of vertices
+every three vertices forms the next
+
+1336
+00:24:45,350 --> 00:24:45,360
+every three vertices forms the next
+ 
+
+1337
+00:24:45,360 --> 00:24:47,510
+every three vertices forms the next
+triangle then initialize your model with
+
+1338
+00:24:47,510 --> 00:24:47,520
+triangle then initialize your model with
+ 
+
+1339
+00:24:47,520 --> 00:24:48,950
+triangle then initialize your model with
+that vertex list
+
+1340
+00:24:48,950 --> 00:24:48,960
+that vertex list
+ 
+
+1341
+00:24:48,960 --> 00:24:50,870
+that vertex list
+i've included a link to my solution in
+
+1342
+00:24:50,870 --> 00:24:50,880
+i've included a link to my solution in
+ 
+
+1343
+00:24:50,880 --> 00:24:53,350
+i've included a link to my solution in
+the video's description
+
+1344
+00:24:53,350 --> 00:24:53,360
+the video's description
+ 
+
+1345
+00:24:53,360 --> 00:24:55,909
+the video's description
+and that's it for today we can now pass
+
+1346
+00:24:55,909 --> 00:24:55,919
+and that's it for today we can now pass
+ 
+
+1347
+00:24:55,919 --> 00:24:58,549
+and that's it for today we can now pass
+in a non-fixed amount of position data
+
+1348
+00:24:58,549 --> 00:24:58,559
+in a non-fixed amount of position data
+ 
+
+1349
+00:24:58,559 --> 00:25:00,470
+in a non-fixed amount of position data
+in the next video we will add an
+
+1350
+00:25:00,470 --> 00:25:00,480
+in the next video we will add an
+ 
+
+1351
+00:25:00,480 --> 00:25:02,630
+in the next video we will add an
+additional color attribute and show how
+
+1352
+00:25:02,630 --> 00:25:02,640
+additional color attribute and show how
+ 
+
+1353
+00:25:02,640 --> 00:25:04,870
+additional color attribute and show how
+to pass data from the vertex shader to
+
+1354
+00:25:04,870 --> 00:25:04,880
+to pass data from the vertex shader to
+ 
+
+1355
+00:25:04,880 --> 00:25:06,390
+to pass data from the vertex shader to
+the fragment shader
+
+1356
+00:25:06,390 --> 00:25:06,400
+the fragment shader
+ 
+
+1357
+00:25:06,400 --> 00:25:12,430
+the fragment shader
+thanks for watching and see you next
+
+1358
+00:25:12,430 --> 00:25:12,440
+
+ 
+
+1359
+00:25:12,440 --> 00:25:15,440
+
+time
+

@@ -502,16 +502,16 @@ namespace lve {
     }
   }
 
+  // Esegue la transizione del layout di un'immagine registrando una VkImageMemoryBarrier
+  // per sincronizzare gli accessi in memoria tra i diversi stadi della pipeline Vulkan
   void LveDevice::transitionImageLayout(
-      VkImage image,
-      VkFormat format,
-      VkImageLayout oldLayout,
-      VkImageLayout newLayout,
-      uint32_t mipLevels,
-      uint32_t layerCount) {
-    // uses an image memory barrier transition image layouts and transfer queue
-    // family ownership when VK_SHARING_MODE_EXCLUSIVE is used. There is an
-    // equivalent buffer memory barrier to do this for buffers
+    VkImage image,
+    VkFormat format,
+    VkImageLayout oldLayout,
+    VkImageLayout newLayout,
+    uint32_t mipLevels,
+    uint32_t layerCount) {
+    // Registra la transizione su un command buffer temporaneo one-time
     VkCommandBuffer commandBuffer = beginSingleTimeCommands();
 
     VkImageMemoryBarrier barrier{};
@@ -519,6 +519,7 @@ namespace lve {
     barrier.oldLayout = oldLayout;
     barrier.newLayout = newLayout;
 
+    // Ignora il trasferimento di proprietà tra code distinte (VK_SHARING_MODE_EXCLUSIVE sulla stessa coda)
     barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
     barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
 
@@ -528,6 +529,7 @@ namespace lve {
     barrier.subresourceRange.baseArrayLayer = 0;
     barrier.subresourceRange.layerCount = layerCount;
 
+    // Determina la maschera di aspetto corretta in base al layout di destinazione (colore vs profondità/stencil)
     if (newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
       barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
       if (format == VK_FORMAT_D32_SFLOAT_S8_UINT || format == VK_FORMAT_D24_UNORM_S8_UINT) {
@@ -540,6 +542,7 @@ namespace lve {
     VkPipelineStageFlags sourceStage;
     VkPipelineStageFlags destinationStage;
 
+    // Caso 1: Da layout indefinito a destinazione di trasferimento (copia da staging buffer)
     if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
       barrier.srcAccessMask = 0;
       barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -547,43 +550,47 @@ namespace lve {
       sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
       destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
     } else if (
-        oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
+      oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
       barrier.srcAccessMask = 0;
       barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
 
       sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
       destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+      // Caso 2: Da destinazione di trasferimento a sola lettura per campionamento negli shader (diffuseMap)
     } else if (
-        oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
-        newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+      oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL &&
+      newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
       barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
       barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
 
       sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
       destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+      // Caso 3: Da layout indefinito ad attachment di profondità/stencil
     } else if (
-        oldLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
-        newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
+      oldLayout == VK_IMAGE_LAYOUT_UNDEFINED &&
+      newLayout == VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL) {
       barrier.srcAccessMask = 0;
       barrier.dstAccessMask =
-          VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
+        VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_READ_BIT | VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT;
 
       sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
       destinationStage = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
     } else {
       throw std::invalid_argument("unsupported layout transition!");
     }
+
+    // Invia la barriera di sincronizzazione alla pipeline
     vkCmdPipelineBarrier(
-        commandBuffer,
-        sourceStage,
-        destinationStage,
-        0,
-        0,
-        nullptr,
-        0,
-        nullptr,
-        1,
-        &barrier);
+      commandBuffer,
+      sourceStage,
+      destinationStage,
+      0,
+      0,
+      nullptr,
+      0,
+      nullptr,
+      1,
+      &barrier);
 
     endSingleTimeCommands(commandBuffer);
   }

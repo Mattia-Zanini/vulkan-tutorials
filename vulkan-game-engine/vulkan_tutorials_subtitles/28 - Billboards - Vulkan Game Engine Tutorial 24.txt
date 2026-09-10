@@ -1,0 +1,946 @@
+1
+00:00:01,489 --> 00:00:07,370
+So one thing I would like to add is some visual
+indication for the light object.
+
+2
+00:00:07,370 --> 00:00:09,660
+There are a variety of ways we could do this.
+
+3
+00:00:09,660 --> 00:00:13,940
+We could render a spherical model using the
+pipeline we currently have.
+
+4
+00:00:13,940 --> 00:00:18,820
+Or More advanced methods might render light
+sources using some sort of post-processing
+
+5
+00:00:18,820 --> 00:00:19,910
+effect.
+
+6
+00:00:19,910 --> 00:00:25,509
+However I would like to take this opportunity
+to add a second rendering system to the engine,
+
+7
+00:00:25,509 --> 00:00:28,660
+and to introduce a topic known as billboards.
+
+8
+00:00:28,660 --> 00:00:34,750
+A billboard is a flat 2D object embedded in
+the 3D world, but has the additional property
+
+9
+00:00:34,750 --> 00:00:37,540
+that it is always facing the camera.
+
+10
+00:00:37,540 --> 00:00:41,590
+No matter how the camera moves or rotates,
+the billboard will always face the camera
+
+11
+00:00:41,590 --> 00:00:42,590
+to some extent.
+
+12
+00:00:42,590 --> 00:00:43,590
+Show billboard not rotating, and then a billboard
+rotating, also screen shot the alternative
+
+13
+00:00:43,590 --> 00:00:44,590
+solution
+
+14
+00:00:44,590 --> 00:00:46,950
+It’s like if someones watching you, and
+no matter where you move or look, they turn
+
+15
+00:00:46,950 --> 00:00:48,530
+to face you.
+
+16
+00:00:48,530 --> 00:00:52,320
+Billboards can be used for a wide range of
+things, such as placing health bars above
+
+17
+00:00:52,320 --> 00:00:56,850
+the heads of enemies, or for representing
+objects that don’t have a physical opaque
+
+18
+00:00:56,850 --> 00:01:00,860
+surface, things such as clouds, grass, smoke
+or particles.
+
+19
+00:01:00,860 --> 00:01:05,360
+There are a few variations on how exactly
+a billboard can work based on how it aligns
+
+20
+00:01:05,360 --> 00:01:07,490
+itself to the view.
+
+21
+00:01:07,490 --> 00:01:11,439
+Screen aligned billboards align themselves
+to the camera’s viewing plane.
+
+22
+00:01:11,439 --> 00:01:15,729
+This means that the billboard's rotation is
+dependent on the camera’s rotation but not
+
+23
+00:01:15,729 --> 00:01:17,180
+it’s positioning.
+
+24
+00:01:17,180 --> 00:01:21,270
+An alternative method is viewpoint oriented
+billboards.
+
+25
+00:01:21,270 --> 00:01:26,229
+With this style of billboard it will always
+orient itself to directly face the camera
+
+26
+00:01:26,229 --> 00:01:30,430
+and therefore is affected by both the rotation
+and position of the camera.
+
+27
+00:01:30,430 --> 00:01:35,329
+There are even more options than just the
+two I mention here, axis aligned billboards
+
+28
+00:01:35,329 --> 00:01:40,009
+are commonly used for displaying trees, or
+for example variations displaying a fixed
+
+29
+00:01:40,009 --> 00:01:42,280
+size regardless of distance.
+
+30
+00:01:42,280 --> 00:01:46,640
+Definitely check out the additional resources
+provided for a more complete description of
+
+31
+00:01:46,640 --> 00:01:47,819
+this topic.
+
+32
+00:01:47,819 --> 00:01:52,369
+For this tutorial we will be using screen
+aligned billboards as they are relatively
+
+33
+00:01:52,369 --> 00:01:58,030
+simple to implement and work well for small
+symmetrical objects like point lights.
+
+34
+00:01:58,030 --> 00:02:03,159
+The billboard will be pinned to a single point
+in 3D world space, and will have a width and
+
+35
+00:02:03,159 --> 00:02:04,159
+height.
+
+36
+00:02:04,159 --> 00:02:08,119
+Each vertex position of the billboard will
+be calculated in a vertex shader.
+
+37
+00:02:08,119 --> 00:02:12,670
+This is accomplished by first starting at
+the center point, and then displacing each
+
+38
+00:02:12,670 --> 00:02:15,830
+vertex by the camera’s up and right vector.
+
+39
+00:02:15,830 --> 00:02:19,680
+This will create a flat object made up of
+two triangles, always aligned to face the
+
+40
+00:02:19,680 --> 00:02:20,680
+camera.
+
+41
+00:02:20,680 --> 00:02:22,480
+Ok let’s get to coding.
+
+42
+00:02:22,480 --> 00:02:27,710
+So to render a billboard we need to be able
+to extract the camera up and right vector
+
+43
+00:02:27,710 --> 00:02:30,630
+in world space within the vertex shader.
+
+44
+00:02:30,630 --> 00:02:35,810
+Currently we have our projection and view
+matrix combined, so in the app implementation
+
+45
+00:02:35,810 --> 00:02:38,020
+I’m going to separate these matrices.
+
+46
+00:02:38,020 --> 00:02:43,260
+And then below in the render loop, set the
+ubo projection field to just the camera projection,
+
+47
+00:02:43,260 --> 00:02:46,820
+and the ubo view to the camera view.
+
+48
+00:02:46,820 --> 00:02:51,880
+Now because we’ve changed the format of
+our uniform buffer, we need to update the
+
+49
+00:02:51,880 --> 00:02:54,320
+definitions in the simple shader files to
+match.
+
+50
+00:02:54,320 --> 00:02:59,610
+In the vertex shader I’ll break the projection
+view matrix into projection and view fields,
+
+51
+00:02:59,610 --> 00:03:04,820
+and will also change the calculation for the
+gl position value to use these separate matrices.
+
+52
+00:03:04,820 --> 00:03:09,560
+Don’t forget here that matrix multiplication
+order matters, so you must have a projection
+
+53
+00:03:09,560 --> 00:03:12,450
+times view and not the other way around.
+
+54
+00:03:12,450 --> 00:03:14,940
+This is probably the last time I’ll mention
+this.
+
+55
+00:03:14,940 --> 00:03:19,690
+I’ll copy the updated ubo structure definition,
+and navigate to my fragment shader to also
+
+56
+00:03:19,690 --> 00:03:21,640
+update the definition there.
+
+57
+00:03:21,640 --> 00:03:26,410
+So we haven’t changed any of the program
+behaviour, but as a quick sanity check let's
+
+58
+00:03:26,410 --> 00:03:29,560
+make sure that everything is still working
+as before.
+
+59
+00:03:29,560 --> 00:03:33,760
+Build and run your program, making sure to
+recompile your shaders, but by now that should
+
+60
+00:03:33,760 --> 00:03:36,130
+really be an automatic build step.
+
+61
+00:03:36,130 --> 00:03:38,700
+Ok so everythings still working.
+
+62
+00:03:38,700 --> 00:03:44,080
+Now to render the light source we’re going
+to create a second independent rendering system!
+
+63
+00:03:44,080 --> 00:03:48,710
+Within my project src directory I’m going
+to create a new folder called systems.
+
+64
+00:03:48,710 --> 00:03:53,410
+The build system we created in the previous
+tutorial should automatically detect any src
+
+65
+00:03:53,410 --> 00:03:55,880
+code even within subdirectories.
+
+66
+00:03:55,880 --> 00:03:58,350
+This will make structuring the project easy.
+
+67
+00:03:58,350 --> 00:04:02,330
+As the tutorials continue I’ll reorganize
+the project bit by bit.
+
+68
+00:04:02,330 --> 00:04:07,340
+For now though I’ll just move the simple
+render system to the systems folder, and then
+
+69
+00:04:07,340 --> 00:04:14,560
+duplicate these files to act as a starting
+point for the point light system.
+
+70
+00:04:14,560 --> 00:04:19,060
+After renaming the two files, navigate to
+the point light system header and rename all
+
+71
+00:04:19,060 --> 00:04:21,900
+occurrences of the class to PointLightSystem.
+
+72
+00:04:21,900 --> 00:04:27,270
+I’m also going to change the renderGameObjects
+function to just be called render as I think
+
+73
+00:04:27,270 --> 00:04:30,479
+this makes a bit more sense in this context.
+
+74
+00:04:30,479 --> 00:04:35,900
+For some reason,I had to close my vscode project
+and re-open to get the detection for my include
+
+75
+00:04:35,900 --> 00:04:38,599
+paths to be properly picked up by intellisense.
+
+76
+00:04:38,599 --> 00:04:42,960
+I’m not sure as to why that was exactly,
+probably something to do with creating the
+
+77
+00:04:42,960 --> 00:04:44,539
+new folder, so..
+
+78
+00:04:44,539 --> 00:04:46,870
+Just you may need to do that as well.
+
+79
+00:04:46,870 --> 00:04:53,080
+Ok now in the point light implementation,
+I need to update my initial include statement.
+
+80
+00:04:53,080 --> 00:04:57,430
+We can remove the push constant struct definition
+here as that’s only relevant to our simple
+
+81
+00:04:57,430 --> 00:05:03,710
+render system, and then replace each occurrence
+of simple render system with the new classes
+
+82
+00:05:03,710 --> 00:05:05,699
+name.
+
+83
+00:05:05,699 --> 00:05:08,450
+The constructor and destructor are both good
+as is.
+
+84
+00:05:08,450 --> 00:05:12,330
+I’m going to just comment out the code for
+the push constant range.
+
+85
+00:05:12,330 --> 00:05:17,110
+We don’t have one yet, but in an upcoming
+tutorial we will be adding this back in.
+
+86
+00:05:17,110 --> 00:05:21,680
+So in the pipeline layout info, let’s also
+update the pushcontant fields to use a count
+
+87
+00:05:21,680 --> 00:05:24,960
+of 0 and a nullptr for the ranges.
+
+88
+00:05:24,960 --> 00:05:30,680
+In the create pipeline function, we will be
+using new shader files specific to this system.
+
+89
+00:05:30,680 --> 00:05:35,330
+So update the shader path files to use point
+light dot vert and dot frag.
+
+90
+00:05:35,330 --> 00:05:40,330
+The render game objects function can be renamed
+to just render, and then we’re still going
+
+91
+00:05:40,330 --> 00:05:45,449
+to bind the systems pipeline and descriptor
+sets just as before, but all of this code
+
+92
+00:05:45,449 --> 00:05:48,090
+for drawing model objects can be removed.
+
+93
+00:05:48,090 --> 00:05:53,300
+We’re going to use a similar trick to what
+we had when drawing your first triangle.
+
+94
+00:05:53,300 --> 00:05:58,870
+To draw the light, we can use a single vk
+command draw that will draw 6 vertices.
+
+95
+00:05:58,870 --> 00:06:03,129
+The billboard will be a square object made
+up of two triangles, so 3 vertices for the
+
+96
+00:06:03,129 --> 00:06:06,710
+first triangle and 3 more for triangle number
+2.
+
+97
+00:06:06,710 --> 00:06:11,699
+The vertex positions will be hardcoded into
+the point light vertex file, as I’ll demonstrate
+
+98
+00:06:11,699 --> 00:06:14,319
+in just a moment.
+
+99
+00:06:14,319 --> 00:06:18,770
+In your shaders directory create new files
+for point light dot vert and point light dot
+
+100
+00:06:18,770 --> 00:06:19,990
+frag.
+
+101
+00:06:19,990 --> 00:06:26,300
+Starting with the vertex file, we specify
+the glsl version being used as version 450,
+
+102
+00:06:26,300 --> 00:06:29,680
+and then I have provided a paste bin link
+with the vertex position offsets that can
+
+103
+00:06:29,680 --> 00:06:31,909
+be copied into here.
+
+104
+00:06:31,909 --> 00:06:36,969
+These values will be used to create the billboard
+object by offsetting each vertex position
+
+105
+00:06:36,969 --> 00:06:41,939
+from the point lights location, in the x and
+y camera space directions.
+
+106
+00:06:41,939 --> 00:06:46,490
+Next I’m going to declare a vertex shader
+output value at location 0, so we can access
+
+107
+00:06:46,490 --> 00:06:50,240
+the linearly interpolated offset within the
+fragment shader.
+
+108
+00:06:50,240 --> 00:06:55,229
+Following that we have the same ubo struct
+definition as used by the simple render system
+
+109
+00:06:55,229 --> 00:06:56,339
+shaders.
+
+110
+00:06:56,339 --> 00:07:00,740
+For the engine, I’m structuring things so
+that the global ubo object will be the same
+
+111
+00:07:00,740 --> 00:07:02,750
+for every shader we create.
+
+112
+00:07:02,750 --> 00:07:07,180
+Where inputs can start to vary between shaders
+will be by adding additional shader specific
+
+113
+00:07:07,180 --> 00:07:08,199
+descriptor sets.
+
+114
+00:07:08,199 --> 00:07:13,800
+Then I’m going to declare a constant value
+specifying the size of the billboard object
+
+115
+00:07:13,800 --> 00:07:15,789
+called Light_radius.
+
+116
+00:07:15,789 --> 00:07:20,099
+We can make this a push constant in a future
+tutorial, but for now we’ll stick with just
+
+117
+00:07:20,099 --> 00:07:22,120
+using a fixed value.
+
+118
+00:07:22,120 --> 00:07:24,340
+Finally we need to write the main function.
+
+119
+00:07:24,340 --> 00:07:27,030
+To start we set the fragOffset output value.
+
+120
+00:07:27,030 --> 00:07:30,999
+We’re going to use the same trick as we
+did in the early tutorials by using the special
+
+121
+00:07:30,999 --> 00:07:36,919
+variable gl vertex index which holds the index
+for the vertex currently being processed.
+
+122
+00:07:36,919 --> 00:07:41,860
+Then we need to extract the camera up and
+right vectors from the view matrix, these
+
+123
+00:07:41,860 --> 00:07:43,180
+will be in world space.
+
+124
+00:07:43,180 --> 00:07:50,759
+The 3 elements of the first row of the view
+matrix make up the camera right vector, and
+
+125
+00:07:50,759 --> 00:07:56,159
+the first 3 elements of the second row make
+up the camera up vector.
+
+126
+00:07:56,159 --> 00:08:01,059
+Using these we can calculate the vertex position
+in world space.
+
+127
+00:08:01,059 --> 00:08:05,659
+We start at the light position which is already
+in world space, and then apply the x and y
+
+128
+00:08:05,659 --> 00:08:18,279
+offsets by the camera vectors.
+
+129
+00:08:18,279 --> 00:08:22,249
+And as the last step we compute the final
+gl position by applying the projection and
+
+130
+00:08:22,249 --> 00:08:25,490
+view matrices to the position in world space.
+
+131
+00:08:25,490 --> 00:08:28,560
+Before moving on there are a couple things
+I’d like to point out.
+
+132
+00:08:28,560 --> 00:08:33,229
+If you are concerned about the extra matrix
+multiplication we now need to perform, a possible
+
+133
+00:08:33,229 --> 00:08:39,780
+optimization is to also pass in the pre-computed
+projection view matrix in the global ubo.
+
+134
+00:08:39,780 --> 00:08:44,400
+But I don’t think this would at least currently
+make any measurable performance difference.
+
+135
+00:08:44,400 --> 00:08:49,570
+Next there’s an alternative method for computing
+the final position by applying the offsets
+
+136
+00:08:49,570 --> 00:08:54,060
+to the position in camera space, rather than
+doing the initial computation using the position
+
+137
+00:08:54,060 --> 00:08:55,100
+in world space.
+
+138
+00:08:55,100 --> 00:08:58,450
+It might be a good exercise to try and come
+up with that yourself.
+
+139
+00:08:58,450 --> 00:09:03,120
+I really can’t emphasize enough how beneficial
+it is for anyone working on computer graphics
+
+140
+00:09:03,120 --> 00:09:08,080
+to gain a really good understanding of these
+transformations and sequence of spaces.
+
+141
+00:09:08,080 --> 00:09:12,410
+I’ll show the other possible solution after
+we get things compiling.
+
+142
+00:09:12,410 --> 00:09:15,860
+Ok, the fragment shader implementation is
+really easy.
+
+143
+00:09:15,860 --> 00:09:18,380
+We specify the version of glsl.
+
+144
+00:09:18,380 --> 00:09:24,000
+Then we need to declare the fragment shader
+inputs, so at location 0 we have the fragOffset
+
+145
+00:09:24,000 --> 00:09:25,000
+value.
+
+146
+00:09:25,000 --> 00:09:31,800
+The output is the same as the simple shaders,
+with a vec4 outcolor at location 0.
+
+147
+00:09:31,800 --> 00:09:37,160
+Then we have the same global ubo struct so
+copy and paste that in, and finally our main
+
+148
+00:09:37,160 --> 00:09:42,500
+function is as simple as it gets, for now
+we’ll just set the outColor to equal a vec4
+
+149
+00:09:42,500 --> 00:09:47,050
+with our light color and an opacity of 1
+
+150
+00:09:47,050 --> 00:09:52,509
+Ok almost finished, in the first app implementation
+I need to update the include statement to
+
+151
+00:09:52,509 --> 00:10:00,250
+look into the systems directory, and I’ll
+also include the point light system.
+
+152
+00:10:00,250 --> 00:10:04,899
+Then below where we have the simple render
+system initialization I will create a point
+
+153
+00:10:04,899 --> 00:10:11,019
+light system.
+
+154
+00:10:11,019 --> 00:10:15,640
+And in the render loop I’ll call point light
+system dot render, passing in the frame’s
+
+155
+00:10:15,640 --> 00:10:16,640
+information.
+
+156
+00:10:16,640 --> 00:10:21,910
+And that’s it, we can build and run, and
+now if you zoom a little back you should be
+
+157
+00:10:21,910 --> 00:10:24,670
+able to see the point light object being rendered.
+
+158
+00:10:24,670 --> 00:10:29,209
+Note how as the camera rotates, the billboard
+always rotates to face the camera directly
+
+159
+00:10:29,209 --> 00:10:30,750
+on.
+
+160
+00:10:30,750 --> 00:10:34,750
+I think a circular light would look a lot
+better, and one way to do this easily is to
+
+161
+00:10:34,750 --> 00:10:38,670
+discard any pixels that are outside the point
+light's radius.
+
+162
+00:10:38,670 --> 00:10:42,490
+We can do this by using the fragOffset input
+in the fragment shader.
+
+163
+00:10:42,490 --> 00:10:46,600
+We first calculate the distance the fragment
+is offset from the lights position.
+
+164
+00:10:46,600 --> 00:10:51,680
+Note that based on how we set up our offsets,
+the fragOffset x and y values will always
+
+165
+00:10:51,680 --> 00:10:56,639
+be in the range -1 to 1, no matter how large
+the billboard is made.
+
+166
+00:10:56,639 --> 00:11:00,569
+So if the distance is greater than 1, we discard.
+
+167
+00:11:00,569 --> 00:11:04,470
+Discard is a special word that can only be
+used within fragment shaders.
+
+168
+00:11:04,470 --> 00:11:09,560
+It tells the pipeline to throw away this fragment
+and return, this means the outcolor will never
+
+169
+00:11:09,560 --> 00:11:11,889
+be set for this fragment.
+
+170
+00:11:11,889 --> 00:11:15,870
+If you run your code again the light should
+now appear spherical.
+
+171
+00:11:15,870 --> 00:11:19,769
+We can make the light object larger or smaller
+by changing the value of the light radius
+
+172
+00:11:19,769 --> 00:11:22,089
+constant in the vertex shader.
+
+173
+00:11:22,089 --> 00:11:26,890
+Now would also be a good time to try calculating
+the vertex positions using the alternative
+
+174
+00:11:26,890 --> 00:11:29,319
+method I mentioned before.
+
+175
+00:11:29,319 --> 00:11:32,250
+And for those interested, here’s my solution.
+
+176
+00:11:32,250 --> 00:11:36,130
+Ok this tutorials already a bit longer than
+I would have liked but there’s one final
+
+177
+00:11:36,130 --> 00:11:40,130
+thing I’d like to do, and that’s to fix
+these validation layer messages.
+
+178
+00:11:40,130 --> 00:11:44,149
+We’re getting these warnings because the
+point light pipeline expects there to be the
+
+179
+00:11:44,149 --> 00:11:48,500
+same vertex attributes that we use in the
+simple shader to be present.
+
+180
+00:11:48,500 --> 00:11:52,860
+Any of the shader programs we create that
+require model objects will want to use these
+
+181
+00:11:52,860 --> 00:11:57,100
+values, but that isn’t really the case for
+the point light system.
+
+182
+00:11:57,100 --> 00:12:01,440
+So before finishing today, I would like to
+make these values optional.
+
+183
+00:12:01,440 --> 00:12:06,790
+In the pipeline header file, I will adjust
+the pipeline config info struct to contain
+
+184
+00:12:06,790 --> 00:12:15,470
+vector fields for both the binding descriptions
+and attribute descriptions.
+
+185
+00:12:15,470 --> 00:12:19,480
+Then when a pipeline is created, rather than
+fetching these values statically from the
+
+186
+00:12:19,480 --> 00:12:24,500
+model class, we can use the values provided
+by the config info.
+
+187
+00:12:24,500 --> 00:12:31,620
+I’ll also mark these variables as references,
+this way we avoid causing an unnecessary vector
+
+188
+00:12:31,620 --> 00:12:35,350
+copy operation.
+
+189
+00:12:35,350 --> 00:12:39,319
+In the default pipeline config info I will
+set the default values for the binding and
+
+190
+00:12:39,319 --> 00:12:44,279
+attribute descriptions to use the static values
+fetched from the model class.
+
+191
+00:12:44,279 --> 00:12:49,970
+This way the simple render system will continue
+to work without any additional changes, and
+
+192
+00:12:49,970 --> 00:12:55,920
+using the model's values is what we will likely
+want in most cases, so I think they make sense
+
+193
+00:12:55,920 --> 00:12:57,670
+as the default value.
+
+194
+00:12:57,670 --> 00:13:01,770
+And finally, for the point light system we
+can tell it to not use these descriptions
+
+195
+00:13:01,770 --> 00:13:04,389
+since it is a special case.
+
+196
+00:13:04,389 --> 00:13:09,440
+So in the implementation of point light create
+pipeline, call the clear function on the pipeline
+
+197
+00:13:09,440 --> 00:13:15,089
+configs attribute description \⁠\⁠ and binding
+description vectors.
+
+198
+00:13:15,089 --> 00:13:18,850
+If you run your code again the validation
+errors should now be gone!
+
+199
+00:13:18,850 --> 00:13:23,290
+And we’re finished, stay tuned for the final
+few tutorials on point lights which will be
+
+200
+00:13:23,290 --> 00:13:24,480
+coming out soon.
+
+201
+00:13:24,480 --> 00:13:26,580
+Thank you for watching and keep on coding.
+
+202
+00:13:26,580 --> 00:13:27,160
+Cheers!
+

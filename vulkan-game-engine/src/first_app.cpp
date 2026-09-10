@@ -38,12 +38,13 @@ namespace lve {
                    .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, LveSwapChain::MAX_FRAMES_IN_FLIGHT)
                    .build();
 
+    // Inizializza i descriptor pool dedicati a ciascun frame in flight per allocare descrittori per-oggetto dinamici
     framePools.resize(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
     auto framePoolBuilder = LveDescriptorPool::Builder(lveDevice)
-                                .setMaxSets(1000)
-                                .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000)
-                                .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000)
-                                .setPoolFlags(VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT);
+                              .setMaxSets(1000)
+                              .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000)
+                              .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000)
+                              .setPoolFlags(VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT);
     for (int i = 0; i < framePools.size(); i++) {
       framePools[i] = framePoolBuilder.build();
     }
@@ -143,6 +144,7 @@ namespace lve {
       // in tal caso saltiamo la registrazione e sottomissione dei comandi per questo frame
       if (auto commandBuffer = lveRenderer.beginFrame()) {
         int frameIndex = lveRenderer.getFrameIndex();
+        // Resetta il pool dei descrittori del frame corrente per riutilizzarne la memoria senza riallocazioni
         framePools[frameIndex]->resetPool();
         // Raggruppa i parametri del frame corrente (incluso il descriptor set per-frame dell'UBO) da passare ai render systems
         FrameInfo frameInfo{
@@ -211,7 +213,7 @@ namespace lve {
     // La scala su Y non ha effetto poiché i vertici del quad giacciono sul piano XZ (Y = 0)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/quad.obj");
     std::shared_ptr<LveTexture> marbleTexture =
-        LveTexture::createTextureFromFile(lveDevice, "textures/missing.png");
+      LveTexture::createTextureFromFile(lveDevice, "textures/missing.png");
     auto& floor = gameObjectManager.createGameObject();
     floor.model = lveModel;
     floor.diffuseMap = marbleTexture;

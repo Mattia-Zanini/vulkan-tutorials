@@ -49,17 +49,20 @@ namespace lve {
     pushConstantRange.offset = 0;
     pushConstantRange.size = sizeof(SimplePushConstantData);
 
+    // Costruisce il layout per il Set 1: binding 0 per l'UBO di trasformazione dell'oggetto e binding 1 per la texture diffusa
     renderSystemLayout = LveDescriptorSetLayout::Builder(lveDevice)
-                             .addBinding(
-                                 0,
-                                 VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
-                                 VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT)
-                             .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
-                             .build();
+                           .addBinding(
+                             0,
+                             VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                             VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT)
+                           .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
+                           .build();
 
+    // Elenco dei layout attesi dalla pipeline: Set 0 = UBO globale, Set 1 = dati e texture specifici del game object
     std::vector<VkDescriptorSetLayout> descriptorSetLayouts{
-        globalSetLayout,
-        renderSystemLayout->getDescriptorSetLayout()};
+      globalSetLayout,
+      renderSystemLayout->getDescriptorSetLayout()
+    };
 
     // Pipeline Layout: definisce come passare dati agli shader oltre ai dati dei vertici.
     // Include descrittori (texture, Uniform Buffer Objects) e push constants.
@@ -117,23 +120,26 @@ namespace lve {
       if (obj.model == nullptr)
         continue;
 
+      // Recupera le informazioni sul buffer UBO dell'oggetto (Set 1, Binding 0) e sulla texture diffusa (Set 1, Binding 1)
       auto bufferInfo = obj.getBufferInfo(frameInfo.frameIndex);
       auto imageInfo = obj.diffuseMap->getImageInfo();
       VkDescriptorSet gameObjectDescriptorSet;
+      // Alloca dinamicamente dal pool del frame corrente e aggiorna il descriptor set specifico per questo oggetto
       LveDescriptorWriter(*renderSystemLayout, frameInfo.frameDescriptorPool)
-          .writeBuffer(0, &bufferInfo)
-          .writeImage(1, &imageInfo)
-          .build(gameObjectDescriptorSet);
+        .writeBuffer(0, &bufferInfo)
+        .writeImage(1, &imageInfo)
+        .build(gameObjectDescriptorSet);
 
+      // Associa il descriptor set per-oggetto alla pipeline partendo dal Set 1 (il Set 0 è il descrittore globale)
       vkCmdBindDescriptorSets(
-          frameInfo.commandBuffer,
-          VK_PIPELINE_BIND_POINT_GRAPHICS,
-          pipelineLayout,
-          1,  // starting set (0 is the globalDescriptorSet, 1 is the set specific to this system)
-          1,  // set count
-          &gameObjectDescriptorSet,
-          0,
-          nullptr);
+        frameInfo.commandBuffer,
+        VK_PIPELINE_BIND_POINT_GRAPHICS,
+        pipelineLayout,
+        1, // starting set (0 is the globalDescriptorSet, 1 is the set specific to this system)
+        1, // set count
+        &gameObjectDescriptorSet,
+        0,
+        nullptr);
 
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};

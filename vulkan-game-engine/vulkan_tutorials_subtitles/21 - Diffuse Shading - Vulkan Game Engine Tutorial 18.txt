@@ -1,0 +1,5595 @@
+1
+00:00:00,880 --> 00:00:03,429
+ 
+a lighting model is a simplification of
+
+2
+00:00:03,429 --> 00:00:03,439
+a lighting model is a simplification of
+ 
+
+3
+00:00:03,439 --> 00:00:05,749
+a lighting model is a simplification of
+the light transport equation which
+
+4
+00:00:05,749 --> 00:00:05,759
+the light transport equation which
+ 
+
+5
+00:00:05,759 --> 00:00:08,150
+the light transport equation which
+dictates how light energy distributes
+
+6
+00:00:08,150 --> 00:00:08,160
+dictates how light energy distributes
+ 
+
+7
+00:00:08,160 --> 00:00:11,589
+dictates how light energy distributes
+reflects and transports within a scene
+
+8
+00:00:11,589 --> 00:00:11,599
+reflects and transports within a scene
+ 
+
+9
+00:00:11,599 --> 00:00:13,910
+reflects and transports within a scene
+this is a complex equation that can be
+
+10
+00:00:13,910 --> 00:00:13,920
+this is a complex equation that can be
+ 
+
+11
+00:00:13,920 --> 00:00:16,950
+this is a complex equation that can be
+very expensive to solve computationally
+
+12
+00:00:16,950 --> 00:00:16,960
+very expensive to solve computationally
+ 
+
+13
+00:00:16,960 --> 00:00:19,590
+very expensive to solve computationally
+so instead we often rely on lighting
+
+14
+00:00:19,590 --> 00:00:19,600
+so instead we often rely on lighting
+ 
+
+15
+00:00:19,600 --> 00:00:21,910
+so instead we often rely on lighting
+models which only approximate the light
+
+16
+00:00:21,910 --> 00:00:21,920
+models which only approximate the light
+ 
+
+17
+00:00:21,920 --> 00:00:24,150
+models which only approximate the light
+transport equation but are simpler to
+
+18
+00:00:24,150 --> 00:00:24,160
+transport equation but are simpler to
+ 
+
+19
+00:00:24,160 --> 00:00:26,230
+transport equation but are simpler to
+calculate and map well to graphics
+
+20
+00:00:26,230 --> 00:00:26,240
+calculate and map well to graphics
+ 
+
+21
+00:00:26,240 --> 00:00:27,269
+calculate and map well to graphics
+hardware
+
+22
+00:00:27,269 --> 00:00:27,279
+hardware
+ 
+
+23
+00:00:27,279 --> 00:00:29,429
+hardware
+one such model is the diffuse or
+
+24
+00:00:29,429 --> 00:00:29,439
+one such model is the diffuse or
+ 
+
+25
+00:00:29,439 --> 00:00:31,509
+one such model is the diffuse or
+lambertian shading model
+
+26
+00:00:31,509 --> 00:00:31,519
+lambertian shading model
+ 
+
+27
+00:00:31,519 --> 00:00:33,510
+lambertian shading model
+it makes the assumption that the surface
+
+28
+00:00:33,510 --> 00:00:33,520
+it makes the assumption that the surface
+ 
+
+29
+00:00:33,520 --> 00:00:36,150
+it makes the assumption that the surface
+reflects incoming light equally in all
+
+30
+00:00:36,150 --> 00:00:36,160
+reflects incoming light equally in all
+ 
+
+31
+00:00:36,160 --> 00:00:37,670
+reflects incoming light equally in all
+directions
+
+32
+00:00:37,670 --> 00:00:37,680
+directions
+ 
+
+33
+00:00:37,680 --> 00:00:39,750
+directions
+this is a very basic model that works
+
+34
+00:00:39,750 --> 00:00:39,760
+this is a very basic model that works
+ 
+
+35
+00:00:39,760 --> 00:00:43,350
+this is a very basic model that works
+well for non-metallic matte surfaces
+
+36
+00:00:43,350 --> 00:00:43,360
+well for non-metallic matte surfaces
+ 
+
+37
+00:00:43,360 --> 00:00:45,510
+well for non-metallic matte surfaces
+this is basically the opposite of a
+
+38
+00:00:45,510 --> 00:00:45,520
+this is basically the opposite of a
+ 
+
+39
+00:00:45,520 --> 00:00:47,110
+this is basically the opposite of a
+mirror surface
+
+40
+00:00:47,110 --> 00:00:47,120
+mirror surface
+ 
+
+41
+00:00:47,120 --> 00:00:49,910
+mirror surface
+with a theoretical perfect mirror every
+
+42
+00:00:49,910 --> 00:00:49,920
+with a theoretical perfect mirror every
+ 
+
+43
+00:00:49,920 --> 00:00:51,910
+with a theoretical perfect mirror every
+incoming light ray is perfectly
+
+44
+00:00:51,910 --> 00:00:51,920
+incoming light ray is perfectly
+ 
+
+45
+00:00:51,920 --> 00:00:54,150
+incoming light ray is perfectly
+reflected with the angle of incidence
+
+46
+00:00:54,150 --> 00:00:54,160
+reflected with the angle of incidence
+ 
+
+47
+00:00:54,160 --> 00:00:56,549
+reflected with the angle of incidence
+matching the angle of reflection and
+
+48
+00:00:56,549 --> 00:00:56,559
+matching the angle of reflection and
+ 
+
+49
+00:00:56,559 --> 00:00:58,630
+matching the angle of reflection and
+zero light is scattered
+
+50
+00:00:58,630 --> 00:00:58,640
+zero light is scattered
+ 
+
+51
+00:00:58,640 --> 00:01:00,950
+zero light is scattered
+on the other hand a perfect lambertian
+
+52
+00:01:00,950 --> 00:01:00,960
+on the other hand a perfect lambertian
+ 
+
+53
+00:01:00,960 --> 00:01:02,950
+on the other hand a perfect lambertian
+surface would scatter an incoming light
+
+54
+00:01:02,950 --> 00:01:02,960
+surface would scatter an incoming light
+ 
+
+55
+00:01:02,960 --> 00:01:05,990
+surface would scatter an incoming light
+ray equally in all directions
+
+56
+00:01:05,990 --> 00:01:06,000
+ray equally in all directions
+ 
+
+57
+00:01:06,000 --> 00:01:08,310
+ray equally in all directions
+lambertian surfaces obey lambert's
+
+58
+00:01:08,310 --> 00:01:08,320
+lambertian surfaces obey lambert's
+ 
+
+59
+00:01:08,320 --> 00:01:10,630
+lambertian surfaces obey lambert's
+cosine law which states that the color
+
+60
+00:01:10,630 --> 00:01:10,640
+cosine law which states that the color
+ 
+
+61
+00:01:10,640 --> 00:01:12,710
+cosine law which states that the color
+of a surface is proportional to the
+
+62
+00:01:12,710 --> 00:01:12,720
+of a surface is proportional to the
+ 
+
+63
+00:01:12,720 --> 00:01:15,350
+of a surface is proportional to the
+cosine of the angle between the surface
+
+64
+00:01:15,350 --> 00:01:15,360
+cosine of the angle between the surface
+ 
+
+65
+00:01:15,360 --> 00:01:17,190
+cosine of the angle between the surface
+normal and the direction to the light
+
+66
+00:01:17,190 --> 00:01:17,200
+normal and the direction to the light
+ 
+
+67
+00:01:17,200 --> 00:01:18,070
+normal and the direction to the light
+source
+
+68
+00:01:18,070 --> 00:01:18,080
+source
+ 
+
+69
+00:01:18,080 --> 00:01:20,149
+source
+the surface normal is a unit vector
+
+70
+00:01:20,149 --> 00:01:20,159
+the surface normal is a unit vector
+ 
+
+71
+00:01:20,159 --> 00:01:22,149
+the surface normal is a unit vector
+that's perpendicular to the plane of the
+
+72
+00:01:22,149 --> 00:01:22,159
+that's perpendicular to the plane of the
+ 
+
+73
+00:01:22,159 --> 00:01:23,190
+that's perpendicular to the plane of the
+surface
+
+74
+00:01:23,190 --> 00:01:23,200
+surface
+ 
+
+75
+00:01:23,200 --> 00:01:25,350
+surface
+so this is the vector that starts on the
+
+76
+00:01:25,350 --> 00:01:25,360
+so this is the vector that starts on the
+ 
+
+77
+00:01:25,360 --> 00:01:28,710
+so this is the vector that starts on the
+surface and points directly away
+
+78
+00:01:28,710 --> 00:01:28,720
+surface and points directly away
+ 
+
+79
+00:01:28,720 --> 00:01:30,789
+surface and points directly away
+normals are generated by modeling
+
+80
+00:01:30,789 --> 00:01:30,799
+normals are generated by modeling
+ 
+
+81
+00:01:30,799 --> 00:01:33,830
+normals are generated by modeling
+software for us and provided in the mesh
+
+82
+00:01:33,830 --> 00:01:33,840
+software for us and provided in the mesh
+ 
+
+83
+00:01:33,840 --> 00:01:36,550
+software for us and provided in the mesh
+object file for each vertex
+
+84
+00:01:36,550 --> 00:01:36,560
+object file for each vertex
+ 
+
+85
+00:01:36,560 --> 00:01:39,670
+object file for each vertex
+the dot product of two vectors a and b
+
+86
+00:01:39,670 --> 00:01:39,680
+the dot product of two vectors a and b
+ 
+
+87
+00:01:39,680 --> 00:01:41,749
+the dot product of two vectors a and b
+is equal to the length of a times the
+
+88
+00:01:41,749 --> 00:01:41,759
+is equal to the length of a times the
+ 
+
+89
+00:01:41,759 --> 00:01:42,870
+is equal to the length of a times the
+length of b
+
+90
+00:01:42,870 --> 00:01:42,880
+length of b
+ 
+
+91
+00:01:42,880 --> 00:01:45,670
+length of b
+times cos theta where theta is the angle
+
+92
+00:01:45,670 --> 00:01:45,680
+times cos theta where theta is the angle
+ 
+
+93
+00:01:45,680 --> 00:01:47,830
+times cos theta where theta is the angle
+between the two vectors
+
+94
+00:01:47,830 --> 00:01:47,840
+between the two vectors
+ 
+
+95
+00:01:47,840 --> 00:01:49,990
+between the two vectors
+if both vectors are normalized to be of
+
+96
+00:01:49,990 --> 00:01:50,000
+if both vectors are normalized to be of
+ 
+
+97
+00:01:50,000 --> 00:01:53,270
+if both vectors are normalized to be of
+unit length then a dot b is equal to cos
+
+98
+00:01:53,270 --> 00:01:53,280
+unit length then a dot b is equal to cos
+ 
+
+99
+00:01:53,280 --> 00:01:56,310
+unit length then a dot b is equal to cos
+theta therefore in vector form the
+
+100
+00:01:56,310 --> 00:01:56,320
+theta therefore in vector form the
+ 
+
+101
+00:01:56,320 --> 00:01:58,709
+theta therefore in vector form the
+reflected light intensity for any
+
+102
+00:01:58,709 --> 00:01:58,719
+reflected light intensity for any
+ 
+
+103
+00:01:58,719 --> 00:02:00,709
+reflected light intensity for any
+outgoing direction can be calculated
+
+104
+00:02:00,709 --> 00:02:00,719
+outgoing direction can be calculated
+ 
+
+105
+00:02:00,719 --> 00:02:02,630
+outgoing direction can be calculated
+using the dot product of the surface
+
+106
+00:02:02,630 --> 00:02:02,640
+using the dot product of the surface
+ 
+
+107
+00:02:02,640 --> 00:02:05,109
+using the dot product of the surface
+normal and a normalized vector pointing
+
+108
+00:02:05,109 --> 00:02:05,119
+normal and a normalized vector pointing
+ 
+
+109
+00:02:05,119 --> 00:02:06,789
+normal and a normalized vector pointing
+to the light source
+
+110
+00:02:06,789 --> 00:02:06,799
+to the light source
+ 
+
+111
+00:02:06,799 --> 00:02:09,430
+to the light source
+the intuition behind this equation is
+
+112
+00:02:09,430 --> 00:02:09,440
+the intuition behind this equation is
+ 
+
+113
+00:02:09,440 --> 00:02:11,350
+the intuition behind this equation is
+that as the angle between the light
+
+114
+00:02:11,350 --> 00:02:11,360
+that as the angle between the light
+ 
+
+115
+00:02:11,360 --> 00:02:13,510
+that as the angle between the light
+source direction and surface normal
+
+116
+00:02:13,510 --> 00:02:13,520
+source direction and surface normal
+ 
+
+117
+00:02:13,520 --> 00:02:16,229
+source direction and surface normal
+increases the light is spread out over a
+
+118
+00:02:16,229 --> 00:02:16,239
+increases the light is spread out over a
+ 
+
+119
+00:02:16,239 --> 00:02:18,150
+increases the light is spread out over a
+larger area
+
+120
+00:02:18,150 --> 00:02:18,160
+larger area
+ 
+
+121
+00:02:18,160 --> 00:02:20,070
+larger area
+therefore the outgoing light at any
+
+122
+00:02:20,070 --> 00:02:20,080
+therefore the outgoing light at any
+ 
+
+123
+00:02:20,080 --> 00:02:22,229
+therefore the outgoing light at any
+specific point will be of lower
+
+124
+00:02:22,229 --> 00:02:22,239
+specific point will be of lower
+ 
+
+125
+00:02:22,239 --> 00:02:23,910
+specific point will be of lower
+intensity
+
+126
+00:02:23,910 --> 00:02:23,920
+intensity
+ 
+
+127
+00:02:23,920 --> 00:02:26,150
+intensity
+scratcher pixel has a very in-depth
+
+128
+00:02:26,150 --> 00:02:26,160
+scratcher pixel has a very in-depth
+ 
+
+129
+00:02:26,160 --> 00:02:28,470
+scratcher pixel has a very in-depth
+article going into how the derivation
+
+130
+00:02:28,470 --> 00:02:28,480
+article going into how the derivation
+ 
+
+131
+00:02:28,480 --> 00:02:32,070
+article going into how the derivation
+works out to be a cos theta relationship
+
+132
+00:02:32,070 --> 00:02:32,080
+works out to be a cos theta relationship
+ 
+
+133
+00:02:32,080 --> 00:02:33,990
+works out to be a cos theta relationship
+so if we know the direction to a light
+
+134
+00:02:33,990 --> 00:02:34,000
+so if we know the direction to a light
+ 
+
+135
+00:02:34,000 --> 00:02:36,070
+so if we know the direction to a light
+source we can determine the light's
+
+136
+00:02:36,070 --> 00:02:36,080
+source we can determine the light's
+ 
+
+137
+00:02:36,080 --> 00:02:38,470
+source we can determine the light's
+intensity at any given vertex on the
+
+138
+00:02:38,470 --> 00:02:38,480
+intensity at any given vertex on the
+ 
+
+139
+00:02:38,480 --> 00:02:42,470
+intensity at any given vertex on the
+model by using the normal at that vertex
+
+140
+00:02:42,470 --> 00:02:42,480
+model by using the normal at that vertex
+ 
+
+141
+00:02:42,480 --> 00:02:45,430
+model by using the normal at that vertex
+okay let's get to coding first let's fix
+
+142
+00:02:45,430 --> 00:02:45,440
+okay let's get to coding first let's fix
+ 
+
+143
+00:02:45,440 --> 00:02:47,830
+okay let's get to coding first let's fix
+a mistake from last week in the load
+
+144
+00:02:47,830 --> 00:02:47,840
+a mistake from last week in the load
+ 
+
+145
+00:02:47,840 --> 00:02:49,190
+a mistake from last week in the load
+model function of the model
+
+146
+00:02:49,190 --> 00:02:49,200
+model function of the model
+ 
+
+147
+00:02:49,200 --> 00:02:51,589
+model function of the model
+implementation file my method for
+
+148
+00:02:51,589 --> 00:02:51,599
+implementation file my method for
+ 
+
+149
+00:02:51,599 --> 00:02:53,589
+implementation file my method for
+setting the default color doesn't
+
+150
+00:02:53,589 --> 00:02:53,599
+setting the default color doesn't
+ 
+
+151
+00:02:53,599 --> 00:02:55,990
+setting the default color doesn't
+actually work this is because the
+
+152
+00:02:55,990 --> 00:02:56,000
+actually work this is because the
+ 
+
+153
+00:02:56,000 --> 00:02:59,110
+actually work this is because the
+trip.colors vector is always initialized
+
+154
+00:02:59,110 --> 00:02:59,120
+trip.colors vector is always initialized
+ 
+
+155
+00:02:59,120 --> 00:03:01,750
+trip.colors vector is always initialized
+to be the same size as the trip.vertices
+
+156
+00:03:01,750 --> 00:03:01,760
+to be the same size as the trip.vertices
+ 
+
+157
+00:03:01,760 --> 00:03:04,390
+to be the same size as the trip.vertices
+vector and filled in with ones wherever
+
+158
+00:03:04,390 --> 00:03:04,400
+vector and filled in with ones wherever
+ 
+
+159
+00:03:04,400 --> 00:03:06,710
+vector and filled in with ones wherever
+a color is not provided in the wavefront
+
+160
+00:03:06,710 --> 00:03:06,720
+a color is not provided in the wavefront
+ 
+
+161
+00:03:06,720 --> 00:03:09,670
+a color is not provided in the wavefront
+file so this entire block of code can be
+
+162
+00:03:09,670 --> 00:03:09,680
+file so this entire block of code can be
+ 
+
+163
+00:03:09,680 --> 00:03:12,309
+file so this entire block of code can be
+simplified i'll remove the current
+
+164
+00:03:12,309 --> 00:03:12,319
+simplified i'll remove the current
+ 
+
+165
+00:03:12,319 --> 00:03:14,550
+simplified i'll remove the current
+implementation and then simply duplicate
+
+166
+00:03:14,550 --> 00:03:14,560
+implementation and then simply duplicate
+ 
+
+167
+00:03:14,560 --> 00:03:15,990
+implementation and then simply duplicate
+the lines above
+
+168
+00:03:15,990 --> 00:03:16,000
+the lines above
+ 
+
+169
+00:03:16,000 --> 00:03:20,390
+the lines above
+change vertex.position to vertex.color
+
+170
+00:03:20,390 --> 00:03:20,400
+change vertex.position to vertex.color
+ 
+
+171
+00:03:20,400 --> 00:03:22,470
+change vertex.position to vertex.color
+and a trip dot vertices to a trip dot
+
+172
+00:03:22,470 --> 00:03:22,480
+and a trip dot vertices to a trip dot
+ 
+
+173
+00:03:22,480 --> 00:03:25,110
+and a trip dot vertices to a trip dot
+colors this will work the same as before
+
+174
+00:03:25,110 --> 00:03:25,120
+colors this will work the same as before
+ 
+
+175
+00:03:25,120 --> 00:03:27,110
+colors this will work the same as before
+with the default color being white when
+
+176
+00:03:27,110 --> 00:03:27,120
+with the default color being white when
+ 
+
+177
+00:03:27,120 --> 00:03:29,670
+with the default color being white when
+no color is specified
+
+178
+00:03:29,670 --> 00:03:29,680
+no color is specified
+ 
+
+179
+00:03:29,680 --> 00:03:31,990
+no color is specified
+okay now last week we added the normal
+
+180
+00:03:31,990 --> 00:03:32,000
+okay now last week we added the normal
+ 
+
+181
+00:03:32,000 --> 00:03:34,630
+okay now last week we added the normal
+and uv fields to the vertex struct but
+
+182
+00:03:34,630 --> 00:03:34,640
+and uv fields to the vertex struct but
+ 
+
+183
+00:03:34,640 --> 00:03:36,470
+and uv fields to the vertex struct but
+we haven't yet provided these attribute
+
+184
+00:03:36,470 --> 00:03:36,480
+we haven't yet provided these attribute
+ 
+
+185
+00:03:36,480 --> 00:03:39,830
+we haven't yet provided these attribute
+values to a shader so let's fix that
+
+186
+00:03:39,830 --> 00:03:39,840
+values to a shader so let's fix that
+ 
+
+187
+00:03:39,840 --> 00:03:41,430
+values to a shader so let's fix that
+just above in the get attributes
+
+188
+00:03:41,430 --> 00:03:41,440
+just above in the get attributes
+ 
+
+189
+00:03:41,440 --> 00:03:43,589
+just above in the get attributes
+descriptions function we're going to
+
+190
+00:03:43,589 --> 00:03:43,599
+descriptions function we're going to
+ 
+
+191
+00:03:43,599 --> 00:03:45,509
+descriptions function we're going to
+update this method with attributes for
+
+192
+00:03:45,509 --> 00:03:45,519
+update this method with attributes for
+ 
+
+193
+00:03:45,519 --> 00:03:48,229
+update this method with attributes for
+the normals and texture coordinates
+
+194
+00:03:48,229 --> 00:03:48,239
+the normals and texture coordinates
+ 
+
+195
+00:03:48,239 --> 00:03:50,229
+the normals and texture coordinates
+first though i'm going to change how we
+
+196
+00:03:50,229 --> 00:03:50,239
+first though i'm going to change how we
+ 
+
+197
+00:03:50,239 --> 00:03:53,030
+first though i'm going to change how we
+add the attributes to be more condensed
+
+198
+00:03:53,030 --> 00:03:53,040
+add the attributes to be more condensed
+ 
+
+199
+00:03:53,040 --> 00:03:54,789
+add the attributes to be more condensed
+update the attributes descriptions to
+
+200
+00:03:54,789 --> 00:03:54,799
+update the attributes descriptions to
+ 
+
+201
+00:03:54,799 --> 00:03:57,270
+update the attributes descriptions to
+use an empty initialization
+
+202
+00:03:57,270 --> 00:03:57,280
+use an empty initialization
+ 
+
+203
+00:03:57,280 --> 00:03:59,350
+use an empty initialization
+and then call attributes descriptions
+
+204
+00:03:59,350 --> 00:03:59,360
+and then call attributes descriptions
+ 
+
+205
+00:03:59,360 --> 00:04:00,949
+and then call attributes descriptions
+dot
+
+206
+00:04:00,949 --> 00:04:00,959
+dot
+ 
+
+207
+00:04:00,959 --> 00:04:03,110
+dot
+and in curly braces we have 0 for the
+
+208
+00:04:03,110 --> 00:04:03,120
+and in curly braces we have 0 for the
+ 
+
+209
+00:04:03,120 --> 00:04:04,390
+and in curly braces we have 0 for the
+location
+
+210
+00:04:04,390 --> 00:04:04,400
+location
+ 
+
+211
+00:04:04,400 --> 00:04:06,070
+location
+0 for the binding
+
+212
+00:04:06,070 --> 00:04:06,080
+0 for the binding
+ 
+
+213
+00:04:06,080 --> 00:04:08,630
+0 for the binding
+r32g32b32
+
+214
+00:04:08,630 --> 00:04:08,640
+r32g32b32
+ 
+
+215
+00:04:08,640 --> 00:04:10,229
+r32g32b32
+as the format
+
+216
+00:04:10,229 --> 00:04:10,239
+as the format
+ 
+
+217
+00:04:10,239 --> 00:04:12,710
+as the format
+and finally offset of vertex comma
+
+218
+00:04:12,710 --> 00:04:12,720
+and finally offset of vertex comma
+ 
+
+219
+00:04:12,720 --> 00:04:15,190
+and finally offset of vertex comma
+position then duplicate this line and
+
+220
+00:04:15,190 --> 00:04:15,200
+position then duplicate this line and
+ 
+
+221
+00:04:15,200 --> 00:04:17,990
+position then duplicate this line and
+change the location to be location 1 and
+
+222
+00:04:17,990 --> 00:04:18,000
+change the location to be location 1 and
+ 
+
+223
+00:04:18,000 --> 00:04:21,270
+change the location to be location 1 and
+the offset of vertex to use the color
+
+224
+00:04:21,270 --> 00:04:21,280
+the offset of vertex to use the color
+ 
+
+225
+00:04:21,280 --> 00:04:24,150
+the offset of vertex to use the color
+in my past experience i've often caused
+
+226
+00:04:24,150 --> 00:04:24,160
+in my past experience i've often caused
+ 
+
+227
+00:04:24,160 --> 00:04:26,390
+in my past experience i've often caused
+errors due to making a typo when using
+
+228
+00:04:26,390 --> 00:04:26,400
+errors due to making a typo when using
+ 
+
+229
+00:04:26,400 --> 00:04:29,510
+errors due to making a typo when using
+the previous more verbose form but of
+
+230
+00:04:29,510 --> 00:04:29,520
+the previous more verbose form but of
+ 
+
+231
+00:04:29,520 --> 00:04:31,350
+the previous more verbose form but of
+course feel free to use whatever you
+
+232
+00:04:31,350 --> 00:04:31,360
+course feel free to use whatever you
+ 
+
+233
+00:04:31,360 --> 00:04:32,710
+course feel free to use whatever you
+prefer
+
+234
+00:04:32,710 --> 00:04:32,720
+prefer
+ 
+
+235
+00:04:32,720 --> 00:04:35,189
+prefer
+then just duplicate this line twice more
+
+236
+00:04:35,189 --> 00:04:35,199
+then just duplicate this line twice more
+ 
+
+237
+00:04:35,199 --> 00:04:37,670
+then just duplicate this line twice more
+and update the location value to be 2
+
+238
+00:04:37,670 --> 00:04:37,680
+and update the location value to be 2
+ 
+
+239
+00:04:37,680 --> 00:04:40,550
+and update the location value to be 2
+and 3. then change the offset of vertex
+
+240
+00:04:40,550 --> 00:04:40,560
+and 3. then change the offset of vertex
+ 
+
+241
+00:04:40,560 --> 00:04:42,070
+and 3. then change the offset of vertex
+to use the normal for the third
+
+242
+00:04:42,070 --> 00:04:42,080
+to use the normal for the third
+ 
+
+243
+00:04:42,080 --> 00:04:45,590
+to use the normal for the third
+attribute and uv for the fourth
+
+244
+00:04:45,590 --> 00:04:45,600
+attribute and uv for the fourth
+ 
+
+245
+00:04:45,600 --> 00:04:47,510
+attribute and uv for the fourth
+finally update the uv attribute
+
+246
+00:04:47,510 --> 00:04:47,520
+finally update the uv attribute
+ 
+
+247
+00:04:47,520 --> 00:04:50,469
+finally update the uv attribute
+descriptions format to only use an r32
+
+248
+00:04:50,469 --> 00:04:50,479
+descriptions format to only use an r32
+ 
+
+249
+00:04:50,479 --> 00:04:53,510
+descriptions format to only use an r32
+g32 float since texture coordinates only
+
+250
+00:04:53,510 --> 00:04:53,520
+g32 float since texture coordinates only
+ 
+
+251
+00:04:53,520 --> 00:04:55,830
+g32 float since texture coordinates only
+have two components
+
+252
+00:04:55,830 --> 00:04:55,840
+have two components
+ 
+
+253
+00:04:55,840 --> 00:04:58,550
+have two components
+next we need to update the vertex shader
+
+254
+00:04:58,550 --> 00:04:58,560
+next we need to update the vertex shader
+ 
+
+255
+00:04:58,560 --> 00:05:00,430
+next we need to update the vertex shader
+in the shaders directory open
+
+256
+00:05:00,430 --> 00:05:00,440
+in the shaders directory open
+ 
+
+257
+00:05:00,440 --> 00:05:02,950
+in the shaders directory open
+simpleshader.vert and add two more lines
+
+258
+00:05:02,950 --> 00:05:02,960
+simpleshader.vert and add two more lines
+ 
+
+259
+00:05:02,960 --> 00:05:05,990
+simpleshader.vert and add two more lines
+declaring the vertex input attributes
+
+260
+00:05:05,990 --> 00:05:06,000
+declaring the vertex input attributes
+ 
+
+261
+00:05:06,000 --> 00:05:08,230
+declaring the vertex input attributes
+these attributes will be at location 2
+
+262
+00:05:08,230 --> 00:05:08,240
+these attributes will be at location 2
+ 
+
+263
+00:05:08,240 --> 00:05:12,550
+these attributes will be at location 2
+and 3 so we'll have in vect3 normal
+
+264
+00:05:12,550 --> 00:05:12,560
+and 3 so we'll have in vect3 normal
+ 
+
+265
+00:05:12,560 --> 00:05:14,189
+and 3 so we'll have in vect3 normal
+followed by
+
+266
+00:05:14,189 --> 00:05:14,199
+followed by
+ 
+
+267
+00:05:14,199 --> 00:05:16,070
+followed by
+invec2uv
+
+268
+00:05:16,070 --> 00:05:16,080
+invec2uv
+ 
+
+269
+00:05:16,080 --> 00:05:17,830
+invec2uv
+next i would have liked to break up the
+
+270
+00:05:17,830 --> 00:05:17,840
+next i would have liked to break up the
+ 
+
+271
+00:05:17,840 --> 00:05:19,909
+next i would have liked to break up the
+push constant definition to define the
+
+272
+00:05:19,909 --> 00:05:19,919
+push constant definition to define the
+ 
+
+273
+00:05:19,919 --> 00:05:22,230
+push constant definition to define the
+projection view and model matrices all
+
+274
+00:05:22,230 --> 00:05:22,240
+projection view and model matrices all
+ 
+
+275
+00:05:22,240 --> 00:05:23,749
+projection view and model matrices all
+individually
+
+276
+00:05:23,749 --> 00:05:23,759
+individually
+ 
+
+277
+00:05:23,759 --> 00:05:25,350
+individually
+this would give us more flexibility
+
+278
+00:05:25,350 --> 00:05:25,360
+this would give us more flexibility
+ 
+
+279
+00:05:25,360 --> 00:05:27,510
+this would give us more flexibility
+within the shader we could calculate the
+
+280
+00:05:27,510 --> 00:05:27,520
+within the shader we could calculate the
+ 
+
+281
+00:05:27,520 --> 00:05:29,590
+within the shader we could calculate the
+vertex position in world space by
+
+282
+00:05:29,590 --> 00:05:29,600
+vertex position in world space by
+ 
+
+283
+00:05:29,600 --> 00:05:31,430
+vertex position in world space by
+multiplying the model matrix by the
+
+284
+00:05:31,430 --> 00:05:31,440
+multiplying the model matrix by the
+ 
+
+285
+00:05:31,440 --> 00:05:32,950
+multiplying the model matrix by the
+vertex position
+
+286
+00:05:32,950 --> 00:05:32,960
+vertex position
+ 
+
+287
+00:05:32,960 --> 00:05:35,270
+vertex position
+for some shader calculations having
+
+288
+00:05:35,270 --> 00:05:35,280
+for some shader calculations having
+ 
+
+289
+00:05:35,280 --> 00:05:37,830
+for some shader calculations having
+these intermediate values is necessary
+
+290
+00:05:37,830 --> 00:05:37,840
+these intermediate values is necessary
+ 
+
+291
+00:05:37,840 --> 00:05:39,749
+these intermediate values is necessary
+such as when we have a point light in
+
+292
+00:05:39,749 --> 00:05:39,759
+such as when we have a point light in
+ 
+
+293
+00:05:39,759 --> 00:05:41,830
+such as when we have a point light in
+world space we can use the vertex
+
+294
+00:05:41,830 --> 00:05:41,840
+world space we can use the vertex
+ 
+
+295
+00:05:41,840 --> 00:05:44,070
+world space we can use the vertex
+position in world space to calculate the
+
+296
+00:05:44,070 --> 00:05:44,080
+position in world space to calculate the
+ 
+
+297
+00:05:44,080 --> 00:05:46,070
+position in world space to calculate the
+direction to the point light for each
+
+298
+00:05:46,070 --> 00:05:46,080
+direction to the point light for each
+ 
+
+299
+00:05:46,080 --> 00:05:47,270
+direction to the point light for each
+vertex
+
+300
+00:05:47,270 --> 00:05:47,280
+vertex
+ 
+
+301
+00:05:47,280 --> 00:05:49,189
+vertex
+however this is where we run into the
+
+302
+00:05:49,189 --> 00:05:49,199
+however this is where we run into the
+ 
+
+303
+00:05:49,199 --> 00:05:52,230
+however this is where we run into the
+limitations of push constants which only
+
+304
+00:05:52,230 --> 00:05:52,240
+limitations of push constants which only
+ 
+
+305
+00:05:52,240 --> 00:05:54,469
+limitations of push constants which only
+guarantee that all platforms support at
+
+306
+00:05:54,469 --> 00:05:54,479
+guarantee that all platforms support at
+ 
+
+307
+00:05:54,479 --> 00:05:57,909
+guarantee that all platforms support at
+least 128 bytes so if we want our code
+
+308
+00:05:57,909 --> 00:05:57,919
+least 128 bytes so if we want our code
+ 
+
+309
+00:05:57,919 --> 00:06:00,790
+least 128 bytes so if we want our code
+to work on all gpu devices we can only
+
+310
+00:06:00,790 --> 00:06:00,800
+to work on all gpu devices we can only
+ 
+
+311
+00:06:00,800 --> 00:06:04,150
+to work on all gpu devices we can only
+include at most two 4x4 matrices in the
+
+312
+00:06:04,150 --> 00:06:04,160
+include at most two 4x4 matrices in the
+ 
+
+313
+00:06:04,160 --> 00:06:07,430
+include at most two 4x4 matrices in the
+push constant block so for today's
+
+314
+00:06:07,430 --> 00:06:07,440
+push constant block so for today's
+ 
+
+315
+00:06:07,440 --> 00:06:09,510
+push constant block so for today's
+tutorial i will instead keep the
+
+316
+00:06:09,510 --> 00:06:09,520
+tutorial i will instead keep the
+ 
+
+317
+00:06:09,520 --> 00:06:11,590
+tutorial i will instead keep the
+transform matrix as is
+
+318
+00:06:11,590 --> 00:06:11,600
+transform matrix as is
+ 
+
+319
+00:06:11,600 --> 00:06:14,150
+transform matrix as is
+but will remove the color push constant
+
+320
+00:06:14,150 --> 00:06:14,160
+but will remove the color push constant
+ 
+
+321
+00:06:14,160 --> 00:06:16,790
+but will remove the color push constant
+and then add a second map4 type storing
+
+322
+00:06:16,790 --> 00:06:16,800
+and then add a second map4 type storing
+ 
+
+323
+00:06:16,800 --> 00:06:19,909
+and then add a second map4 type storing
+just the model matrix so the first
+
+324
+00:06:19,909 --> 00:06:19,919
+just the model matrix so the first
+ 
+
+325
+00:06:19,919 --> 00:06:21,909
+just the model matrix so the first
+transform matrix stores the projection
+
+326
+00:06:21,909 --> 00:06:21,919
+transform matrix stores the projection
+ 
+
+327
+00:06:21,919 --> 00:06:24,309
+transform matrix stores the projection
+times the view times the model matrix
+
+328
+00:06:24,309 --> 00:06:24,319
+times the view times the model matrix
+ 
+
+329
+00:06:24,319 --> 00:06:26,469
+times the view times the model matrix
+and will be used to transform our vertex
+
+330
+00:06:26,469 --> 00:06:26,479
+and will be used to transform our vertex
+ 
+
+331
+00:06:26,479 --> 00:06:27,749
+and will be used to transform our vertex
+positions
+
+332
+00:06:27,749 --> 00:06:27,759
+positions
+ 
+
+333
+00:06:27,759 --> 00:06:29,990
+positions
+then declare a const vector3 called
+
+334
+00:06:29,990 --> 00:06:30,000
+then declare a const vector3 called
+ 
+
+335
+00:06:30,000 --> 00:06:32,830
+then declare a const vector3 called
+direction to light equal to normalized
+
+336
+00:06:32,830 --> 00:06:32,840
+direction to light equal to normalized
+ 
+
+337
+00:06:32,840 --> 00:06:36,550
+direction to light equal to normalized
+vect3 with values 1 negative 3 and
+
+338
+00:06:36,550 --> 00:06:36,560
+vect3 with values 1 negative 3 and
+ 
+
+339
+00:06:36,560 --> 00:06:38,469
+vect3 with values 1 negative 3 and
+negative 1.
+
+340
+00:06:38,469 --> 00:06:38,479
+negative 1.
+ 
+
+341
+00:06:38,479 --> 00:06:40,550
+negative 1.
+the normalize function is a built-in
+
+342
+00:06:40,550 --> 00:06:40,560
+the normalize function is a built-in
+ 
+
+343
+00:06:40,560 --> 00:06:43,270
+the normalize function is a built-in
+glsl function that converts any vector
+
+344
+00:06:43,270 --> 00:06:43,280
+glsl function that converts any vector
+ 
+
+345
+00:06:43,280 --> 00:06:46,150
+glsl function that converts any vector
+into an equivalent vector of unit length
+
+346
+00:06:46,150 --> 00:06:46,160
+into an equivalent vector of unit length
+ 
+
+347
+00:06:46,160 --> 00:06:48,150
+into an equivalent vector of unit length
+whenever doing lighting calculations you
+
+348
+00:06:48,150 --> 00:06:48,160
+whenever doing lighting calculations you
+ 
+
+349
+00:06:48,160 --> 00:06:49,909
+whenever doing lighting calculations you
+should always make sure that the input
+
+350
+00:06:49,909 --> 00:06:49,919
+should always make sure that the input
+ 
+
+351
+00:06:49,919 --> 00:06:52,390
+should always make sure that the input
+vectors are unit vectors otherwise you
+
+352
+00:06:52,390 --> 00:06:52,400
+vectors are unit vectors otherwise you
+ 
+
+353
+00:06:52,400 --> 00:06:54,870
+vectors are unit vectors otherwise you
+will get incorrect outputs
+
+354
+00:06:54,870 --> 00:06:54,880
+will get incorrect outputs
+ 
+
+355
+00:06:54,880 --> 00:06:56,870
+will get incorrect outputs
+this technique we are using here is
+
+356
+00:06:56,870 --> 00:06:56,880
+this technique we are using here is
+ 
+
+357
+00:06:56,880 --> 00:06:59,510
+this technique we are using here is
+called directional lighting since every
+
+358
+00:06:59,510 --> 00:06:59,520
+called directional lighting since every
+ 
+
+359
+00:06:59,520 --> 00:07:01,749
+called directional lighting since every
+vertex regardless of what its position
+
+360
+00:07:01,749 --> 00:07:01,759
+vertex regardless of what its position
+ 
+
+361
+00:07:01,759 --> 00:07:04,070
+vertex regardless of what its position
+is we'll use the same direction to the
+
+362
+00:07:04,070 --> 00:07:04,080
+is we'll use the same direction to the
+ 
+
+363
+00:07:04,080 --> 00:07:05,510
+is we'll use the same direction to the
+light source
+
+364
+00:07:05,510 --> 00:07:05,520
+light source
+ 
+
+365
+00:07:05,520 --> 00:07:07,270
+light source
+this simulates a light source that is
+
+366
+00:07:07,270 --> 00:07:07,280
+this simulates a light source that is
+ 
+
+367
+00:07:07,280 --> 00:07:10,070
+this simulates a light source that is
+infinitely far away from the object a
+
+368
+00:07:10,070 --> 00:07:10,080
+infinitely far away from the object a
+ 
+
+369
+00:07:10,080 --> 00:07:11,990
+infinitely far away from the object a
+real world example of a directional
+
+370
+00:07:11,990 --> 00:07:12,000
+real world example of a directional
+ 
+
+371
+00:07:12,000 --> 00:07:13,909
+real world example of a directional
+light source would be the sun
+
+372
+00:07:13,909 --> 00:07:13,919
+light source would be the sun
+ 
+
+373
+00:07:13,919 --> 00:07:16,629
+light source would be the sun
+since because it is so far away light
+
+374
+00:07:16,629 --> 00:07:16,639
+since because it is so far away light
+ 
+
+375
+00:07:16,639 --> 00:07:18,629
+since because it is so far away light
+rays that reach the earth are
+
+376
+00:07:18,629 --> 00:07:18,639
+rays that reach the earth are
+ 
+
+377
+00:07:18,639 --> 00:07:20,710
+rays that reach the earth are
+essentially parallel
+
+378
+00:07:20,710 --> 00:07:20,720
+essentially parallel
+ 
+
+379
+00:07:20,720 --> 00:07:23,029
+essentially parallel
+the alternative is a point light source
+
+380
+00:07:23,029 --> 00:07:23,039
+the alternative is a point light source
+ 
+
+381
+00:07:23,039 --> 00:07:25,110
+the alternative is a point light source
+whose position would be much closer to
+
+382
+00:07:25,110 --> 00:07:25,120
+whose position would be much closer to
+ 
+
+383
+00:07:25,120 --> 00:07:27,510
+whose position would be much closer to
+the object being lit in that case we
+
+384
+00:07:27,510 --> 00:07:27,520
+the object being lit in that case we
+ 
+
+385
+00:07:27,520 --> 00:07:29,430
+the object being lit in that case we
+would need to calculate the direction to
+
+386
+00:07:29,430 --> 00:07:29,440
+would need to calculate the direction to
+ 
+
+387
+00:07:29,440 --> 00:07:32,469
+would need to calculate the direction to
+the light on a per vertex basis
+
+388
+00:07:32,469 --> 00:07:32,479
+the light on a per vertex basis
+ 
+
+389
+00:07:32,479 --> 00:07:34,309
+the light on a per vertex basis
+we will cover point lights in a future
+
+390
+00:07:34,309 --> 00:07:34,319
+we will cover point lights in a future
+ 
+
+391
+00:07:34,319 --> 00:07:35,749
+we will cover point lights in a future
+tutorial
+
+392
+00:07:35,749 --> 00:07:35,759
+tutorial
+ 
+
+393
+00:07:35,759 --> 00:07:37,670
+tutorial
+the direction to the light is specified
+
+394
+00:07:37,670 --> 00:07:37,680
+the direction to the light is specified
+ 
+
+395
+00:07:37,680 --> 00:07:40,230
+the direction to the light is specified
+in world space therefore to properly
+
+396
+00:07:40,230 --> 00:07:40,240
+in world space therefore to properly
+ 
+
+397
+00:07:40,240 --> 00:07:42,469
+in world space therefore to properly
+compute the lighting we require the
+
+398
+00:07:42,469 --> 00:07:42,479
+compute the lighting we require the
+ 
+
+399
+00:07:42,479 --> 00:07:44,390
+compute the lighting we require the
+normals to be transformed from model
+
+400
+00:07:44,390 --> 00:07:44,400
+normals to be transformed from model
+ 
+
+401
+00:07:44,400 --> 00:07:46,469
+normals to be transformed from model
+space to world space
+
+402
+00:07:46,469 --> 00:07:46,479
+space to world space
+ 
+
+403
+00:07:46,479 --> 00:07:49,110
+space to world space
+we can do this by using the model matrix
+
+404
+00:07:49,110 --> 00:07:49,120
+we can do this by using the model matrix
+ 
+
+405
+00:07:49,120 --> 00:07:51,830
+we can do this by using the model matrix
+the mat3 function converts the 4x4 model
+
+406
+00:07:51,830 --> 00:07:51,840
+the mat3 function converts the 4x4 model
+ 
+
+407
+00:07:51,840 --> 00:07:55,110
+the mat3 function converts the 4x4 model
+matrix to a 3x3 matrix by removing the
+
+408
+00:07:55,110 --> 00:07:55,120
+matrix to a 3x3 matrix by removing the
+ 
+
+409
+00:07:55,120 --> 00:07:57,270
+matrix to a 3x3 matrix by removing the
+last row and column
+
+410
+00:07:57,270 --> 00:07:57,280
+last row and column
+ 
+
+411
+00:07:57,280 --> 00:07:59,110
+last row and column
+we only need the upper portion of the
+
+412
+00:07:59,110 --> 00:07:59,120
+we only need the upper portion of the
+ 
+
+413
+00:07:59,120 --> 00:08:01,110
+we only need the upper portion of the
+matrix when transforming normals because
+
+414
+00:08:01,110 --> 00:08:01,120
+matrix when transforming normals because
+ 
+
+415
+00:08:01,120 --> 00:08:03,909
+matrix when transforming normals because
+they represent directions not positions
+
+416
+00:08:03,909 --> 00:08:03,919
+they represent directions not positions
+ 
+
+417
+00:08:03,919 --> 00:08:05,830
+they represent directions not positions
+and therefore are not affected by
+
+418
+00:08:05,830 --> 00:08:05,840
+and therefore are not affected by
+ 
+
+419
+00:08:05,840 --> 00:08:07,670
+and therefore are not affected by
+translations
+
+420
+00:08:07,670 --> 00:08:07,680
+translations
+ 
+
+421
+00:08:07,680 --> 00:08:09,990
+translations
+alternatively you could also use the
+
+422
+00:08:09,990 --> 00:08:10,000
+alternatively you could also use the
+ 
+
+423
+00:08:10,000 --> 00:08:13,110
+alternatively you could also use the
+full 4x4 matrix and multiply by the
+
+424
+00:08:13,110 --> 00:08:13,120
+full 4x4 matrix and multiply by the
+ 
+
+425
+00:08:13,120 --> 00:08:14,790
+full 4x4 matrix and multiply by the
+normal with an additional fourth
+
+426
+00:08:14,790 --> 00:08:14,800
+normal with an additional fourth
+ 
+
+427
+00:08:14,800 --> 00:08:17,270
+normal with an additional fourth
+component of 0 for the homogeneous
+
+428
+00:08:17,270 --> 00:08:17,280
+component of 0 for the homogeneous
+ 
+
+429
+00:08:17,280 --> 00:08:19,270
+component of 0 for the homogeneous
+coordinate value
+
+430
+00:08:19,270 --> 00:08:19,280
+coordinate value
+ 
+
+431
+00:08:19,280 --> 00:08:21,430
+coordinate value
+but the former method avoids performing
+
+432
+00:08:21,430 --> 00:08:21,440
+but the former method avoids performing
+ 
+
+433
+00:08:21,440 --> 00:08:24,469
+but the former method avoids performing
+unnecessary calculations so this method
+
+434
+00:08:24,469 --> 00:08:24,479
+unnecessary calculations so this method
+ 
+
+435
+00:08:24,479 --> 00:08:26,309
+unnecessary calculations so this method
+of transforming normals by using the
+
+436
+00:08:26,309 --> 00:08:26,319
+of transforming normals by using the
+ 
+
+437
+00:08:26,319 --> 00:08:29,350
+of transforming normals by using the
+model matrix is technically incorrect
+
+438
+00:08:29,350 --> 00:08:29,360
+model matrix is technically incorrect
+ 
+
+439
+00:08:29,360 --> 00:08:31,830
+model matrix is technically incorrect
+and only works if certain conditions are
+
+440
+00:08:31,830 --> 00:08:31,840
+and only works if certain conditions are
+ 
+
+441
+00:08:31,840 --> 00:08:34,469
+and only works if certain conditions are
+satisfied i'll come back to this in just
+
+442
+00:08:34,469 --> 00:08:34,479
+satisfied i'll come back to this in just
+ 
+
+443
+00:08:34,479 --> 00:08:35,990
+satisfied i'll come back to this in just
+a moment
+
+444
+00:08:35,990 --> 00:08:36,000
+a moment
+ 
+
+445
+00:08:36,000 --> 00:08:37,829
+a moment
+finally we can calculate the light
+
+446
+00:08:37,829 --> 00:08:37,839
+finally we can calculate the light
+ 
+
+447
+00:08:37,839 --> 00:08:40,389
+finally we can calculate the light
+intensity at this vertex value i will
+
+448
+00:08:40,389 --> 00:08:40,399
+intensity at this vertex value i will
+ 
+
+449
+00:08:40,399 --> 00:08:43,350
+intensity at this vertex value i will
+add a float light intensity is equal to
+
+450
+00:08:43,350 --> 00:08:43,360
+add a float light intensity is equal to
+ 
+
+451
+00:08:43,360 --> 00:08:45,670
+add a float light intensity is equal to
+the dot product of my normal in world
+
+452
+00:08:45,670 --> 00:08:45,680
+the dot product of my normal in world
+ 
+
+453
+00:08:45,680 --> 00:08:49,269
+the dot product of my normal in world
+space comma the direction to the light
+
+454
+00:08:49,269 --> 00:08:49,279
+space comma the direction to the light
+ 
+
+455
+00:08:49,279 --> 00:08:51,829
+space comma the direction to the light
+now it's possible for the dot product to
+
+456
+00:08:51,829 --> 00:08:51,839
+now it's possible for the dot product to
+ 
+
+457
+00:08:51,839 --> 00:08:54,070
+now it's possible for the dot product to
+be negative which occurs when the normal
+
+458
+00:08:54,070 --> 00:08:54,080
+be negative which occurs when the normal
+ 
+
+459
+00:08:54,080 --> 00:08:56,870
+be negative which occurs when the normal
+is facing away from the light source
+
+460
+00:08:56,870 --> 00:08:56,880
+is facing away from the light source
+ 
+
+461
+00:08:56,880 --> 00:08:58,790
+is facing away from the light source
+when the surface isn't facing the light
+
+462
+00:08:58,790 --> 00:08:58,800
+when the surface isn't facing the light
+ 
+
+463
+00:08:58,800 --> 00:09:00,470
+when the surface isn't facing the light
+we'd like the light intensity to have a
+
+464
+00:09:00,470 --> 00:09:00,480
+we'd like the light intensity to have a
+ 
+
+465
+00:09:00,480 --> 00:09:03,269
+we'd like the light intensity to have a
+value of zero finally the output freight
+
+466
+00:09:03,269 --> 00:09:03,279
+value of zero finally the output freight
+ 
+
+467
+00:09:03,279 --> 00:09:05,910
+value of zero finally the output freight
+color is given by vertex color scaled by
+
+468
+00:09:05,910 --> 00:09:05,920
+color is given by vertex color scaled by
+ 
+
+469
+00:09:05,920 --> 00:09:06,829
+color is given by vertex color scaled by
+the light
+
+470
+00:09:06,829 --> 00:09:06,839
+the light
+ 
+
+471
+00:09:06,839 --> 00:09:09,509
+the light
+intensity for the fragment shader we can
+
+472
+00:09:09,509 --> 00:09:09,519
+intensity for the fragment shader we can
+ 
+
+473
+00:09:09,519 --> 00:09:11,990
+intensity for the fragment shader we can
+leave it as is except we need to update
+
+474
+00:09:11,990 --> 00:09:12,000
+leave it as is except we need to update
+ 
+
+475
+00:09:12,000 --> 00:09:14,949
+leave it as is except we need to update
+the push constant struct definition
+
+476
+00:09:14,949 --> 00:09:14,959
+the push constant struct definition
+ 
+
+477
+00:09:14,959 --> 00:09:17,630
+the push constant struct definition
+so copy these lines navigate to
+
+478
+00:09:17,630 --> 00:09:17,640
+so copy these lines navigate to
+ 
+
+479
+00:09:17,640 --> 00:09:19,829
+so copy these lines navigate to
+simpleshader.frag and overwrite the
+
+480
+00:09:19,829 --> 00:09:19,839
+simpleshader.frag and overwrite the
+ 
+
+481
+00:09:19,839 --> 00:09:21,990
+simpleshader.frag and overwrite the
+previous push constant declaration with
+
+482
+00:09:21,990 --> 00:09:22,000
+previous push constant declaration with
+ 
+
+483
+00:09:22,000 --> 00:09:23,990
+previous push constant declaration with
+the updated version
+
+484
+00:09:23,990 --> 00:09:24,000
+the updated version
+ 
+
+485
+00:09:24,000 --> 00:09:25,990
+the updated version
+then navigate to the simple renderer
+
+486
+00:09:25,990 --> 00:09:26,000
+then navigate to the simple renderer
+ 
+
+487
+00:09:26,000 --> 00:09:28,630
+then navigate to the simple renderer
+system implementation and scroll to the
+
+488
+00:09:28,630 --> 00:09:28,640
+system implementation and scroll to the
+ 
+
+489
+00:09:28,640 --> 00:09:31,030
+system implementation and scroll to the
+top of the file let's update the push
+
+490
+00:09:31,030 --> 00:09:31,040
+top of the file let's update the push
+ 
+
+491
+00:09:31,040 --> 00:09:33,110
+top of the file let's update the push
+constant data struct to match the shader
+
+492
+00:09:33,110 --> 00:09:33,120
+constant data struct to match the shader
+ 
+
+493
+00:09:33,120 --> 00:09:34,470
+constant data struct to match the shader
+definition
+
+494
+00:09:34,470 --> 00:09:34,480
+definition
+ 
+
+495
+00:09:34,480 --> 00:09:36,310
+definition
+then scroll down to the render game
+
+496
+00:09:36,310 --> 00:09:36,320
+then scroll down to the render game
+ 
+
+497
+00:09:36,320 --> 00:09:38,630
+then scroll down to the render game
+objects function and inside the for loop
+
+498
+00:09:38,630 --> 00:09:38,640
+objects function and inside the for loop
+ 
+
+499
+00:09:38,640 --> 00:09:40,389
+objects function and inside the for loop
+remove the line setting the push dot
+
+500
+00:09:40,389 --> 00:09:40,399
+remove the line setting the push dot
+ 
+
+501
+00:09:40,399 --> 00:09:43,269
+remove the line setting the push dot
+color and declare new variable with auto
+
+502
+00:09:43,269 --> 00:09:43,279
+color and declare new variable with auto
+ 
+
+503
+00:09:43,279 --> 00:09:44,630
+color and declare new variable with auto
+model matrix is equal to
+
+504
+00:09:44,630 --> 00:09:44,640
+model matrix is equal to
+ 
+
+505
+00:09:44,640 --> 00:09:47,509
+model matrix is equal to
+object.transform.map4
+
+506
+00:09:47,509 --> 00:09:47,519
+object.transform.map4
+ 
+
+507
+00:09:47,519 --> 00:09:49,910
+object.transform.map4
+in the line below remove the mat four
+
+508
+00:09:49,910 --> 00:09:49,920
+in the line below remove the mat four
+ 
+
+509
+00:09:49,920 --> 00:09:51,990
+in the line below remove the mat four
+function call to use this model matrix
+
+510
+00:09:51,990 --> 00:09:52,000
+function call to use this model matrix
+ 
+
+511
+00:09:52,000 --> 00:09:53,829
+function call to use this model matrix
+local variable instead to avoid
+
+512
+00:09:53,829 --> 00:09:53,839
+local variable instead to avoid
+ 
+
+513
+00:09:53,839 --> 00:09:56,470
+local variable instead to avoid
+performing the calculation twice
+
+514
+00:09:56,470 --> 00:09:56,480
+performing the calculation twice
+ 
+
+515
+00:09:56,480 --> 00:09:58,630
+performing the calculation twice
+and then we have push.model matrix is
+
+516
+00:09:58,630 --> 00:09:58,640
+and then we have push.model matrix is
+ 
+
+517
+00:09:58,640 --> 00:10:01,190
+and then we have push.model matrix is
+equal to model matrix
+
+518
+00:10:01,190 --> 00:10:01,200
+equal to model matrix
+ 
+
+519
+00:10:01,200 --> 00:10:02,949
+equal to model matrix
+we can build and run and you should see
+
+520
+00:10:02,949 --> 00:10:02,959
+we can build and run and you should see
+ 
+
+521
+00:10:02,959 --> 00:10:05,509
+we can build and run and you should see
+the vase model now shaded with diffuse
+
+522
+00:10:05,509 --> 00:10:05,519
+the vase model now shaded with diffuse
+ 
+
+523
+00:10:05,519 --> 00:10:06,710
+the vase model now shaded with diffuse
+lighting
+
+524
+00:10:06,710 --> 00:10:06,720
+lighting
+ 
+
+525
+00:10:06,720 --> 00:10:08,310
+lighting
+vertices that point towards the light
+
+526
+00:10:08,310 --> 00:10:08,320
+vertices that point towards the light
+ 
+
+527
+00:10:08,320 --> 00:10:10,870
+vertices that point towards the light
+will be lit with a greater intensity and
+
+528
+00:10:10,870 --> 00:10:10,880
+will be lit with a greater intensity and
+ 
+
+529
+00:10:10,880 --> 00:10:12,949
+will be lit with a greater intensity and
+as the angle between the surface normal
+
+530
+00:10:12,949 --> 00:10:12,959
+as the angle between the surface normal
+ 
+
+531
+00:10:12,959 --> 00:10:15,509
+as the angle between the surface normal
+and the light direction increases less
+
+532
+00:10:15,509 --> 00:10:15,519
+and the light direction increases less
+ 
+
+533
+00:10:15,519 --> 00:10:17,350
+and the light direction increases less
+light hits the surface and the model
+
+534
+00:10:17,350 --> 00:10:17,360
+light hits the surface and the model
+ 
+
+535
+00:10:17,360 --> 00:10:19,509
+light hits the surface and the model
+will be shaded darker
+
+536
+00:10:19,509 --> 00:10:19,519
+will be shaded darker
+ 
+
+537
+00:10:19,519 --> 00:10:21,590
+will be shaded darker
+surfaces that point away from the light
+
+538
+00:10:21,590 --> 00:10:21,600
+surfaces that point away from the light
+ 
+
+539
+00:10:21,600 --> 00:10:23,430
+surfaces that point away from the light
+will be completely black
+
+540
+00:10:23,430 --> 00:10:23,440
+will be completely black
+ 
+
+541
+00:10:23,440 --> 00:10:25,990
+will be completely black
+this may appear a little unrealistic
+
+542
+00:10:25,990 --> 00:10:26,000
+this may appear a little unrealistic
+ 
+
+543
+00:10:26,000 --> 00:10:28,630
+this may appear a little unrealistic
+in real life light bounces all over it
+
+544
+00:10:28,630 --> 00:10:28,640
+in real life light bounces all over it
+ 
+
+545
+00:10:28,640 --> 00:10:30,710
+in real life light bounces all over it
+scatters in the atmosphere and reflects
+
+546
+00:10:30,710 --> 00:10:30,720
+scatters in the atmosphere and reflects
+ 
+
+547
+00:10:30,720 --> 00:10:32,949
+scatters in the atmosphere and reflects
+off the walls and objects even the
+
+548
+00:10:32,949 --> 00:10:32,959
+off the walls and objects even the
+ 
+
+549
+00:10:32,959 --> 00:10:35,269
+off the walls and objects even the
+darkest part of a shadow doesn't appear
+
+550
+00:10:35,269 --> 00:10:35,279
+darkest part of a shadow doesn't appear
+ 
+
+551
+00:10:35,279 --> 00:10:37,910
+darkest part of a shadow doesn't appear
+completely black to our eyes
+
+552
+00:10:37,910 --> 00:10:37,920
+completely black to our eyes
+ 
+
+553
+00:10:37,920 --> 00:10:39,750
+completely black to our eyes
+and that's because even in complete
+
+554
+00:10:39,750 --> 00:10:39,760
+and that's because even in complete
+ 
+
+555
+00:10:39,760 --> 00:10:41,910
+and that's because even in complete
+shadow some light indirectly reaches
+
+556
+00:10:41,910 --> 00:10:41,920
+shadow some light indirectly reaches
+ 
+
+557
+00:10:41,920 --> 00:10:44,389
+shadow some light indirectly reaches
+that location it would only be in the
+
+558
+00:10:44,389 --> 00:10:44,399
+that location it would only be in the
+ 
+
+559
+00:10:44,399 --> 00:10:46,870
+that location it would only be in the
+deep void of space where there is
+
+560
+00:10:46,870 --> 00:10:46,880
+deep void of space where there is
+ 
+
+561
+00:10:46,880 --> 00:10:48,949
+deep void of space where there is
+nothing for light to bounce off of would
+
+562
+00:10:48,949 --> 00:10:48,959
+nothing for light to bounce off of would
+ 
+
+563
+00:10:48,959 --> 00:10:51,829
+nothing for light to bounce off of would
+you get a completely black shadow
+
+564
+00:10:51,829 --> 00:10:51,839
+you get a completely black shadow
+ 
+
+565
+00:10:51,839 --> 00:10:53,590
+you get a completely black shadow
+this type of lighting is known as
+
+566
+00:10:53,590 --> 00:10:53,600
+this type of lighting is known as
+ 
+
+567
+00:10:53,600 --> 00:10:56,630
+this type of lighting is known as
+indirect illumination unfortunately
+
+568
+00:10:56,630 --> 00:10:56,640
+indirect illumination unfortunately
+ 
+
+569
+00:10:56,640 --> 00:10:58,310
+indirect illumination unfortunately
+accurately modeling indirect
+
+570
+00:10:58,310 --> 00:10:58,320
+accurately modeling indirect
+ 
+
+571
+00:10:58,320 --> 00:11:01,350
+accurately modeling indirect
+illumination is very very hard
+
+572
+00:11:01,350 --> 00:11:01,360
+illumination is very very hard
+ 
+
+573
+00:11:01,360 --> 00:11:03,990
+illumination is very very hard
+especially for gpus
+
+574
+00:11:03,990 --> 00:11:04,000
+especially for gpus
+ 
+
+575
+00:11:04,000 --> 00:11:05,990
+especially for gpus
+the ambient lighting model is a very
+
+576
+00:11:05,990 --> 00:11:06,000
+the ambient lighting model is a very
+ 
+
+577
+00:11:06,000 --> 00:11:08,230
+the ambient lighting model is a very
+simple way to roughly approximate
+
+578
+00:11:08,230 --> 00:11:08,240
+simple way to roughly approximate
+ 
+
+579
+00:11:08,240 --> 00:11:10,310
+simple way to roughly approximate
+indirect illumination
+
+580
+00:11:10,310 --> 00:11:10,320
+indirect illumination
+ 
+
+581
+00:11:10,320 --> 00:11:12,550
+indirect illumination
+it assumes that every object receives a
+
+582
+00:11:12,550 --> 00:11:12,560
+it assumes that every object receives a
+ 
+
+583
+00:11:12,560 --> 00:11:15,110
+it assumes that every object receives a
+small constant amount of light from all
+
+584
+00:11:15,110 --> 00:11:15,120
+small constant amount of light from all
+ 
+
+585
+00:11:15,120 --> 00:11:16,389
+small constant amount of light from all
+directions
+
+586
+00:11:16,389 --> 00:11:16,399
+directions
+ 
+
+587
+00:11:16,399 --> 00:11:18,550
+directions
+regardless of what direction the surface
+
+588
+00:11:18,550 --> 00:11:18,560
+regardless of what direction the surface
+ 
+
+589
+00:11:18,560 --> 00:11:20,550
+regardless of what direction the surface
+is facing
+
+590
+00:11:20,550 --> 00:11:20,560
+is facing
+ 
+
+591
+00:11:20,560 --> 00:11:22,710
+is facing
+back in the simple shader.vert i will
+
+592
+00:11:22,710 --> 00:11:22,720
+back in the simple shader.vert i will
+ 
+
+593
+00:11:22,720 --> 00:11:25,590
+back in the simple shader.vert i will
+add a const float value called ambient
+
+594
+00:11:25,590 --> 00:11:25,600
+add a const float value called ambient
+ 
+
+595
+00:11:25,600 --> 00:11:28,110
+add a const float value called ambient
+and set it to a small value such as
+
+596
+00:11:28,110 --> 00:11:28,120
+and set it to a small value such as
+ 
+
+597
+00:11:28,120 --> 00:11:29,990
+and set it to a small value such as
+0.02
+
+598
+00:11:29,990 --> 00:11:30,000
+0.02
+ 
+
+599
+00:11:30,000 --> 00:11:32,470
+0.02
+then in the light intensity calculation
+
+600
+00:11:32,470 --> 00:11:32,480
+then in the light intensity calculation
+ 
+
+601
+00:11:32,480 --> 00:11:34,470
+then in the light intensity calculation
+i will add this ambient term to the
+
+602
+00:11:34,470 --> 00:11:34,480
+i will add this ambient term to the
+ 
+
+603
+00:11:34,480 --> 00:11:37,509
+i will add this ambient term to the
+current calculation so that all vertices
+
+604
+00:11:37,509 --> 00:11:37,519
+current calculation so that all vertices
+ 
+
+605
+00:11:37,519 --> 00:11:39,590
+current calculation so that all vertices
+receive a minor amount of indirect
+
+606
+00:11:39,590 --> 00:11:39,600
+receive a minor amount of indirect
+ 
+
+607
+00:11:39,600 --> 00:11:41,269
+receive a minor amount of indirect
+illumination
+
+608
+00:11:41,269 --> 00:11:41,279
+illumination
+ 
+
+609
+00:11:41,279 --> 00:11:43,430
+illumination
+now if i build and run the vase model
+
+610
+00:11:43,430 --> 00:11:43,440
+now if i build and run the vase model
+ 
+
+611
+00:11:43,440 --> 00:11:45,509
+now if i build and run the vase model
+looks a bit more realistic
+
+612
+00:11:45,509 --> 00:11:45,519
+looks a bit more realistic
+ 
+
+613
+00:11:45,519 --> 00:11:47,670
+looks a bit more realistic
+since even the portions of the model not
+
+614
+00:11:47,670 --> 00:11:47,680
+since even the portions of the model not
+ 
+
+615
+00:11:47,680 --> 00:11:50,310
+since even the portions of the model not
+facing the light still have some amount
+
+616
+00:11:50,310 --> 00:11:50,320
+facing the light still have some amount
+ 
+
+617
+00:11:50,320 --> 00:11:52,310
+facing the light still have some amount
+of lighting applied
+
+618
+00:11:52,310 --> 00:11:52,320
+of lighting applied
+ 
+
+619
+00:11:52,320 --> 00:11:54,870
+of lighting applied
+along with the smooth vase object i also
+
+620
+00:11:54,870 --> 00:11:54,880
+along with the smooth vase object i also
+ 
+
+621
+00:11:54,880 --> 00:11:57,110
+along with the smooth vase object i also
+provided a second object file called
+
+622
+00:11:57,110 --> 00:11:57,120
+provided a second object file called
+ 
+
+623
+00:11:57,120 --> 00:11:59,190
+provided a second object file called
+flat vase that you would have downloaded
+
+624
+00:11:59,190 --> 00:11:59,200
+flat vase that you would have downloaded
+ 
+
+625
+00:11:59,200 --> 00:12:01,350
+flat vase that you would have downloaded
+in the previous tutorial so if you
+
+626
+00:12:01,350 --> 00:12:01,360
+in the previous tutorial so if you
+ 
+
+627
+00:12:01,360 --> 00:12:03,670
+in the previous tutorial so if you
+navigate to your app implementation we
+
+628
+00:12:03,670 --> 00:12:03,680
+navigate to your app implementation we
+ 
+
+629
+00:12:03,680 --> 00:12:06,069
+navigate to your app implementation we
+can change to using this object file
+
+630
+00:12:06,069 --> 00:12:06,079
+can change to using this object file
+ 
+
+631
+00:12:06,079 --> 00:12:07,350
+can change to using this object file
+instead
+
+632
+00:12:07,350 --> 00:12:07,360
+instead
+ 
+
+633
+00:12:07,360 --> 00:12:09,030
+instead
+first i will adjust my object's
+
+634
+00:12:09,030 --> 00:12:09,040
+first i will adjust my object's
+ 
+
+635
+00:12:09,040 --> 00:12:10,949
+first i will adjust my object's
+translation in the y direction to move
+
+636
+00:12:10,949 --> 00:12:10,959
+translation in the y direction to move
+ 
+
+637
+00:12:10,959 --> 00:12:13,829
+translation in the y direction to move
+it down by 0.5 to have the model a bit
+
+638
+00:12:13,829 --> 00:12:13,839
+it down by 0.5 to have the model a bit
+ 
+
+639
+00:12:13,839 --> 00:12:15,990
+it down by 0.5 to have the model a bit
+more centered in the view then i will
+
+640
+00:12:15,990 --> 00:12:16,000
+more centered in the view then i will
+ 
+
+641
+00:12:16,000 --> 00:12:17,670
+more centered in the view then i will
+instead load models
+
+642
+00:12:17,670 --> 00:12:17,680
+instead load models
+ 
+
+643
+00:12:17,680 --> 00:12:20,949
+instead load models
+flat vase dot obj when i build and run
+
+644
+00:12:20,949 --> 00:12:20,959
+flat vase dot obj when i build and run
+ 
+
+645
+00:12:20,959 --> 00:12:23,030
+flat vase dot obj when i build and run
+the second vase object has a much more
+
+646
+00:12:23,030 --> 00:12:23,040
+the second vase object has a much more
+ 
+
+647
+00:12:23,040 --> 00:12:25,829
+the second vase object has a much more
+faceted appearance where each face of
+
+648
+00:12:25,829 --> 00:12:25,839
+faceted appearance where each face of
+ 
+
+649
+00:12:25,839 --> 00:12:28,470
+faceted appearance where each face of
+the vase is clearly visible
+
+650
+00:12:28,470 --> 00:12:28,480
+the vase is clearly visible
+ 
+
+651
+00:12:28,480 --> 00:12:30,389
+the vase is clearly visible
+the difference between these model files
+
+652
+00:12:30,389 --> 00:12:30,399
+the difference between these model files
+ 
+
+653
+00:12:30,399 --> 00:12:32,550
+the difference between these model files
+is based on how the vertex normals were
+
+654
+00:12:32,550 --> 00:12:32,560
+is based on how the vertex normals were
+ 
+
+655
+00:12:32,560 --> 00:12:34,069
+is based on how the vertex normals were
+calculated
+
+656
+00:12:34,069 --> 00:12:34,079
+calculated
+ 
+
+657
+00:12:34,079 --> 00:12:36,310
+calculated
+the smooth base object uses vertex
+
+658
+00:12:36,310 --> 00:12:36,320
+the smooth base object uses vertex
+ 
+
+659
+00:12:36,320 --> 00:12:39,990
+the smooth base object uses vertex
+normals also known as smooth shading
+
+660
+00:12:39,990 --> 00:12:40,000
+normals also known as smooth shading
+ 
+
+661
+00:12:40,000 --> 00:12:42,069
+normals also known as smooth shading
+this is when the normal at each vertex
+
+662
+00:12:42,069 --> 00:12:42,079
+this is when the normal at each vertex
+ 
+
+663
+00:12:42,079 --> 00:12:44,710
+this is when the normal at each vertex
+is calculated as if there existed an
+
+664
+00:12:44,710 --> 00:12:44,720
+is calculated as if there existed an
+ 
+
+665
+00:12:44,720 --> 00:12:47,590
+is calculated as if there existed an
+underlying smooth surface
+
+666
+00:12:47,590 --> 00:12:47,600
+underlying smooth surface
+ 
+
+667
+00:12:47,600 --> 00:12:50,310
+underlying smooth surface
+the flat base object uses face normals
+
+668
+00:12:50,310 --> 00:12:50,320
+the flat base object uses face normals
+ 
+
+669
+00:12:50,320 --> 00:12:52,629
+the flat base object uses face normals
+also known as flat shading this is when
+
+670
+00:12:52,629 --> 00:12:52,639
+also known as flat shading this is when
+ 
+
+671
+00:12:52,639 --> 00:12:55,110
+also known as flat shading this is when
+the normal at each vertex uses the same
+
+672
+00:12:55,110 --> 00:12:55,120
+the normal at each vertex uses the same
+ 
+
+673
+00:12:55,120 --> 00:12:57,430
+the normal at each vertex uses the same
+normal as its face
+
+674
+00:12:57,430 --> 00:12:57,440
+normal as its face
+ 
+
+675
+00:12:57,440 --> 00:12:59,590
+normal as its face
+face normals are more commonly used in
+
+676
+00:12:59,590 --> 00:12:59,600
+face normals are more commonly used in
+ 
+
+677
+00:12:59,600 --> 00:13:02,230
+face normals are more commonly used in
+low poly art styles when you want each
+
+678
+00:13:02,230 --> 00:13:02,240
+low poly art styles when you want each
+ 
+
+679
+00:13:02,240 --> 00:13:05,509
+low poly art styles when you want each
+individual polygon to be clearly visible
+
+680
+00:13:05,509 --> 00:13:05,519
+individual polygon to be clearly visible
+ 
+
+681
+00:13:05,519 --> 00:13:07,670
+individual polygon to be clearly visible
+since a vertex can be shared by multiple
+
+682
+00:13:07,670 --> 00:13:07,680
+since a vertex can be shared by multiple
+ 
+
+683
+00:13:07,680 --> 00:13:10,230
+since a vertex can be shared by multiple
+faces this means we will have duplicate
+
+684
+00:13:10,230 --> 00:13:10,240
+faces this means we will have duplicate
+ 
+
+685
+00:13:10,240 --> 00:13:12,710
+faces this means we will have duplicate
+vertices one for each face
+
+686
+00:13:12,710 --> 00:13:12,720
+vertices one for each face
+ 
+
+687
+00:13:12,720 --> 00:13:14,790
+vertices one for each face
+because of this a flat model will have
+
+688
+00:13:14,790 --> 00:13:14,800
+because of this a flat model will have
+ 
+
+689
+00:13:14,800 --> 00:13:16,870
+because of this a flat model will have
+more vertices than its smooth model
+
+690
+00:13:16,870 --> 00:13:16,880
+more vertices than its smooth model
+ 
+
+691
+00:13:16,880 --> 00:13:19,190
+more vertices than its smooth model
+counterpart
+
+692
+00:13:19,190 --> 00:13:19,200
+counterpart
+ 
+
+693
+00:13:19,200 --> 00:13:21,269
+counterpart
+you can choose between flat and smooth
+
+694
+00:13:21,269 --> 00:13:21,279
+you can choose between flat and smooth
+ 
+
+695
+00:13:21,279 --> 00:13:23,590
+you can choose between flat and smooth
+shading in blender before you export
+
+696
+00:13:23,590 --> 00:13:23,600
+shading in blender before you export
+ 
+
+697
+00:13:23,600 --> 00:13:24,710
+shading in blender before you export
+your model
+
+698
+00:13:24,710 --> 00:13:24,720
+your model
+ 
+
+699
+00:13:24,720 --> 00:13:27,030
+your model
+if you select your model in object mode
+
+700
+00:13:27,030 --> 00:13:27,040
+if you select your model in object mode
+ 
+
+701
+00:13:27,040 --> 00:13:29,350
+if you select your model in object mode
+and then open the object drop down menu
+
+702
+00:13:29,350 --> 00:13:29,360
+and then open the object drop down menu
+ 
+
+703
+00:13:29,360 --> 00:13:31,269
+and then open the object drop down menu
+there should be two options
+
+704
+00:13:31,269 --> 00:13:31,279
+there should be two options
+ 
+
+705
+00:13:31,279 --> 00:13:34,310
+there should be two options
+shade smooth and shade flat
+
+706
+00:13:34,310 --> 00:13:34,320
+shade smooth and shade flat
+ 
+
+707
+00:13:34,320 --> 00:13:36,629
+shade smooth and shade flat
+select your desired option then go to
+
+708
+00:13:36,629 --> 00:13:36,639
+select your desired option then go to
+ 
+
+709
+00:13:36,639 --> 00:13:40,150
+select your desired option then go to
+file export wavefront.obj
+
+710
+00:13:40,150 --> 00:13:40,160
+file export wavefront.obj
+ 
+
+711
+00:13:40,160 --> 00:13:41,990
+file export wavefront.obj
+before exporting your model you will
+
+712
+00:13:41,990 --> 00:13:42,000
+before exporting your model you will
+ 
+
+713
+00:13:42,000 --> 00:13:45,350
+before exporting your model you will
+likely want to adjust a few settings
+
+714
+00:13:45,350 --> 00:13:45,360
+likely want to adjust a few settings
+ 
+
+715
+00:13:45,360 --> 00:13:47,269
+likely want to adjust a few settings
+first under the transform heading you
+
+716
+00:13:47,269 --> 00:13:47,279
+first under the transform heading you
+ 
+
+717
+00:13:47,279 --> 00:13:48,949
+first under the transform heading you
+should set the transformation to match
+
+718
+00:13:48,949 --> 00:13:48,959
+should set the transformation to match
+ 
+
+719
+00:13:48,959 --> 00:13:50,870
+should set the transformation to match
+the coordinate system convention that
+
+720
+00:13:50,870 --> 00:13:50,880
+the coordinate system convention that
+ 
+
+721
+00:13:50,880 --> 00:13:52,949
+the coordinate system convention that
+your engine is using
+
+722
+00:13:52,949 --> 00:13:52,959
+your engine is using
+ 
+
+723
+00:13:52,959 --> 00:13:55,189
+your engine is using
+in our case that means positive z for
+
+724
+00:13:55,189 --> 00:13:55,199
+in our case that means positive z for
+ 
+
+725
+00:13:55,199 --> 00:13:57,750
+in our case that means positive z for
+the forward direction and negative y as
+
+726
+00:13:57,750 --> 00:13:57,760
+the forward direction and negative y as
+ 
+
+727
+00:13:57,760 --> 00:13:59,750
+the forward direction and negative y as
+the up direction
+
+728
+00:13:59,750 --> 00:13:59,760
+the up direction
+ 
+
+729
+00:13:59,760 --> 00:14:01,910
+the up direction
+next in the geometry menu you will want
+
+730
+00:14:01,910 --> 00:14:01,920
+next in the geometry menu you will want
+ 
+
+731
+00:14:01,920 --> 00:14:04,949
+next in the geometry menu you will want
+to select the triangulate faces option
+
+732
+00:14:04,949 --> 00:14:04,959
+to select the triangulate faces option
+ 
+
+733
+00:14:04,959 --> 00:14:06,389
+to select the triangulate faces option
+you can optionally choose to include
+
+734
+00:14:06,389 --> 00:14:06,399
+you can optionally choose to include
+ 
+
+735
+00:14:06,399 --> 00:14:08,629
+you can optionally choose to include
+materials but we are not using them
+
+736
+00:14:08,629 --> 00:14:08,639
+materials but we are not using them
+ 
+
+737
+00:14:08,639 --> 00:14:09,910
+materials but we are not using them
+currently
+
+738
+00:14:09,910 --> 00:14:09,920
+currently
+ 
+
+739
+00:14:09,920 --> 00:14:11,990
+currently
+and then also have write normals and
+
+740
+00:14:11,990 --> 00:14:12,000
+and then also have write normals and
+ 
+
+741
+00:14:12,000 --> 00:14:14,470
+and then also have write normals and
+include uv selected
+
+742
+00:14:14,470 --> 00:14:14,480
+include uv selected
+ 
+
+743
+00:14:14,480 --> 00:14:16,310
+include uv selected
+you can save this as a preset if you
+
+744
+00:14:16,310 --> 00:14:16,320
+you can save this as a preset if you
+ 
+
+745
+00:14:16,320 --> 00:14:19,430
+you can save this as a preset if you
+wish to make future exporting quicker
+
+746
+00:14:19,430 --> 00:14:19,440
+wish to make future exporting quicker
+ 
+
+747
+00:14:19,440 --> 00:14:21,350
+wish to make future exporting quicker
+transforming normals isn't quite as
+
+748
+00:14:21,350 --> 00:14:21,360
+transforming normals isn't quite as
+ 
+
+749
+00:14:21,360 --> 00:14:23,350
+transforming normals isn't quite as
+straightforward as simply multiplying by
+
+750
+00:14:23,350 --> 00:14:23,360
+straightforward as simply multiplying by
+ 
+
+751
+00:14:23,360 --> 00:14:26,389
+straightforward as simply multiplying by
+the model matrix as we've done so far
+
+752
+00:14:26,389 --> 00:14:26,399
+the model matrix as we've done so far
+ 
+
+753
+00:14:26,399 --> 00:14:28,069
+the model matrix as we've done so far
+this calculation is actually only
+
+754
+00:14:28,069 --> 00:14:28,079
+this calculation is actually only
+ 
+
+755
+00:14:28,079 --> 00:14:30,310
+this calculation is actually only
+correct if uniform scaling is being
+
+756
+00:14:30,310 --> 00:14:30,320
+correct if uniform scaling is being
+ 
+
+757
+00:14:30,320 --> 00:14:31,750
+correct if uniform scaling is being
+performed
+
+758
+00:14:31,750 --> 00:14:31,760
+performed
+ 
+
+759
+00:14:31,760 --> 00:14:34,069
+performed
+this means that the x y and z directions
+
+760
+00:14:34,069 --> 00:14:34,079
+this means that the x y and z directions
+ 
+
+761
+00:14:34,079 --> 00:14:36,389
+this means that the x y and z directions
+all apply an equal amount of scaling to
+
+762
+00:14:36,389 --> 00:14:36,399
+all apply an equal amount of scaling to
+ 
+
+763
+00:14:36,399 --> 00:14:37,990
+all apply an equal amount of scaling to
+the object
+
+764
+00:14:37,990 --> 00:14:38,000
+the object
+ 
+
+765
+00:14:38,000 --> 00:14:39,829
+the object
+if you change the scale factor on the
+
+766
+00:14:39,829 --> 00:14:39,839
+if you change the scale factor on the
+ 
+
+767
+00:14:39,839 --> 00:14:41,590
+if you change the scale factor on the
+vase object to squash the model
+
+768
+00:14:41,590 --> 00:14:41,600
+vase object to squash the model
+ 
+
+769
+00:14:41,600 --> 00:14:42,629
+vase object to squash the model
+vertically
+
+770
+00:14:42,629 --> 00:14:42,639
+vertically
+ 
+
+771
+00:14:42,639 --> 00:14:44,790
+vertically
+and then render it you can tell this
+
+772
+00:14:44,790 --> 00:14:44,800
+and then render it you can tell this
+ 
+
+773
+00:14:44,800 --> 00:14:47,030
+and then render it you can tell this
+doesn't look quite right
+
+774
+00:14:47,030 --> 00:14:47,040
+doesn't look quite right
+ 
+
+775
+00:14:47,040 --> 00:14:48,710
+doesn't look quite right
+the image looks as if i took the
+
+776
+00:14:48,710 --> 00:14:48,720
+the image looks as if i took the
+ 
+
+777
+00:14:48,720 --> 00:14:51,030
+the image looks as if i took the
+previous vase object and simply squished
+
+778
+00:14:51,030 --> 00:14:51,040
+previous vase object and simply squished
+ 
+
+779
+00:14:51,040 --> 00:14:53,590
+previous vase object and simply squished
+the image of it
+
+780
+00:14:53,590 --> 00:14:53,600
+the image of it
+ 
+
+781
+00:14:53,600 --> 00:14:55,590
+the image of it
+the proper way to transform normals is
+
+782
+00:14:55,590 --> 00:14:55,600
+the proper way to transform normals is
+ 
+
+783
+00:14:55,600 --> 00:14:57,590
+the proper way to transform normals is
+to use the inverse transpose of the
+
+784
+00:14:57,590 --> 00:14:57,600
+to use the inverse transpose of the
+ 
+
+785
+00:14:57,600 --> 00:15:01,750
+to use the inverse transpose of the
+model transformation matrix
+
+786
+00:15:01,750 --> 00:15:01,760
+
+ 
+
+787
+00:15:01,760 --> 00:15:03,990
+ 
+if you update the vertex shader to
+
+788
+00:15:03,990 --> 00:15:04,000
+if you update the vertex shader to
+ 
+
+789
+00:15:04,000 --> 00:15:06,389
+if you update the vertex shader to
+instead use the inverse transpose and
+
+790
+00:15:06,389 --> 00:15:06,399
+instead use the inverse transpose and
+ 
+
+791
+00:15:06,399 --> 00:15:08,310
+instead use the inverse transpose and
+re-render
+
+792
+00:15:08,310 --> 00:15:08,320
+re-render
+ 
+
+793
+00:15:08,320 --> 00:15:10,629
+re-render
+we can see the vase now looks as if it's
+
+794
+00:15:10,629 --> 00:15:10,639
+we can see the vase now looks as if it's
+ 
+
+795
+00:15:10,639 --> 00:15:13,910
+we can see the vase now looks as if it's
+interacting with the light correctly
+
+796
+00:15:13,910 --> 00:15:13,920
+interacting with the light correctly
+ 
+
+797
+00:15:13,920 --> 00:15:16,069
+interacting with the light correctly
+i'm not going to prove here why this is
+
+798
+00:15:16,069 --> 00:15:16,079
+i'm not going to prove here why this is
+ 
+
+799
+00:15:16,079 --> 00:15:18,389
+i'm not going to prove here why this is
+true but i've provided a great resource
+
+800
+00:15:18,389 --> 00:15:18,399
+true but i've provided a great resource
+ 
+
+801
+00:15:18,399 --> 00:15:20,389
+true but i've provided a great resource
+that goes through the derivation of why
+
+802
+00:15:20,389 --> 00:15:20,399
+that goes through the derivation of why
+ 
+
+803
+00:15:20,399 --> 00:15:22,629
+that goes through the derivation of why
+normal vectors need to be transformed
+
+804
+00:15:22,629 --> 00:15:22,639
+normal vectors need to be transformed
+ 
+
+805
+00:15:22,639 --> 00:15:23,990
+normal vectors need to be transformed
+differently
+
+806
+00:15:23,990 --> 00:15:24,000
+differently
+ 
+
+807
+00:15:24,000 --> 00:15:26,629
+differently
+but now we actually have another problem
+
+808
+00:15:26,629 --> 00:15:26,639
+but now we actually have another problem
+ 
+
+809
+00:15:26,639 --> 00:15:28,949
+but now we actually have another problem
+computing the inverse of a matrix per
+
+810
+00:15:28,949 --> 00:15:28,959
+computing the inverse of a matrix per
+ 
+
+811
+00:15:28,959 --> 00:15:30,550
+computing the inverse of a matrix per
+vertex within a shader can be
+
+812
+00:15:30,550 --> 00:15:30,560
+vertex within a shader can be
+ 
+
+813
+00:15:30,560 --> 00:15:33,189
+vertex within a shader can be
+computationally expensive and is
+
+814
+00:15:33,189 --> 00:15:33,199
+computationally expensive and is
+ 
+
+815
+00:15:33,199 --> 00:15:36,069
+computationally expensive and is
+typically not recommended so we have a
+
+816
+00:15:36,069 --> 00:15:36,079
+typically not recommended so we have a
+ 
+
+817
+00:15:36,079 --> 00:15:38,710
+typically not recommended so we have a
+few viable solutions here
+
+818
+00:15:38,710 --> 00:15:38,720
+few viable solutions here
+ 
+
+819
+00:15:38,720 --> 00:15:41,030
+few viable solutions here
+one change your engine to only allow for
+
+820
+00:15:41,030 --> 00:15:41,040
+one change your engine to only allow for
+ 
+
+821
+00:15:41,040 --> 00:15:44,230
+one change your engine to only allow for
+uniform scaling so scale becomes a float
+
+822
+00:15:44,230 --> 00:15:44,240
+uniform scaling so scale becomes a float
+ 
+
+823
+00:15:44,240 --> 00:15:46,629
+uniform scaling so scale becomes a float
+that acts on the x y and z components
+
+824
+00:15:46,629 --> 00:15:46,639
+that acts on the x y and z components
+ 
+
+825
+00:15:46,639 --> 00:15:49,110
+that acts on the x y and z components
+equally and can just use your model
+
+826
+00:15:49,110 --> 00:15:49,120
+equally and can just use your model
+ 
+
+827
+00:15:49,120 --> 00:15:51,749
+equally and can just use your model
+matrix on all your normals this is
+
+828
+00:15:51,749 --> 00:15:51,759
+matrix on all your normals this is
+ 
+
+829
+00:15:51,759 --> 00:15:53,670
+matrix on all your normals this is
+actually a very commonly used solution
+
+830
+00:15:53,670 --> 00:15:53,680
+actually a very commonly used solution
+ 
+
+831
+00:15:53,680 --> 00:15:55,350
+actually a very commonly used solution
+by game engines
+
+832
+00:15:55,350 --> 00:15:55,360
+by game engines
+ 
+
+833
+00:15:55,360 --> 00:15:58,069
+by game engines
+option 2 compute the inverse transpose
+
+834
+00:15:58,069 --> 00:15:58,079
+option 2 compute the inverse transpose
+ 
+
+835
+00:15:58,079 --> 00:16:00,310
+option 2 compute the inverse transpose
+on the shader which is not recommended
+
+836
+00:16:00,310 --> 00:16:00,320
+on the shader which is not recommended
+ 
+
+837
+00:16:00,320 --> 00:16:02,790
+on the shader which is not recommended
+for performance reasons in option 3
+
+838
+00:16:02,790 --> 00:16:02,800
+for performance reasons in option 3
+ 
+
+839
+00:16:02,800 --> 00:16:05,189
+for performance reasons in option 3
+compute a normal matrix on the host and
+
+840
+00:16:05,189 --> 00:16:05,199
+compute a normal matrix on the host and
+ 
+
+841
+00:16:05,199 --> 00:16:07,749
+compute a normal matrix on the host and
+pass it into the shader i'm going to use
+
+842
+00:16:07,749 --> 00:16:07,759
+pass it into the shader i'm going to use
+ 
+
+843
+00:16:07,759 --> 00:16:10,150
+pass it into the shader i'm going to use
+the third method here even though it has
+
+844
+00:16:10,150 --> 00:16:10,160
+the third method here even though it has
+ 
+
+845
+00:16:10,160 --> 00:16:12,310
+the third method here even though it has
+the disadvantage of adding extra
+
+846
+00:16:12,310 --> 00:16:12,320
+the disadvantage of adding extra
+ 
+
+847
+00:16:12,320 --> 00:16:14,790
+the disadvantage of adding extra
+complexity to the engine
+
+848
+00:16:14,790 --> 00:16:14,800
+complexity to the engine
+ 
+
+849
+00:16:14,800 --> 00:16:17,269
+complexity to the engine
+if you know that non-uniform scaling is
+
+850
+00:16:17,269 --> 00:16:17,279
+if you know that non-uniform scaling is
+ 
+
+851
+00:16:17,279 --> 00:16:19,590
+if you know that non-uniform scaling is
+something you simply don't care about
+
+852
+00:16:19,590 --> 00:16:19,600
+something you simply don't care about
+ 
+
+853
+00:16:19,600 --> 00:16:22,069
+something you simply don't care about
+option 1 may be the preferable choice
+
+854
+00:16:22,069 --> 00:16:22,079
+option 1 may be the preferable choice
+ 
+
+855
+00:16:22,079 --> 00:16:24,470
+option 1 may be the preferable choice
+for your engine
+
+856
+00:16:24,470 --> 00:16:24,480
+for your engine
+ 
+
+857
+00:16:24,480 --> 00:16:26,629
+for your engine
+constructing the normal matrix directly
+
+858
+00:16:26,629 --> 00:16:26,639
+constructing the normal matrix directly
+ 
+
+859
+00:16:26,639 --> 00:16:29,110
+constructing the normal matrix directly
+is actually not very complicated so we
+
+860
+00:16:29,110 --> 00:16:29,120
+is actually not very complicated so we
+ 
+
+861
+00:16:29,120 --> 00:16:31,269
+is actually not very complicated so we
+can avoid most of the computation costs
+
+862
+00:16:31,269 --> 00:16:31,279
+can avoid most of the computation costs
+ 
+
+863
+00:16:31,279 --> 00:16:33,350
+can avoid most of the computation costs
+associated with using an inverse
+
+864
+00:16:33,350 --> 00:16:33,360
+associated with using an inverse
+ 
+
+865
+00:16:33,360 --> 00:16:34,629
+associated with using an inverse
+function
+
+866
+00:16:34,629 --> 00:16:34,639
+function
+ 
+
+867
+00:16:34,639 --> 00:16:36,710
+function
+first the normal matrix will only be
+
+868
+00:16:36,710 --> 00:16:36,720
+first the normal matrix will only be
+ 
+
+869
+00:16:36,720 --> 00:16:38,470
+first the normal matrix will only be
+three by three and can ignore the
+
+870
+00:16:38,470 --> 00:16:38,480
+three by three and can ignore the
+ 
+
+871
+00:16:38,480 --> 00:16:40,470
+three by three and can ignore the
+translation component since only
+
+872
+00:16:40,470 --> 00:16:40,480
+translation component since only
+ 
+
+873
+00:16:40,480 --> 00:16:42,069
+translation component since only
+position values are affected by
+
+874
+00:16:42,069 --> 00:16:42,079
+position values are affected by
+ 
+
+875
+00:16:42,079 --> 00:16:43,670
+position values are affected by
+translations
+
+876
+00:16:43,670 --> 00:16:43,680
+translations
+ 
+
+877
+00:16:43,680 --> 00:16:45,590
+translations
+therefore the normal matrix is given by
+
+878
+00:16:45,590 --> 00:16:45,600
+therefore the normal matrix is given by
+ 
+
+879
+00:16:45,600 --> 00:16:47,590
+therefore the normal matrix is given by
+the inverse transpose of the rotation
+
+880
+00:16:47,590 --> 00:16:47,600
+the inverse transpose of the rotation
+ 
+
+881
+00:16:47,600 --> 00:16:50,470
+the inverse transpose of the rotation
+matrix times the scale matrix
+
+882
+00:16:50,470 --> 00:16:50,480
+matrix times the scale matrix
+ 
+
+883
+00:16:50,480 --> 00:16:52,790
+matrix times the scale matrix
+using a bit of linear algebra knowledge
+
+884
+00:16:52,790 --> 00:16:52,800
+using a bit of linear algebra knowledge
+ 
+
+885
+00:16:52,800 --> 00:16:54,870
+using a bit of linear algebra knowledge
+we can rearrange this to get the normal
+
+886
+00:16:54,870 --> 00:16:54,880
+we can rearrange this to get the normal
+ 
+
+887
+00:16:54,880 --> 00:16:57,189
+we can rearrange this to get the normal
+matrix is equal to the rotation matrix
+
+888
+00:16:57,189 --> 00:16:57,199
+matrix is equal to the rotation matrix
+ 
+
+889
+00:16:57,199 --> 00:16:59,910
+matrix is equal to the rotation matrix
+times the inverse scale matrix the
+
+890
+00:16:59,910 --> 00:16:59,920
+times the inverse scale matrix the
+ 
+
+891
+00:16:59,920 --> 00:17:02,230
+times the inverse scale matrix the
+inverse scale matrix just uses the
+
+892
+00:17:02,230 --> 00:17:02,240
+inverse scale matrix just uses the
+ 
+
+893
+00:17:02,240 --> 00:17:04,949
+inverse scale matrix just uses the
+reciprocal of the scale factors so we
+
+894
+00:17:04,949 --> 00:17:04,959
+reciprocal of the scale factors so we
+ 
+
+895
+00:17:04,959 --> 00:17:07,270
+reciprocal of the scale factors so we
+can easily calculate the normal matrix
+
+896
+00:17:07,270 --> 00:17:07,280
+can easily calculate the normal matrix
+ 
+
+897
+00:17:07,280 --> 00:17:08,789
+can easily calculate the normal matrix
+directly
+
+898
+00:17:08,789 --> 00:17:08,799
+directly
+ 
+
+899
+00:17:08,799 --> 00:17:10,870
+directly
+in the vertex shader comment out these
+
+900
+00:17:10,870 --> 00:17:10,880
+in the vertex shader comment out these
+ 
+
+901
+00:17:10,880 --> 00:17:13,270
+in the vertex shader comment out these
+lines and rename the push model matrix
+
+902
+00:17:13,270 --> 00:17:13,280
+lines and rename the push model matrix
+ 
+
+903
+00:17:13,280 --> 00:17:15,750
+lines and rename the push model matrix
+to be called normal matrix
+
+904
+00:17:15,750 --> 00:17:15,760
+to be called normal matrix
+ 
+
+905
+00:17:15,760 --> 00:17:18,069
+to be called normal matrix
+then the normal world space is equal to
+
+906
+00:17:18,069 --> 00:17:18,079
+then the normal world space is equal to
+ 
+
+907
+00:17:18,079 --> 00:17:20,870
+then the normal world space is equal to
+the normalized result of the push.normal
+
+908
+00:17:20,870 --> 00:17:20,880
+the normalized result of the push.normal
+ 
+
+909
+00:17:20,880 --> 00:17:24,069
+the normalized result of the push.normal
+matrix times the vertex normal
+
+910
+00:17:24,069 --> 00:17:24,079
+matrix times the vertex normal
+ 
+
+911
+00:17:24,079 --> 00:17:26,150
+matrix times the vertex normal
+copy the push constant definition and
+
+912
+00:17:26,150 --> 00:17:26,160
+copy the push constant definition and
+ 
+
+913
+00:17:26,160 --> 00:17:27,829
+copy the push constant definition and
+overwrite the push constant struct in
+
+914
+00:17:27,829 --> 00:17:27,839
+overwrite the push constant struct in
+ 
+
+915
+00:17:27,839 --> 00:17:30,789
+overwrite the push constant struct in
+the fragment shader so that they match
+
+916
+00:17:30,789 --> 00:17:30,799
+the fragment shader so that they match
+ 
+
+917
+00:17:30,799 --> 00:17:32,950
+the fragment shader so that they match
+and then in the game object header we
+
+918
+00:17:32,950 --> 00:17:32,960
+and then in the game object header we
+ 
+
+919
+00:17:32,960 --> 00:17:34,950
+and then in the game object header we
+will add a new function to calculate the
+
+920
+00:17:34,950 --> 00:17:34,960
+will add a new function to calculate the
+ 
+
+921
+00:17:34,960 --> 00:17:37,110
+will add a new function to calculate the
+normal matrix first though let's
+
+922
+00:17:37,110 --> 00:17:37,120
+normal matrix first though let's
+ 
+
+923
+00:17:37,120 --> 00:17:38,310
+normal matrix first though let's
+actually move the function
+
+924
+00:17:38,310 --> 00:17:38,320
+actually move the function
+ 
+
+925
+00:17:38,320 --> 00:17:40,549
+actually move the function
+implementations out of the header to an
+
+926
+00:17:40,549 --> 00:17:40,559
+implementations out of the header to an
+ 
+
+927
+00:17:40,559 --> 00:17:42,950
+implementations out of the header to an
+implementation file
+
+928
+00:17:42,950 --> 00:17:42,960
+implementation file
+ 
+
+929
+00:17:42,960 --> 00:17:44,870
+implementation file
+so i will create a new file called lve
+
+930
+00:17:44,870 --> 00:17:44,880
+so i will create a new file called lve
+ 
+
+931
+00:17:44,880 --> 00:17:47,590
+so i will create a new file called lve
+lvegameobject.cpp
+
+932
+00:17:47,590 --> 00:17:47,600
+lvegameobject.cpp
+ 
+
+933
+00:17:47,600 --> 00:17:49,070
+lvegameobject.cpp
+including the
+
+934
+00:17:49,070 --> 00:17:49,080
+including the
+ 
+
+935
+00:17:49,080 --> 00:17:51,270
+including the
+lvegameobject.hpp header file and then
+
+936
+00:17:51,270 --> 00:17:51,280
+lvegameobject.hpp header file and then
+ 
+
+937
+00:17:51,280 --> 00:17:53,830
+lvegameobject.hpp header file and then
+add my namespace
+
+938
+00:17:53,830 --> 00:17:53,840
+add my namespace
+ 
+
+939
+00:17:53,840 --> 00:17:55,830
+add my namespace
+back in the gameobject header file i
+
+940
+00:17:55,830 --> 00:17:55,840
+back in the gameobject header file i
+ 
+
+941
+00:17:55,840 --> 00:17:57,990
+back in the gameobject header file i
+will copy and remove the map4function's
+
+942
+00:17:57,990 --> 00:17:58,000
+will copy and remove the map4function's
+ 
+
+943
+00:17:58,000 --> 00:17:59,270
+will copy and remove the map4function's
+body
+
+944
+00:17:59,270 --> 00:17:59,280
+body
+ 
+
+945
+00:17:59,280 --> 00:18:01,110
+body
+so that just the map4 function
+
+946
+00:18:01,110 --> 00:18:01,120
+so that just the map4 function
+ 
+
+947
+00:18:01,120 --> 00:18:03,270
+so that just the map4 function
+declaration remains in the header and
+
+948
+00:18:03,270 --> 00:18:03,280
+declaration remains in the header and
+ 
+
+949
+00:18:03,280 --> 00:18:05,270
+declaration remains in the header and
+then navigate back to the game object
+
+950
+00:18:05,270 --> 00:18:05,280
+then navigate back to the game object
+ 
+
+951
+00:18:05,280 --> 00:18:07,029
+then navigate back to the game object
+implementation
+
+952
+00:18:07,029 --> 00:18:07,039
+implementation
+ 
+
+953
+00:18:07,039 --> 00:18:09,270
+implementation
+paste the function body in and add the
+
+954
+00:18:09,270 --> 00:18:09,280
+paste the function body in and add the
+ 
+
+955
+00:18:09,280 --> 00:18:11,430
+paste the function body in and add the
+transform component class name scope
+
+956
+00:18:11,430 --> 00:18:11,440
+transform component class name scope
+ 
+
+957
+00:18:11,440 --> 00:18:14,070
+transform component class name scope
+before the map for a function's name
+
+958
+00:18:14,070 --> 00:18:14,080
+before the map for a function's name
+ 
+
+959
+00:18:14,080 --> 00:18:16,230
+before the map for a function's name
+okay then back in the gameobject header
+
+960
+00:18:16,230 --> 00:18:16,240
+okay then back in the gameobject header
+ 
+
+961
+00:18:16,240 --> 00:18:18,150
+okay then back in the gameobject header
+i'll declare a new function that returns
+
+962
+00:18:18,150 --> 00:18:18,160
+i'll declare a new function that returns
+ 
+
+963
+00:18:18,160 --> 00:18:22,630
+i'll declare a new function that returns
+a glm mat3 type called normal matrix
+
+964
+00:18:22,630 --> 00:18:22,640
+a glm mat3 type called normal matrix
+ 
+
+965
+00:18:22,640 --> 00:18:24,549
+a glm mat3 type called normal matrix
+in the implementation file i will
+
+966
+00:18:24,549 --> 00:18:24,559
+in the implementation file i will
+ 
+
+967
+00:18:24,559 --> 00:18:27,190
+in the implementation file i will
+declare the glm.3 transform component
+
+968
+00:18:27,190 --> 00:18:27,200
+declare the glm.3 transform component
+ 
+
+969
+00:18:27,200 --> 00:18:33,510
+declare the glm.3 transform component
+normal matrix function
+
+970
+00:18:33,510 --> 00:18:33,520
+
+ 
+
+971
+00:18:33,520 --> 00:18:35,830
+ 
+and then i'll copy the contents of the
+
+972
+00:18:35,830 --> 00:18:35,840
+and then i'll copy the contents of the
+ 
+
+973
+00:18:35,840 --> 00:18:39,830
+and then i'll copy the contents of the
+map4 function to use as a starting point
+
+974
+00:18:39,830 --> 00:18:39,840
+map4 function to use as a starting point
+ 
+
+975
+00:18:39,840 --> 00:18:42,310
+map4 function to use as a starting point
+declare a new local variable of type
+
+976
+00:18:42,310 --> 00:18:42,320
+declare a new local variable of type
+ 
+
+977
+00:18:42,320 --> 00:18:44,870
+declare a new local variable of type
+const glm vect3
+
+978
+00:18:44,870 --> 00:18:44,880
+const glm vect3
+ 
+
+979
+00:18:44,880 --> 00:18:47,669
+const glm vect3
+called inverse scale and set it equal to
+
+980
+00:18:47,669 --> 00:18:47,679
+called inverse scale and set it equal to
+ 
+
+981
+00:18:47,679 --> 00:18:49,590
+called inverse scale and set it equal to
+1 over scale
+
+982
+00:18:49,590 --> 00:18:49,600
+1 over scale
+ 
+
+983
+00:18:49,600 --> 00:18:51,750
+1 over scale
+then in the return statement change gl
+
+984
+00:18:51,750 --> 00:18:51,760
+then in the return statement change gl
+ 
+
+985
+00:18:51,760 --> 00:18:54,549
+then in the return statement change gl
+and map 4 to return a glm mat 3 object
+
+986
+00:18:54,549 --> 00:18:54,559
+and map 4 to return a glm mat 3 object
+ 
+
+987
+00:18:54,559 --> 00:18:57,430
+and map 4 to return a glm mat 3 object
+type instead and remove the last
+
+988
+00:18:57,430 --> 00:18:57,440
+type instead and remove the last
+ 
+
+989
+00:18:57,440 --> 00:19:00,150
+type instead and remove the last
+component from each column vector
+
+990
+00:19:00,150 --> 00:19:00,160
+component from each column vector
+ 
+
+991
+00:19:00,160 --> 00:19:03,110
+component from each column vector
+as well as the entire last column
+
+992
+00:19:03,110 --> 00:19:03,120
+as well as the entire last column
+ 
+
+993
+00:19:03,120 --> 00:19:06,150
+as well as the entire last column
+then change each occurrence of scale x y
+
+994
+00:19:06,150 --> 00:19:06,160
+then change each occurrence of scale x y
+ 
+
+995
+00:19:06,160 --> 00:19:08,789
+then change each occurrence of scale x y
+or z to instead use the inverse scale
+
+996
+00:19:08,789 --> 00:19:08,799
+or z to instead use the inverse scale
+ 
+
+997
+00:19:08,799 --> 00:19:10,390
+or z to instead use the inverse scale
+local variable
+
+998
+00:19:10,390 --> 00:19:10,400
+local variable
+ 
+
+999
+00:19:10,400 --> 00:19:12,390
+local variable
+and that's it the normal matrix is very
+
+1000
+00:19:12,390 --> 00:19:12,400
+and that's it the normal matrix is very
+ 
+
+1001
+00:19:12,400 --> 00:19:14,549
+and that's it the normal matrix is very
+similar to the model matrix except it's
+
+1002
+00:19:14,549 --> 00:19:14,559
+similar to the model matrix except it's
+ 
+
+1003
+00:19:14,559 --> 00:19:17,909
+similar to the model matrix except it's
+3 by 3 ignores the translation component
+
+1004
+00:19:17,909 --> 00:19:17,919
+3 by 3 ignores the translation component
+ 
+
+1005
+00:19:17,919 --> 00:19:20,470
+3 by 3 ignores the translation component
+and scales each column by the reciprocal
+
+1006
+00:19:20,470 --> 00:19:20,480
+and scales each column by the reciprocal
+ 
+
+1007
+00:19:20,480 --> 00:19:27,270
+and scales each column by the reciprocal
+of the scale components
+
+1008
+00:19:27,270 --> 00:19:27,280
+
+ 
+
+1009
+00:19:27,280 --> 00:19:28,710
+ 
+in the simple render system
+
+1010
+00:19:28,710 --> 00:19:28,720
+in the simple render system
+ 
+
+1011
+00:19:28,720 --> 00:19:30,789
+in the simple render system
+implementation we can rename model
+
+1012
+00:19:30,789 --> 00:19:30,799
+implementation we can rename model
+ 
+
+1013
+00:19:30,799 --> 00:19:33,430
+implementation we can rename model
+matrix to instead be normal matrix and
+
+1014
+00:19:33,430 --> 00:19:33,440
+matrix to instead be normal matrix and
+ 
+
+1015
+00:19:33,440 --> 00:19:35,750
+matrix to instead be normal matrix and
+then in the load game objects function
+
+1016
+00:19:35,750 --> 00:19:35,760
+then in the load game objects function
+ 
+
+1017
+00:19:35,760 --> 00:19:38,230
+then in the load game objects function
+set push.normal matrix equal to
+
+1018
+00:19:38,230 --> 00:19:38,240
+set push.normal matrix equal to
+ 
+
+1019
+00:19:38,240 --> 00:19:41,909
+set push.normal matrix equal to
+object.transform.normalmatrix
+
+1020
+00:19:41,909 --> 00:19:41,919
+
+ 
+
+1021
+00:19:41,919 --> 00:19:43,990
+ 
+we can't successfully build the project
+
+1022
+00:19:43,990 --> 00:19:44,000
+we can't successfully build the project
+ 
+
+1023
+00:19:44,000 --> 00:19:45,990
+we can't successfully build the project
+yet because there is a mistake in the
+
+1024
+00:19:45,990 --> 00:19:46,000
+yet because there is a mistake in the
+ 
+
+1025
+00:19:46,000 --> 00:19:49,270
+yet because there is a mistake in the
+vertex shader the normal matrix is 3x3
+
+1026
+00:19:49,270 --> 00:19:49,280
+vertex shader the normal matrix is 3x3
+ 
+
+1027
+00:19:49,280 --> 00:19:51,110
+vertex shader the normal matrix is 3x3
+not 4x4
+
+1028
+00:19:51,110 --> 00:19:51,120
+not 4x4
+ 
+
+1029
+00:19:51,120 --> 00:19:53,750
+not 4x4
+however in our push constant struct we
+
+1030
+00:19:53,750 --> 00:19:53,760
+however in our push constant struct we
+ 
+
+1031
+00:19:53,760 --> 00:19:56,549
+however in our push constant struct we
+will still use a 4x4 matrix because of
+
+1032
+00:19:56,549 --> 00:19:56,559
+will still use a 4x4 matrix because of
+ 
+
+1033
+00:19:56,559 --> 00:19:59,110
+will still use a 4x4 matrix because of
+alignment requirements
+
+1034
+00:19:59,110 --> 00:19:59,120
+alignment requirements
+ 
+
+1035
+00:19:59,120 --> 00:20:00,950
+alignment requirements
+i covered alignment requirements in
+
+1036
+00:20:00,950 --> 00:20:00,960
+i covered alignment requirements in
+ 
+
+1037
+00:20:00,960 --> 00:20:03,590
+i covered alignment requirements in
+tutorial 9 when i first introduced push
+
+1038
+00:20:03,590 --> 00:20:03,600
+tutorial 9 when i first introduced push
+ 
+
+1039
+00:20:03,600 --> 00:20:05,110
+tutorial 9 when i first introduced push
+constants
+
+1040
+00:20:05,110 --> 00:20:05,120
+constants
+ 
+
+1041
+00:20:05,120 --> 00:20:07,909
+constants
+and matte three is actually three vect4s
+
+1042
+00:20:07,909 --> 00:20:07,919
+and matte three is actually three vect4s
+ 
+
+1043
+00:20:07,919 --> 00:20:10,549
+and matte three is actually three vect4s
+as each vector3 is three floats aligned
+
+1044
+00:20:10,549 --> 00:20:10,559
+as each vector3 is three floats aligned
+ 
+
+1045
+00:20:10,559 --> 00:20:13,029
+as each vector3 is three floats aligned
+to 16 bytes
+
+1046
+00:20:13,029 --> 00:20:13,039
+to 16 bytes
+ 
+
+1047
+00:20:13,039 --> 00:20:15,590
+to 16 bytes
+so at least the easiest way i know of to
+
+1048
+00:20:15,590 --> 00:20:15,600
+so at least the easiest way i know of to
+ 
+
+1049
+00:20:15,600 --> 00:20:17,669
+so at least the easiest way i know of to
+pass a three by three matrix to shader
+
+1050
+00:20:17,669 --> 00:20:17,679
+pass a three by three matrix to shader
+ 
+
+1051
+00:20:17,679 --> 00:20:20,549
+pass a three by three matrix to shader
+with the proper padding is to pass it in
+
+1052
+00:20:20,549 --> 00:20:20,559
+with the proper padding is to pass it in
+ 
+
+1053
+00:20:20,559 --> 00:20:23,110
+with the proper padding is to pass it in
+as a map for and then when you want to
+
+1054
+00:20:23,110 --> 00:20:23,120
+as a map for and then when you want to
+ 
+
+1055
+00:20:23,120 --> 00:20:25,190
+as a map for and then when you want to
+use the matrix within the shader
+
+1056
+00:20:25,190 --> 00:20:25,200
+use the matrix within the shader
+ 
+
+1057
+00:20:25,200 --> 00:20:28,549
+use the matrix within the shader
+truncate it by using a mat 3 conversion
+
+1058
+00:20:28,549 --> 00:20:28,559
+truncate it by using a mat 3 conversion
+ 
+
+1059
+00:20:28,559 --> 00:20:31,830
+truncate it by using a mat 3 conversion
+so wrap push.normal matrix with the mat
+
+1060
+00:20:31,830 --> 00:20:31,840
+so wrap push.normal matrix with the mat
+ 
+
+1061
+00:20:31,840 --> 00:20:34,470
+so wrap push.normal matrix with the mat
+3 constructor before multiplying it by
+
+1062
+00:20:34,470 --> 00:20:34,480
+3 constructor before multiplying it by
+ 
+
+1063
+00:20:34,480 --> 00:20:36,310
+3 constructor before multiplying it by
+the normal vector
+
+1064
+00:20:36,310 --> 00:20:36,320
+the normal vector
+ 
+
+1065
+00:20:36,320 --> 00:20:38,149
+the normal vector
+when we initialize the push.normal
+
+1066
+00:20:38,149 --> 00:20:38,159
+when we initialize the push.normal
+ 
+
+1067
+00:20:38,159 --> 00:20:39,909
+when we initialize the push.normal
+matrix in the simple render system
+
+1068
+00:20:39,909 --> 00:20:39,919
+matrix in the simple render system
+ 
+
+1069
+00:20:39,919 --> 00:20:43,110
+matrix in the simple render system
+implementation the glm library will
+
+1070
+00:20:43,110 --> 00:20:43,120
+implementation the glm library will
+ 
+
+1071
+00:20:43,120 --> 00:20:45,270
+implementation the glm library will
+automatically convert the 3x3 matrix
+
+1072
+00:20:45,270 --> 00:20:45,280
+automatically convert the 3x3 matrix
+ 
+
+1073
+00:20:45,280 --> 00:20:47,510
+automatically convert the 3x3 matrix
+returned by the normal matrix function
+
+1074
+00:20:47,510 --> 00:20:47,520
+returned by the normal matrix function
+ 
+
+1075
+00:20:47,520 --> 00:20:50,470
+returned by the normal matrix function
+to a padded 4x4 matrix
+
+1076
+00:20:50,470 --> 00:20:50,480
+to a padded 4x4 matrix
+ 
+
+1077
+00:20:50,480 --> 00:20:52,630
+to a padded 4x4 matrix
+so now we can build and run and you
+
+1078
+00:20:52,630 --> 00:20:52,640
+so now we can build and run and you
+ 
+
+1079
+00:20:52,640 --> 00:20:54,789
+so now we can build and run and you
+should see the squished base once more
+
+1080
+00:20:54,789 --> 00:20:54,799
+should see the squished base once more
+ 
+
+1081
+00:20:54,799 --> 00:20:57,750
+should see the squished base once more
+with the correct lighting being applied
+
+1082
+00:20:57,750 --> 00:20:57,760
+with the correct lighting being applied
+ 
+
+1083
+00:20:57,760 --> 00:20:59,830
+with the correct lighting being applied
+you can even render both the smooth and
+
+1084
+00:20:59,830 --> 00:20:59,840
+you can even render both the smooth and
+ 
+
+1085
+00:20:59,840 --> 00:21:01,830
+you can even render both the smooth and
+flat phase models at once
+
+1086
+00:21:01,830 --> 00:21:01,840
+flat phase models at once
+ 
+
+1087
+00:21:01,840 --> 00:21:03,830
+flat phase models at once
+all it takes is creating a second game
+
+1088
+00:21:03,830 --> 00:21:03,840
+all it takes is creating a second game
+ 
+
+1089
+00:21:03,840 --> 00:21:06,549
+all it takes is creating a second game
+object that uses the other model file if
+
+1090
+00:21:06,549 --> 00:21:06,559
+object that uses the other model file if
+ 
+
+1091
+00:21:06,559 --> 00:21:07,830
+object that uses the other model file if
+i do this
+
+1092
+00:21:07,830 --> 00:21:07,840
+i do this
+ 
+
+1093
+00:21:07,840 --> 00:21:10,390
+i do this
+shifting the flat phase slightly left
+
+1094
+00:21:10,390 --> 00:21:10,400
+shifting the flat phase slightly left
+ 
+
+1095
+00:21:10,400 --> 00:21:12,870
+shifting the flat phase slightly left
+and the smooth bay slightly to the right
+
+1096
+00:21:12,870 --> 00:21:12,880
+and the smooth bay slightly to the right
+ 
+
+1097
+00:21:12,880 --> 00:21:14,470
+and the smooth bay slightly to the right
+i can build and run
+
+1098
+00:21:14,470 --> 00:21:14,480
+i can build and run
+ 
+
+1099
+00:21:14,480 --> 00:21:17,110
+i can build and run
+and compare the two vase objects
+
+1100
+00:21:17,110 --> 00:21:17,120
+and compare the two vase objects
+ 
+
+1101
+00:21:17,120 --> 00:21:19,350
+and compare the two vase objects
+the vertex positions are all the same
+
+1102
+00:21:19,350 --> 00:21:19,360
+the vertex positions are all the same
+ 
+
+1103
+00:21:19,360 --> 00:21:21,190
+the vertex positions are all the same
+and the exact same vertex shader is used
+
+1104
+00:21:21,190 --> 00:21:21,200
+and the exact same vertex shader is used
+ 
+
+1105
+00:21:21,200 --> 00:21:22,549
+and the exact same vertex shader is used
+by both
+
+1106
+00:21:22,549 --> 00:21:22,559
+by both
+ 
+
+1107
+00:21:22,559 --> 00:21:24,470
+by both
+the only difference is how the model
+
+1108
+00:21:24,470 --> 00:21:24,480
+the only difference is how the model
+ 
+
+1109
+00:21:24,480 --> 00:21:27,669
+the only difference is how the model
+files specify the vertex normals
+
+1110
+00:21:27,669 --> 00:21:27,679
+files specify the vertex normals
+ 
+
+1111
+00:21:27,679 --> 00:21:29,750
+files specify the vertex normals
+i will clean up this unused code in the
+
+1112
+00:21:29,750 --> 00:21:29,760
+i will clean up this unused code in the
+ 
+
+1113
+00:21:29,760 --> 00:21:32,549
+i will clean up this unused code in the
+vertex shader
+
+1114
+00:21:32,549 --> 00:21:32,559
+vertex shader
+ 
+
+1115
+00:21:32,559 --> 00:21:34,470
+vertex shader
+and that's it for today
+
+1116
+00:21:34,470 --> 00:21:34,480
+and that's it for today
+ 
+
+1117
+00:21:34,480 --> 00:21:36,149
+and that's it for today
+thank you for watching and keep on
+
+1118
+00:21:36,149 --> 00:21:36,159
+thank you for watching and keep on
+ 
+
+1119
+00:21:36,159 --> 00:21:39,960
+thank you for watching and keep on
+coding cheers
+

@@ -41,9 +41,9 @@ namespace lve {
     float frameTime;
     VkCommandBuffer commandBuffer;
     LveCamera& camera;
-    VkDescriptorSet globalDescriptorSet; // Descriptor set globale per il frame corrente (contiene l'UBO)
-    LveDescriptorPool& frameDescriptorPool;
-    LveGameObject::Map& gameObjects;     // Riferimento a tutti i game object attivi nella scena
+    VkDescriptorSet globalDescriptorSet;    // Descriptor set globale per il frame corrente (contiene l'UBO)
+    LveDescriptorPool& frameDescriptorPool; // Pool dinamico per allocare descrittori per-oggetto resettato a inizio frame
+    LveGameObject::Map& gameObjects;        // Riferimento a tutti i game object attivi nella scena
   };
 
 } // namespace lve

@@ -14,7 +14,7 @@ layout(location = 3) in vec2 uv;
 layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec3 fragPosWorld;    // Posizione del vertice nello spazio mondo (interpolata per frammento)
 layout(location = 2) out vec3 fragNormalWorld; // Normale del vertice nello spazio mondo (interpolata per frammento)
-layout(location = 3) out vec2 fragUv;
+layout(location = 3) out vec2 fragUv;          // Coordinate texture UV interpolate per frammento
 
 // Dati di una singola point light memorizzati nell'UBO (allineamento std140)
 struct PointLight {
@@ -32,6 +32,7 @@ layout(set = 0, binding = 0) uniform GlobalUbo {
   int numLights;
 } ubo;
 
+// Uniform Buffer Object specifico del singolo Game Object (Set 1, Binding 0): contiene le matrici di trasformazione
 layout(set = 1, binding = 0) uniform GameObjectBufferData {
   mat4 modelMatrix;
   mat4 normalMatrix;

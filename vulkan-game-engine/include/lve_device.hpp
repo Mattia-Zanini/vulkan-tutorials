@@ -63,13 +63,14 @@ namespace lve {
 
     void createImageWithInfo(const VkImageCreateInfo& imageInfo, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 
+    // Esegue la transizione del layout di memoria di una VkImage registrando una pipeline barrier su un command buffer temporaneo
     void transitionImageLayout(
-        VkImage image,
-        VkFormat format,
-        VkImageLayout oldLayout,
-        VkImageLayout newLayout,
-        uint32_t mipLevels = 1,
-        uint32_t layerCount = 1);
+      VkImage image,
+      VkFormat format,
+      VkImageLayout oldLayout,
+      VkImageLayout newLayout,
+      uint32_t mipLevels = 1,
+      uint32_t layerCount = 1);
 
     VkPhysicalDeviceProperties properties;
 

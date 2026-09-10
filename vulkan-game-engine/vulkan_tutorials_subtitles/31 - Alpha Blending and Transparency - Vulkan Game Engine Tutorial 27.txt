@@ -1,0 +1,875 @@
+1
+00:00:00,329 --> 00:00:01,649
+Hello coders,
+
+2
+00:00:01,649 --> 00:00:07,729
+So far up until now, everything we have rendered
+has been a solid and completely opaque object.
+
+3
+00:00:07,729 --> 00:00:11,780
+This means that none of the incoming light
+is allowed to pass through.
+
+4
+00:00:11,780 --> 00:00:16,250
+This corresponds to the alpha component for
+every fragment being equal to 1.
+
+5
+00:00:16,250 --> 00:00:21,320
+Well we do have one exception, and that’s
+the billboard we use for the point light objects.
+
+6
+00:00:21,320 --> 00:00:25,050
+In the case a fragment falls outside the light’s
+radius, we discard it.
+
+7
+00:00:25,050 --> 00:00:28,470
+This is mostly equivalent to having an alpha
+value of zero.
+
+8
+00:00:28,470 --> 00:00:32,810
+But what about all the other possible values
+in between 0 and 1.
+
+9
+00:00:32,810 --> 00:00:37,060
+Conceptually the alpha component says what
+percentage of the color to contribute to the
+
+10
+00:00:37,060 --> 00:00:38,470
+final image.
+
+11
+00:00:38,470 --> 00:00:44,290
+So for example, if we wanted to add a blue
+tinted window to the scene that lets 3/4 of
+
+12
+00:00:44,290 --> 00:00:48,780
+the light behind it pass through, then it
+should be as simple as rendering a quad with
+
+13
+00:00:48,780 --> 00:00:51,370
+its alpha component set to one quarter.
+
+14
+00:00:51,370 --> 00:00:57,370
+The final fragment color should be 25% the
+color of the window, plus 1 minus 25% the
+
+15
+00:00:57,370 --> 00:00:59,750
+color of whatever is behind the window.
+
+16
+00:00:59,750 --> 00:01:04,280
+The graphics pipeline also already provides
+a fixed function step to do this for us.
+
+17
+00:01:04,280 --> 00:01:09,030
+If you recall way back to tutorial 4, the
+final stage of the graphics pipeline is the
+
+18
+00:01:09,030 --> 00:01:10,900
+color blending stage.
+
+19
+00:01:10,900 --> 00:01:16,320
+This occurs automatically following the fragment
+shader, and is even configurable.
+
+20
+00:01:16,320 --> 00:01:17,320
+The color blending stage can perform two types
+of operations.
+
+21
+00:01:17,320 --> 00:01:20,730
+It can mix the previous and incoming color
+to produce a new mixed value,
+
+22
+00:01:20,730 --> 00:01:25,660
+Or it can combine the previous and incoming
+value using a bitwise operation.
+
+23
+00:01:25,660 --> 00:01:31,040
+So far this should all sound very straightforward,
+and you may be wondering why we just didn’t
+
+24
+00:01:31,040 --> 00:01:33,460
+enable color blending from the start.
+
+25
+00:01:33,460 --> 00:01:38,820
+And that’s because there is one pretty significant
+gotcha when working with transparency, the
+
+26
+00:01:38,820 --> 00:01:42,909
+order in which we render semi-transparent
+objects actually matters!
+
+27
+00:01:42,909 --> 00:01:47,490
+The reason for this can be a bit counter-intuitive,
+especially if you’ve spent any time using
+
+28
+00:01:47,490 --> 00:01:52,479
+art editing software where an image is broken
+up into a sequence of layers.
+
+29
+00:01:52,479 --> 00:01:56,659
+When working with layers, partial transparency
+isn’t an issue because we know the alpha
+
+30
+00:01:56,659 --> 00:02:01,440
+component for each pixel at each layer, and
+there is a well defined ordering of layers
+
+31
+00:02:01,440 --> 00:02:03,330
+from front to back.
+
+32
+00:02:03,330 --> 00:02:07,610
+But this is the wrong mental model to have
+for our pipeline based rendering.
+
+33
+00:02:07,610 --> 00:03:11,940
+Lets jump back to tutorial 4 for a quick review.
+
+34
+00:03:11,940 --> 00:03:16,090
+So how does this relate to semi-transparent
+objects?
+
+35
+00:03:16,090 --> 00:03:21,310
+Well the depth buffer can only store one depth
+value per pixel and doesn’t care about how
+
+36
+00:03:21,310 --> 00:03:23,510
+transparent an object is.
+
+37
+00:03:23,510 --> 00:03:28,250
+If the window is rendered before the vase
+object behind it, then the depth buffer will
+
+38
+00:03:28,250 --> 00:03:33,330
+be storing the window’s depth which is closer
+to the camera, therefore the vase fragments
+
+39
+00:03:33,330 --> 00:03:34,340
+get discarded.
+
+40
+00:03:34,340 --> 00:03:39,590
+One simple solution is to first render all
+the solid objects in the scene, followed by
+
+41
+00:03:39,590 --> 00:03:41,959
+every semi-transparent object.
+
+42
+00:03:41,959 --> 00:03:46,720
+However even this solution isn’t perfect
+and breaks down when multiple semi-transparent
+
+43
+00:03:46,720 --> 00:03:48,440
+objects overlap.
+
+44
+00:03:48,440 --> 00:03:52,629
+You could work around this by first sorting
+each semi-transparent object by its distance
+
+45
+00:03:52,629 --> 00:03:56,310
+from the camera, and then rendering in the
+order from back to front.
+
+46
+00:03:56,310 --> 00:04:01,780
+But what about if the camera moves, or a model
+moves, sorting every object by distance every
+
+47
+00:04:01,780 --> 00:04:04,400
+frame can require a lot of computation.
+
+48
+00:04:04,400 --> 00:04:06,870
+And even that will break down in certain scenarios.
+
+49
+00:04:06,870 --> 00:04:12,560
+It’s possible to overlap 3 triangles such
+that from the perspective of the camera, properly
+
+50
+00:04:12,560 --> 00:04:18,209
+ordering them becomes impossible and we’d
+need to order per fragment.
+
+51
+00:04:18,209 --> 00:04:23,470
+So unfortunately, there isn’t an easy solution
+that handles every case.
+
+52
+00:04:23,470 --> 00:04:28,870
+There do exist a class of techniques known
+as order independent transparency that solve
+
+53
+00:04:28,870 --> 00:04:34,169
+this complicated problem, but all of which
+have prerequisite topics we would need to
+
+54
+00:04:34,169 --> 00:04:35,689
+cover first.
+
+55
+00:04:35,689 --> 00:04:39,449
+So I guess that’s it, thank you for watching
+and?
+
+56
+00:04:39,449 --> 00:04:40,449
+Well not quite.
+
+57
+00:04:40,449 --> 00:04:43,069
+I would still like to demonstrate blending.
+
+58
+00:04:43,069 --> 00:04:46,849
+And if the only semi-transparent objects in
+the scene are the point lights, then this
+
+59
+00:04:46,849 --> 00:04:49,650
+is a simple case we can make work.
+
+60
+00:04:49,650 --> 00:04:53,919
+Point lights are billboards and always face
+the camera, therefore we avoid the case where
+
+61
+00:04:53,919 --> 00:04:59,159
+triangles can overlap, and we do not need
+to sort individual vertices, the only thing
+
+62
+00:04:59,159 --> 00:05:02,719
+that will affect the ordering is the position
+of the point light.
+
+63
+00:05:02,719 --> 00:05:05,419
+Ok so let’s get to coding.
+
+64
+00:05:05,419 --> 00:05:10,059
+First we will need to render all the solid
+objects in the scene, so in the first app
+
+65
+00:05:10,059 --> 00:05:14,569
+implementation file’s run function make
+sure your simple render system’s render
+
+66
+00:05:14,569 --> 00:05:19,710
+game objects function is being called before
+the point light systems render function.
+
+67
+00:05:19,710 --> 00:05:23,560
+Typically when rendering any semi-transparent
+objects you will want to first render all
+
+68
+00:05:23,560 --> 00:05:28,430
+your solid objects, then render any semi-transparent
+objects.
+
+69
+00:05:28,430 --> 00:05:32,650
+Next we’re going to head over to the pipeline
+header to add a helper function to enable
+
+70
+00:05:32,650 --> 00:05:34,199
+alpha blending.
+
+71
+00:05:34,199 --> 00:05:38,789
+First though, if you haven’t yet corrected
+this yourself, I have a mistake in the pipeline
+
+72
+00:05:38,789 --> 00:05:40,669
+config info struct.
+
+73
+00:05:40,669 --> 00:05:45,319
+We should be setting the constructor function
+equal to the default.
+
+74
+00:05:45,319 --> 00:05:50,789
+This is because whenever you edit any of the
+copy or move constructors you need to explicitly
+
+75
+00:05:50,789 --> 00:05:53,469
+default or implement the constructor.
+
+76
+00:05:53,469 --> 00:05:57,080
+Not doing so can cause errors when using other
+compilers.
+
+77
+00:05:57,080 --> 00:06:03,220
+Now, just below the default pipeline config
+info we will add a second static void function
+
+78
+00:06:03,220 --> 00:06:08,139
+called enable alpha blending that will also
+take a pipeline config info reference called
+
+79
+00:06:08,139 --> 00:06:09,310
+pipeline.
+
+80
+00:06:09,310 --> 00:06:14,620
+This will be a helper function to easily enable
+alpha blending for a pipeline config.
+
+81
+00:06:14,620 --> 00:06:20,250
+Then at the bottom of our pipeline implementation
+file we can add the implementation for this.
+
+82
+00:06:20,250 --> 00:06:24,729
+We already have an example setting the necessary
+fields for the color blend attachment in the
+
+83
+00:06:24,729 --> 00:06:31,529
+default function above, so scroll up and copy
+that chunk of code, and paste it into your
+
+84
+00:06:31,529 --> 00:06:33,309
+enable function.
+
+85
+00:06:33,309 --> 00:06:37,379
+To enable alpha blending we need to change
+a few of the fields here.
+
+86
+00:06:37,379 --> 00:06:40,409
+First we set the blend enable field to vk
+true.
+
+87
+00:06:40,409 --> 00:06:44,060
+You may be wondering why we don’t have this
+field always set to true for all pipelines
+
+88
+00:06:44,060 --> 00:06:49,509
+and that's because there is a performance
+cost to having it enabled, we need to perform
+
+89
+00:06:49,509 --> 00:06:51,130
+the blending operations.
+
+90
+00:06:51,130 --> 00:06:57,399
+The color write mask can remain unchanged,
+since we want to write the r, g, b and a components.
+
+91
+00:06:57,399 --> 00:07:02,439
+The next 6 fields correspond to variables
+in this equation, and determine how exactly
+
+92
+00:07:02,439 --> 00:07:05,870
+rgb values and alpha values are combined.
+
+93
+00:07:05,870 --> 00:07:10,530
+The src is the current value being output
+from the fragment shader, in our case we call
+
+94
+00:07:10,530 --> 00:07:12,789
+it the outColor.
+
+95
+00:07:12,789 --> 00:07:18,050
+The destination is whatever values exist at
+that fragment in our color attachment.
+
+96
+00:07:18,050 --> 00:07:22,050
+So before we’ve rendered anything, this
+will be equal to whatever we’ve set the
+
+97
+00:07:22,050 --> 00:07:25,289
+clear value of our render pass.
+
+98
+00:07:25,289 --> 00:07:31,100
+So in our case, when writing a color we want
+to use its alpha component as the src blend
+
+99
+00:07:31,100 --> 00:07:36,710
+factor, and one minus the src alpha as how
+much the existing value in the color attachment
+
+100
+00:07:36,710 --> 00:07:37,960
+contributes.
+
+101
+00:07:37,960 --> 00:07:42,499
+As long as we render solid objects first,
+and then semi-transparent objects from farthest
+
+102
+00:07:42,499 --> 00:07:47,039
+to closest, this method will work fine.
+
+103
+00:07:47,039 --> 00:07:52,879
+The color blend op should be vk blend op add
+since we want to add these values together.
+
+104
+00:07:52,879 --> 00:07:57,210
+And the last 3 fields for alpha blending don’t
+actually matter for our purposes here, since
+
+105
+00:07:57,210 --> 00:08:01,520
+we don’t check what the destination alpha
+is at any point.
+
+106
+00:08:01,520 --> 00:08:05,719
+So I’ve left the alpha blend fields just
+with their current values, you may want to
+
+107
+00:08:05,719 --> 00:08:09,479
+change these in the future though depending
+on what you’re doing.
+
+108
+00:08:09,479 --> 00:08:13,830
+Ok now moving on, lets enable alpha blending
+for just the point light system.
+
+109
+00:08:13,830 --> 00:08:18,589
+Head over to its implementation, and in its
+create pipeline function after we’ve set
+
+110
+00:08:18,589 --> 00:08:22,759
+the pipeline config to the default we can
+then enable blending using the helper function
+
+111
+00:08:22,759 --> 00:08:25,709
+we just created.
+
+112
+00:08:25,709 --> 00:08:29,669
+The last thing to do before running our code
+is to make use of the alpha component in our
+
+113
+00:08:29,669 --> 00:08:33,370
+point light fragment shader in a non-trivial
+way.
+
+114
+00:08:33,370 --> 00:08:37,210
+Currently we always output the value of one,
+but let's make it so that the alpha component
+
+115
+00:08:37,210 --> 00:08:42,630
+approaches 0 as the distance from the center
+of the point light approaches 1.
+
+116
+00:08:42,630 --> 00:08:46,260
+The cosine function can be a nice function
+for this since it’s continuous with zero
+
+117
+00:08:46,260 --> 00:08:48,440
+slope at its max and minimum.
+
+118
+00:08:48,440 --> 00:08:53,090
+We’ll need the pi constant to properly map
+the domain, so I’ll define a const float
+
+119
+00:08:53,090 --> 00:09:01,240
+pi variable as 3.1415926538 which is more
+than enough significant digits.
+
+120
+00:09:01,240 --> 00:09:07,200
+Next I’ll set the alpha value to use 0.5
+times cos of my distance times pi plus one
+
+121
+00:09:07,200 --> 00:09:10,370
+in brackets with the cosine function.
+
+122
+00:09:10,370 --> 00:09:15,900
+This will have the effect of transforming
+the cosine function to this.
+
+123
+00:09:15,900 --> 00:09:21,310
+If we build and run, everything is looking
+pretty good but there's actually a small problem,
+
+124
+00:09:21,310 --> 00:09:27,680
+which to demonstrate I’ll need to first
+disable the rotation of my lights.
+
+125
+00:09:27,680 --> 00:09:34,680
+If we build and run again, when the red light
+overlaps the white light, this looks fine,
+
+126
+00:09:34,680 --> 00:09:40,810
+but if we flip our orientation we can see
+a clear problem when the white light overlaps
+
+127
+00:09:40,810 --> 00:09:42,370
+the red light.
+
+128
+00:09:42,370 --> 00:09:46,120
+This is because as I mentioned at the start
+of the video, ordering matters.
+
+129
+00:09:46,120 --> 00:09:49,320
+In this case the white light is being rendered
+first.
+
+130
+00:09:49,320 --> 00:09:53,830
+But when the red light is rendered, the depth
+buffer signals to the red fragments that they
+
+131
+00:09:53,830 --> 00:09:59,840
+are behind these semi-transparent fragments
+of the white light, so they get discarded.
+
+132
+00:09:59,840 --> 00:10:03,470
+I know what you may be thinking, that if we
+just change how the blending operations are
+
+133
+00:10:03,470 --> 00:10:07,760
+being performed we should be able to make
+things work, right?
+
+134
+00:10:07,760 --> 00:10:12,870
+But no, changing the blend operations just
+result in other problems and the only real
+
+135
+00:10:12,870 --> 00:10:17,641
+solutions are to sort all semi-transparent
+objects and render from back to front, or
+
+136
+00:10:17,641 --> 00:10:22,610
+to use an order-independent rendering technique
+which isn’t something we can do with the
+
+137
+00:10:22,610 --> 00:10:24,140
+vulkan topics I’ve covered so far.
+
+138
+00:10:24,140 --> 00:10:27,500
+So we’re going to do the former, we’ll
+make sure that the draw call for each light
+
+139
+00:10:27,500 --> 00:10:30,710
+is ordered by the light’s distance from
+the camera.
+
+140
+00:10:30,710 --> 00:10:35,210
+To start, we’ll add a helper function to
+the camera header to get its current position.
+
+141
+00:10:35,210 --> 00:10:40,070
+This can be easily accomplished now that we
+also are storing the inverse view matrix.
+
+142
+00:10:40,070 --> 00:10:44,410
+The first 3 values of the last column of the
+inverse view matrix correspond to the camera’s
+
+143
+00:10:44,410 --> 00:10:47,380
+position in world space.
+
+144
+00:10:47,380 --> 00:10:54,880
+We cast the last column to a vec3 in order
+to remove the 4th component.
+
+145
+00:10:54,880 --> 00:10:58,950
+Next in the point light system at the top
+of the file I’ll import the map header.
+
+146
+00:10:58,950 --> 00:11:03,490
+We’re going to use a map as a quick and
+simple way to sort our point light objects.
+
+147
+00:11:03,490 --> 00:11:07,880
+So below in the render function as an initial
+step we’ll sort the lights.
+
+148
+00:11:07,880 --> 00:11:15,280
+Create a map object with a float as the maps
+key and a game object id as the value.
+
+149
+00:11:15,280 --> 00:11:19,500
+The float key here will be the distance of
+the point light.
+
+150
+00:11:19,500 --> 00:11:24,940
+We iterate through each point using the same
+method as below.
+
+151
+00:11:24,940 --> 00:11:29,600
+Going through every game object and filtering
+out any game object that does not have the
+
+152
+00:11:29,600 --> 00:11:34,820
+point light component.
+
+153
+00:11:34,820 --> 00:11:38,880
+To calculate the distance we first get the
+camera's position and subtract the position
+
+154
+00:11:38,880 --> 00:11:42,420
+of the point light.
+
+155
+00:11:42,420 --> 00:11:46,870
+Then by using the dot product with itself
+we get the length of the offset vector.
+
+156
+00:11:46,870 --> 00:11:51,760
+Well technically we get the length squared,
+but that's good enough for our purposes since
+
+157
+00:11:51,760 --> 00:11:56,950
+we only care about the ordering and computing
+the square root would only add unnecessary
+
+158
+00:11:56,950 --> 00:11:58,670
+calculations.
+
+159
+00:11:58,670 --> 00:12:02,180
+We then add the game objects id to our sorted
+map.
+
+160
+00:12:02,180 --> 00:12:07,470
+Now below, instead of iterating through every
+game object, we will iterate through the sorted
+
+161
+00:12:07,470 --> 00:12:16,000
+map in reverse order, since we want to render
+the game objects from back to front.
+
+162
+00:12:16,000 --> 00:12:24,180
+To do so we’ll use a c++ iterator, going
+from r begin to r end.
+
+163
+00:12:24,180 --> 00:12:29,510
+We fetch the actual game object by using the
+object id from the sorted map to index into
+
+164
+00:12:29,510 --> 00:12:32,800
+the unordered map of all game objects.
+
+165
+00:12:32,800 --> 00:12:37,321
+Game objects are not copyable, that’s why
+we must do it this way using the game object
+
+166
+00:12:37,321 --> 00:12:43,540
+ids, rather than copying the actual game object
+to the sorted map.
+
+167
+00:12:43,540 --> 00:12:48,350
+And finally we can remove this filtering step
+as we know already that we only have point
+
+168
+00:12:48,350 --> 00:12:49,650
+lights at this point.
+
+169
+00:12:49,650 --> 00:12:54,430
+And that’s it, we can build and run and
+now regardless of the camera’s orientation,
+
+170
+00:12:54,430 --> 00:12:59,230
+the lights will be rendered in the correct
+order, so we will no longer see that artifact
+
+171
+00:12:59,230 --> 00:13:02,630
+when the white light overlaps the red.
+
+172
+00:13:02,630 --> 00:13:06,930
+This wraps up the point light series of videos
+and we’ll be moving on to textures next
+
+173
+00:13:06,930 --> 00:13:10,610
+as I know that's a topic many of you have
+been waiting for.
+
+174
+00:13:10,610 --> 00:13:15,150
+Feel free to experiment with how exactly you
+render the point light objects.
+
+175
+00:13:15,150 --> 00:13:18,670
+One thing we haven’t touched is adding some
+color variation.
+
+176
+00:13:18,670 --> 00:13:23,370
+If we pull out our cosine function, we can
+also make use of it when determining each
+
+177
+00:13:23,370 --> 00:13:25,650
+fragment's color.
+
+178
+00:13:25,650 --> 00:13:31,680
+One effect I particularly like is simply adding
+the cosine term to the lights rgb color, which
+
+179
+00:13:31,680 --> 00:13:36,060
+will make the center of each light white,
+and gradually transition to the actual lights
+
+180
+00:13:36,060 --> 00:13:38,250
+colors only near the edges.
+
+181
+00:13:38,250 --> 00:13:43,060
+Share any equations you come up with in the
+comments below or on our discord, I’d love
+
+182
+00:13:43,060 --> 00:13:45,160
+to see what you guys can come up with.
+
+183
+00:13:45,160 --> 00:13:48,750
+Maybe I could do something like a showcase
+in a future video.
+
+184
+00:13:48,750 --> 00:13:52,620
+Anyway thank you for watching and keep on
+coding!
+

@@ -1,0 +1,4785 @@
+1
+00:00:00,240 --> 00:00:02,230
+ 
+the swap chain is a series of frame
+
+2
+00:00:02,230 --> 00:00:02,240
+the swap chain is a series of frame
+ 
+
+3
+00:00:02,240 --> 00:00:04,390
+the swap chain is a series of frame
+buffers used to display images to our
+
+4
+00:00:04,390 --> 00:00:04,400
+buffers used to display images to our
+ 
+
+5
+00:00:04,400 --> 00:00:05,510
+buffers used to display images to our
+window
+
+6
+00:00:05,510 --> 00:00:05,520
+window
+ 
+
+7
+00:00:05,520 --> 00:00:07,349
+window
+in previous videos i've said how our
+
+8
+00:00:07,349 --> 00:00:07,359
+in previous videos i've said how our
+ 
+
+9
+00:00:07,359 --> 00:00:09,509
+in previous videos i've said how our
+graphics pipeline outputs to a target
+
+10
+00:00:09,509 --> 00:00:09,519
+graphics pipeline outputs to a target
+ 
+
+11
+00:00:09,519 --> 00:00:10,549
+graphics pipeline outputs to a target
+frame buffer
+
+12
+00:00:10,549 --> 00:00:10,559
+frame buffer
+ 
+
+13
+00:00:10,559 --> 00:00:12,070
+frame buffer
+and how a frame buffer can have
+
+14
+00:00:12,070 --> 00:00:12,080
+and how a frame buffer can have
+ 
+
+15
+00:00:12,080 --> 00:00:13,990
+and how a frame buffer can have
+different attachments such as color
+
+16
+00:00:13,990 --> 00:00:14,000
+different attachments such as color
+ 
+
+17
+00:00:14,000 --> 00:00:16,630
+different attachments such as color
+buffers or a depth buffer now the swap
+
+18
+00:00:16,630 --> 00:00:16,640
+buffers or a depth buffer now the swap
+ 
+
+19
+00:00:16,640 --> 00:00:18,550
+buffers or a depth buffer now the swap
+chain also uses these frame buffer
+
+20
+00:00:18,550 --> 00:00:18,560
+chain also uses these frame buffer
+ 
+
+21
+00:00:18,560 --> 00:00:19,109
+chain also uses these frame buffer
+objects
+
+22
+00:00:19,109 --> 00:00:19,119
+objects
+ 
+
+23
+00:00:19,119 --> 00:00:21,109
+objects
+but to read from the color attachment to
+
+24
+00:00:21,109 --> 00:00:21,119
+but to read from the color attachment to
+ 
+
+25
+00:00:21,119 --> 00:00:23,590
+but to read from the color attachment to
+then display to our windows surface
+
+26
+00:00:23,590 --> 00:00:23,600
+then display to our windows surface
+ 
+
+27
+00:00:23,600 --> 00:00:25,349
+then display to our windows surface
+any modern operating system will
+
+28
+00:00:25,349 --> 00:00:25,359
+any modern operating system will
+ 
+
+29
+00:00:25,359 --> 00:00:27,269
+any modern operating system will
+typically use at least two buffers at
+
+30
+00:00:27,269 --> 00:00:27,279
+typically use at least two buffers at
+ 
+
+31
+00:00:27,279 --> 00:00:27,990
+typically use at least two buffers at
+once
+
+32
+00:00:27,990 --> 00:00:28,000
+once
+ 
+
+33
+00:00:28,000 --> 00:00:30,230
+once
+this is known as double buffering the
+
+34
+00:00:30,230 --> 00:00:30,240
+this is known as double buffering the
+ 
+
+35
+00:00:30,240 --> 00:00:32,310
+this is known as double buffering the
+frame buffer being displayed is known as
+
+36
+00:00:32,310 --> 00:00:32,320
+frame buffer being displayed is known as
+ 
+
+37
+00:00:32,320 --> 00:00:33,350
+frame buffer being displayed is known as
+the front buffer
+
+38
+00:00:33,350 --> 00:00:33,360
+the front buffer
+ 
+
+39
+00:00:33,360 --> 00:00:35,110
+the front buffer
+and the buffer being rendered to is
+
+40
+00:00:35,110 --> 00:00:35,120
+and the buffer being rendered to is
+ 
+
+41
+00:00:35,120 --> 00:00:37,510
+and the buffer being rendered to is
+designated the back buffer
+
+42
+00:00:37,510 --> 00:00:37,520
+designated the back buffer
+ 
+
+43
+00:00:37,520 --> 00:00:39,510
+designated the back buffer
+the swap chain handles coordinating with
+
+44
+00:00:39,510 --> 00:00:39,520
+the swap chain handles coordinating with
+ 
+
+45
+00:00:39,520 --> 00:00:40,630
+the swap chain handles coordinating with
+the display
+
+46
+00:00:40,630 --> 00:00:40,640
+the display
+ 
+
+47
+00:00:40,640 --> 00:00:42,549
+the display
+to swap the front and back buffers at
+
+48
+00:00:42,549 --> 00:00:42,559
+to swap the front and back buffers at
+ 
+
+49
+00:00:42,559 --> 00:00:43,990
+to swap the front and back buffers at
+the appropriate time just
+
+50
+00:00:43,990 --> 00:00:44,000
+the appropriate time just
+ 
+
+51
+00:00:44,000 --> 00:00:46,869
+the appropriate time just
+prior to the vertical sync vertical sync
+
+52
+00:00:46,869 --> 00:00:46,879
+prior to the vertical sync vertical sync
+ 
+
+53
+00:00:46,879 --> 00:00:47,670
+prior to the vertical sync vertical sync
+or vsync
+
+54
+00:00:47,670 --> 00:00:47,680
+or vsync
+ 
+
+55
+00:00:47,680 --> 00:00:49,510
+or vsync
+is the moment at which the display
+
+56
+00:00:49,510 --> 00:00:49,520
+is the moment at which the display
+ 
+
+57
+00:00:49,520 --> 00:00:51,270
+is the moment at which the display
+begins drawing the new image
+
+58
+00:00:51,270 --> 00:00:51,280
+begins drawing the new image
+ 
+
+59
+00:00:51,280 --> 00:00:53,430
+begins drawing the new image
+and is tied to our display's refresh
+
+60
+00:00:53,430 --> 00:00:53,440
+and is tied to our display's refresh
+ 
+
+61
+00:00:53,440 --> 00:00:55,350
+and is tied to our display's refresh
+rate so for example
+
+62
+00:00:55,350 --> 00:00:55,360
+rate so for example
+ 
+
+63
+00:00:55,360 --> 00:00:57,430
+rate so for example
+if your display's refresh rate is 60
+
+64
+00:00:57,430 --> 00:00:57,440
+if your display's refresh rate is 60
+ 
+
+65
+00:00:57,440 --> 00:01:00,150
+if your display's refresh rate is 60
+hertz that means 60 times per second or
+
+66
+00:01:00,150 --> 00:01:00,160
+hertz that means 60 times per second or
+ 
+
+67
+00:01:00,160 --> 00:01:00,709
+hertz that means 60 times per second or
+every
+
+68
+00:01:00,709 --> 00:01:00,719
+every
+ 
+
+69
+00:01:00,719 --> 00:01:03,990
+every
+16.6 milliseconds the vsync occurs and
+
+70
+00:01:03,990 --> 00:01:04,000
+16.6 milliseconds the vsync occurs and
+ 
+
+71
+00:01:04,000 --> 00:01:06,550
+16.6 milliseconds the vsync occurs and
+our front and back buffers are swapped
+
+72
+00:01:06,550 --> 00:01:06,560
+our front and back buffers are swapped
+ 
+
+73
+00:01:06,560 --> 00:01:07,910
+our front and back buffers are swapped
+it's possible to ignore the
+
+74
+00:01:07,910 --> 00:01:07,920
+it's possible to ignore the
+ 
+
+75
+00:01:07,920 --> 00:01:09,830
+it's possible to ignore the
+synchronization in many games this is
+
+76
+00:01:09,830 --> 00:01:09,840
+synchronization in many games this is
+ 
+
+77
+00:01:09,840 --> 00:01:12,390
+synchronization in many games this is
+done by disabling vsync in the graphical
+
+78
+00:01:12,390 --> 00:01:12,400
+done by disabling vsync in the graphical
+ 
+
+79
+00:01:12,400 --> 00:01:13,190
+done by disabling vsync in the graphical
+settings
+
+80
+00:01:13,190 --> 00:01:13,200
+settings
+ 
+
+81
+00:01:13,200 --> 00:01:15,429
+settings
+in which case you may observe tearing
+
+82
+00:01:15,429 --> 00:01:15,439
+in which case you may observe tearing
+ 
+
+83
+00:01:15,439 --> 00:01:17,190
+in which case you may observe tearing
+tearing is when our display shows
+
+84
+00:01:17,190 --> 00:01:17,200
+tearing is when our display shows
+ 
+
+85
+00:01:17,200 --> 00:01:19,190
+tearing is when our display shows
+information from multiple frames
+
+86
+00:01:19,190 --> 00:01:19,200
+information from multiple frames
+ 
+
+87
+00:01:19,200 --> 00:01:21,749
+information from multiple frames
+in a single screen draw note that not
+
+88
+00:01:21,749 --> 00:01:21,759
+in a single screen draw note that not
+ 
+
+89
+00:01:21,759 --> 00:01:23,510
+in a single screen draw note that not
+only do we have multiple frame buffers
+
+90
+00:01:23,510 --> 00:01:23,520
+only do we have multiple frame buffers
+ 
+
+91
+00:01:23,520 --> 00:01:25,670
+only do we have multiple frame buffers
+but each frame buffer also requires
+
+92
+00:01:25,670 --> 00:01:25,680
+but each frame buffer also requires
+ 
+
+93
+00:01:25,680 --> 00:01:27,190
+but each frame buffer also requires
+unique attachments
+
+94
+00:01:27,190 --> 00:01:27,200
+unique attachments
+ 
+
+95
+00:01:27,200 --> 00:01:29,190
+unique attachments
+this isn't always true depending on our
+
+96
+00:01:29,190 --> 00:01:29,200
+this isn't always true depending on our
+ 
+
+97
+00:01:29,200 --> 00:01:30,710
+this isn't always true depending on our
+usage we can get away with sharing
+
+98
+00:01:30,710 --> 00:01:30,720
+usage we can get away with sharing
+ 
+
+99
+00:01:30,720 --> 00:01:32,390
+usage we can get away with sharing
+certain attachments like the depth
+
+100
+00:01:32,390 --> 00:01:32,400
+certain attachments like the depth
+ 
+
+101
+00:01:32,400 --> 00:01:33,749
+certain attachments like the depth
+buffer some of the time
+
+102
+00:01:33,749 --> 00:01:33,759
+buffer some of the time
+ 
+
+103
+00:01:33,759 --> 00:01:35,670
+buffer some of the time
+since usually we're only displaying the
+
+104
+00:01:35,670 --> 00:01:35,680
+since usually we're only displaying the
+ 
+
+105
+00:01:35,680 --> 00:01:37,109
+since usually we're only displaying the
+color buffer
+
+106
+00:01:37,109 --> 00:01:37,119
+color buffer
+ 
+
+107
+00:01:37,119 --> 00:01:38,870
+color buffer
+this seems like a pretty great solution
+
+108
+00:01:38,870 --> 00:01:38,880
+this seems like a pretty great solution
+ 
+
+109
+00:01:38,880 --> 00:01:40,710
+this seems like a pretty great solution
+but there's a possible drawback
+
+110
+00:01:40,710 --> 00:01:40,720
+but there's a possible drawback
+ 
+
+111
+00:01:40,720 --> 00:01:42,630
+but there's a possible drawback
+once we finish rendering the frame our
+
+112
+00:01:42,630 --> 00:01:42,640
+once we finish rendering the frame our
+ 
+
+113
+00:01:42,640 --> 00:01:44,550
+once we finish rendering the frame our
+device needs to wait until the next
+
+114
+00:01:44,550 --> 00:01:44,560
+device needs to wait until the next
+ 
+
+115
+00:01:44,560 --> 00:01:45,190
+device needs to wait until the next
+vsync
+
+116
+00:01:45,190 --> 00:01:45,200
+vsync
+ 
+
+117
+00:01:45,200 --> 00:01:47,350
+vsync
+and frame buffer swap before starting to
+
+118
+00:01:47,350 --> 00:01:47,360
+and frame buffer swap before starting to
+ 
+
+119
+00:01:47,360 --> 00:01:48,950
+and frame buffer swap before starting to
+work on the subsequent frame
+
+120
+00:01:48,950 --> 00:01:48,960
+work on the subsequent frame
+ 
+
+121
+00:01:48,960 --> 00:01:51,350
+work on the subsequent frame
+if we had a second back buffer we could
+
+122
+00:01:51,350 --> 00:01:51,360
+if we had a second back buffer we could
+ 
+
+123
+00:01:51,360 --> 00:01:52,950
+if we had a second back buffer we could
+start working on the next frame
+
+124
+00:01:52,950 --> 00:01:52,960
+start working on the next frame
+ 
+
+125
+00:01:52,960 --> 00:01:55,190
+start working on the next frame
+immediately this is known as triple
+
+126
+00:01:55,190 --> 00:01:55,200
+immediately this is known as triple
+ 
+
+127
+00:01:55,200 --> 00:01:55,990
+immediately this is known as triple
+buffering
+
+128
+00:01:55,990 --> 00:01:56,000
+buffering
+ 
+
+129
+00:01:56,000 --> 00:01:58,230
+buffering
+the main downside is that extra memory
+
+130
+00:01:58,230 --> 00:01:58,240
+the main downside is that extra memory
+ 
+
+131
+00:01:58,240 --> 00:02:00,469
+the main downside is that extra memory
+is required for storing the additional
+
+132
+00:02:00,469 --> 00:02:00,479
+is required for storing the additional
+ 
+
+133
+00:02:00,479 --> 00:02:00,950
+is required for storing the additional
+image
+
+134
+00:02:00,950 --> 00:02:00,960
+image
+ 
+
+135
+00:02:00,960 --> 00:02:03,030
+image
+the main upside occurs in cases where
+
+136
+00:02:03,030 --> 00:02:03,040
+the main upside occurs in cases where
+ 
+
+137
+00:02:03,040 --> 00:02:04,069
+the main upside occurs in cases where
+rendering a frame
+
+138
+00:02:04,069 --> 00:02:04,079
+rendering a frame
+ 
+
+139
+00:02:04,079 --> 00:02:06,069
+rendering a frame
+can't keep up with the refresh rate of
+
+140
+00:02:06,069 --> 00:02:06,079
+can't keep up with the refresh rate of
+ 
+
+141
+00:02:06,079 --> 00:02:07,350
+can't keep up with the refresh rate of
+the display
+
+142
+00:02:07,350 --> 00:02:07,360
+the display
+ 
+
+143
+00:02:07,360 --> 00:02:09,669
+the display
+with double buffering even if a frame
+
+144
+00:02:09,669 --> 00:02:09,679
+with double buffering even if a frame
+ 
+
+145
+00:02:09,679 --> 00:02:11,910
+with double buffering even if a frame
+just misses the v-sync our graphics
+
+146
+00:02:11,910 --> 00:02:11,920
+just misses the v-sync our graphics
+ 
+
+147
+00:02:11,920 --> 00:02:13,750
+just misses the v-sync our graphics
+device has to wait all the way until the
+
+148
+00:02:13,750 --> 00:02:13,760
+device has to wait all the way until the
+ 
+
+149
+00:02:13,760 --> 00:02:15,830
+device has to wait all the way until the
+next v-sync before it can start working
+
+150
+00:02:15,830 --> 00:02:15,840
+next v-sync before it can start working
+ 
+
+151
+00:02:15,840 --> 00:02:16,550
+next v-sync before it can start working
+again
+
+152
+00:02:16,550 --> 00:02:16,560
+again
+ 
+
+153
+00:02:16,560 --> 00:02:18,470
+again
+to a user this can seem like a
+
+154
+00:02:18,470 --> 00:02:18,480
+to a user this can seem like a
+ 
+
+155
+00:02:18,480 --> 00:02:19,750
+to a user this can seem like a
+noticeable hiccup
+
+156
+00:02:19,750 --> 00:02:19,760
+noticeable hiccup
+ 
+
+157
+00:02:19,760 --> 00:02:21,589
+noticeable hiccup
+where the frame rate has suddenly
+
+158
+00:02:21,589 --> 00:02:21,599
+where the frame rate has suddenly
+ 
+
+159
+00:02:21,599 --> 00:02:24,309
+where the frame rate has suddenly
+dropped triple buffering avoids this
+
+160
+00:02:24,309 --> 00:02:24,319
+dropped triple buffering avoids this
+ 
+
+161
+00:02:24,319 --> 00:02:26,150
+dropped triple buffering avoids this
+problem by always providing a frame
+
+162
+00:02:26,150 --> 00:02:26,160
+problem by always providing a frame
+ 
+
+163
+00:02:26,160 --> 00:02:27,750
+problem by always providing a frame
+buffer to work on
+
+164
+00:02:27,750 --> 00:02:27,760
+buffer to work on
+ 
+
+165
+00:02:27,760 --> 00:02:29,910
+buffer to work on
+if you've worked with opengl or other
+
+166
+00:02:29,910 --> 00:02:29,920
+if you've worked with opengl or other
+ 
+
+167
+00:02:29,920 --> 00:02:31,350
+if you've worked with opengl or other
+graphics apis before
+
+168
+00:02:31,350 --> 00:02:31,360
+graphics apis before
+ 
+
+169
+00:02:31,360 --> 00:02:32,949
+graphics apis before
+triple buffering is probably not
+
+170
+00:02:32,949 --> 00:02:32,959
+triple buffering is probably not
+ 
+
+171
+00:02:32,959 --> 00:02:34,790
+triple buffering is probably not
+something you've had to deal with
+
+172
+00:02:34,790 --> 00:02:34,800
+something you've had to deal with
+ 
+
+173
+00:02:34,800 --> 00:02:36,630
+something you've had to deal with
+it's usually handled automatically
+
+174
+00:02:36,630 --> 00:02:36,640
+it's usually handled automatically
+ 
+
+175
+00:02:36,640 --> 00:02:38,309
+it's usually handled automatically
+behind the scenes but like with most
+
+176
+00:02:38,309 --> 00:02:38,319
+behind the scenes but like with most
+ 
+
+177
+00:02:38,319 --> 00:02:39,509
+behind the scenes but like with most
+things in vulcan
+
+178
+00:02:39,509 --> 00:02:39,519
+things in vulcan
+ 
+
+179
+00:02:39,519 --> 00:02:41,910
+things in vulcan
+we need to be explicit about it of
+
+180
+00:02:41,910 --> 00:02:41,920
+we need to be explicit about it of
+ 
+
+181
+00:02:41,920 --> 00:02:43,509
+we need to be explicit about it of
+course all of this is a bit of a
+
+182
+00:02:43,509 --> 00:02:43,519
+course all of this is a bit of a
+ 
+
+183
+00:02:43,519 --> 00:02:44,470
+course all of this is a bit of a
+simplification
+
+184
+00:02:44,470 --> 00:02:44,480
+simplification
+ 
+
+185
+00:02:44,480 --> 00:02:46,550
+simplification
+and there are exceptions to this you may
+
+186
+00:02:46,550 --> 00:02:46,560
+and there are exceptions to this you may
+ 
+
+187
+00:02:46,560 --> 00:02:48,630
+and there are exceptions to this you may
+have heard of adaptive sync or g-sync
+
+188
+00:02:48,630 --> 00:02:48,640
+have heard of adaptive sync or g-sync
+ 
+
+189
+00:02:48,640 --> 00:02:49,030
+have heard of adaptive sync or g-sync
+which
+
+190
+00:02:49,030 --> 00:02:49,040
+which
+ 
+
+191
+00:02:49,040 --> 00:02:51,030
+which
+changes the display's behavior so it
+
+192
+00:02:51,030 --> 00:02:51,040
+changes the display's behavior so it
+ 
+
+193
+00:02:51,040 --> 00:02:52,949
+changes the display's behavior so it
+doesn't have to wait the entire update
+
+194
+00:02:52,949 --> 00:02:52,959
+doesn't have to wait the entire update
+ 
+
+195
+00:02:52,959 --> 00:02:54,949
+doesn't have to wait the entire update
+period before refreshing
+
+196
+00:02:54,949 --> 00:02:54,959
+period before refreshing
+ 
+
+197
+00:02:54,959 --> 00:02:56,869
+period before refreshing
+also all of this depends on the type of
+
+198
+00:02:56,869 --> 00:02:56,879
+also all of this depends on the type of
+ 
+
+199
+00:02:56,879 --> 00:02:59,350
+also all of this depends on the type of
+present mode our swap chain is using
+
+200
+00:02:59,350 --> 00:02:59,360
+present mode our swap chain is using
+ 
+
+201
+00:02:59,360 --> 00:03:01,509
+present mode our swap chain is using
+we'll discuss this more in a bit but for
+
+202
+00:03:01,509 --> 00:03:01,519
+we'll discuss this more in a bit but for
+ 
+
+203
+00:03:01,519 --> 00:03:03,430
+we'll discuss this more in a bit but for
+now the key takeaways are
+
+204
+00:03:03,430 --> 00:03:03,440
+now the key takeaways are
+ 
+
+205
+00:03:03,440 --> 00:03:05,670
+now the key takeaways are
+one we will have multiple frame buffers
+
+206
+00:03:05,670 --> 00:03:05,680
+one we will have multiple frame buffers
+ 
+
+207
+00:03:05,680 --> 00:03:07,430
+one we will have multiple frame buffers
+likely two or three
+
+208
+00:03:07,430 --> 00:03:07,440
+likely two or three
+ 
+
+209
+00:03:07,440 --> 00:03:10,229
+likely two or three
+and two each frame we ask the swap chain
+
+210
+00:03:10,229 --> 00:03:10,239
+and two each frame we ask the swap chain
+ 
+
+211
+00:03:10,239 --> 00:03:11,830
+and two each frame we ask the swap chain
+to tell us which frame buffer or
+
+212
+00:03:11,830 --> 00:03:11,840
+to tell us which frame buffer or
+ 
+
+213
+00:03:11,840 --> 00:03:14,790
+to tell us which frame buffer or
+graphics pipeline should be using
+
+214
+00:03:14,790 --> 00:03:14,800
+graphics pipeline should be using
+ 
+
+215
+00:03:14,800 --> 00:03:17,110
+graphics pipeline should be using
+so for the same reasons as for the
+
+216
+00:03:17,110 --> 00:03:17,120
+so for the same reasons as for the
+ 
+
+217
+00:03:17,120 --> 00:03:18,309
+so for the same reasons as for the
+device class
+
+218
+00:03:18,309 --> 00:03:18,319
+device class
+ 
+
+219
+00:03:18,319 --> 00:03:20,309
+device class
+this is the one other instance where
+
+220
+00:03:20,309 --> 00:03:20,319
+this is the one other instance where
+ 
+
+221
+00:03:20,319 --> 00:03:22,390
+this is the one other instance where
+i'll be providing a chunk of code for
+
+222
+00:03:22,390 --> 00:03:22,400
+i'll be providing a chunk of code for
+ 
+
+223
+00:03:22,400 --> 00:03:23,509
+i'll be providing a chunk of code for
+you to download
+
+224
+00:03:23,509 --> 00:03:23,519
+you to download
+ 
+
+225
+00:03:23,519 --> 00:03:25,350
+you to download
+and that we will come back to as we
+
+226
+00:03:25,350 --> 00:03:25,360
+and that we will come back to as we
+ 
+
+227
+00:03:25,360 --> 00:03:27,670
+and that we will come back to as we
+start to cover more advanced topics
+
+228
+00:03:27,670 --> 00:03:27,680
+start to cover more advanced topics
+ 
+
+229
+00:03:27,680 --> 00:03:29,830
+start to cover more advanced topics
+such as images for textures and
+
+230
+00:03:29,830 --> 00:03:29,840
+such as images for textures and
+ 
+
+231
+00:03:29,840 --> 00:03:31,830
+such as images for textures and
+off-screen frame buffers for rendering
+
+232
+00:03:31,830 --> 00:03:31,840
+off-screen frame buffers for rendering
+ 
+
+233
+00:03:31,840 --> 00:03:33,670
+off-screen frame buffers for rendering
+reflections and shadows
+
+234
+00:03:33,670 --> 00:03:33,680
+reflections and shadows
+ 
+
+235
+00:03:33,680 --> 00:03:35,350
+reflections and shadows
+this swap chain class handles the
+
+236
+00:03:35,350 --> 00:03:35,360
+this swap chain class handles the
+ 
+
+237
+00:03:35,360 --> 00:03:37,670
+this swap chain class handles the
+synchronization and setup for double
+
+238
+00:03:37,670 --> 00:03:37,680
+synchronization and setup for double
+ 
+
+239
+00:03:37,680 --> 00:03:39,670
+synchronization and setup for double
+or triple buffering based on your
+
+240
+00:03:39,670 --> 00:03:39,680
+or triple buffering based on your
+ 
+
+241
+00:03:39,680 --> 00:03:41,509
+or triple buffering based on your
+device's capabilities
+
+242
+00:03:41,509 --> 00:03:41,519
+device's capabilities
+ 
+
+243
+00:03:41,519 --> 00:03:43,670
+device's capabilities
+it also creates frame buffer objects and
+
+244
+00:03:43,670 --> 00:03:43,680
+it also creates frame buffer objects and
+ 
+
+245
+00:03:43,680 --> 00:03:45,110
+it also creates frame buffer objects and
+their associated color
+
+246
+00:03:45,110 --> 00:03:45,120
+their associated color
+ 
+
+247
+00:03:45,120 --> 00:03:47,350
+their associated color
+and depth attachments for a graphics
+
+248
+00:03:47,350 --> 00:03:47,360
+and depth attachments for a graphics
+ 
+
+249
+00:03:47,360 --> 00:03:50,149
+and depth attachments for a graphics
+pipeline to use while rendering
+
+250
+00:03:50,149 --> 00:03:50,159
+pipeline to use while rendering
+ 
+
+251
+00:03:50,159 --> 00:03:51,509
+pipeline to use while rendering
+in the description below there is a
+
+252
+00:03:51,509 --> 00:03:51,519
+in the description below there is a
+ 
+
+253
+00:03:51,519 --> 00:03:54,789
+in the description below there is a
+download link for the swap chain code
+
+254
+00:03:54,789 --> 00:03:54,799
+download link for the swap chain code
+ 
+
+255
+00:03:54,799 --> 00:03:56,789
+download link for the swap chain code
+let's download it and then drag the
+
+256
+00:03:56,789 --> 00:03:56,799
+let's download it and then drag the
+ 
+
+257
+00:03:56,799 --> 00:04:01,110
+let's download it and then drag the
+files into your project
+
+258
+00:04:01,110 --> 00:04:01,120
+files into your project
+ 
+
+259
+00:04:01,120 --> 00:04:03,350
+files into your project
+then i'm going to do a find and replace
+
+260
+00:04:03,350 --> 00:04:03,360
+then i'm going to do a find and replace
+ 
+
+261
+00:04:03,360 --> 00:04:05,589
+then i'm going to do a find and replace
+and replace all occurrences of my engine
+
+262
+00:04:05,589 --> 00:04:05,599
+and replace all occurrences of my engine
+ 
+
+263
+00:04:05,599 --> 00:04:05,910
+and replace all occurrences of my engine
+with
+
+264
+00:04:05,910 --> 00:04:05,920
+with
+ 
+
+265
+00:04:05,920 --> 00:04:09,350
+with
+lve
+
+266
+00:04:09,350 --> 00:04:09,360
+
+ 
+
+267
+00:04:09,360 --> 00:04:11,110
+ 
+and finally just like with our device
+
+268
+00:04:11,110 --> 00:04:11,120
+and finally just like with our device
+ 
+
+269
+00:04:11,120 --> 00:04:13,429
+and finally just like with our device
+class rename the header file as well as
+
+270
+00:04:13,429 --> 00:04:13,439
+class rename the header file as well as
+ 
+
+271
+00:04:13,439 --> 00:04:16,469
+class rename the header file as well as
+the implementation file
+
+272
+00:04:16,469 --> 00:04:16,479
+the implementation file
+ 
+
+273
+00:04:16,479 --> 00:04:18,870
+the implementation file
+you will also need to update the include
+
+274
+00:04:18,870 --> 00:04:18,880
+you will also need to update the include
+ 
+
+275
+00:04:18,880 --> 00:04:20,629
+you will also need to update the include
+at the top of the swap chain
+
+276
+00:04:20,629 --> 00:04:20,639
+at the top of the swap chain
+ 
+
+277
+00:04:20,639 --> 00:04:23,270
+at the top of the swap chain
+implementation file to reflect the new
+
+278
+00:04:23,270 --> 00:04:23,280
+implementation file to reflect the new
+ 
+
+279
+00:04:23,280 --> 00:04:26,550
+implementation file to reflect the new
+file's name change
+
+280
+00:04:26,550 --> 00:04:26,560
+
+ 
+
+281
+00:04:26,560 --> 00:04:28,950
+ 
+now navigate to your window header file
+
+282
+00:04:28,950 --> 00:04:28,960
+now navigate to your window header file
+ 
+
+283
+00:04:28,960 --> 00:04:30,710
+now navigate to your window header file
+and add a getter that's going to return
+
+284
+00:04:30,710 --> 00:04:30,720
+and add a getter that's going to return
+ 
+
+285
+00:04:30,720 --> 00:04:31,430
+and add a getter that's going to return
+a vk
+
+286
+00:04:31,430 --> 00:04:31,440
+a vk
+ 
+
+287
+00:04:31,440 --> 00:04:34,790
+a vk
+extent 2d called get extent and return
+
+288
+00:04:34,790 --> 00:04:34,800
+extent 2d called get extent and return
+ 
+
+289
+00:04:34,800 --> 00:04:37,749
+extent 2d called get extent and return
+our width and height
+
+290
+00:04:37,749 --> 00:04:37,759
+our width and height
+ 
+
+291
+00:04:37,759 --> 00:04:41,030
+our width and height
+so if you check out the type here extent
+
+292
+00:04:41,030 --> 00:04:41,040
+so if you check out the type here extent
+ 
+
+293
+00:04:41,040 --> 00:04:43,189
+so if you check out the type here extent
+is just a struct of an unsigned width
+
+294
+00:04:43,189 --> 00:04:43,199
+is just a struct of an unsigned width
+ 
+
+295
+00:04:43,199 --> 00:04:44,070
+is just a struct of an unsigned width
+and height
+
+296
+00:04:44,070 --> 00:04:44,080
+and height
+ 
+
+297
+00:04:44,080 --> 00:04:46,390
+and height
+so really we should explicitly cast
+
+298
+00:04:46,390 --> 00:04:46,400
+so really we should explicitly cast
+ 
+
+299
+00:04:46,400 --> 00:04:48,550
+so really we should explicitly cast
+these in values
+
+300
+00:04:48,550 --> 00:04:48,560
+these in values
+ 
+
+301
+00:04:48,560 --> 00:04:51,670
+these in values
+so add a static cast un32 type
+
+302
+00:04:51,670 --> 00:04:51,680
+so add a static cast un32 type
+ 
+
+303
+00:04:51,680 --> 00:04:54,830
+so add a static cast un32 type
+around width as well as around the
+
+304
+00:04:54,830 --> 00:04:54,840
+around width as well as around the
+ 
+
+305
+00:04:54,840 --> 00:04:56,550
+around width as well as around the
+height
+
+306
+00:04:56,550 --> 00:04:56,560
+height
+ 
+
+307
+00:04:56,560 --> 00:04:59,189
+height
+unfortunately last week i made a mistake
+
+308
+00:04:59,189 --> 00:04:59,199
+unfortunately last week i made a mistake
+ 
+
+309
+00:04:59,199 --> 00:05:01,430
+unfortunately last week i made a mistake
+if you open your pipeline header file
+
+310
+00:05:01,430 --> 00:05:01,440
+if you open your pipeline header file
+ 
+
+311
+00:05:01,440 --> 00:05:03,350
+if you open your pipeline header file
+you may be able to see the problem
+
+312
+00:05:03,350 --> 00:05:03,360
+you may be able to see the problem
+ 
+
+313
+00:05:03,360 --> 00:05:06,390
+you may be able to see the problem
+with the pipeline config info struct so
+
+314
+00:05:06,390 --> 00:05:06,400
+with the pipeline config info struct so
+ 
+
+315
+00:05:06,400 --> 00:05:07,909
+with the pipeline config info struct so
+let's fix this quickly
+
+316
+00:05:07,909 --> 00:05:07,919
+let's fix this quickly
+ 
+
+317
+00:05:07,919 --> 00:05:10,070
+let's fix this quickly
+start by deleting the vk pipeline
+
+318
+00:05:10,070 --> 00:05:10,080
+start by deleting the vk pipeline
+ 
+
+319
+00:05:10,080 --> 00:05:12,310
+start by deleting the vk pipeline
+viewport state create info
+
+320
+00:05:12,310 --> 00:05:12,320
+viewport state create info
+ 
+
+321
+00:05:12,320 --> 00:05:14,310
+viewport state create info
+then open your pipeline implementation
+
+322
+00:05:14,310 --> 00:05:14,320
+then open your pipeline implementation
+ 
+
+323
+00:05:14,320 --> 00:05:16,790
+then open your pipeline implementation
+file in our default pipeline config
+
+324
+00:05:16,790 --> 00:05:16,800
+file in our default pipeline config
+ 
+
+325
+00:05:16,800 --> 00:05:18,790
+file in our default pipeline config
+info function the problem becomes more
+
+326
+00:05:18,790 --> 00:05:18,800
+info function the problem becomes more
+ 
+
+327
+00:05:18,800 --> 00:05:21,029
+info function the problem becomes more
+obvious i had made it so that the
+
+328
+00:05:21,029 --> 00:05:21,039
+obvious i had made it so that the
+ 
+
+329
+00:05:21,039 --> 00:05:23,029
+obvious i had made it so that the
+viewport info has members that point to
+
+330
+00:05:23,029 --> 00:05:23,039
+viewport info has members that point to
+ 
+
+331
+00:05:23,039 --> 00:05:24,390
+viewport info has members that point to
+our viewport and scissor
+
+332
+00:05:24,390 --> 00:05:24,400
+our viewport and scissor
+ 
+
+333
+00:05:24,400 --> 00:05:26,629
+our viewport and scissor
+which are stored in the same struct this
+
+334
+00:05:26,629 --> 00:05:26,639
+which are stored in the same struct this
+ 
+
+335
+00:05:26,639 --> 00:05:28,390
+which are stored in the same struct this
+is typically something you want to avoid
+
+336
+00:05:28,390 --> 00:05:28,400
+is typically something you want to avoid
+ 
+
+337
+00:05:28,400 --> 00:05:29,189
+is typically something you want to avoid
+doing
+
+338
+00:05:29,189 --> 00:05:29,199
+doing
+ 
+
+339
+00:05:29,199 --> 00:05:31,189
+doing
+if we create a copy of our pipeline
+
+340
+00:05:31,189 --> 00:05:31,199
+if we create a copy of our pipeline
+ 
+
+341
+00:05:31,199 --> 00:05:32,230
+if we create a copy of our pipeline
+configmo
+
+342
+00:05:32,230 --> 00:05:32,240
+configmo
+ 
+
+343
+00:05:32,240 --> 00:05:34,629
+configmo
+the p viewports and p scissor fields
+
+344
+00:05:34,629 --> 00:05:34,639
+the p viewports and p scissor fields
+ 
+
+345
+00:05:34,639 --> 00:05:36,390
+the p viewports and p scissor fields
+will point to the previous struct
+
+346
+00:05:36,390 --> 00:05:36,400
+will point to the previous struct
+ 
+
+347
+00:05:36,400 --> 00:05:37,749
+will point to the previous struct
+viewport and scissor
+
+348
+00:05:37,749 --> 00:05:37,759
+viewport and scissor
+ 
+
+349
+00:05:37,759 --> 00:05:40,550
+viewport and scissor
+which may then be deallocated definitely
+
+350
+00:05:40,550 --> 00:05:40,560
+which may then be deallocated definitely
+ 
+
+351
+00:05:40,560 --> 00:05:43,029
+which may then be deallocated definitely
+not what i intended in this case
+
+352
+00:05:43,029 --> 00:05:43,039
+not what i intended in this case
+ 
+
+353
+00:05:43,039 --> 00:05:45,270
+not what i intended in this case
+now depending on your compiler you may
+
+354
+00:05:45,270 --> 00:05:45,280
+now depending on your compiler you may
+ 
+
+355
+00:05:45,280 --> 00:05:46,870
+now depending on your compiler you may
+or not have run into this
+
+356
+00:05:46,870 --> 00:05:46,880
+or not have run into this
+ 
+
+357
+00:05:46,880 --> 00:05:48,790
+or not have run into this
+because some compilers will optimize
+
+358
+00:05:48,790 --> 00:05:48,800
+because some compilers will optimize
+ 
+
+359
+00:05:48,800 --> 00:05:50,629
+because some compilers will optimize
+away the copy of this return
+
+360
+00:05:50,629 --> 00:05:50,639
+away the copy of this return
+ 
+
+361
+00:05:50,639 --> 00:05:53,590
+away the copy of this return
+in a process known as copy illusion so
+
+362
+00:05:53,590 --> 00:05:53,600
+in a process known as copy illusion so
+ 
+
+363
+00:05:53,600 --> 00:05:55,670
+in a process known as copy illusion so
+copy and remove these five lines
+
+364
+00:05:55,670 --> 00:05:55,680
+copy and remove these five lines
+ 
+
+365
+00:05:55,680 --> 00:05:57,590
+copy and remove these five lines
+and then paste them above our pipeline
+
+366
+00:05:57,590 --> 00:05:57,600
+and then paste them above our pipeline
+ 
+
+367
+00:05:57,600 --> 00:05:58,710
+and then paste them above our pipeline
+create info
+
+368
+00:05:58,710 --> 00:05:58,720
+create info
+ 
+
+369
+00:05:58,720 --> 00:06:01,029
+create info
+in the create graphics pipeline function
+
+370
+00:06:01,029 --> 00:06:01,039
+in the create graphics pipeline function
+ 
+
+371
+00:06:01,039 --> 00:06:02,870
+in the create graphics pipeline function
+create a new local variable
+
+372
+00:06:02,870 --> 00:06:02,880
+create a new local variable
+ 
+
+373
+00:06:02,880 --> 00:06:05,909
+create a new local variable
+vk pipeline viewport state create info
+
+374
+00:06:05,909 --> 00:06:05,919
+vk pipeline viewport state create info
+ 
+
+375
+00:06:05,919 --> 00:06:06,469
+vk pipeline viewport state create info
+called
+
+376
+00:06:06,469 --> 00:06:06,479
+called
+ 
+
+377
+00:06:06,479 --> 00:06:09,189
+called
+viewport info and don't forget these two
+
+378
+00:06:09,189 --> 00:06:09,199
+viewport info and don't forget these two
+ 
+
+379
+00:06:09,199 --> 00:06:10,550
+viewport info and don't forget these two
+braces at the end
+
+380
+00:06:10,550 --> 00:06:10,560
+braces at the end
+ 
+
+381
+00:06:10,560 --> 00:06:12,550
+braces at the end
+these braces have the effect of value
+
+382
+00:06:12,550 --> 00:06:12,560
+these braces have the effect of value
+ 
+
+383
+00:06:12,560 --> 00:06:15,029
+these braces have the effect of value
+initializing all of the struct members
+
+384
+00:06:15,029 --> 00:06:15,039
+initializing all of the struct members
+ 
+
+385
+00:06:15,039 --> 00:06:17,110
+initializing all of the struct members
+so in this case we are relying on the
+
+386
+00:06:17,110 --> 00:06:17,120
+so in this case we are relying on the
+ 
+
+387
+00:06:17,120 --> 00:06:18,309
+so in this case we are relying on the
+braces to set p
+
+388
+00:06:18,309 --> 00:06:18,319
+braces to set p
+ 
+
+389
+00:06:18,319 --> 00:06:21,029
+braces to set p
+next to be a null pointer and flags to
+
+390
+00:06:21,029 --> 00:06:21,039
+next to be a null pointer and flags to
+ 
+
+391
+00:06:21,039 --> 00:06:22,629
+next to be a null pointer and flags to
+equal 0.
+
+392
+00:06:22,629 --> 00:06:22,639
+equal 0.
+ 
+
+393
+00:06:22,639 --> 00:06:25,270
+equal 0.
+remove the config info qualifier before
+
+394
+00:06:25,270 --> 00:06:25,280
+remove the config info qualifier before
+ 
+
+395
+00:06:25,280 --> 00:06:26,950
+remove the config info qualifier before
+each line and update the p
+
+396
+00:06:26,950 --> 00:06:26,960
+each line and update the p
+ 
+
+397
+00:06:26,960 --> 00:06:28,790
+each line and update the p
+viewport state to point to the local
+
+398
+00:06:28,790 --> 00:06:28,800
+viewport state to point to the local
+ 
+
+399
+00:06:28,800 --> 00:06:30,150
+viewport state to point to the local
+viewport info variable
+
+400
+00:06:30,150 --> 00:06:30,160
+viewport info variable
+ 
+
+401
+00:06:30,160 --> 00:06:33,749
+viewport info variable
+we just created in our swap chain class
+
+402
+00:06:33,749 --> 00:06:33,759
+we just created in our swap chain class
+ 
+
+403
+00:06:33,759 --> 00:06:33,990
+we just created in our swap chain class
+we
+
+404
+00:06:33,990 --> 00:06:34,000
+we
+ 
+
+405
+00:06:34,000 --> 00:06:35,590
+we
+have a function called choose swap
+
+406
+00:06:35,590 --> 00:06:35,600
+have a function called choose swap
+ 
+
+407
+00:06:35,600 --> 00:06:37,990
+have a function called choose swap
+present mode depending on your graphics
+
+408
+00:06:37,990 --> 00:06:38,000
+present mode depending on your graphics
+ 
+
+409
+00:06:38,000 --> 00:06:39,830
+present mode depending on your graphics
+device i've set things up to choose the
+
+410
+00:06:39,830 --> 00:06:39,840
+device i've set things up to choose the
+ 
+
+411
+00:06:39,840 --> 00:06:42,070
+device i've set things up to choose the
+mailbox present mode by default
+
+412
+00:06:42,070 --> 00:06:42,080
+mailbox present mode by default
+ 
+
+413
+00:06:42,080 --> 00:06:44,629
+mailbox present mode by default
+and then vsync as the fallback the
+
+414
+00:06:44,629 --> 00:06:44,639
+and then vsync as the fallback the
+ 
+
+415
+00:06:44,639 --> 00:06:46,070
+and then vsync as the fallback the
+present mode configures how
+
+416
+00:06:46,070 --> 00:06:46,080
+present mode configures how
+ 
+
+417
+00:06:46,080 --> 00:06:48,150
+present mode configures how
+our swap chain handles synchronization
+
+418
+00:06:48,150 --> 00:06:48,160
+our swap chain handles synchronization
+ 
+
+419
+00:06:48,160 --> 00:06:49,909
+our swap chain handles synchronization
+with our display
+
+420
+00:06:49,909 --> 00:06:49,919
+with our display
+ 
+
+421
+00:06:49,919 --> 00:06:51,990
+with our display
+we can check the vulkan documentation to
+
+422
+00:06:51,990 --> 00:06:52,000
+we can check the vulkan documentation to
+ 
+
+423
+00:06:52,000 --> 00:06:53,830
+we can check the vulkan documentation to
+see a description of the possible
+
+424
+00:06:53,830 --> 00:06:53,840
+see a description of the possible
+ 
+
+425
+00:06:53,840 --> 00:06:54,950
+see a description of the possible
+present modes
+
+426
+00:06:54,950 --> 00:06:54,960
+present modes
+ 
+
+427
+00:06:54,960 --> 00:06:56,950
+present modes
+the only present mode guaranteed to be
+
+428
+00:06:56,950 --> 00:06:56,960
+the only present mode guaranteed to be
+ 
+
+429
+00:06:56,960 --> 00:06:58,710
+the only present mode guaranteed to be
+supported is fifo
+
+430
+00:06:58,710 --> 00:06:58,720
+supported is fifo
+ 
+
+431
+00:06:58,720 --> 00:07:01,029
+supported is fifo
+otherwise for all other present modes
+
+432
+00:07:01,029 --> 00:07:01,039
+otherwise for all other present modes
+ 
+
+433
+00:07:01,039 --> 00:07:02,629
+otherwise for all other present modes
+you need to check that the available
+
+434
+00:07:02,629 --> 00:07:02,639
+you need to check that the available
+ 
+
+435
+00:07:02,639 --> 00:07:03,909
+you need to check that the available
+present modes vector
+
+436
+00:07:03,909 --> 00:07:03,919
+present modes vector
+ 
+
+437
+00:07:03,919 --> 00:07:06,950
+present modes vector
+contains your choice before returning it
+
+438
+00:07:06,950 --> 00:07:06,960
+contains your choice before returning it
+ 
+
+439
+00:07:06,960 --> 00:07:08,870
+contains your choice before returning it
+so the fifo present mode is what i
+
+440
+00:07:08,870 --> 00:07:08,880
+so the fifo present mode is what i
+ 
+
+441
+00:07:08,880 --> 00:07:11,110
+so the fifo present mode is what i
+discussed at the start of this video
+
+442
+00:07:11,110 --> 00:07:11,120
+discussed at the start of this video
+ 
+
+443
+00:07:11,120 --> 00:07:12,550
+discussed at the start of this video
+this is where the swap chain
+
+444
+00:07:12,550 --> 00:07:12,560
+this is where the swap chain
+ 
+
+445
+00:07:12,560 --> 00:07:14,550
+this is where the swap chain
+synchronizes with the v-sync of our
+
+446
+00:07:14,550 --> 00:07:14,560
+synchronizes with the v-sync of our
+ 
+
+447
+00:07:14,560 --> 00:07:15,189
+synchronizes with the v-sync of our
+display
+
+448
+00:07:15,189 --> 00:07:15,199
+display
+ 
+
+449
+00:07:15,199 --> 00:07:18,150
+display
+to prevent tearing so what's the
+
+450
+00:07:18,150 --> 00:07:18,160
+to prevent tearing so what's the
+ 
+
+451
+00:07:18,160 --> 00:07:20,629
+to prevent tearing so what's the
+difference between fifo and mailbox
+
+452
+00:07:20,629 --> 00:07:20,639
+difference between fifo and mailbox
+ 
+
+453
+00:07:20,639 --> 00:07:23,110
+difference between fifo and mailbox
+well when using fifo if our gpu can
+
+454
+00:07:23,110 --> 00:07:23,120
+well when using fifo if our gpu can
+ 
+
+455
+00:07:23,120 --> 00:07:25,110
+well when using fifo if our gpu can
+process images really fast
+
+456
+00:07:25,110 --> 00:07:25,120
+process images really fast
+ 
+
+457
+00:07:25,120 --> 00:07:27,110
+process images really fast
+even if we're triple buffering both our
+
+458
+00:07:27,110 --> 00:07:27,120
+even if we're triple buffering both our
+ 
+
+459
+00:07:27,120 --> 00:07:28,870
+even if we're triple buffering both our
+back buffers can be written to
+
+460
+00:07:28,870 --> 00:07:28,880
+back buffers can be written to
+ 
+
+461
+00:07:28,880 --> 00:07:30,870
+back buffers can be written to
+and then our gpu will idle until the
+
+462
+00:07:30,870 --> 00:07:30,880
+and then our gpu will idle until the
+ 
+
+463
+00:07:30,880 --> 00:07:32,950
+and then our gpu will idle until the
+next refresh cycle where our swap chain
+
+464
+00:07:32,950 --> 00:07:32,960
+next refresh cycle where our swap chain
+ 
+
+465
+00:07:32,960 --> 00:07:34,790
+next refresh cycle where our swap chain
+swaps the images
+
+466
+00:07:34,790 --> 00:07:34,800
+swaps the images
+ 
+
+467
+00:07:34,800 --> 00:07:37,189
+swaps the images
+but when using the mailbox present mode
+
+468
+00:07:37,189 --> 00:07:37,199
+but when using the mailbox present mode
+ 
+
+469
+00:07:37,199 --> 00:07:38,309
+but when using the mailbox present mode
+the gpu never
+
+470
+00:07:38,309 --> 00:07:38,319
+the gpu never
+ 
+
+471
+00:07:38,319 --> 00:07:40,629
+the gpu never
+idles and instead will discard and
+
+472
+00:07:40,629 --> 00:07:40,639
+idles and instead will discard and
+ 
+
+473
+00:07:40,639 --> 00:07:43,029
+idles and instead will discard and
+overwrite the older back buffer
+
+474
+00:07:43,029 --> 00:07:43,039
+overwrite the older back buffer
+ 
+
+475
+00:07:43,039 --> 00:07:45,510
+overwrite the older back buffer
+when the display is ready to refresh the
+
+476
+00:07:45,510 --> 00:07:45,520
+when the display is ready to refresh the
+ 
+
+477
+00:07:45,520 --> 00:07:47,189
+when the display is ready to refresh the
+swap chain will take whichever back
+
+478
+00:07:47,189 --> 00:07:47,199
+swap chain will take whichever back
+ 
+
+479
+00:07:47,199 --> 00:07:49,430
+swap chain will take whichever back
+buffer is completed with the most recent
+
+480
+00:07:49,430 --> 00:07:49,440
+buffer is completed with the most recent
+ 
+
+481
+00:07:49,440 --> 00:07:50,469
+buffer is completed with the most recent
+image
+
+482
+00:07:50,469 --> 00:07:50,479
+image
+ 
+
+483
+00:07:50,479 --> 00:07:52,950
+image
+the advantage of this is that the frame
+
+484
+00:07:52,950 --> 00:07:52,960
+the advantage of this is that the frame
+ 
+
+485
+00:07:52,960 --> 00:07:54,629
+the advantage of this is that the frame
+presented to your display
+
+486
+00:07:54,629 --> 00:07:54,639
+presented to your display
+ 
+
+487
+00:07:54,639 --> 00:07:56,710
+presented to your display
+is fresher in terms of it will be
+
+488
+00:07:56,710 --> 00:07:56,720
+is fresher in terms of it will be
+ 
+
+489
+00:07:56,720 --> 00:07:58,070
+is fresher in terms of it will be
+updated with the latest
+
+490
+00:07:58,070 --> 00:07:58,080
+updated with the latest
+ 
+
+491
+00:07:58,080 --> 00:08:01,189
+updated with the latest
+user input so input latency can be lower
+
+492
+00:08:01,189 --> 00:08:01,199
+user input so input latency can be lower
+ 
+
+493
+00:08:01,199 --> 00:08:04,390
+user input so input latency can be lower
+versus when using fifo however
+
+494
+00:08:04,390 --> 00:08:04,400
+versus when using fifo however
+ 
+
+495
+00:08:04,400 --> 00:08:07,029
+versus when using fifo however
+because our gpu never idles unless our
+
+496
+00:08:07,029 --> 00:08:07,039
+because our gpu never idles unless our
+ 
+
+497
+00:08:07,039 --> 00:08:08,469
+because our gpu never idles unless our
+application provides some
+
+498
+00:08:08,469 --> 00:08:08,479
+application provides some
+ 
+
+499
+00:08:08,479 --> 00:08:10,629
+application provides some
+additional manner of throttling this can
+
+500
+00:08:10,629 --> 00:08:10,639
+additional manner of throttling this can
+ 
+
+501
+00:08:10,639 --> 00:08:13,430
+additional manner of throttling this can
+result in very high power consumption
+
+502
+00:08:13,430 --> 00:08:13,440
+result in very high power consumption
+ 
+
+503
+00:08:13,440 --> 00:08:15,270
+result in very high power consumption
+so this is something you typically not
+
+504
+00:08:15,270 --> 00:08:15,280
+so this is something you typically not
+ 
+
+505
+00:08:15,280 --> 00:08:18,150
+so this is something you typically not
+want to use for mobile devices
+
+506
+00:08:18,150 --> 00:08:18,160
+want to use for mobile devices
+ 
+
+507
+00:08:18,160 --> 00:08:20,869
+want to use for mobile devices
+so if you'd prefer to always use vsync
+
+508
+00:08:20,869 --> 00:08:20,879
+so if you'd prefer to always use vsync
+ 
+
+509
+00:08:20,879 --> 00:08:22,629
+so if you'd prefer to always use vsync
+then you can comment out these lines
+
+510
+00:08:22,629 --> 00:08:22,639
+then you can comment out these lines
+ 
+
+511
+00:08:22,639 --> 00:08:24,150
+then you can comment out these lines
+like i have already done
+
+512
+00:08:24,150 --> 00:08:24,160
+like i have already done
+ 
+
+513
+00:08:24,160 --> 00:08:27,510
+like i have already done
+just below the immediate present mode
+
+514
+00:08:27,510 --> 00:08:27,520
+just below the immediate present mode
+ 
+
+515
+00:08:27,520 --> 00:08:29,830
+just below the immediate present mode
+does not perform any synchronization
+
+516
+00:08:29,830 --> 00:08:29,840
+does not perform any synchronization
+ 
+
+517
+00:08:29,840 --> 00:08:32,149
+does not perform any synchronization
+with the refresh cycle of the display
+
+518
+00:08:32,149 --> 00:08:32,159
+with the refresh cycle of the display
+ 
+
+519
+00:08:32,159 --> 00:08:35,190
+with the refresh cycle of the display
+when updating the current image
+
+520
+00:08:35,190 --> 00:08:35,200
+when updating the current image
+ 
+
+521
+00:08:35,200 --> 00:08:37,589
+when updating the current image
+this may result in visible tearing as
+
+522
+00:08:37,589 --> 00:08:37,599
+this may result in visible tearing as
+ 
+
+523
+00:08:37,599 --> 00:08:40,709
+this may result in visible tearing as
+well as a high cpu and gpu usage
+
+524
+00:08:40,709 --> 00:08:40,719
+well as a high cpu and gpu usage
+ 
+
+525
+00:08:40,719 --> 00:08:42,709
+well as a high cpu and gpu usage
+i usually only use this when i want to
+
+526
+00:08:42,709 --> 00:08:42,719
+i usually only use this when i want to
+ 
+
+527
+00:08:42,719 --> 00:08:44,630
+i usually only use this when i want to
+get an indication of performance and
+
+528
+00:08:44,630 --> 00:08:44,640
+get an indication of performance and
+ 
+
+529
+00:08:44,640 --> 00:08:46,070
+get an indication of performance and
+maximum fps
+
+530
+00:08:46,070 --> 00:08:46,080
+maximum fps
+ 
+
+531
+00:08:46,080 --> 00:08:48,150
+maximum fps
+since my device does not support the
+
+532
+00:08:48,150 --> 00:08:48,160
+since my device does not support the
+ 
+
+533
+00:08:48,160 --> 00:08:50,470
+since my device does not support the
+mailbox present mode
+
+534
+00:08:50,470 --> 00:08:50,480
+mailbox present mode
+ 
+
+535
+00:08:50,480 --> 00:08:52,230
+mailbox present mode
+now in our first app header let's
+
+536
+00:08:52,230 --> 00:08:52,240
+now in our first app header let's
+ 
+
+537
+00:08:52,240 --> 00:08:54,150
+now in our first app header let's
+include our swap chain and then below
+
+538
+00:08:54,150 --> 00:08:54,160
+include our swap chain and then below
+ 
+
+539
+00:08:54,160 --> 00:08:56,470
+include our swap chain and then below
+our device we create a new lve swap
+
+540
+00:08:56,470 --> 00:08:56,480
+our device we create a new lve swap
+ 
+
+541
+00:08:56,480 --> 00:08:57,509
+our device we create a new lve swap
+chain variable
+
+542
+00:08:57,509 --> 00:08:57,519
+chain variable
+ 
+
+543
+00:08:57,519 --> 00:09:00,230
+chain variable
+lve swap chain with our device as the
+
+544
+00:09:00,230 --> 00:09:00,240
+lve swap chain with our device as the
+ 
+
+545
+00:09:00,240 --> 00:09:01,269
+lve swap chain with our device as the
+first parameter
+
+546
+00:09:01,269 --> 00:09:01,279
+first parameter
+ 
+
+547
+00:09:01,279 --> 00:09:03,670
+first parameter
+and our window dot get extent as the
+
+548
+00:09:03,670 --> 00:09:03,680
+and our window dot get extent as the
+ 
+
+549
+00:09:03,680 --> 00:09:04,790
+and our window dot get extent as the
+second
+
+550
+00:09:04,790 --> 00:09:04,800
+second
+ 
+
+551
+00:09:04,800 --> 00:09:07,190
+second
+don't forget that order here matters and
+
+552
+00:09:07,190 --> 00:09:07,200
+don't forget that order here matters and
+ 
+
+553
+00:09:07,200 --> 00:09:09,430
+don't forget that order here matters and
+that variables are initialized from top
+
+554
+00:09:09,430 --> 00:09:09,440
+that variables are initialized from top
+ 
+
+555
+00:09:09,440 --> 00:09:10,310
+that variables are initialized from top
+to bottom
+
+556
+00:09:10,310 --> 00:09:10,320
+to bottom
+ 
+
+557
+00:09:10,320 --> 00:09:13,829
+to bottom
+and then destroyed in the reverse order
+
+558
+00:09:13,829 --> 00:09:13,839
+and then destroyed in the reverse order
+ 
+
+559
+00:09:13,839 --> 00:09:15,990
+and then destroyed in the reverse order
+so if you build and run your code in
+
+560
+00:09:15,990 --> 00:09:16,000
+so if you build and run your code in
+ 
+
+561
+00:09:16,000 --> 00:09:17,590
+so if you build and run your code in
+your console you should find an
+
+562
+00:09:17,590 --> 00:09:17,600
+your console you should find an
+ 
+
+563
+00:09:17,600 --> 00:09:19,110
+your console you should find an
+additional message
+
+564
+00:09:19,110 --> 00:09:19,120
+additional message
+ 
+
+565
+00:09:19,120 --> 00:09:21,430
+additional message
+saying what the selected present mode is
+
+566
+00:09:21,430 --> 00:09:21,440
+saying what the selected present mode is
+ 
+
+567
+00:09:21,440 --> 00:09:23,670
+saying what the selected present mode is
+just before the failed assertion we
+
+568
+00:09:23,670 --> 00:09:23,680
+just before the failed assertion we
+ 
+
+569
+00:09:23,680 --> 00:09:25,430
+just before the failed assertion we
+added in the previous video when
+
+570
+00:09:25,430 --> 00:09:25,440
+added in the previous video when
+ 
+
+571
+00:09:25,440 --> 00:09:28,389
+added in the previous video when
+initializing our pipeline
+
+572
+00:09:28,389 --> 00:09:28,399
+initializing our pipeline
+ 
+
+573
+00:09:28,399 --> 00:09:30,630
+initializing our pipeline
+okay back to coding in the first app
+
+574
+00:09:30,630 --> 00:09:30,640
+okay back to coding in the first app
+ 
+
+575
+00:09:30,640 --> 00:09:33,190
+okay back to coding in the first app
+header add an include for memory
+
+576
+00:09:33,190 --> 00:09:33,200
+header add an include for memory
+ 
+
+577
+00:09:33,200 --> 00:09:35,110
+header add an include for memory
+and now we're going to make the pipeline
+
+578
+00:09:35,110 --> 00:09:35,120
+and now we're going to make the pipeline
+ 
+
+579
+00:09:35,120 --> 00:09:36,630
+and now we're going to make the pipeline
+object be a unique
+
+580
+00:09:36,630 --> 00:09:36,640
+object be a unique
+ 
+
+581
+00:09:36,640 --> 00:09:39,430
+object be a unique
+pointer instead so let's get rid of our
+
+582
+00:09:39,430 --> 00:09:39,440
+pointer instead so let's get rid of our
+ 
+
+583
+00:09:39,440 --> 00:09:41,030
+pointer instead so let's get rid of our
+old pipeline variable
+
+584
+00:09:41,030 --> 00:09:41,040
+old pipeline variable
+ 
+
+585
+00:09:41,040 --> 00:09:44,389
+old pipeline variable
+and declare a new std unique
+
+586
+00:09:44,389 --> 00:09:44,399
+and declare a new std unique
+ 
+
+587
+00:09:44,399 --> 00:09:47,509
+and declare a new std unique
+angle brackets lve pipeline and i'll
+
+588
+00:09:47,509 --> 00:09:47,519
+angle brackets lve pipeline and i'll
+ 
+
+589
+00:09:47,519 --> 00:09:50,710
+angle brackets lve pipeline and i'll
+name it lve pipeline
+
+590
+00:09:50,710 --> 00:09:50,720
+name it lve pipeline
+ 
+
+591
+00:09:50,720 --> 00:09:53,030
+name it lve pipeline
+also this is a smart pointer if you're
+
+592
+00:09:53,030 --> 00:09:53,040
+also this is a smart pointer if you're
+ 
+
+593
+00:09:53,040 --> 00:09:54,949
+also this is a smart pointer if you're
+unfamiliar with these i strongly
+
+594
+00:09:54,949 --> 00:09:54,959
+unfamiliar with these i strongly
+ 
+
+595
+00:09:54,959 --> 00:09:56,790
+unfamiliar with these i strongly
+recommend doing a bit of reading on this
+
+596
+00:09:56,790 --> 00:09:56,800
+recommend doing a bit of reading on this
+ 
+
+597
+00:09:56,800 --> 00:09:57,829
+recommend doing a bit of reading on this
+topic
+
+598
+00:09:57,829 --> 00:09:57,839
+topic
+ 
+
+599
+00:09:57,839 --> 00:10:00,310
+topic
+learn cpp is a resource i really like
+
+600
+00:10:00,310 --> 00:10:00,320
+learn cpp is a resource i really like
+ 
+
+601
+00:10:00,320 --> 00:10:01,990
+learn cpp is a resource i really like
+and i've included some links in the
+
+602
+00:10:01,990 --> 00:10:02,000
+and i've included some links in the
+ 
+
+603
+00:10:02,000 --> 00:10:03,430
+and i've included some links in the
+description below
+
+604
+00:10:03,430 --> 00:10:03,440
+description below
+ 
+
+605
+00:10:03,440 --> 00:10:06,389
+description below
+but as a quick refresher a smart pointer
+
+606
+00:10:06,389 --> 00:10:06,399
+but as a quick refresher a smart pointer
+ 
+
+607
+00:10:06,399 --> 00:10:08,310
+but as a quick refresher a smart pointer
+simulates a pointer with the addition
+
+608
+00:10:08,310 --> 00:10:08,320
+simulates a pointer with the addition
+ 
+
+609
+00:10:08,320 --> 00:10:10,710
+simulates a pointer with the addition
+of automatic memory management so we're
+
+610
+00:10:10,710 --> 00:10:10,720
+of automatic memory management so we're
+ 
+
+611
+00:10:10,720 --> 00:10:12,790
+of automatic memory management so we're
+no longer responsible for calling new
+
+612
+00:10:12,790 --> 00:10:12,800
+no longer responsible for calling new
+ 
+
+613
+00:10:12,800 --> 00:10:14,310
+no longer responsible for calling new
+and delete
+
+614
+00:10:14,310 --> 00:10:14,320
+and delete
+ 
+
+615
+00:10:14,320 --> 00:10:17,350
+and delete
+next add a private vk pipeline layout
+
+616
+00:10:17,350 --> 00:10:17,360
+next add a private vk pipeline layout
+ 
+
+617
+00:10:17,360 --> 00:10:21,430
+next add a private vk pipeline layout
+member variable named pipeline layout
+
+618
+00:10:21,430 --> 00:10:21,440
+member variable named pipeline layout
+ 
+
+619
+00:10:21,440 --> 00:10:23,990
+member variable named pipeline layout
+and then underneath add a vector of vk
+
+620
+00:10:23,990 --> 00:10:24,000
+and then underneath add a vector of vk
+ 
+
+621
+00:10:24,000 --> 00:10:25,829
+and then underneath add a vector of vk
+command buffer objects
+
+622
+00:10:25,829 --> 00:10:25,839
+command buffer objects
+ 
+
+623
+00:10:25,839 --> 00:10:29,670
+command buffer objects
+so std vector vk command buffer
+
+624
+00:10:29,670 --> 00:10:29,680
+so std vector vk command buffer
+ 
+
+625
+00:10:29,680 --> 00:10:37,829
+so std vector vk command buffer
+closing angle bracket command buffers
+
+626
+00:10:37,829 --> 00:10:37,839
+
+ 
+
+627
+00:10:37,839 --> 00:10:39,509
+ 
+and also don't forget to add include
+
+628
+00:10:39,509 --> 00:10:39,519
+and also don't forget to add include
+ 
+
+629
+00:10:39,519 --> 00:10:41,670
+and also don't forget to add include
+vector in our list of includes at the
+
+630
+00:10:41,670 --> 00:10:41,680
+vector in our list of includes at the
+ 
+
+631
+00:10:41,680 --> 00:10:43,509
+vector in our list of includes at the
+top of the file
+
+632
+00:10:43,509 --> 00:10:43,519
+top of the file
+ 
+
+633
+00:10:43,519 --> 00:10:45,590
+top of the file
+we'll cover what our pipeline layout and
+
+634
+00:10:45,590 --> 00:10:45,600
+we'll cover what our pipeline layout and
+ 
+
+635
+00:10:45,600 --> 00:10:46,710
+we'll cover what our pipeline layout and
+command buffers are
+
+636
+00:10:46,710 --> 00:10:46,720
+command buffers are
+ 
+
+637
+00:10:46,720 --> 00:10:49,430
+command buffers are
+in just a moment but before we do so
+
+638
+00:10:49,430 --> 00:10:49,440
+in just a moment but before we do so
+ 
+
+639
+00:10:49,440 --> 00:10:51,590
+in just a moment but before we do so
+let's add some private functions
+
+640
+00:10:51,590 --> 00:10:51,600
+let's add some private functions
+ 
+
+641
+00:10:51,600 --> 00:10:53,829
+let's add some private functions
+first we have void create pipeline
+
+642
+00:10:53,829 --> 00:10:53,839
+first we have void create pipeline
+ 
+
+643
+00:10:53,839 --> 00:10:55,990
+first we have void create pipeline
+layout
+
+644
+00:10:55,990 --> 00:10:56,000
+layout
+ 
+
+645
+00:10:56,000 --> 00:10:59,670
+layout
+then void create pipeline
+
+646
+00:10:59,670 --> 00:10:59,680
+then void create pipeline
+ 
+
+647
+00:10:59,680 --> 00:11:03,110
+then void create pipeline
+and finally void create command buffers
+
+648
+00:11:03,110 --> 00:11:03,120
+and finally void create command buffers
+ 
+
+649
+00:11:03,120 --> 00:11:05,509
+and finally void create command buffers
+while we're at it we might as well add a
+
+650
+00:11:05,509 --> 00:11:05,519
+while we're at it we might as well add a
+ 
+
+651
+00:11:05,519 --> 00:11:08,949
+while we're at it we might as well add a
+void draw frame function here as well
+
+652
+00:11:08,949 --> 00:11:08,959
+void draw frame function here as well
+ 
+
+653
+00:11:08,959 --> 00:11:11,430
+void draw frame function here as well
+next add a declaration for a constructor
+
+654
+00:11:11,430 --> 00:11:11,440
+next add a declaration for a constructor
+ 
+
+655
+00:11:11,440 --> 00:11:12,389
+next add a declaration for a constructor
+and destructor
+
+656
+00:11:12,389 --> 00:11:12,399
+and destructor
+ 
+
+657
+00:11:12,399 --> 00:11:14,630
+and destructor
+for first app and finally because our
+
+658
+00:11:14,630 --> 00:11:14,640
+for first app and finally because our
+ 
+
+659
+00:11:14,640 --> 00:11:16,710
+for first app and finally because our
+app is now managing vulkan objects for
+
+660
+00:11:16,710 --> 00:11:16,720
+app is now managing vulkan objects for
+ 
+
+661
+00:11:16,720 --> 00:11:19,030
+app is now managing vulkan objects for
+our pipeline layout and command buffers
+
+662
+00:11:19,030 --> 00:11:19,040
+our pipeline layout and command buffers
+ 
+
+663
+00:11:19,040 --> 00:11:21,910
+our pipeline layout and command buffers
+we should delete our copy constructors i
+
+664
+00:11:21,910 --> 00:11:21,920
+we should delete our copy constructors i
+ 
+
+665
+00:11:21,920 --> 00:11:23,670
+we should delete our copy constructors i
+always forget how these go so i'm just
+
+666
+00:11:23,670 --> 00:11:23,680
+always forget how these go so i'm just
+ 
+
+667
+00:11:23,680 --> 00:11:25,829
+always forget how these go so i'm just
+going to copy them from window
+
+668
+00:11:25,829 --> 00:11:25,839
+going to copy them from window
+ 
+
+669
+00:11:25,839 --> 00:11:28,230
+going to copy them from window
+and paste them in and then update window
+
+670
+00:11:28,230 --> 00:11:28,240
+and paste them in and then update window
+ 
+
+671
+00:11:28,240 --> 00:11:32,069
+and paste them in and then update window
+to first app
+
+672
+00:11:32,069 --> 00:11:32,079
+
+ 
+
+673
+00:11:32,079 --> 00:11:34,069
+ 
+let's start with implementing our create
+
+674
+00:11:34,069 --> 00:11:34,079
+let's start with implementing our create
+ 
+
+675
+00:11:34,079 --> 00:11:35,670
+let's start with implementing our create
+pipeline layout function
+
+676
+00:11:35,670 --> 00:11:35,680
+pipeline layout function
+ 
+
+677
+00:11:35,680 --> 00:11:37,750
+pipeline layout function
+grab the function signature and paste it
+
+678
+00:11:37,750 --> 00:11:37,760
+grab the function signature and paste it
+ 
+
+679
+00:11:37,760 --> 00:11:39,590
+grab the function signature and paste it
+in add your class name
+
+680
+00:11:39,590 --> 00:11:39,600
+in add your class name
+ 
+
+681
+00:11:39,600 --> 00:11:42,069
+in add your class name
+scope and then create a vk pipeline
+
+682
+00:11:42,069 --> 00:11:42,079
+scope and then create a vk pipeline
+ 
+
+683
+00:11:42,079 --> 00:11:43,829
+scope and then create a vk pipeline
+layout create info variable
+
+684
+00:11:43,829 --> 00:11:43,839
+layout create info variable
+ 
+
+685
+00:11:43,839 --> 00:11:46,710
+layout create info variable
+called pipeline layout info just like we
+
+686
+00:11:46,710 --> 00:11:46,720
+called pipeline layout info just like we
+ 
+
+687
+00:11:46,720 --> 00:11:48,150
+called pipeline layout info just like we
+did in the previous video
+
+688
+00:11:48,150 --> 00:11:48,160
+did in the previous video
+ 
+
+689
+00:11:48,160 --> 00:11:50,949
+did in the previous video
+we need to set the members of the struct
+
+690
+00:11:50,949 --> 00:11:50,959
+we need to set the members of the struct
+ 
+
+691
+00:11:50,959 --> 00:11:52,069
+we need to set the members of the struct
+so first set
+
+692
+00:11:52,069 --> 00:11:52,079
+so first set
+ 
+
+693
+00:11:52,079 --> 00:11:54,949
+so first set
+s type to vk structure type pipeline
+
+694
+00:11:54,949 --> 00:11:54,959
+s type to vk structure type pipeline
+ 
+
+695
+00:11:54,959 --> 00:11:55,509
+s type to vk structure type pipeline
+layout
+
+696
+00:11:55,509 --> 00:11:55,519
+layout
+ 
+
+697
+00:11:55,519 --> 00:11:58,870
+layout
+create info
+
+698
+00:11:58,870 --> 00:11:58,880
+
+ 
+
+699
+00:11:58,880 --> 00:12:00,790
+ 
+for now we just want to create an empty
+
+700
+00:12:00,790 --> 00:12:00,800
+for now we just want to create an empty
+ 
+
+701
+00:12:00,800 --> 00:12:03,030
+for now we just want to create an empty
+layout so let's set the set layout count
+
+702
+00:12:03,030 --> 00:12:03,040
+layout so let's set the set layout count
+ 
+
+703
+00:12:03,040 --> 00:12:04,710
+layout so let's set the set layout count
+member to equal 0
+
+704
+00:12:04,710 --> 00:12:04,720
+member to equal 0
+ 
+
+705
+00:12:04,720 --> 00:12:07,990
+member to equal 0
+and pset layouts to equal a null pointer
+
+706
+00:12:07,990 --> 00:12:08,000
+and pset layouts to equal a null pointer
+ 
+
+707
+00:12:08,000 --> 00:12:10,470
+and pset layouts to equal a null pointer
+a pipeline set layout is used to pass
+
+708
+00:12:10,470 --> 00:12:10,480
+a pipeline set layout is used to pass
+ 
+
+709
+00:12:10,480 --> 00:12:11,030
+a pipeline set layout is used to pass
+data
+
+710
+00:12:11,030 --> 00:12:11,040
+data
+ 
+
+711
+00:12:11,040 --> 00:12:13,430
+data
+other than our vertex data to our vertex
+
+712
+00:12:13,430 --> 00:12:13,440
+other than our vertex data to our vertex
+ 
+
+713
+00:12:13,440 --> 00:12:14,949
+other than our vertex data to our vertex
+and fragment shaders
+
+714
+00:12:14,949 --> 00:12:14,959
+and fragment shaders
+ 
+
+715
+00:12:14,959 --> 00:12:16,870
+and fragment shaders
+this can include textures and uniform
+
+716
+00:12:16,870 --> 00:12:16,880
+this can include textures and uniform
+ 
+
+717
+00:12:16,880 --> 00:12:17,990
+this can include textures and uniform
+buffer objects
+
+718
+00:12:17,990 --> 00:12:18,000
+buffer objects
+ 
+
+719
+00:12:18,000 --> 00:12:21,190
+buffer objects
+which will all be covered soon next
+
+720
+00:12:21,190 --> 00:12:21,200
+which will all be covered soon next
+ 
+
+721
+00:12:21,200 --> 00:12:24,230
+which will all be covered soon next
+set push constant range count to 0
+
+722
+00:12:24,230 --> 00:12:24,240
+set push constant range count to 0
+ 
+
+723
+00:12:24,240 --> 00:12:26,790
+set push constant range count to 0
+and p push constant ranges to a null
+
+724
+00:12:26,790 --> 00:12:26,800
+and p push constant ranges to a null
+ 
+
+725
+00:12:26,800 --> 00:12:27,829
+and p push constant ranges to a null
+pointer
+
+726
+00:12:27,829 --> 00:12:27,839
+pointer
+ 
+
+727
+00:12:27,839 --> 00:12:29,910
+pointer
+push constants are a way to very
+
+728
+00:12:29,910 --> 00:12:29,920
+push constants are a way to very
+ 
+
+729
+00:12:29,920 --> 00:12:32,069
+push constants are a way to very
+efficiently send a small amount of data
+
+730
+00:12:32,069 --> 00:12:32,079
+efficiently send a small amount of data
+ 
+
+731
+00:12:32,079 --> 00:12:33,590
+efficiently send a small amount of data
+to our shader programs
+
+732
+00:12:33,590 --> 00:12:33,600
+to our shader programs
+ 
+
+733
+00:12:33,600 --> 00:12:35,509
+to our shader programs
+and i think we will get to them in about
+
+734
+00:12:35,509 --> 00:12:35,519
+and i think we will get to them in about
+ 
+
+735
+00:12:35,519 --> 00:12:38,230
+and i think we will get to them in about
+tutorial 8 or so
+
+736
+00:12:38,230 --> 00:12:38,240
+tutorial 8 or so
+ 
+
+737
+00:12:38,240 --> 00:12:40,790
+tutorial 8 or so
+then in an if statement call vk create
+
+738
+00:12:40,790 --> 00:12:40,800
+then in an if statement call vk create
+ 
+
+739
+00:12:40,800 --> 00:12:41,910
+then in an if statement call vk create
+pipeline layout
+
+740
+00:12:41,910 --> 00:12:41,920
+pipeline layout
+ 
+
+741
+00:12:41,920 --> 00:12:44,790
+pipeline layout
+with our device.device a pointer to our
+
+742
+00:12:44,790 --> 00:12:44,800
+with our device.device a pointer to our
+ 
+
+743
+00:12:44,800 --> 00:12:47,990
+with our device.device a pointer to our
+pipeline layout info
+
+744
+00:12:47,990 --> 00:12:48,000
+pipeline layout info
+ 
+
+745
+00:12:48,000 --> 00:12:50,829
+pipeline layout info
+a null pointer for our allocation
+
+746
+00:12:50,829 --> 00:12:50,839
+a null pointer for our allocation
+ 
+
+747
+00:12:50,839 --> 00:12:53,110
+a null pointer for our allocation
+callback
+
+748
+00:12:53,110 --> 00:12:53,120
+callback
+ 
+
+749
+00:12:53,120 --> 00:12:54,790
+callback
+and then a pointer to our pipeline
+
+750
+00:12:54,790 --> 00:12:54,800
+and then a pointer to our pipeline
+ 
+
+751
+00:12:54,800 --> 00:12:56,629
+and then a pointer to our pipeline
+layout member variable
+
+752
+00:12:56,629 --> 00:12:56,639
+layout member variable
+ 
+
+753
+00:12:56,639 --> 00:12:58,870
+layout member variable
+check that this is not equal to vk
+
+754
+00:12:58,870 --> 00:12:58,880
+check that this is not equal to vk
+ 
+
+755
+00:12:58,880 --> 00:12:59,829
+check that this is not equal to vk
+success
+
+756
+00:12:59,829 --> 00:12:59,839
+success
+ 
+
+757
+00:12:59,839 --> 00:13:02,870
+success
+and in such a case throw a runtime error
+
+758
+00:13:02,870 --> 00:13:02,880
+and in such a case throw a runtime error
+ 
+
+759
+00:13:02,880 --> 00:13:05,990
+and in such a case throw a runtime error
+failed to create pipeline layout
+
+760
+00:13:05,990 --> 00:13:06,000
+failed to create pipeline layout
+ 
+
+761
+00:13:06,000 --> 00:13:07,670
+failed to create pipeline layout
+at the start of the first app
+
+762
+00:13:07,670 --> 00:13:07,680
+at the start of the first app
+ 
+
+763
+00:13:07,680 --> 00:13:09,829
+at the start of the first app
+implementation also add an
+
+764
+00:13:09,829 --> 00:13:09,839
+implementation also add an
+ 
+
+765
+00:13:09,839 --> 00:13:13,190
+implementation also add an
+include for std accept
+
+766
+00:13:13,190 --> 00:13:13,200
+include for std accept
+ 
+
+767
+00:13:13,200 --> 00:13:15,350
+include for std accept
+next let's implement the create pipeline
+
+768
+00:13:15,350 --> 00:13:15,360
+next let's implement the create pipeline
+ 
+
+769
+00:13:15,360 --> 00:13:17,509
+next let's implement the create pipeline
+function grab the function signature
+
+770
+00:13:17,509 --> 00:13:17,519
+function grab the function signature
+ 
+
+771
+00:13:17,519 --> 00:13:18,870
+function grab the function signature
+from the header file
+
+772
+00:13:18,870 --> 00:13:18,880
+from the header file
+ 
+
+773
+00:13:18,880 --> 00:13:21,269
+from the header file
+and paste it in then add the first app
+
+774
+00:13:21,269 --> 00:13:21,279
+and paste it in then add the first app
+ 
+
+775
+00:13:21,279 --> 00:13:22,949
+and paste it in then add the first app
+class name scope
+
+776
+00:13:22,949 --> 00:13:22,959
+class name scope
+ 
+
+777
+00:13:22,959 --> 00:13:24,790
+class name scope
+we're going to start by creating a
+
+778
+00:13:24,790 --> 00:13:24,800
+we're going to start by creating a
+ 
+
+779
+00:13:24,800 --> 00:13:26,150
+we're going to start by creating a
+pipeline config
+
+780
+00:13:26,150 --> 00:13:26,160
+pipeline config
+ 
+
+781
+00:13:26,160 --> 00:13:29,430
+pipeline config
+so auto pipeline config equals lve
+
+782
+00:13:29,430 --> 00:13:29,440
+so auto pipeline config equals lve
+ 
+
+783
+00:13:29,440 --> 00:13:30,550
+so auto pipeline config equals lve
+pipeline
+
+784
+00:13:30,550 --> 00:13:30,560
+pipeline
+ 
+
+785
+00:13:30,560 --> 00:13:33,350
+pipeline
+default pipeline config info and using
+
+786
+00:13:33,350 --> 00:13:33,360
+default pipeline config info and using
+ 
+
+787
+00:13:33,360 --> 00:13:33,829
+default pipeline config info and using
+our swap
+
+788
+00:13:33,829 --> 00:13:33,839
+our swap
+ 
+
+789
+00:13:33,839 --> 00:13:36,230
+our swap
+chain get the width and height it's
+
+790
+00:13:36,230 --> 00:13:36,240
+chain get the width and height it's
+ 
+
+791
+00:13:36,240 --> 00:13:38,230
+chain get the width and height it's
+important to use the swap chain's width
+
+792
+00:13:38,230 --> 00:13:38,240
+important to use the swap chain's width
+ 
+
+793
+00:13:38,240 --> 00:13:40,230
+important to use the swap chain's width
+and height as it doesn't necessarily
+
+794
+00:13:40,230 --> 00:13:40,240
+and height as it doesn't necessarily
+ 
+
+795
+00:13:40,240 --> 00:13:42,150
+and height as it doesn't necessarily
+match the windows
+
+796
+00:13:42,150 --> 00:13:42,160
+match the windows
+ 
+
+797
+00:13:42,160 --> 00:13:44,870
+match the windows
+on high pixel density displays such as
+
+798
+00:13:44,870 --> 00:13:44,880
+on high pixel density displays such as
+ 
+
+799
+00:13:44,880 --> 00:13:46,550
+on high pixel density displays such as
+apple's retina displays
+
+800
+00:13:46,550 --> 00:13:46,560
+apple's retina displays
+ 
+
+801
+00:13:46,560 --> 00:13:48,150
+apple's retina displays
+the window measured in screen
+
+802
+00:13:48,150 --> 00:13:48,160
+the window measured in screen
+ 
+
+803
+00:13:48,160 --> 00:13:50,310
+the window measured in screen
+coordinates is smaller than the number
+
+804
+00:13:50,310 --> 00:13:50,320
+coordinates is smaller than the number
+ 
+
+805
+00:13:50,320 --> 00:13:52,870
+coordinates is smaller than the number
+of pixels the window contains
+
+806
+00:13:52,870 --> 00:13:52,880
+of pixels the window contains
+ 
+
+807
+00:13:52,880 --> 00:13:54,870
+of pixels the window contains
+and we will set the render pass member
+
+808
+00:13:54,870 --> 00:13:54,880
+and we will set the render pass member
+ 
+
+809
+00:13:54,880 --> 00:13:56,310
+and we will set the render pass member
+of config info
+
+810
+00:13:56,310 --> 00:13:56,320
+of config info
+ 
+
+811
+00:13:56,320 --> 00:13:59,269
+of config info
+to our lve swap chain dot get render
+
+812
+00:13:59,269 --> 00:13:59,279
+to our lve swap chain dot get render
+ 
+
+813
+00:13:59,279 --> 00:14:00,949
+to our lve swap chain dot get render
+pass
+
+814
+00:14:00,949 --> 00:14:00,959
+pass
+ 
+
+815
+00:14:00,959 --> 00:14:02,949
+pass
+so i lumped creating a default render
+
+816
+00:14:02,949 --> 00:14:02,959
+so i lumped creating a default render
+ 
+
+817
+00:14:02,959 --> 00:14:05,670
+so i lumped creating a default render
+pass in with the swap chain code
+
+818
+00:14:05,670 --> 00:14:05,680
+pass in with the swap chain code
+ 
+
+819
+00:14:05,680 --> 00:14:07,269
+pass in with the swap chain code
+this is something we will eventually
+
+820
+00:14:07,269 --> 00:14:07,279
+this is something we will eventually
+ 
+
+821
+00:14:07,279 --> 00:14:09,590
+this is something we will eventually
+pull out after we cover render passes in
+
+822
+00:14:09,590 --> 00:14:09,600
+pull out after we cover render passes in
+ 
+
+823
+00:14:09,600 --> 00:14:10,949
+pull out after we cover render passes in
+more detail
+
+824
+00:14:10,949 --> 00:14:10,959
+more detail
+ 
+
+825
+00:14:10,959 --> 00:14:13,189
+more detail
+for now all that is really necessary to
+
+826
+00:14:13,189 --> 00:14:13,199
+for now all that is really necessary to
+ 
+
+827
+00:14:13,199 --> 00:14:15,670
+for now all that is really necessary to
+know is that a render pass describes the
+
+828
+00:14:15,670 --> 00:14:15,680
+know is that a render pass describes the
+ 
+
+829
+00:14:15,680 --> 00:14:17,910
+know is that a render pass describes the
+structure and format of our frame buffer
+
+830
+00:14:17,910 --> 00:14:17,920
+structure and format of our frame buffer
+ 
+
+831
+00:14:17,920 --> 00:14:18,470
+structure and format of our frame buffer
+objects
+
+832
+00:14:18,470 --> 00:14:18,480
+objects
+ 
+
+833
+00:14:18,480 --> 00:14:21,350
+objects
+and their attachments for example in
+
+834
+00:14:21,350 --> 00:14:21,360
+and their attachments for example in
+ 
+
+835
+00:14:21,360 --> 00:14:22,069
+and their attachments for example in
+this basic
+
+836
+00:14:22,069 --> 00:14:22,079
+this basic
+ 
+
+837
+00:14:22,079 --> 00:14:24,629
+this basic
+setup in attachment location 0 we will
+
+838
+00:14:24,629 --> 00:14:24,639
+setup in attachment location 0 we will
+ 
+
+839
+00:14:24,639 --> 00:14:25,829
+setup in attachment location 0 we will
+have a color buffer
+
+840
+00:14:25,829 --> 00:14:25,839
+have a color buffer
+ 
+
+841
+00:14:25,839 --> 00:14:28,790
+have a color buffer
+and in location 1 will be a depth buffer
+
+842
+00:14:28,790 --> 00:14:28,800
+and in location 1 will be a depth buffer
+ 
+
+843
+00:14:28,800 --> 00:14:31,189
+and in location 1 will be a depth buffer
+so it may help to think of a render pass
+
+844
+00:14:31,189 --> 00:14:31,199
+so it may help to think of a render pass
+ 
+
+845
+00:14:31,199 --> 00:14:33,430
+so it may help to think of a render pass
+as a blueprint that tells the graphics
+
+846
+00:14:33,430 --> 00:14:33,440
+as a blueprint that tells the graphics
+ 
+
+847
+00:14:33,440 --> 00:14:34,470
+as a blueprint that tells the graphics
+pipeline object
+
+848
+00:14:34,470 --> 00:14:34,480
+pipeline object
+ 
+
+849
+00:14:34,480 --> 00:14:36,629
+pipeline object
+what layout to expect for the output
+
+850
+00:14:36,629 --> 00:14:36,639
+what layout to expect for the output
+ 
+
+851
+00:14:36,639 --> 00:14:37,670
+what layout to expect for the output
+frame buffer
+
+852
+00:14:37,670 --> 00:14:37,680
+frame buffer
+ 
+
+853
+00:14:37,680 --> 00:14:39,670
+frame buffer
+that way when it's time to actually
+
+854
+00:14:39,670 --> 00:14:39,680
+that way when it's time to actually
+ 
+
+855
+00:14:39,680 --> 00:14:41,829
+that way when it's time to actually
+render our graphics pipeline is already
+
+856
+00:14:41,829 --> 00:14:41,839
+render our graphics pipeline is already
+ 
+
+857
+00:14:41,839 --> 00:14:43,990
+render our graphics pipeline is already
+prepared to output to a frame buffer as
+
+858
+00:14:43,990 --> 00:14:44,000
+prepared to output to a frame buffer as
+ 
+
+859
+00:14:44,000 --> 00:14:46,150
+prepared to output to a frame buffer as
+long as the passed in framebuffer object
+
+860
+00:14:46,150 --> 00:14:46,160
+long as the passed in framebuffer object
+ 
+
+861
+00:14:46,160 --> 00:14:48,230
+long as the passed in framebuffer object
+is set up in a way that is compatible
+
+862
+00:14:48,230 --> 00:14:48,240
+is set up in a way that is compatible
+ 
+
+863
+00:14:48,240 --> 00:14:50,069
+is set up in a way that is compatible
+with what we specified in the render
+
+864
+00:14:50,069 --> 00:14:50,079
+with what we specified in the render
+ 
+
+865
+00:14:50,079 --> 00:14:51,590
+with what we specified in the render
+path
+
+866
+00:14:51,590 --> 00:14:51,600
+path
+ 
+
+867
+00:14:51,600 --> 00:14:53,750
+path
+for more complicated render passes for
+
+868
+00:14:53,750 --> 00:14:53,760
+for more complicated render passes for
+ 
+
+869
+00:14:53,760 --> 00:14:55,829
+for more complicated render passes for
+example a sequence of post-processing
+
+870
+00:14:55,829 --> 00:14:55,839
+example a sequence of post-processing
+ 
+
+871
+00:14:55,839 --> 00:14:56,710
+example a sequence of post-processing
+effects
+
+872
+00:14:56,710 --> 00:14:56,720
+effects
+ 
+
+873
+00:14:56,720 --> 00:14:58,470
+effects
+multiple sub passes can be grouped
+
+874
+00:14:58,470 --> 00:14:58,480
+multiple sub passes can be grouped
+ 
+
+875
+00:14:58,480 --> 00:15:01,430
+multiple sub passes can be grouped
+together into a single render pass
+
+876
+00:15:01,430 --> 00:15:01,440
+together into a single render pass
+ 
+
+877
+00:15:01,440 --> 00:15:03,509
+together into a single render pass
+set the pipeline layout member of the
+
+878
+00:15:03,509 --> 00:15:03,519
+set the pipeline layout member of the
+ 
+
+879
+00:15:03,519 --> 00:15:04,629
+set the pipeline layout member of the
+config info
+
+880
+00:15:04,629 --> 00:15:04,639
+config info
+ 
+
+881
+00:15:04,639 --> 00:15:09,750
+config info
+to the pipeline layout member variable
+
+882
+00:15:09,750 --> 00:15:09,760
+
+ 
+
+883
+00:15:09,760 --> 00:15:11,990
+ 
+so let's finish creating our pipeline by
+
+884
+00:15:11,990 --> 00:15:12,000
+so let's finish creating our pipeline by
+ 
+
+885
+00:15:12,000 --> 00:15:13,750
+so let's finish creating our pipeline by
+setting the pipeline member variable
+
+886
+00:15:13,750 --> 00:15:13,760
+setting the pipeline member variable
+ 
+
+887
+00:15:13,760 --> 00:15:19,750
+setting the pipeline member variable
+equal to std make unique lve pipeline
+
+888
+00:15:19,750 --> 00:15:19,760
+
+ 
+
+889
+00:15:19,760 --> 00:15:22,389
+ 
+then for the first argument lve device
+
+890
+00:15:22,389 --> 00:15:22,399
+then for the first argument lve device
+ 
+
+891
+00:15:22,399 --> 00:15:22,870
+then for the first argument lve device
+next
+
+892
+00:15:22,870 --> 00:15:22,880
+next
+ 
+
+893
+00:15:22,880 --> 00:15:27,710
+next
+the vertex path at shaders slash
+
+894
+00:15:27,710 --> 00:15:27,720
+
+ 
+
+895
+00:15:27,720 --> 00:15:29,350
+
+simpleunderscoreshader.vert.spv
+
+896
+00:15:29,350 --> 00:15:29,360
+simpleunderscoreshader.vert.spv
+ 
+
+897
+00:15:29,360 --> 00:15:31,990
+simpleunderscoreshader.vert.spv
+and then the fragment shader shaders
+
+898
+00:15:31,990 --> 00:15:32,000
+and then the fragment shader shaders
+ 
+
+899
+00:15:32,000 --> 00:15:34,990
+and then the fragment shader shaders
+slash
+
+900
+00:15:34,990 --> 00:15:35,000
+
+ 
+
+901
+00:15:35,000 --> 00:15:36,470
+
+simpleunderscoreshader.frag.spv
+
+902
+00:15:36,470 --> 00:15:36,480
+simpleunderscoreshader.frag.spv
+ 
+
+903
+00:15:36,480 --> 00:15:45,829
+simpleunderscoreshader.frag.spv
+and finally the pipeline config
+
+904
+00:15:45,829 --> 00:15:45,839
+
+ 
+
+905
+00:15:45,839 --> 00:15:48,389
+ 
+in our constructor let's add calls to
+
+906
+00:15:48,389 --> 00:15:48,399
+in our constructor let's add calls to
+ 
+
+907
+00:15:48,399 --> 00:15:48,949
+in our constructor let's add calls to
+first
+
+908
+00:15:48,949 --> 00:15:48,959
+first
+ 
+
+909
+00:15:48,959 --> 00:15:52,790
+first
+create pipeline layout
+
+910
+00:15:52,790 --> 00:15:52,800
+
+ 
+
+911
+00:15:52,800 --> 00:15:56,389
+ 
+then create pipeline
+
+912
+00:15:56,389 --> 00:15:56,399
+
+ 
+
+913
+00:15:56,399 --> 00:16:01,509
+ 
+and then create command buffers
+
+914
+00:16:01,509 --> 00:16:01,519
+
+ 
+
+915
+00:16:01,519 --> 00:16:03,910
+ 
+in the destructor make sure to destroy
+
+916
+00:16:03,910 --> 00:16:03,920
+in the destructor make sure to destroy
+ 
+
+917
+00:16:03,920 --> 00:16:05,430
+in the destructor make sure to destroy
+the pipeline layout with
+
+918
+00:16:05,430 --> 00:16:05,440
+the pipeline layout with
+ 
+
+919
+00:16:05,440 --> 00:16:09,230
+the pipeline layout with
+vk destroy pipeline layout
+
+920
+00:16:09,230 --> 00:16:09,240
+vk destroy pipeline layout
+ 
+
+921
+00:16:09,240 --> 00:16:13,030
+vk destroy pipeline layout
+device.device pipeline layout
+
+922
+00:16:13,030 --> 00:16:13,040
+device.device pipeline layout
+ 
+
+923
+00:16:13,040 --> 00:16:16,790
+device.device pipeline layout
+and null pointer if we add
+
+924
+00:16:16,790 --> 00:16:16,800
+and null pointer if we add
+ 
+
+925
+00:16:16,800 --> 00:16:18,870
+and null pointer if we add
+an empty implementation for the create
+
+926
+00:16:18,870 --> 00:16:18,880
+an empty implementation for the create
+ 
+
+927
+00:16:18,880 --> 00:16:20,470
+an empty implementation for the create
+command buffers and draw a frame
+
+928
+00:16:20,470 --> 00:16:20,480
+command buffers and draw a frame
+ 
+
+929
+00:16:20,480 --> 00:16:21,350
+command buffers and draw a frame
+function
+
+930
+00:16:21,350 --> 00:16:21,360
+function
+ 
+
+931
+00:16:21,360 --> 00:16:25,030
+function
+then our code should now compile
+
+932
+00:16:25,030 --> 00:16:25,040
+then our code should now compile
+ 
+
+933
+00:16:25,040 --> 00:16:28,069
+then our code should now compile
+and since we've now provided a pipeline
+
+934
+00:16:28,069 --> 00:16:28,079
+and since we've now provided a pipeline
+ 
+
+935
+00:16:28,079 --> 00:16:30,150
+and since we've now provided a pipeline
+layout and a render pass to our pipeline
+
+936
+00:16:30,150 --> 00:16:30,160
+layout and a render pass to our pipeline
+ 
+
+937
+00:16:30,160 --> 00:16:31,030
+layout and a render pass to our pipeline
+config
+
+938
+00:16:31,030 --> 00:16:31,040
+config
+ 
+
+939
+00:16:31,040 --> 00:16:33,189
+config
+our assertions that previously failed
+
+940
+00:16:33,189 --> 00:16:33,199
+our assertions that previously failed
+ 
+
+941
+00:16:33,199 --> 00:16:34,069
+our assertions that previously failed
+should now pass
+
+942
+00:16:34,069 --> 00:16:34,079
+should now pass
+ 
+
+943
+00:16:34,079 --> 00:16:35,910
+should now pass
+and creating our graphics pipeline will
+
+944
+00:16:35,910 --> 00:16:35,920
+and creating our graphics pipeline will
+ 
+
+945
+00:16:35,920 --> 00:16:37,670
+and creating our graphics pipeline will
+be successful
+
+946
+00:16:37,670 --> 00:16:37,680
+be successful
+ 
+
+947
+00:16:37,680 --> 00:16:40,629
+be successful
+so let's build and run our code and you
+
+948
+00:16:40,629 --> 00:16:40,639
+so let's build and run our code and you
+ 
+
+949
+00:16:40,639 --> 00:16:42,790
+so let's build and run our code and you
+should now have an empty window again
+
+950
+00:16:42,790 --> 00:16:42,800
+should now have an empty window again
+ 
+
+951
+00:16:42,800 --> 00:16:44,710
+should now have an empty window again
+and in your console the previous
+
+952
+00:16:44,710 --> 00:16:44,720
+and in your console the previous
+ 
+
+953
+00:16:44,720 --> 00:16:45,910
+and in your console the previous
+assertion messages
+
+954
+00:16:45,910 --> 00:16:45,920
+assertion messages
+ 
+
+955
+00:16:45,920 --> 00:17:07,510
+assertion messages
+should now have disappeared
+
+956
+00:17:07,510 --> 00:17:07,520
+
+ 
+
+957
+00:17:07,520 --> 00:17:09,600
+
+you
+

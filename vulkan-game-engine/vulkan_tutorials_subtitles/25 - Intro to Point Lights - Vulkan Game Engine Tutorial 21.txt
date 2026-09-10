@@ -1,0 +1,3015 @@
+1
+00:00:00,359 --> 00:00:02,790
+ 
+hello coders so Point lights are
+
+2
+00:00:02,790 --> 00:00:02,800
+hello coders so Point lights are
+ 
+
+3
+00:00:02,800 --> 00:00:05,550
+hello coders so Point lights are
+infantes small sources of light they
+
+4
+00:00:05,550 --> 00:00:05,560
+infantes small sources of light they
+ 
+
+5
+00:00:05,560 --> 00:00:08,070
+infantes small sources of light they
+differ from directional Lighting in two
+
+6
+00:00:08,070 --> 00:00:08,080
+differ from directional Lighting in two
+ 
+
+7
+00:00:08,080 --> 00:00:10,470
+differ from directional Lighting in two
+major ways first the relative
+
+8
+00:00:10,470 --> 00:00:10,480
+major ways first the relative
+ 
+
+9
+00:00:10,480 --> 00:00:12,230
+major ways first the relative
+positioning between the light source and
+
+10
+00:00:12,230 --> 00:00:12,240
+positioning between the light source and
+ 
+
+11
+00:00:12,240 --> 00:00:14,230
+positioning between the light source and
+the surface points on the model now
+
+12
+00:00:14,230 --> 00:00:14,240
+the surface points on the model now
+ 
+
+13
+00:00:14,240 --> 00:00:16,470
+the surface points on the model now
+actually will matter unlike with
+
+14
+00:00:16,470 --> 00:00:16,480
+actually will matter unlike with
+ 
+
+15
+00:00:16,480 --> 00:00:18,550
+actually will matter unlike with
+directional lighting where incoming
+
+16
+00:00:18,550 --> 00:00:18,560
+directional lighting where incoming
+ 
+
+17
+00:00:18,560 --> 00:00:20,550
+directional lighting where incoming
+light rays will have the same direction
+
+18
+00:00:20,550 --> 00:00:20,560
+light rays will have the same direction
+ 
+
+19
+00:00:20,560 --> 00:00:22,349
+light rays will have the same direction
+no matter where an object is in the
+
+20
+00:00:22,349 --> 00:00:22,359
+no matter where an object is in the
+ 
+
+21
+00:00:22,359 --> 00:00:24,990
+no matter where an object is in the
+scene Rays from a point light can hit a
+
+22
+00:00:24,990 --> 00:00:25,000
+scene Rays from a point light can hit a
+ 
+
+23
+00:00:25,000 --> 00:00:27,269
+scene Rays from a point light can hit a
+flat surface at different angles which
+
+24
+00:00:27,269 --> 00:00:27,279
+flat surface at different angles which
+ 
+
+25
+00:00:27,279 --> 00:00:29,070
+flat surface at different angles which
+will affect the apparent brightness of
+
+26
+00:00:29,070 --> 00:00:29,080
+will affect the apparent brightness of
+ 
+
+27
+00:00:29,080 --> 00:00:31,630
+will affect the apparent brightness of
+the surface the second major difference
+
+28
+00:00:31,630 --> 00:00:31,640
+the surface the second major difference
+ 
+
+29
+00:00:31,640 --> 00:00:34,470
+the surface the second major difference
+is point lights are typically attenuated
+
+30
+00:00:34,470 --> 00:00:34,480
+is point lights are typically attenuated
+ 
+
+31
+00:00:34,480 --> 00:00:36,590
+is point lights are typically attenuated
+what this means is that the intensity of
+
+32
+00:00:36,590 --> 00:00:36,600
+what this means is that the intensity of
+ 
+
+33
+00:00:36,600 --> 00:00:38,750
+what this means is that the intensity of
+the light source drops as the distance
+
+34
+00:00:38,750 --> 00:00:38,760
+the light source drops as the distance
+ 
+
+35
+00:00:38,760 --> 00:00:40,910
+the light source drops as the distance
+from the light source increases in
+
+36
+00:00:40,910 --> 00:00:40,920
+from the light source increases in
+ 
+
+37
+00:00:40,920 --> 00:00:42,869
+from the light source increases in
+reality light intensity follows the
+
+38
+00:00:42,869 --> 00:00:42,879
+reality light intensity follows the
+ 
+
+39
+00:00:42,879 --> 00:00:45,150
+reality light intensity follows the
+inverse Square law meaning that the
+
+40
+00:00:45,150 --> 00:00:45,160
+inverse Square law meaning that the
+ 
+
+41
+00:00:45,160 --> 00:00:46,910
+inverse Square law meaning that the
+light intensity is inversely
+
+42
+00:00:46,910 --> 00:00:46,920
+light intensity is inversely
+ 
+
+43
+00:00:46,920 --> 00:00:48,709
+light intensity is inversely
+proportional to the square of the
+
+44
+00:00:48,709 --> 00:00:48,719
+proportional to the square of the
+ 
+
+45
+00:00:48,719 --> 00:00:51,549
+proportional to the square of the
+distance from the light source so an
+
+46
+00:00:51,549 --> 00:00:51,559
+distance from the light source so an
+ 
+
+47
+00:00:51,559 --> 00:00:54,069
+distance from the light source so an
+object that is twice the distance away
+
+48
+00:00:54,069 --> 00:00:54,079
+object that is twice the distance away
+ 
+
+49
+00:00:54,079 --> 00:00:56,510
+object that is twice the distance away
+will only receive one qu the amount of
+
+50
+00:00:56,510 --> 00:00:56,520
+will only receive one qu the amount of
+ 
+
+51
+00:00:56,520 --> 00:00:58,630
+will only receive one qu the amount of
+light note that this is true even for
+
+52
+00:00:58,630 --> 00:00:58,640
+light note that this is true even for
+ 
+
+53
+00:00:58,640 --> 00:01:00,430
+light note that this is true even for
+light sources such as the sun
+
+54
+00:01:00,430 --> 00:01:00,440
+light sources such as the sun
+ 
+
+55
+00:01:00,440 --> 00:01:02,470
+light sources such as the sun
+Pluto is about 50 times further away
+
+56
+00:01:02,470 --> 00:01:02,480
+Pluto is about 50 times further away
+ 
+
+57
+00:01:02,480 --> 00:01:05,149
+Pluto is about 50 times further away
+from the Sun so at that distance the
+
+58
+00:01:05,149 --> 00:01:05,159
+from the Sun so at that distance the
+ 
+
+59
+00:01:05,159 --> 00:01:08,109
+from the Sun so at that distance the
+intensity of light would be 2500 times
+
+60
+00:01:08,109 --> 00:01:08,119
+intensity of light would be 2500 times
+ 
+
+61
+00:01:08,119 --> 00:01:10,910
+intensity of light would be 2500 times
+weaker than it is on Earth the reason we
+
+62
+00:01:10,910 --> 00:01:10,920
+weaker than it is on Earth the reason we
+ 
+
+63
+00:01:10,920 --> 00:01:12,830
+weaker than it is on Earth the reason we
+don't attenuate directional lighting is
+
+64
+00:01:12,830 --> 00:01:12,840
+don't attenuate directional lighting is
+ 
+
+65
+00:01:12,840 --> 00:01:14,350
+don't attenuate directional lighting is
+that the light source is being treated
+
+66
+00:01:14,350 --> 00:01:14,360
+that the light source is being treated
+ 
+
+67
+00:01:14,360 --> 00:01:17,030
+that the light source is being treated
+as infinitely far away so any small
+
+68
+00:01:17,030 --> 00:01:17,040
+as infinitely far away so any small
+ 
+
+69
+00:01:17,040 --> 00:01:19,469
+as infinitely far away so any small
+increase in distance has a negligible
+
+70
+00:01:19,469 --> 00:01:19,479
+increase in distance has a negligible
+ 
+
+71
+00:01:19,479 --> 00:01:20,950
+increase in distance has a negligible
+effect on the light's
+
+72
+00:01:20,950 --> 00:01:20,960
+effect on the light's
+ 
+
+73
+00:01:20,960 --> 00:01:23,230
+effect on the light's
+intensity you're not constrained to
+
+74
+00:01:23,230 --> 00:01:23,240
+intensity you're not constrained to
+ 
+
+75
+00:01:23,240 --> 00:01:25,030
+intensity you're not constrained to
+making Point lights follow the inverse
+
+76
+00:01:25,030 --> 00:01:25,040
+making Point lights follow the inverse
+ 
+
+77
+00:01:25,040 --> 00:01:27,270
+making Point lights follow the inverse
+Square law many animation programs
+
+78
+00:01:27,270 --> 00:01:27,280
+Square law many animation programs
+ 
+
+79
+00:01:27,280 --> 00:01:29,069
+Square law many animation programs
+actually allow a constant linear and
+
+80
+00:01:29,069 --> 00:01:29,079
+actually allow a constant linear and
+ 
+
+81
+00:01:29,079 --> 00:01:32,789
+actually allow a constant linear and
+quadratic param to modify how exactly an
+
+82
+00:01:32,789 --> 00:01:32,799
+quadratic param to modify how exactly an
+ 
+
+83
+00:01:32,799 --> 00:01:35,389
+quadratic param to modify how exactly an
+individual light is attenuated for
+
+84
+00:01:35,389 --> 00:01:35,399
+individual light is attenuated for
+ 
+
+85
+00:01:35,399 --> 00:01:38,149
+individual light is attenuated for
+artistic effect while not physically
+
+86
+00:01:38,149 --> 00:01:38,159
+artistic effect while not physically
+ 
+
+87
+00:01:38,159 --> 00:01:40,429
+artistic effect while not physically
+realistic these extra parameters may
+
+88
+00:01:40,429 --> 00:01:40,439
+realistic these extra parameters may
+ 
+
+89
+00:01:40,439 --> 00:01:42,469
+realistic these extra parameters may
+enable you to get the specific look you
+
+90
+00:01:42,469 --> 00:01:42,479
+enable you to get the specific look you
+ 
+
+91
+00:01:42,479 --> 00:01:44,789
+enable you to get the specific look you
+are after for this tutorial though we
+
+92
+00:01:44,789 --> 00:01:44,799
+are after for this tutorial though we
+ 
+
+93
+00:01:44,799 --> 00:01:47,469
+are after for this tutorial though we
+will stick with an ination of just light
+
+94
+00:01:47,469 --> 00:01:47,479
+will stick with an ination of just light
+ 
+
+95
+00:01:47,479 --> 00:01:50,670
+will stick with an ination of just light
+intensity over distance squared okay
+
+96
+00:01:50,670 --> 00:01:50,680
+intensity over distance squared okay
+ 
+
+97
+00:01:50,680 --> 00:01:52,469
+intensity over distance squared okay
+let's get started in our first
+
+98
+00:01:52,469 --> 00:01:52,479
+let's get started in our first
+ 
+
+99
+00:01:52,479 --> 00:01:54,429
+let's get started in our first
+implementation file we need to update
+
+100
+00:01:54,429 --> 00:01:54,439
+implementation file we need to update
+ 
+
+101
+00:01:54,439 --> 00:01:57,109
+implementation file we need to update
+the global ubo I'm going to remove the
+
+102
+00:01:57,109 --> 00:01:57,119
+the global ubo I'm going to remove the
+ 
+
+103
+00:01:57,119 --> 00:01:58,789
+the global ubo I'm going to remove the
+light Direction field and for the first
+
+104
+00:01:58,789 --> 00:01:58,799
+light Direction field and for the first
+ 
+
+105
+00:01:58,799 --> 00:02:01,149
+light Direction field and for the first
+point light object add a position and
+
+106
+00:02:01,149 --> 00:02:01,159
+point light object add a position and
+ 
+
+107
+00:02:01,159 --> 00:02:04,469
+point light object add a position and
+color field position will have the VC 3
+
+108
+00:02:04,469 --> 00:02:04,479
+color field position will have the VC 3
+ 
+
+109
+00:02:04,479 --> 00:02:06,990
+color field position will have the VC 3
+type but I'm making the light color a VC
+
+110
+00:02:06,990 --> 00:02:07,000
+type but I'm making the light color a VC
+ 
+
+111
+00:02:07,000 --> 00:02:09,949
+type but I'm making the light color a VC
+4 where the W component will store the
+
+112
+00:02:09,949 --> 00:02:09,959
+4 where the W component will store the
+ 
+
+113
+00:02:09,959 --> 00:02:12,630
+4 where the W component will store the
+lights intensity you could get away with
+
+114
+00:02:12,630 --> 00:02:12,640
+lights intensity you could get away with
+ 
+
+115
+00:02:12,640 --> 00:02:15,550
+lights intensity you could get away with
+using a VC 3 and control light intensity
+
+116
+00:02:15,550 --> 00:02:15,560
+using a VC 3 and control light intensity
+ 
+
+117
+00:02:15,560 --> 00:02:18,350
+using a VC 3 and control light intensity
+by allowing RGB values greater than one
+
+118
+00:02:18,350 --> 00:02:18,360
+by allowing RGB values greater than one
+ 
+
+119
+00:02:18,360 --> 00:02:20,350
+by allowing RGB values greater than one
+but I prefer keeping the RGB values in
+
+120
+00:02:20,350 --> 00:02:20,360
+but I prefer keeping the RGB values in
+ 
+
+121
+00:02:20,360 --> 00:02:22,270
+but I prefer keeping the RGB values in
+the 0o to one range and being able to
+
+122
+00:02:22,270 --> 00:02:22,280
+the 0o to one range and being able to
+ 
+
+123
+00:02:22,280 --> 00:02:24,229
+the 0o to one range and being able to
+control the light intensity while
+
+124
+00:02:24,229 --> 00:02:24,239
+control the light intensity while
+ 
+
+125
+00:02:24,239 --> 00:02:25,869
+control the light intensity while
+maintaining the same values for the
+
+126
+00:02:25,869 --> 00:02:25,879
+maintaining the same values for the
+ 
+
+127
+00:02:25,879 --> 00:02:28,949
+maintaining the same values for the
+color components now just a refresher
+
+128
+00:02:28,949 --> 00:02:28,959
+color components now just a refresher
+ 
+
+129
+00:02:28,959 --> 00:02:31,150
+color components now just a refresher
+about alignment requirements since I
+
+130
+00:02:31,150 --> 00:02:31,160
+about alignment requirements since I
+ 
+
+131
+00:02:31,160 --> 00:02:33,190
+about alignment requirements since I
+feel like this is still a point of
+
+132
+00:02:33,190 --> 00:02:33,200
+feel like this is still a point of
+ 
+
+133
+00:02:33,200 --> 00:02:36,470
+feel like this is still a point of
+confusion for some viewers ubo memory
+
+134
+00:02:36,470 --> 00:02:36,480
+confusion for some viewers ubo memory
+ 
+
+135
+00:02:36,480 --> 00:02:38,030
+confusion for some viewers ubo memory
+within Shader programs will
+
+136
+00:02:38,030 --> 00:02:38,040
+within Shader programs will
+ 
+
+137
+00:02:38,040 --> 00:02:40,149
+within Shader programs will
+automatically align in certain ways
+
+138
+00:02:40,149 --> 00:02:40,159
+automatically align in certain ways
+ 
+
+139
+00:02:40,159 --> 00:02:43,630
+automatically align in certain ways
+following the STD 140 specification
+
+140
+00:02:43,630 --> 00:02:43,640
+following the STD 140 specification
+ 
+
+141
+00:02:43,640 --> 00:02:45,710
+following the STD 140 specification
+ignoring the projection view Matrix
+
+142
+00:02:45,710 --> 00:02:45,720
+ignoring the projection view Matrix
+ 
+
+143
+00:02:45,720 --> 00:02:48,110
+ignoring the projection view Matrix
+since it's 64 bytes and will already be
+
+144
+00:02:48,110 --> 00:02:48,120
+since it's 64 bytes and will already be
+ 
+
+145
+00:02:48,120 --> 00:02:50,270
+since it's 64 bytes and will already be
+aligned currently the structure on the
+
+146
+00:02:50,270 --> 00:02:50,280
+aligned currently the structure on the
+ 
+
+147
+00:02:50,280 --> 00:02:53,550
+aligned currently the structure on the
+Shader will look like this with a 4 byte
+
+148
+00:02:53,550 --> 00:02:53,560
+Shader will look like this with a 4 byte
+ 
+
+149
+00:02:53,560 --> 00:02:54,949
+Shader will look like this with a 4 byte
+gap between the end of the light
+
+150
+00:02:54,949 --> 00:02:54,959
+gap between the end of the light
+ 
+
+151
+00:02:54,959 --> 00:02:56,589
+gap between the end of the light
+position and the start of the color
+
+152
+00:02:56,589 --> 00:02:56,599
+position and the start of the color
+ 
+
+153
+00:02:56,599 --> 00:02:58,990
+position and the start of the color
+variable this will happen because the
+
+154
+00:02:58,990 --> 00:02:59,000
+variable this will happen because the
+ 
+
+155
+00:02:59,000 --> 00:03:01,030
+variable this will happen because the
+specification says says that VC 3 and VC
+
+156
+00:03:01,030 --> 00:03:01,040
+specification says says that VC 3 and VC
+ 
+
+157
+00:03:01,040 --> 00:03:04,910
+specification says says that VC 3 and VC
+4 types need to be aligned to 16 bytes
+
+158
+00:03:04,910 --> 00:03:04,920
+4 types need to be aligned to 16 bytes
+ 
+
+159
+00:03:04,920 --> 00:03:06,830
+4 types need to be aligned to 16 bytes
+the host's default Behavior though would
+
+160
+00:03:06,830 --> 00:03:06,840
+the host's default Behavior though would
+ 
+
+161
+00:03:06,840 --> 00:03:10,030
+the host's default Behavior though would
+be to pack the memory tightly one option
+
+162
+00:03:10,030 --> 00:03:10,040
+be to pack the memory tightly one option
+ 
+
+163
+00:03:10,040 --> 00:03:12,509
+be to pack the memory tightly one option
+to manually fix this is by adding four
+
+164
+00:03:12,509 --> 00:03:12,519
+to manually fix this is by adding four
+ 
+
+165
+00:03:12,519 --> 00:03:14,990
+to manually fix this is by adding four
+bytes of padding the Shader would fit
+
+166
+00:03:14,990 --> 00:03:15,000
+bytes of padding the Shader would fit
+ 
+
+167
+00:03:15,000 --> 00:03:17,509
+bytes of padding the Shader would fit
+this 4 byte variable in at by 12 and the
+
+168
+00:03:17,509 --> 00:03:17,519
+this 4 byte variable in at by 12 and the
+ 
+
+169
+00:03:17,519 --> 00:03:19,670
+this 4 byte variable in at by 12 and the
+memory layout would be tightly packed
+
+170
+00:03:19,670 --> 00:03:19,680
+memory layout would be tightly packed
+ 
+
+171
+00:03:19,680 --> 00:03:21,350
+memory layout would be tightly packed
+and will also therefore match the layout
+
+172
+00:03:21,350 --> 00:03:21,360
+and will also therefore match the layout
+ 
+
+173
+00:03:21,360 --> 00:03:24,229
+and will also therefore match the layout
+on the host alternatively some engines
+
+174
+00:03:24,229 --> 00:03:24,239
+on the host alternatively some engines
+ 
+
+175
+00:03:24,239 --> 00:03:26,830
+on the host alternatively some engines
+avoid ever using the VC 3 and mat 3 data
+
+176
+00:03:26,830 --> 00:03:26,840
+avoid ever using the VC 3 and mat 3 data
+ 
+
+177
+00:03:26,840 --> 00:03:29,350
+avoid ever using the VC 3 and mat 3 data
+types within buffer objects and will
+
+178
+00:03:29,350 --> 00:03:29,360
+types within buffer objects and will
+ 
+
+179
+00:03:29,360 --> 00:03:32,869
+types within buffer objects and will
+just ignore the extra unused values one
+
+180
+00:03:32,869 --> 00:03:32,879
+just ignore the extra unused values one
+ 
+
+181
+00:03:32,879 --> 00:03:34,589
+just ignore the extra unused values one
+reason to do this is that some
+
+182
+00:03:34,589 --> 00:03:34,599
+reason to do this is that some
+ 
+
+183
+00:03:34,599 --> 00:03:36,350
+reason to do this is that some
+implementations in the past have
+
+184
+00:03:36,350 --> 00:03:36,360
+implementations in the past have
+ 
+
+185
+00:03:36,360 --> 00:03:38,390
+implementations in the past have
+incorrectly implemented v3's layout
+
+186
+00:03:38,390 --> 00:03:38,400
+incorrectly implemented v3's layout
+ 
+
+187
+00:03:38,400 --> 00:03:40,670
+incorrectly implemented v3's layout
+rules so even if you did everything
+
+188
+00:03:40,670 --> 00:03:40,680
+rules so even if you did everything
+ 
+
+189
+00:03:40,680 --> 00:03:42,589
+rules so even if you did everything
+correctly on some devices your code
+
+190
+00:03:42,589 --> 00:03:42,599
+correctly on some devices your code
+ 
+
+191
+00:03:42,599 --> 00:03:45,270
+correctly on some devices your code
+would still fail however based on the
+
+192
+00:03:45,270 --> 00:03:45,280
+would still fail however based on the
+ 
+
+193
+00:03:45,280 --> 00:03:47,949
+would still fail however based on the
+stack Overflow answer so not exactly the
+
+194
+00:03:47,949 --> 00:03:47,959
+stack Overflow answer so not exactly the
+ 
+
+195
+00:03:47,959 --> 00:03:50,270
+stack Overflow answer so not exactly the
+best source but this shouldn't be an
+
+196
+00:03:50,270 --> 00:03:50,280
+best source but this shouldn't be an
+ 
+
+197
+00:03:50,280 --> 00:03:52,149
+best source but this shouldn't be an
+issue with Vulcan because shaders are
+
+198
+00:03:52,149 --> 00:03:52,159
+issue with Vulcan because shaders are
+ 
+
+199
+00:03:52,159 --> 00:03:55,710
+issue with Vulcan because shaders are
+compiled to spear 5 and this was more of
+
+200
+00:03:55,710 --> 00:03:55,720
+compiled to spear 5 and this was more of
+ 
+
+201
+00:03:55,720 --> 00:03:58,990
+compiled to spear 5 and this was more of
+a problem for older graphics apis and
+
+202
+00:03:58,990 --> 00:03:59,000
+a problem for older graphics apis and
+ 
+
+203
+00:03:59,000 --> 00:04:01,030
+a problem for older graphics apis and
+the last option would be to use the
+
+204
+00:04:01,030 --> 00:04:01,040
+the last option would be to use the
+ 
+
+205
+00:04:01,040 --> 00:04:03,550
+the last option would be to use the
+Align as operator which we can put
+
+206
+00:04:03,550 --> 00:04:03,560
+Align as operator which we can put
+ 
+
+207
+00:04:03,560 --> 00:04:05,670
+Align as operator which we can put
+before the color variable don't make the
+
+208
+00:04:05,670 --> 00:04:05,680
+before the color variable don't make the
+ 
+
+209
+00:04:05,680 --> 00:04:07,910
+before the color variable don't make the
+mistake of putting align as 16 before
+
+210
+00:04:07,910 --> 00:04:07,920
+mistake of putting align as 16 before
+ 
+
+211
+00:04:07,920 --> 00:04:10,069
+mistake of putting align as 16 before
+every variable for example if we did a
+
+212
+00:04:10,069 --> 00:04:10,079
+every variable for example if we did a
+ 
+
+213
+00:04:10,079 --> 00:04:12,670
+every variable for example if we did a
+line as 16 before the int padding this
+
+214
+00:04:12,670 --> 00:04:12,680
+line as 16 before the int padding this
+ 
+
+215
+00:04:12,680 --> 00:04:14,949
+line as 16 before the int padding this
+would be incorrect actually we could use
+
+216
+00:04:14,949 --> 00:04:14,959
+would be incorrect actually we could use
+ 
+
+217
+00:04:14,959 --> 00:04:17,189
+would be incorrect actually we could use
+a line as 4 here instead but note that
+
+218
+00:04:17,189 --> 00:04:17,199
+a line as 4 here instead but note that
+ 
+
+219
+00:04:17,199 --> 00:04:20,189
+a line as 4 here instead but note that
+this doesn't work in all situations for
+
+220
+00:04:20,189 --> 00:04:20,199
+this doesn't work in all situations for
+ 
+
+221
+00:04:20,199 --> 00:04:22,550
+this doesn't work in all situations for
+example when using a nested structure it
+
+222
+00:04:22,550 --> 00:04:22,560
+example when using a nested structure it
+ 
+
+223
+00:04:22,560 --> 00:04:24,590
+example when using a nested structure it
+will fill its space rounded up to the
+
+224
+00:04:24,590 --> 00:04:24,600
+will fill its space rounded up to the
+ 
+
+225
+00:04:24,600 --> 00:04:27,870
+will fill its space rounded up to the
+nearest VC four size so using a line as
+
+226
+00:04:27,870 --> 00:04:27,880
+nearest VC four size so using a line as
+ 
+
+227
+00:04:27,880 --> 00:04:29,790
+nearest VC four size so using a line as
+4 on the host would pack the float
+
+228
+00:04:29,790 --> 00:04:29,800
+4 on the host would pack the float
+ 
+
+229
+00:04:29,800 --> 00:04:32,550
+4 on the host would pack the float
+variable too tightly when to be correct
+
+230
+00:04:32,550 --> 00:04:32,560
+variable too tightly when to be correct
+ 
+
+231
+00:04:32,560 --> 00:04:35,110
+variable too tightly when to be correct
+it would actually need to be a line as
+
+232
+00:04:35,110 --> 00:04:35,120
+it would actually need to be a line as
+ 
+
+233
+00:04:35,120 --> 00:04:38,590
+it would actually need to be a line as
+16 my point is just take your time and
+
+234
+00:04:38,590 --> 00:04:38,600
+16 my point is just take your time and
+ 
+
+235
+00:04:38,600 --> 00:04:40,230
+16 my point is just take your time and
+double check the alignment rules
+
+236
+00:04:40,230 --> 00:04:40,240
+double check the alignment rules
+ 
+
+237
+00:04:40,240 --> 00:04:42,909
+double check the alignment rules
+whenever making changes to buffer object
+
+238
+00:04:42,909 --> 00:04:42,919
+whenever making changes to buffer object
+ 
+
+239
+00:04:42,919 --> 00:04:45,270
+whenever making changes to buffer object
+structures it's a common place for hard
+
+240
+00:04:45,270 --> 00:04:45,280
+structures it's a common place for hard
+ 
+
+241
+00:04:45,280 --> 00:04:47,029
+structures it's a common place for hard
+to find bugs to be
+
+242
+00:04:47,029 --> 00:04:47,039
+to find bugs to be
+ 
+
+243
+00:04:47,039 --> 00:04:49,909
+to find bugs to be
+introduced okay let's get back on track
+
+244
+00:04:49,909 --> 00:04:49,919
+introduced okay let's get back on track
+ 
+
+245
+00:04:49,919 --> 00:04:52,790
+introduced okay let's get back on track
+add one more vc4 member for the ambient
+
+246
+00:04:52,790 --> 00:04:52,800
+add one more vc4 member for the ambient
+ 
+
+247
+00:04:52,800 --> 00:04:54,590
+add one more vc4 member for the ambient
+color since currently we are just
+
+248
+00:04:54,590 --> 00:04:54,600
+color since currently we are just
+ 
+
+249
+00:04:54,600 --> 00:04:57,310
+color since currently we are just
+hardcoding this into the Shader set the
+
+250
+00:04:57,310 --> 00:04:57,320
+hardcoding this into the Shader set the
+ 
+
+251
+00:04:57,320 --> 00:05:00,110
+hardcoding this into the Shader set the
+color RGB components to White and then
+
+252
+00:05:00,110 --> 00:05:00,120
+color RGB components to White and then
+ 
+
+253
+00:05:00,120 --> 00:05:01,990
+color RGB components to White and then
+for the fourth component just a low
+
+254
+00:05:01,990 --> 00:05:02,000
+for the fourth component just a low
+ 
+
+255
+00:05:02,000 --> 00:05:04,710
+for the fourth component just a low
+intensity value of like
+
+256
+00:05:04,710 --> 00:05:04,720
+intensity value of like
+ 
+
+257
+00:05:04,720 --> 00:05:07,510
+intensity value of like
+0.02 now we need to update the vertex
+
+258
+00:05:07,510 --> 00:05:07,520
+0.02 now we need to update the vertex
+ 
+
+259
+00:05:07,520 --> 00:05:09,469
+0.02 now we need to update the vertex
+Shader with the new ubo struct
+
+260
+00:05:09,469 --> 00:05:09,479
+Shader with the new ubo struct
+ 
+
+261
+00:05:09,479 --> 00:05:11,909
+Shader with the new ubo struct
+definition so navigate to your Shader
+
+262
+00:05:11,909 --> 00:05:11,919
+definition so navigate to your Shader
+ 
+
+263
+00:05:11,919 --> 00:05:14,430
+definition so navigate to your Shader
+remove direction to light and add the
+
+264
+00:05:14,430 --> 00:05:14,440
+remove direction to light and add the
+ 
+
+265
+00:05:14,440 --> 00:05:16,629
+remove direction to light and add the
+three new fields in the exact same order
+
+266
+00:05:16,629 --> 00:05:16,639
+three new fields in the exact same order
+ 
+
+267
+00:05:16,639 --> 00:05:19,150
+three new fields in the exact same order
+as you did in the app implementation so
+
+268
+00:05:19,150 --> 00:05:19,160
+as you did in the app implementation so
+ 
+
+269
+00:05:19,160 --> 00:05:21,110
+as you did in the app implementation so
+that will be ambient light color light
+
+270
+00:05:21,110 --> 00:05:21,120
+that will be ambient light color light
+ 
+
+271
+00:05:21,120 --> 00:05:23,390
+that will be ambient light color light
+position and light color and now since
+
+272
+00:05:23,390 --> 00:05:23,400
+position and light color and now since
+ 
+
+273
+00:05:23,400 --> 00:05:25,469
+position and light color and now since
+we're passing in the ambient light color
+
+274
+00:05:25,469 --> 00:05:25,479
+we're passing in the ambient light color
+ 
+
+275
+00:05:25,479 --> 00:05:27,710
+we're passing in the ambient light color
+we can get rid of the ambient constant
+
+276
+00:05:27,710 --> 00:05:27,720
+we can get rid of the ambient constant
+ 
+
+277
+00:05:27,720 --> 00:05:30,029
+we can get rid of the ambient constant
+we defined previously for for Point
+
+278
+00:05:30,029 --> 00:05:30,039
+we defined previously for for Point
+ 
+
+279
+00:05:30,039 --> 00:05:31,590
+we defined previously for for Point
+lighting we need to calculate the
+
+280
+00:05:31,590 --> 00:05:31,600
+lighting we need to calculate the
+ 
+
+281
+00:05:31,600 --> 00:05:33,510
+lighting we need to calculate the
+direction to the light source from the
+
+282
+00:05:33,510 --> 00:05:33,520
+direction to the light source from the
+ 
+
+283
+00:05:33,520 --> 00:05:36,510
+direction to the light source from the
+vertex you might be tempted to try VC 3
+
+284
+00:05:36,510 --> 00:05:36,520
+vertex you might be tempted to try VC 3
+ 
+
+285
+00:05:36,520 --> 00:05:38,629
+vertex you might be tempted to try VC 3
+direction to light is equal to light
+
+286
+00:05:38,629 --> 00:05:38,639
+direction to light is equal to light
+ 
+
+287
+00:05:38,639 --> 00:05:41,309
+direction to light is equal to light
+position minus position however this
+
+288
+00:05:41,309 --> 00:05:41,319
+position minus position however this
+ 
+
+289
+00:05:41,319 --> 00:05:43,749
+position minus position however this
+would be incorrect whenever you are
+
+290
+00:05:43,749 --> 00:05:43,759
+would be incorrect whenever you are
+ 
+
+291
+00:05:43,759 --> 00:05:45,990
+would be incorrect whenever you are
+doing operations within a Shader you
+
+292
+00:05:45,990 --> 00:05:46,000
+doing operations within a Shader you
+ 
+
+293
+00:05:46,000 --> 00:05:48,110
+doing operations within a Shader you
+need to make sure that the values within
+
+294
+00:05:48,110 --> 00:05:48,120
+need to make sure that the values within
+ 
+
+295
+00:05:48,120 --> 00:05:51,749
+need to make sure that the values within
+the calculation occupy the same space in
+
+296
+00:05:51,749 --> 00:05:51,759
+the calculation occupy the same space in
+ 
+
+297
+00:05:51,759 --> 00:05:54,150
+the calculation occupy the same space in
+this case our light position is in World
+
+298
+00:05:54,150 --> 00:05:54,160
+this case our light position is in World
+ 
+
+299
+00:05:54,160 --> 00:05:56,590
+this case our light position is in World
+space but the vertex position is still
+
+300
+00:05:56,590 --> 00:05:56,600
+space but the vertex position is still
+ 
+
+301
+00:05:56,600 --> 00:05:59,070
+space but the vertex position is still
+in model space so we need to First
+
+302
+00:05:59,070 --> 00:05:59,080
+in model space so we need to First
+ 
+
+303
+00:05:59,080 --> 00:06:01,070
+in model space so we need to First
+transform the vertex position to World
+
+304
+00:06:01,070 --> 00:06:01,080
+transform the vertex position to World
+ 
+
+305
+00:06:01,080 --> 00:06:05,510
+transform the vertex position to World
+Space by multiplying by its model
+
+306
+00:06:05,510 --> 00:06:05,520
+
+ 
+
+307
+00:06:05,520 --> 00:06:07,909
+ 
+Matrix once we have the vertex position
+
+308
+00:06:07,909 --> 00:06:07,919
+Matrix once we have the vertex position
+ 
+
+309
+00:06:07,919 --> 00:06:09,790
+Matrix once we have the vertex position
+in World space we can calculate the
+
+310
+00:06:09,790 --> 00:06:09,800
+in World space we can calculate the
+ 
+
+311
+00:06:09,800 --> 00:06:13,749
+in World space we can calculate the
+direction to the point light using
+
+312
+00:06:13,749 --> 00:06:13,759
+
+ 
+
+313
+00:06:13,759 --> 00:06:17,029
+ 
+subtraction and don't leave out thexyz
+
+314
+00:06:17,029 --> 00:06:17,039
+subtraction and don't leave out thexyz
+ 
+
+315
+00:06:17,039 --> 00:06:19,230
+subtraction and don't leave out thexyz
+postfix since the position world is a
+
+316
+00:06:19,230 --> 00:06:19,240
+postfix since the position world is a
+ 
+
+317
+00:06:19,240 --> 00:06:21,309
+postfix since the position world is a
+vc4 but we only care about the first
+
+318
+00:06:21,309 --> 00:06:21,319
+vc4 but we only care about the first
+ 
+
+319
+00:06:21,319 --> 00:06:23,790
+vc4 but we only care about the first
+three components for this
+
+320
+00:06:23,790 --> 00:06:23,800
+three components for this
+ 
+
+321
+00:06:23,800 --> 00:06:26,749
+three components for this
+calculation next let's scale the point
+
+322
+00:06:26,749 --> 00:06:26,759
+calculation next let's scale the point
+ 
+
+323
+00:06:26,759 --> 00:06:29,029
+calculation next let's scale the point
+light's color by its intensity this
+
+324
+00:06:29,029 --> 00:06:29,039
+light's color by its intensity this
+ 
+
+325
+00:06:29,039 --> 00:06:31,510
+light's color by its intensity this
+would be necessary if we just used a v 3
+
+326
+00:06:31,510 --> 00:06:31,520
+would be necessary if we just used a v 3
+ 
+
+327
+00:06:31,520 --> 00:06:34,589
+would be necessary if we just used a v 3
+Type
+
+328
+00:06:34,589 --> 00:06:34,599
+
+ 
+
+329
+00:06:34,599 --> 00:06:36,830
+ 
+instead and then do the same for the
+
+330
+00:06:36,830 --> 00:06:36,840
+instead and then do the same for the
+ 
+
+331
+00:06:36,840 --> 00:06:40,469
+instead and then do the same for the
+ambient
+
+332
+00:06:40,469 --> 00:06:40,479
+
+ 
+
+333
+00:06:40,479 --> 00:06:43,189
+ 
+light we need to slightly modify the
+
+334
+00:06:43,189 --> 00:06:43,199
+light we need to slightly modify the
+ 
+
+335
+00:06:43,199 --> 00:06:45,270
+light we need to slightly modify the
+light intensity equation since unlike
+
+336
+00:06:45,270 --> 00:06:45,280
+light intensity equation since unlike
+ 
+
+337
+00:06:45,280 --> 00:06:47,350
+light intensity equation since unlike
+before we are now providing a color
+
+338
+00:06:47,350 --> 00:06:47,360
+before we are now providing a color
+ 
+
+339
+00:06:47,360 --> 00:06:50,350
+before we are now providing a color
+value the diffuse lighting equation then
+
+340
+00:06:50,350 --> 00:06:50,360
+value the diffuse lighting equation then
+ 
+
+341
+00:06:50,360 --> 00:06:52,510
+value the diffuse lighting equation then
+becomes the diffuse light color times
+
+342
+00:06:52,510 --> 00:06:52,520
+becomes the diffuse light color times
+ 
+
+343
+00:06:52,520 --> 00:06:54,150
+becomes the diffuse light color times
+the cosine of the angle between the
+
+344
+00:06:54,150 --> 00:06:54,160
+the cosine of the angle between the
+ 
+
+345
+00:06:54,160 --> 00:06:56,150
+the cosine of the angle between the
+surfaces normal and the direction to the
+
+346
+00:06:56,150 --> 00:06:56,160
+surfaces normal and the direction to the
+ 
+
+347
+00:06:56,160 --> 00:06:58,629
+surfaces normal and the direction to the
+light source which is just equal to the
+
+348
+00:06:58,629 --> 00:06:58,639
+light source which is just equal to the
+ 
+
+349
+00:06:58,639 --> 00:07:01,469
+light source which is just equal to the
+dotproduct of the normalized vectors so
+
+350
+00:07:01,469 --> 00:07:01,479
+dotproduct of the normalized vectors so
+ 
+
+351
+00:07:01,479 --> 00:07:03,350
+dotproduct of the normalized vectors so
+make sure to add a normalized function
+
+352
+00:07:03,350 --> 00:07:03,360
+make sure to add a normalized function
+ 
+
+353
+00:07:03,360 --> 00:07:05,950
+make sure to add a normalized function
+call on the direction to light
+
+354
+00:07:05,950 --> 00:07:05,960
+call on the direction to light
+ 
+
+355
+00:07:05,960 --> 00:07:08,589
+call on the direction to light
+Vector diffuse shading was first covered
+
+356
+00:07:08,589 --> 00:07:08,599
+Vector diffuse shading was first covered
+ 
+
+357
+00:07:08,599 --> 00:07:10,629
+Vector diffuse shading was first covered
+back in tutorial
+
+358
+00:07:10,629 --> 00:07:10,639
+back in tutorial
+ 
+
+359
+00:07:10,639 --> 00:07:12,950
+back in tutorial
+18 then we can finally calculate the
+
+360
+00:07:12,950 --> 00:07:12,960
+18 then we can finally calculate the
+ 
+
+361
+00:07:12,960 --> 00:07:14,749
+18 then we can finally calculate the
+output color as just the sum of the
+
+362
+00:07:14,749 --> 00:07:14,759
+output color as just the sum of the
+ 
+
+363
+00:07:14,759 --> 00:07:16,950
+output color as just the sum of the
+diffuse light plus our ambient light
+
+364
+00:07:16,950 --> 00:07:16,960
+diffuse light plus our ambient light
+ 
+
+365
+00:07:16,960 --> 00:07:19,469
+diffuse light plus our ambient light
+times the color of the surface and
+
+366
+00:07:19,469 --> 00:07:19,479
+times the color of the surface and
+ 
+
+367
+00:07:19,479 --> 00:07:21,150
+times the color of the surface and
+that's it we can build and run and the
+
+368
+00:07:21,150 --> 00:07:21,160
+that's it we can build and run and the
+ 
+
+369
+00:07:21,160 --> 00:07:23,029
+that's it we can build and run and the
+vase objects will now have slightly
+
+370
+00:07:23,029 --> 00:07:23,039
+vase objects will now have slightly
+ 
+
+371
+00:07:23,039 --> 00:07:25,309
+vase objects will now have slightly
+different lighting being applied but we
+
+372
+00:07:25,309 --> 00:07:25,319
+different lighting being applied but we
+ 
+
+373
+00:07:25,319 --> 00:07:27,110
+different lighting being applied but we
+haven't yet taken into account
+
+374
+00:07:27,110 --> 00:07:27,120
+haven't yet taken into account
+ 
+
+375
+00:07:27,120 --> 00:07:29,189
+haven't yet taken into account
+attenuation right now the intensity of
+
+376
+00:07:29,189 --> 00:07:29,199
+attenuation right now the intensity of
+ 
+
+377
+00:07:29,199 --> 00:07:31,189
+attenuation right now the intensity of
+the light will be the same regardless of
+
+378
+00:07:31,189 --> 00:07:31,199
+the light will be the same regardless of
+ 
+
+379
+00:07:31,199 --> 00:07:34,029
+the light will be the same regardless of
+the vas's distance to the light source
+
+380
+00:07:34,029 --> 00:07:34,039
+the vas's distance to the light source
+ 
+
+381
+00:07:34,039 --> 00:07:36,430
+the vas's distance to the light source
+so in the vertex Shader we can add an
+
+382
+00:07:36,430 --> 00:07:36,440
+so in the vertex Shader we can add an
+ 
+
+383
+00:07:36,440 --> 00:07:38,909
+so in the vertex Shader we can add an
+attenuation Factor equal to the inverse
+
+384
+00:07:38,909 --> 00:07:38,919
+attenuation Factor equal to the inverse
+ 
+
+385
+00:07:38,919 --> 00:07:41,869
+attenuation Factor equal to the inverse
+square of the distance okay there are
+
+386
+00:07:41,869 --> 00:07:41,879
+square of the distance okay there are
+ 
+
+387
+00:07:41,879 --> 00:07:44,550
+square of the distance okay there are
+two things to note here the dot product
+
+388
+00:07:44,550 --> 00:07:44,560
+two things to note here the dot product
+ 
+
+389
+00:07:44,560 --> 00:07:47,469
+two things to note here the dot product
+of any Vector with itself is an easy and
+
+390
+00:07:47,469 --> 00:07:47,479
+of any Vector with itself is an easy and
+ 
+
+391
+00:07:47,479 --> 00:07:49,869
+of any Vector with itself is an easy and
+efficient way to calculate the length of
+
+392
+00:07:49,869 --> 00:07:49,879
+efficient way to calculate the length of
+ 
+
+393
+00:07:49,879 --> 00:07:52,749
+efficient way to calculate the length of
+the vector squared and secondly make
+
+394
+00:07:52,749 --> 00:07:52,759
+the vector squared and secondly make
+ 
+
+395
+00:07:52,759 --> 00:07:54,390
+the vector squared and secondly make
+sure to calculate your attenuation
+
+396
+00:07:54,390 --> 00:07:54,400
+sure to calculate your attenuation
+ 
+
+397
+00:07:54,400 --> 00:07:56,149
+sure to calculate your attenuation
+Vector before you normalize the
+
+398
+00:07:56,149 --> 00:07:56,159
+Vector before you normalize the
+ 
+
+399
+00:07:56,159 --> 00:07:58,469
+Vector before you normalize the
+direction Vector otherwise your distance
+
+400
+00:07:58,469 --> 00:07:58,479
+direction Vector otherwise your distance
+ 
+
+401
+00:07:58,479 --> 00:08:00,230
+direction Vector otherwise your distance
+will always equal one
+
+402
+00:08:00,230 --> 00:08:00,240
+will always equal one
+ 
+
+403
+00:08:00,240 --> 00:08:02,309
+will always equal one
+then multiply the light color by the
+
+404
+00:08:02,309 --> 00:08:02,319
+then multiply the light color by the
+ 
+
+405
+00:08:02,319 --> 00:08:04,670
+then multiply the light color by the
+attenuation recompile your shaders and
+
+406
+00:08:04,670 --> 00:08:04,680
+attenuation recompile your shaders and
+ 
+
+407
+00:08:04,680 --> 00:08:07,149
+attenuation recompile your shaders and
+run your code and our vases are looking
+
+408
+00:08:07,149 --> 00:08:07,159
+run your code and our vases are looking
+ 
+
+409
+00:08:07,159 --> 00:08:09,350
+run your code and our vases are looking
+a little dark so let's move them a bit
+
+410
+00:08:09,350 --> 00:08:09,360
+a little dark so let's move them a bit
+ 
+
+411
+00:08:09,360 --> 00:08:11,790
+a little dark so let's move them a bit
+closer to the light source rather than
+
+412
+00:08:11,790 --> 00:08:11,800
+closer to the light source rather than
+ 
+
+413
+00:08:11,800 --> 00:08:13,950
+closer to the light source rather than
+change the lights position I'll scroll
+
+414
+00:08:13,950 --> 00:08:13,960
+change the lights position I'll scroll
+ 
+
+415
+00:08:13,960 --> 00:08:16,629
+change the lights position I'll scroll
+down to the load game objects function
+
+416
+00:08:16,629 --> 00:08:16,639
+down to the load game objects function
+ 
+
+417
+00:08:16,639 --> 00:08:19,469
+down to the load game objects function
+and set their Z components equal to zero
+
+418
+00:08:19,469 --> 00:08:19,479
+and set their Z components equal to zero
+ 
+
+419
+00:08:19,479 --> 00:08:21,230
+and set their Z components equal to zero
+and now that I've moved the vase objects
+
+420
+00:08:21,230 --> 00:08:21,240
+and now that I've moved the vase objects
+ 
+
+421
+00:08:21,240 --> 00:08:22,990
+and now that I've moved the vase objects
+closer to the camera we should also
+
+422
+00:08:22,990 --> 00:08:23,000
+closer to the camera we should also
+ 
+
+423
+00:08:23,000 --> 00:08:24,909
+closer to the camera we should also
+adjust the viewer object starting
+
+424
+00:08:24,909 --> 00:08:24,919
+adjust the viewer object starting
+ 
+
+425
+00:08:24,919 --> 00:08:27,589
+adjust the viewer object starting
+position to be just a bit further back
+
+426
+00:08:27,589 --> 00:08:27,599
+position to be just a bit further back
+ 
+
+427
+00:08:27,599 --> 00:08:30,589
+position to be just a bit further back
+by setting the translation. Z value to
+
+428
+00:08:30,589 --> 00:08:30,599
+by setting the translation. Z value to
+ 
+
+429
+00:08:30,599 --> 00:08:33,589
+by setting the translation. Z value to
+-2.5 the camera will now have moved back
+
+430
+00:08:33,589 --> 00:08:33,599
+-2.5 the camera will now have moved back
+ 
+
+431
+00:08:33,599 --> 00:08:36,790
+-2.5 the camera will now have moved back
+an equal distance now the vase objects
+
+432
+00:08:36,790 --> 00:08:36,800
+an equal distance now the vase objects
+ 
+
+433
+00:08:36,800 --> 00:08:39,029
+an equal distance now the vase objects
+are looking a bit better the point
+
+434
+00:08:39,029 --> 00:08:39,039
+are looking a bit better the point
+ 
+
+435
+00:08:39,039 --> 00:08:41,070
+are looking a bit better the point
+lights position is slightly closer to
+
+436
+00:08:41,070 --> 00:08:41,080
+lights position is slightly closer to
+ 
+
+437
+00:08:41,080 --> 00:08:43,269
+lights position is slightly closer to
+the vase on the left so if you look
+
+438
+00:08:43,269 --> 00:08:43,279
+the vase on the left so if you look
+ 
+
+439
+00:08:43,279 --> 00:08:45,310
+the vase on the left so if you look
+closely you should be able to tell that
+
+440
+00:08:45,310 --> 00:08:45,320
+closely you should be able to tell that
+ 
+
+441
+00:08:45,320 --> 00:08:46,870
+closely you should be able to tell that
+it is brighter than the vase on the
+
+442
+00:08:46,870 --> 00:08:46,880
+it is brighter than the vase on the
+ 
+
+443
+00:08:46,880 --> 00:08:49,350
+it is brighter than the vase on the
+right unfortunately we can't yet see the
+
+444
+00:08:49,350 --> 00:08:49,360
+right unfortunately we can't yet see the
+ 
+
+445
+00:08:49,360 --> 00:08:51,190
+right unfortunately we can't yet see the
+point light but I think it should be
+
+446
+00:08:51,190 --> 00:08:51,200
+point light but I think it should be
+ 
+
+447
+00:08:51,200 --> 00:08:53,430
+point light but I think it should be
+right around this area
+
+448
+00:08:53,430 --> 00:08:53,440
+right around this area
+ 
+
+449
+00:08:53,440 --> 00:08:55,829
+right around this area
+here the last change I'd like to make
+
+450
+00:08:55,829 --> 00:08:55,839
+here the last change I'd like to make
+ 
+
+451
+00:08:55,839 --> 00:08:58,910
+here the last change I'd like to make
+today is to add in a floor object for
+
+452
+00:08:58,910 --> 00:08:58,920
+today is to add in a floor object for
+ 
+
+453
+00:08:58,920 --> 00:09:00,710
+today is to add in a floor object for
+this we'll use use a simple Square model
+
+454
+00:09:00,710 --> 00:09:00,720
+this we'll use use a simple Square model
+ 
+
+455
+00:09:00,720 --> 00:09:03,910
+this we'll use use a simple Square model
+made up of two triangles so create a
+
+456
+00:09:03,910 --> 00:09:03,920
+made up of two triangles so create a
+ 
+
+457
+00:09:03,920 --> 00:09:07,190
+made up of two triangles so create a
+quad. obj file within the models
+
+458
+00:09:07,190 --> 00:09:07,200
+quad. obj file within the models
+ 
+
+459
+00:09:07,200 --> 00:09:09,790
+quad. obj file within the models
+directory and then I've provided a past
+
+460
+00:09:09,790 --> 00:09:09,800
+directory and then I've provided a past
+ 
+
+461
+00:09:09,800 --> 00:09:12,790
+directory and then I've provided a past
+bin link containing the model's data in
+
+462
+00:09:12,790 --> 00:09:12,800
+bin link containing the model's data in
+ 
+
+463
+00:09:12,800 --> 00:09:14,710
+bin link containing the model's data in
+the load game objects function create a
+
+464
+00:09:14,710 --> 00:09:14,720
+the load game objects function create a
+ 
+
+465
+00:09:14,720 --> 00:09:18,230
+the load game objects function create a
+new object that uses the quad
+
+466
+00:09:18,230 --> 00:09:18,240
+new object that uses the quad
+ 
+
+467
+00:09:18,240 --> 00:09:21,389
+new object that uses the quad
+model I'll call my game object
+
+468
+00:09:21,389 --> 00:09:21,399
+model I'll call my game object
+ 
+
+469
+00:09:21,399 --> 00:09:24,190
+model I'll call my game object
+floor and set its initial translation to
+
+470
+00:09:24,190 --> 00:09:24,200
+floor and set its initial translation to
+ 
+
+471
+00:09:24,200 --> 00:09:27,350
+floor and set its initial translation to
+0 0.5
+
+472
+00:09:27,350 --> 00:09:27,360
+0 0.5
+ 
+
+473
+00:09:27,360 --> 00:09:30,590
+0 0.5
+and0 the scale can be whatever positive
+
+474
+00:09:30,590 --> 00:09:30,600
+and0 the scale can be whatever positive
+ 
+
+475
+00:09:30,600 --> 00:09:33,150
+and0 the scale can be whatever positive
+values you like I'll keep it at
+
+476
+00:09:33,150 --> 00:09:33,160
+values you like I'll keep it at
+ 
+
+477
+00:09:33,160 --> 00:09:36,150
+values you like I'll keep it at
+313 note that the Y scale value doesn't
+
+478
+00:09:36,150 --> 00:09:36,160
+313 note that the Y scale value doesn't
+ 
+
+479
+00:09:36,160 --> 00:09:37,990
+313 note that the Y scale value doesn't
+actually matter at all since all the
+
+480
+00:09:37,990 --> 00:09:38,000
+actually matter at all since all the
+ 
+
+481
+00:09:38,000 --> 00:09:40,910
+actually matter at all since all the
+models y components are already zero
+
+482
+00:09:40,910 --> 00:09:40,920
+models y components are already zero
+ 
+
+483
+00:09:40,920 --> 00:09:42,750
+models y components are already zero
+finally move the floor to your list of
+
+484
+00:09:42,750 --> 00:09:42,760
+finally move the floor to your list of
+ 
+
+485
+00:09:42,760 --> 00:09:44,590
+finally move the floor to your list of
+Game objects run your code and you
+
+486
+00:09:44,590 --> 00:09:44,600
+Game objects run your code and you
+ 
+
+487
+00:09:44,600 --> 00:09:46,430
+Game objects run your code and you
+should get a floor object perfectly
+
+488
+00:09:46,430 --> 00:09:46,440
+should get a floor object perfectly
+ 
+
+489
+00:09:46,440 --> 00:09:49,430
+should get a floor object perfectly
+placed at the bottom of the vase objects
+
+490
+00:09:49,430 --> 00:09:49,440
+placed at the bottom of the vase objects
+ 
+
+491
+00:09:49,440 --> 00:09:51,670
+placed at the bottom of the vase objects
+if we zoom out even just a bit though
+
+492
+00:09:51,670 --> 00:09:51,680
+if we zoom out even just a bit though
+ 
+
+493
+00:09:51,680 --> 00:09:53,350
+if we zoom out even just a bit though
+the models start to get clipped by the
+
+494
+00:09:53,350 --> 00:09:53,360
+the models start to get clipped by the
+ 
+
+495
+00:09:53,360 --> 00:09:55,630
+the models start to get clipped by the
+far clipping plane I used a very
+
+496
+00:09:55,630 --> 00:09:55,640
+far clipping plane I used a very
+ 
+
+497
+00:09:55,640 --> 00:09:57,870
+far clipping plane I used a very
+conservative value for this when we
+
+498
+00:09:57,870 --> 00:09:57,880
+conservative value for this when we
+ 
+
+499
+00:09:57,880 --> 00:10:00,150
+conservative value for this when we
+first set up the projection Matrix
+
+500
+00:10:00,150 --> 00:10:00,160
+first set up the projection Matrix
+ 
+
+501
+00:10:00,160 --> 00:10:01,710
+first set up the projection Matrix
+so you will probably want to increase
+
+502
+00:10:01,710 --> 00:10:01,720
+so you will probably want to increase
+ 
+
+503
+00:10:01,720 --> 00:10:04,710
+so you will probably want to increase
+this to a value of 100 or even a th000
+
+504
+00:10:04,710 --> 00:10:04,720
+this to a value of 100 or even a th000
+ 
+
+505
+00:10:04,720 --> 00:10:06,310
+this to a value of 100 or even a th000
+and that's it for this one next we'll
+
+506
+00:10:06,310 --> 00:10:06,320
+and that's it for this one next we'll
+ 
+
+507
+00:10:06,320 --> 00:10:08,870
+and that's it for this one next we'll
+cover fragment versus vertex lighting
+
+508
+00:10:08,870 --> 00:10:08,880
+cover fragment versus vertex lighting
+ 
+
+509
+00:10:08,880 --> 00:10:10,750
+cover fragment versus vertex lighting
+which will fix why the floor object
+
+510
+00:10:10,750 --> 00:10:10,760
+which will fix why the floor object
+ 
+
+511
+00:10:10,760 --> 00:10:14,150
+which will fix why the floor object
+doesn't look quite correct so I've been
+
+512
+00:10:14,150 --> 00:10:14,160
+doesn't look quite correct so I've been
+ 
+
+513
+00:10:14,160 --> 00:10:16,110
+doesn't look quite correct so I've been
+thinking of making some small changes to
+
+514
+00:10:16,110 --> 00:10:16,120
+thinking of making some small changes to
+ 
+
+515
+00:10:16,120 --> 00:10:18,990
+thinking of making some small changes to
+how I make these tutorials as we move to
+
+516
+00:10:18,990 --> 00:10:19,000
+how I make these tutorials as we move to
+ 
+
+517
+00:10:19,000 --> 00:10:20,910
+how I make these tutorials as we move to
+more intermediate level content
+
+518
+00:10:20,910 --> 00:10:20,920
+more intermediate level content
+ 
+
+519
+00:10:20,920 --> 00:10:22,710
+more intermediate level content
+implementing a feature isn't quite
+
+520
+00:10:22,710 --> 00:10:22,720
+implementing a feature isn't quite
+ 
+
+521
+00:10:22,720 --> 00:10:25,470
+implementing a feature isn't quite
+typically possible within a single video
+
+522
+00:10:25,470 --> 00:10:25,480
+typically possible within a single video
+ 
+
+523
+00:10:25,480 --> 00:10:28,190
+typically possible within a single video
+unless I make it very very long so to
+
+524
+00:10:28,190 --> 00:10:28,200
+unless I make it very very long so to
+ 
+
+525
+00:10:28,200 --> 00:10:29,790
+unless I make it very very long so to
+make my life a bit easier easier I'm
+
+526
+00:10:29,790 --> 00:10:29,800
+make my life a bit easier easier I'm
+ 
+
+527
+00:10:29,800 --> 00:10:31,710
+make my life a bit easier easier I'm
+going to start breaking things up into
+
+528
+00:10:31,710 --> 00:10:31,720
+going to start breaking things up into
+ 
+
+529
+00:10:31,720 --> 00:10:34,590
+going to start breaking things up into
+shorter videos this should also make
+
+530
+00:10:34,590 --> 00:10:34,600
+shorter videos this should also make
+ 
+
+531
+00:10:34,600 --> 00:10:36,590
+shorter videos this should also make
+possible a regular weekly posting
+
+532
+00:10:36,590 --> 00:10:36,600
+possible a regular weekly posting
+ 
+
+533
+00:10:36,600 --> 00:10:39,069
+possible a regular weekly posting
+schedule which from what I hear is good
+
+534
+00:10:39,069 --> 00:10:39,079
+schedule which from what I hear is good
+ 
+
+535
+00:10:39,079 --> 00:10:41,470
+schedule which from what I hear is good
+for the YouTube algorithm anyway I'll
+
+536
+00:10:41,470 --> 00:10:41,480
+for the YouTube algorithm anyway I'll
+ 
+
+537
+00:10:41,480 --> 00:10:43,750
+for the YouTube algorithm anyway I'll
+try to Target like the 8 to 15 minute
+
+538
+00:10:43,750 --> 00:10:43,760
+try to Target like the 8 to 15 minute
+ 
+
+539
+00:10:43,760 --> 00:10:45,949
+try to Target like the 8 to 15 minute
+range each tutorial will be contained
+
+540
+00:10:45,949 --> 00:10:45,959
+range each tutorial will be contained
+ 
+
+541
+00:10:45,959 --> 00:10:48,230
+range each tutorial will be contained
+within a single video but features will
+
+542
+00:10:48,230 --> 00:10:48,240
+within a single video but features will
+ 
+
+543
+00:10:48,240 --> 00:10:50,389
+within a single video but features will
+be implemented over the course of
+
+544
+00:10:50,389 --> 00:10:50,399
+be implemented over the course of
+ 
+
+545
+00:10:50,399 --> 00:10:52,910
+be implemented over the course of
+multiple tutorials and if you want to
+
+546
+00:10:52,910 --> 00:10:52,920
+multiple tutorials and if you want to
+ 
+
+547
+00:10:52,920 --> 00:10:54,910
+multiple tutorials and if you want to
+peek ahead to the end result you can go
+
+548
+00:10:54,910 --> 00:10:54,920
+peek ahead to the end result you can go
+ 
+
+549
+00:10:54,920 --> 00:10:57,150
+peek ahead to the end result you can go
+to the GitHub repo and check out the
+
+550
+00:10:57,150 --> 00:10:57,160
+to the GitHub repo and check out the
+ 
+
+551
+00:10:57,160 --> 00:10:58,990
+to the GitHub repo and check out the
+point lights branch that is already
+
+552
+00:10:58,990 --> 00:10:59,000
+point lights branch that is already
+ 
+
+553
+00:10:59,000 --> 00:11:00,110
+point lights branch that is already
+there
+
+554
+00:11:00,110 --> 00:11:00,120
+there
+ 
+
+555
+00:11:00,120 --> 00:11:01,949
+there
+this version of the repo contains the
+
+556
+00:11:01,949 --> 00:11:01,959
+this version of the repo contains the
+ 
+
+557
+00:11:01,959 --> 00:11:03,790
+this version of the repo contains the
+code for the completed feature within
+
+558
+00:11:03,790 --> 00:11:03,800
+code for the completed feature within
+ 
+
+559
+00:11:03,800 --> 00:11:06,310
+code for the completed feature within
+the tutorial subdirectory note that this
+
+560
+00:11:06,310 --> 00:11:06,320
+the tutorial subdirectory note that this
+ 
+
+561
+00:11:06,320 --> 00:11:09,389
+the tutorial subdirectory note that this
+is just preliminary code and the final
+
+562
+00:11:09,389 --> 00:11:09,399
+is just preliminary code and the final
+ 
+
+563
+00:11:09,399 --> 00:11:11,990
+is just preliminary code and the final
+version covered within the actual videos
+
+564
+00:11:11,990 --> 00:11:12,000
+version covered within the actual videos
+ 
+
+565
+00:11:12,000 --> 00:11:15,629
+version covered within the actual videos
+will likely contain some changes so if
+
+566
+00:11:15,629 --> 00:11:15,639
+will likely contain some changes so if
+ 
+
+567
+00:11:15,639 --> 00:11:18,269
+will likely contain some changes so if
+you test this out ahead of time please
+
+568
+00:11:18,269 --> 00:11:18,279
+you test this out ahead of time please
+ 
+
+569
+00:11:18,279 --> 00:11:20,790
+you test this out ahead of time please
+provide feedback on the Discord I really
+
+570
+00:11:20,790 --> 00:11:20,800
+provide feedback on the Discord I really
+ 
+
+571
+00:11:20,800 --> 00:11:22,990
+provide feedback on the Discord I really
+hate when bugs manage to make their way
+
+572
+00:11:22,990 --> 00:11:23,000
+hate when bugs manage to make their way
+ 
+
+573
+00:11:23,000 --> 00:11:25,310
+hate when bugs manage to make their way
+into a video and I think this is
+
+574
+00:11:25,310 --> 00:11:25,320
+into a video and I think this is
+ 
+
+575
+00:11:25,320 --> 00:11:27,190
+into a video and I think this is
+actually a pretty good way to prevent
+
+576
+00:11:27,190 --> 00:11:27,200
+actually a pretty good way to prevent
+ 
+
+577
+00:11:27,200 --> 00:11:29,670
+actually a pretty good way to prevent
+some of that I also started adding in
+
+578
+00:11:29,670 --> 00:11:29,680
+some of that I also started adding in
+ 
+
+579
+00:11:29,680 --> 00:11:31,590
+some of that I also started adding in
+more of a directory structure so if that
+
+580
+00:11:31,590 --> 00:11:31,600
+more of a directory structure so if that
+ 
+
+581
+00:11:31,600 --> 00:11:33,509
+more of a directory structure so if that
+makes building the project difficult for
+
+582
+00:11:33,509 --> 00:11:33,519
+makes building the project difficult for
+ 
+
+583
+00:11:33,519 --> 00:11:35,310
+makes building the project difficult for
+you let me know especially if you're
+
+584
+00:11:35,310 --> 00:11:35,320
+you let me know especially if you're
+ 
+
+585
+00:11:35,320 --> 00:11:37,670
+you let me know especially if you're
+using your own build process since
+
+586
+00:11:37,670 --> 00:11:37,680
+using your own build process since
+ 
+
+587
+00:11:37,680 --> 00:11:39,910
+using your own build process since
+feedback ahead of the videos can give me
+
+588
+00:11:39,910 --> 00:11:39,920
+feedback ahead of the videos can give me
+ 
+
+589
+00:11:39,920 --> 00:11:41,870
+feedback ahead of the videos can give me
+time to change things to work as
+
+590
+00:11:41,870 --> 00:11:41,880
+time to change things to work as
+ 
+
+591
+00:11:41,880 --> 00:11:44,310
+time to change things to work as
+smoothly as possible on most platforms
+
+592
+00:11:44,310 --> 00:11:44,320
+smoothly as possible on most platforms
+ 
+
+593
+00:11:44,320 --> 00:11:46,269
+smoothly as possible on most platforms
+for when I actually get to implementing
+
+594
+00:11:46,269 --> 00:11:46,279
+for when I actually get to implementing
+ 
+
+595
+00:11:46,279 --> 00:11:48,790
+for when I actually get to implementing
+these in the tutorial series anyway
+
+596
+00:11:48,790 --> 00:11:48,800
+these in the tutorial series anyway
+ 
+
+597
+00:11:48,800 --> 00:11:50,790
+these in the tutorial series anyway
+thank you for watching if you like this
+
+598
+00:11:50,790 --> 00:11:50,800
+thank you for watching if you like this
+ 
+
+599
+00:11:50,800 --> 00:11:52,949
+thank you for watching if you like this
+video and the new format please leave a
+
+600
+00:11:52,949 --> 00:11:52,959
+video and the new format please leave a
+ 
+
+601
+00:11:52,959 --> 00:11:54,990
+video and the new format please leave a
+comment or like on the video keep on
+
+602
+00:11:54,990 --> 00:11:55,000
+comment or like on the video keep on
+ 
+
+603
+00:11:55,000 --> 00:11:58,720
+comment or like on the video keep on
+coding cheers
+
