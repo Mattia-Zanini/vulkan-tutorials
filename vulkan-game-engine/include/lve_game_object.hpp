@@ -4,6 +4,7 @@
 #include "lve_model.hpp"
 
 // libs
+#include <cstddef>
 #include <glm/gtc/matrix_transform.hpp>
 
 // std
@@ -26,6 +27,12 @@ namespace lve {
     glm::mat3 normalMatrix();
   };
 
+  // Componente per identificare un game object come point light (compatibile con PointLightSystem).
+  // Posizione e raggio non vengono duplicati, ma riutilizzano i campi translation e scale.x di TransformComponent
+  struct PointLightComponent {
+    float lightIntensity = 1.0f;
+  };
+
   // Rappresenta un'entità di gioco (Game Object).
   // Per ora utilizziamo un modello monolitico semplice in cui ogni game object possiede
   // direttamente i componenti (modello, colore, trasformazione).
@@ -42,6 +49,9 @@ namespace lve {
       return LveGameObject{ currentId++ };
     }
 
+    // Helper per creare un game object configurato come point light (con raggio in scale.x e componente dedicato)
+    static LveGameObject makePointLight(float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
+
     // I game object possiedono un ID univoco: impediamo la copia accidentale,
     // consentendo invece lo spostamento (move semantics).
     LveGameObject(const LveGameObject&) = delete;
@@ -53,9 +63,13 @@ namespace lve {
     id_t getid() const { return id; }
 
     // Riferimento condiviso al modello: più game object possono condividere lo stesso vertex buffer allocato sulla GPU
-    std::shared_ptr<LveModel> model{};
     glm::vec3 color{};
     TransformComponent transform{};
+
+    std::shared_ptr<LveModel> model{};
+    // Puntatore opzionale al componente point light (nullptr se l'oggetto non è una sorgente di luce).
+    // Gli oggetti luce non hanno il modello associato, così da essere ignorati dal SimpleRenderSystem
+    std::unique_ptr<PointLightComponent> pointLight = nullptr;
 
   private:
     // Costruttore privato: la creazione è consentita esclusivamente tramite factory method createGameObject()

@@ -15,13 +15,19 @@ layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec3 fragPosWorld;    // Posizione del vertice nello spazio mondo (interpolata per frammento)
 layout(location = 2) out vec3 fragNormalWorld; // Normale del vertice nello spazio mondo (interpolata per frammento)
 
-// Uniform Buffer Object globale accessibile tramite descriptor set 0 al binding 0
+// Dati di una singola point light memorizzati nell'UBO (allineamento std140)
+struct PointLight {
+  vec4 position; // ignore w
+  vec4 color;  // w is intensity
+};
+
+// Uniform Buffer Object globale (stessa struttura per tutti gli shader dell'engine)
 layout(set = 0, binding = 0) uniform GlobalUbo {
   mat4 projection;
   mat4 view;
-  vec4 ambientLightColor; // RGB = colore, A = intensità
-  vec3 lightPosition;
-  vec4 lightColor; // RGB = colore, A = intensità
+  vec4 ambientLightColor; // w is intensity
+  PointLight pointLights[10];
+  int numLights;
 } ubo;
 
 // Blocco di Push Constants accessibile nel Vertex Shader

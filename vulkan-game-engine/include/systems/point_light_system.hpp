@@ -19,6 +19,8 @@ namespace lve {
     PointLightSystem(const PointLightSystem&) = delete;
     PointLightSystem& operator=(const PointLightSystem&) = delete;
 
+    // Aggiorna l'array di point light nell'UBO globale copiando le proprietà dai rispettivi game object attivi
+    void update(FrameInfo& frameInfo, GlobalUbo& ubo);
     // Registra i comandi di disegno per i billboard delle point light
     void render(FrameInfo& frameInfo);
 

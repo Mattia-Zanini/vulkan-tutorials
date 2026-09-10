@@ -2,7 +2,6 @@
 
 #include "glm/common.hpp"
 #include "glm/ext/vector_float3.hpp"
-#include "glm/ext/vector_float4.hpp"
 #include "keyboard_movement_controller.hpp"
 #include "lve_buffer.hpp"
 #include "lve_camera.hpp"
@@ -30,21 +29,6 @@
 #define MAX_FRAME_TIME (float)0.0166666667
 
 namespace lve {
-
-  // Uniform Buffer Object (UBO) globale: permette di passare dati arbitrari in sola lettura agli shader
-  // superando i limiti di dimensione delle push constants (128 byte garantiti vs almeno 16KB per gli UBO).
-  struct GlobalUbo {
-    // Matrici projection e view separate: permette agli shader (come nei billboard) di estrarre i vettori Up e Right della camera
-    glm::mat4 projection{ 1.f };
-    glm::mat4 view{ 1.f };
-    // Colore della luce ambientale (RGB) con intensità memorizzata nella componente w (0.02)
-    glm::vec4 ambientLightColor{ 1.f, 1.f, 1.f, .02f };
-    // Posizione della point light nello spazio mondo
-    glm::vec3 lightPosition{ -1.f };
-    // Colore della point light (RGB) con intensità in w.
-    // alignas(16) assicura la compatibilità con le regole di allineamento std140 (gap di 4 byte dopo lightPosition)
-    alignas(16) glm::vec4 lightColor{ 1.f };
-  };
 
   FirstApp::FirstApp() {
     // Inizializza il pool globale allocando memoria per MAX_FRAMES_IN_FLIGHT descriptor set
@@ -163,6 +147,10 @@ namespace lve {
         GlobalUbo ubo{};
         ubo.projection = camera.getProjection();
         ubo.view = camera.getView();
+
+        // Aggiorna le luci nell'UBO prima della scrittura su buffer per inviare alla GPU le posizioni correnti del frame
+        pointLightSystem.update(frameInfo, ubo);
+
         // Scrive i dati e ne esegue il flush sul buffer UBO dedicato al frame corrente
         uboBuffers[frameIndex]->writeToBuffer(&ubo);
         uboBuffers[frameIndex]->flush();
@@ -211,6 +199,30 @@ namespace lve {
     floor.transform.translation = { 0.f, .5f, 0.f };
     floor.transform.scale = glm::vec3{ 3.f, 1.f, 3.f };
     gameObjects.emplace(floor.getid(), std::move(floor));
+
+    // Palette di colori per istanziare un cerchio di sorgenti luminose puntiformi
+    std::vector<glm::vec3> lightColors{
+      { 1.f, .1f, .1f },
+      { .1f, .1f, 1.f },
+      { .1f, 1.f, .1f },
+      { 1.f, 1.f, .1f },
+      { .1f, 1.f, 1.f },
+      { 1.f, 1.f, 1.f }
+    };
+
+    // Dispone le point light lungo una circonferenza suddividendo 360° (2*pi) in settori uguali attorno all'asse Y (0, -1, 0)
+    for (int i = 0; i < lightColors.size(); i++) {
+      auto pointLight = LveGameObject::makePointLight(.2f);
+
+      pointLight.color = lightColors[i];
+      auto rotateLight = glm::rotate(
+        glm::mat4(1.f),
+        (i * glm::two_pi<float>()) / lightColors.size(),
+        { 0.f, -1.f, 0.f });
+      pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
+
+      gameObjects.emplace(pointLight.getid(), std::move(pointLight));
+    }
   }
 
 } // namespace lve
