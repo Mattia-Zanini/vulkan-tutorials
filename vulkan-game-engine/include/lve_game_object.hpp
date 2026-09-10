@@ -2,6 +2,7 @@
 
 #include "glm/ext/matrix_float4x4.hpp"
 #include "lve_model.hpp"
+#include "lve_swap_chain.hpp"
 #include "lve_texture.hpp"
 
 // libs
@@ -34,49 +35,76 @@ namespace lve {
     float lightIntensity = 1.0f;
   };
 
+  struct GameObjectBufferData {
+    glm::mat4 modelMatrix{ 1.f };
+    glm::mat4 normalMatrix{ 1.f };
+  };
+
+  class LveGameObjectManager; // forward declare game object manager class
+
   // Rappresenta un'entità di gioco (Game Object).
-  // Per ora utilizziamo un modello monolitico semplice in cui ogni game object possiede
-  // direttamente i componenti (modello, colore, trasformazione).
   class LveGameObject {
   public:
     using id_t = unsigned int;
-    // Mappa dei game object indicizzata per ID: permette ricerche rapide in tempo costante O(1)
-    // e facilita le relazioni tra oggetti memorizzando semplicemente l'ID
     using Map = std::unordered_map<id_t, LveGameObject>;
 
-    // Factory method per creare game object con identificativo ID univoco incrementale
-    static LveGameObject createGameObject() {
-      static id_t currentId = 0;
-      return LveGameObject{ currentId++ };
-    }
-
-    // Helper per creare un game object configurato come point light (con raggio in scale.x e componente dedicato)
-    static LveGameObject makePointLight(float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
-
-    // I game object possiedono un ID univoco: impediamo la copia accidentale,
-    // consentendo invece lo spostamento (move semantics).
     LveGameObject(const LveGameObject&) = delete;
     LveGameObject& operator=(const LveGameObject&) = delete;
     LveGameObject(LveGameObject&&) = default;
     LveGameObject& operator=(LveGameObject&&) = default;
 
-    // Restituisce l'ID univoco dell'oggetto
     id_t getId() const { return id; }
 
-    // Riferimento condiviso al modello: più game object possono condividere lo stesso vertex buffer allocato sulla GPU
+    VkDescriptorBufferInfo getBufferInfo(int frameIndex);
+
     glm::vec3 color{};
     TransformComponent transform{};
 
     std::shared_ptr<LveModel> model{};
     std::shared_ptr<LveTexture> diffuseMap = nullptr;
-    // Puntatore opzionale al componente point light (nullptr se l'oggetto non è una sorgente di luce).
-    // Gli oggetti luce non hanno il modello associato, così da essere ignorati dal SimpleRenderSystem
     std::unique_ptr<PointLightComponent> pointLight = nullptr;
 
   private:
-    // Costruttore privato: la creazione è consentita esclusivamente tramite factory method createGameObject()
-    LveGameObject(id_t objId) : id{ objId } {}
+    LveGameObject(id_t objId, const LveGameObjectManager& manager);
 
     id_t id;
+    const LveGameObjectManager& gameObjectManger;
+
+    friend class LveGameObjectManager;
   };
+
+  class LveGameObjectManager {
+  public:
+    static constexpr int MAX_GAME_OBJECTS = 1000;
+
+    LveGameObjectManager(LveDevice& device);
+    LveGameObjectManager(const LveGameObjectManager&) = delete;
+    LveGameObjectManager& operator=(const LveGameObjectManager&) = delete;
+    LveGameObjectManager(LveGameObjectManager&&) = delete;
+    LveGameObjectManager& operator=(LveGameObjectManager&&) = delete;
+
+    LveGameObject& createGameObject() {
+      assert(currentId < MAX_GAME_OBJECTS && "Max game object count exceeded!");
+      auto gameObject = LveGameObject{ currentId++, *this };
+      auto gameObjectId = gameObject.getId();
+      gameObjects.emplace(gameObjectId, std::move(gameObject));
+      return gameObjects.at(gameObjectId);
+    }
+
+    LveGameObject& makePointLight(
+      float intensity = 10.f, float radius = 0.1f, glm::vec3 color = glm::vec3(1.f));
+
+    VkDescriptorBufferInfo getBufferInfoForGameObject(int frameIndex, id_t gameObjectId) const {
+      return uboBuffers[frameIndex]->descriptorInfoForIndex(gameObjectId);
+    }
+
+    void updateBuffer(int frameIndex);
+
+    LveGameObject::Map gameObjects{};
+    std::vector<std::unique_ptr<LveBuffer>> uboBuffers{ LveSwapChain::MAX_FRAMES_IN_FLIGHT };
+
+  private:
+    id_t currentId = 0;
+  };
+
 } // namespace lve

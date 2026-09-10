@@ -42,7 +42,7 @@ namespace lve {
     // Dichiarato dopo lveDevice in modo da essere distrutto prima del device stesso.
     std::unique_ptr<LveDescriptorPool> globalPool{};
     std::vector<std::unique_ptr<LveDescriptorPool>> framePools;
-    // Mappa dei Game Object presenti nella scena indicizzati per ID
-    LveGameObject::Map gameObjects;
+    // Gestore dei Game Object e dei relativi buffer per-oggetto
+    LveGameObjectManager gameObjectManager{ lveDevice };
   };
 }

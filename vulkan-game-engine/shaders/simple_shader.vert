@@ -31,6 +31,11 @@ layout(set = 0, binding = 0) uniform GlobalUbo {
   int numLights;
 } ubo;
 
+layout(set = 1, binding = 0) uniform GameObjectBufferData {
+  mat4 modelMatrix;
+  mat4 normalMatrix;
+} gameObject;
+
 // Blocco di Push Constants accessibile nel Vertex Shader
 layout(push_constant) uniform Push {
   mat4 modelMatrix; // Matrice di trasformazione specifica del singolo modello
@@ -39,13 +44,13 @@ layout(push_constant) uniform Push {
 
 void main() {
   // Trasforma la posizione del vertice nello spazio mondo (necessario poiché la posizione della point light è in world space)
-  vec4 positionWorld = push.modelMatrix * vec4(position, 1.0);
+  vec4 positionWorld = gameObject.modelMatrix * vec4(position, 1.0);
 
   // Trasforma la posizione nello spazio di proiezione/clip applicando separatamente view e projection (l'ordine di moltiplicazione è critico)
   gl_Position = ubo.projection * ubo.view * positionWorld;
 
   // Trasforma la normale nello spazio mondo estraendo la sottomatrice 3x3 dalla normalMatrix (passata come mat4 per allineamento)
-  fragNormalWorld = normalize(mat3(push.normalMatrix) * normal);
+  fragNormalWorld = normalize(mat3(gameObject.normalMatrix) * normal);
   // Inoltra posizione nello spazio mondo e colore del vertice allo stadio di rasterizzazione
   fragPosWorld = positionWorld.xyz;
   fragColor = color;

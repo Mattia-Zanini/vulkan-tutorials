@@ -37,5 +37,6 @@ namespace lve {
     // Pipeline Layout: descrive le risorse esterne (come descriptor set e push constants)
     // accessibili dagli shader
     VkPipelineLayout pipelineLayout;
+    std::unique_ptr<LveDescriptorSetLayout> renderSystemLayout;
   };
 }

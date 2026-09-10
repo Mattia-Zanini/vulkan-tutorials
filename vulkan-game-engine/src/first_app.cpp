@@ -12,7 +12,6 @@
 #include "lve_swap_chain.hpp"
 #include "systems/point_light_system.hpp"
 #include "systems/simple_render_system.hpp"
-#include "systems/texture_render_system.hpp"
 #include "vulkan/vulkan_core.h"
 
 // libs
@@ -100,17 +99,11 @@ namespace lve {
       lveRenderer.getSwapChainRenderPass(),
       globalSetLayout->getDescriptorSetLayout()
     };
-    TextureRenderSystem textureRenderSystem{
-      lveDevice,
-      lveRenderer.getSwapChainRenderPass(),
-      globalSetLayout->getDescriptorSetLayout()
-    };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
 
-    // Oggetto invisibile usato per mantenere lo stato della telecamera (posizione, orientamento)
-    // dal momento che la classe LveCamera non memorizza internamente questi dati tra un frame e l'altro
-    auto viewerObject = LveGameObject::createGameObject();
+    // Oggetto usato per mantenere lo stato della telecamera (posizione, orientamento)
+    auto& viewerObject = gameObjectManager.createGameObject();
     // Arretra la telecamera a Z = -2.5 per compensare l'avvicinamento degli oggetti verso l'origine (Z = 0)
     viewerObject.transform.translation.z = -2.5f;
     KeyboardMovementController cameraController{};
@@ -159,7 +152,7 @@ namespace lve {
           camera,
           globalDescriptorSets[frameIndex],
           *framePools[frameIndex],
-          gameObjects
+          gameObjectManager.gameObjects
         };
 
         // Fase 1: Aggiornamento degli oggetti e della memoria
@@ -175,11 +168,13 @@ namespace lve {
         uboBuffers[frameIndex]->writeToBuffer(&ubo);
         uboBuffers[frameIndex]->flush();
 
+        // Aggiorna il buffer dei dati di trasformazione dei game object per questo frame
+        gameObjectManager.updateBuffer(frameIndex);
+
         // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
 
         // Gli oggetti solidi ed opachi devono sempre essere renderizzati prima di quelli semi-trasparenti
-        textureRenderSystem.renderGameObjects(frameInfo);
         simpleRenderSystem.renderGameObjects(frameInfo);
         // Renderizza i billboard semi-trasparenti delle point light solo dopo gli oggetti opachi
         pointLightSystem.render(frameInfo);
@@ -199,33 +194,29 @@ namespace lve {
     // Carica il modello con shading piatto (flat shading / face normals: ciascuna faccia ha normali distinte).
     // Posizionato a Z = 0 per avvicinarlo alla point light
     std::shared_ptr<LveModel> lveModel = LveModel::createModelFromFile(lveDevice, "models/flat_vase.obj");
-    auto flatVase = LveGameObject::createGameObject();
+    auto& flatVase = gameObjectManager.createGameObject();
     flatVase.model = lveModel;
     flatVase.transform.translation = { -.5f, .5f, 0.f };
     // Scala non uniforme lungo Y (1.5 rispetto a 3.0 su X e Z) per testare la correttezza della normalMatrix
     flatVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
-    // Inserisce l'oggetto nella mappa associandone l'ID univoco come chiave
-    gameObjects.emplace(flatVase.getId(), std::move(flatVase));
 
     // Carica lo stesso modello con shading liscio (smooth shading / vertex normals: normali interpolate sulla superficie)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj");
-    auto smoothVase = LveGameObject::createGameObject();
+    auto& smoothVase = gameObjectManager.createGameObject();
     smoothVase.model = lveModel;
     smoothVase.transform.translation = { .5f, .5f, 0.f };
     smoothVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
-    gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
 
     // Oggetto pavimento: quad piano orizzontale (2 triangoli) posizionato alla base dei vasi (Y = 0.5).
     // La scala su Y non ha effetto poiché i vertici del quad giacciono sul piano XZ (Y = 0)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/quad.obj");
     std::shared_ptr<LveTexture> marbleTexture =
         LveTexture::createTextureFromFile(lveDevice, "textures/missing.png");
-    auto floor = LveGameObject::createGameObject();
+    auto& floor = gameObjectManager.createGameObject();
     floor.model = lveModel;
     floor.diffuseMap = marbleTexture;
     floor.transform.translation = { 0.f, .5f, 0.f };
     floor.transform.scale = glm::vec3{ 3.f, 1.f, 3.f };
-    gameObjects.emplace(floor.getId(), std::move(floor));
 
     // Palette di colori per istanziare un cerchio di sorgenti luminose puntiformi
     std::vector<glm::vec3> lightColors{
@@ -239,7 +230,7 @@ namespace lve {
 
     // Dispone le point light lungo una circonferenza suddividendo 360° (2*pi) in settori uguali attorno all'asse Y (0, -1, 0)
     for (int i = 0; i < lightColors.size(); i++) {
-      auto pointLight = LveGameObject::makePointLight(.2f);
+      auto& pointLight = gameObjectManager.makePointLight(.2f);
 
       pointLight.color = lightColors[i];
       auto rotateLight = glm::rotate(
@@ -247,8 +238,6 @@ namespace lve {
         (i * glm::two_pi<float>()) / lightColors.size(),
         { 0.f, -1.f, 0.f });
       pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
-
-      gameObjects.emplace(pointLight.getId(), std::move(pointLight));
     }
   }
 

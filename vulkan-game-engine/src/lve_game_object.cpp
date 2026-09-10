@@ -1,5 +1,6 @@
 #include "lve_game_object.hpp"
 #include <memory>
+#include <numeric>
 
 namespace lve {
 
@@ -73,10 +74,9 @@ namespace lve {
     };
   }
 
-  // Crea e restituisce un game object configurato come point light:
-  // la dimensione è determinata unicamente dal raggio memorizzato in scale.x, mentre il componente dedicato ne traccia l'intensità
-  LveGameObject LveGameObject::makePointLight(float intensity, float radius, glm::vec3 color) {
-    LveGameObject gameObj = LveGameObject::createGameObject();
+  LveGameObject& LveGameObjectManager::makePointLight(
+      float intensity, float radius, glm::vec3 color) {
+    auto& gameObj = createGameObject();
     gameObj.color = color;
     gameObj.transform.scale.x = radius;
     gameObj.pointLight = std::make_unique<PointLightComponent>();
@@ -84,5 +84,39 @@ namespace lve {
 
     return gameObj;
   }
+
+  LveGameObjectManager::LveGameObjectManager(LveDevice& device) {
+    int alignment = std::lcm(
+        device.properties.limits.nonCoherentAtomSize,
+        device.properties.limits.minUniformBufferOffsetAlignment);
+    for (int i = 0; i < uboBuffers.size(); i++) {
+      uboBuffers[i] = std::make_unique<LveBuffer>(
+          device,
+          sizeof(GameObjectBufferData),
+          LveGameObjectManager::MAX_GAME_OBJECTS,
+          VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT,
+          VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
+          alignment);
+      uboBuffers[i]->map();
+    }
+  }
+
+  void LveGameObjectManager::updateBuffer(int frameIndex) {
+    for (auto& kv : gameObjects) {
+      auto& obj = kv.second;
+      GameObjectBufferData data{};
+      data.modelMatrix = obj.transform.mat4();
+      data.normalMatrix = obj.transform.normalMatrix();
+      uboBuffers[frameIndex]->writeToIndex(&data, kv.first);
+    }
+    uboBuffers[frameIndex]->flush();
+  }
+
+  VkDescriptorBufferInfo LveGameObject::getBufferInfo(int frameIndex) {
+    return gameObjectManger.getBufferInfoForGameObject(frameIndex, id);
+  }
+
+  LveGameObject::LveGameObject(id_t objId, const LveGameObjectManager& manager)
+      : id{objId}, gameObjectManger{manager} {}
 
 } // namespace lve

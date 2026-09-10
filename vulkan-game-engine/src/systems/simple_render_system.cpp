@@ -49,7 +49,16 @@ namespace lve {
     pushConstantRange.offset = 0;
     pushConstantRange.size = sizeof(SimplePushConstantData);
 
-    std::vector<VkDescriptorSetLayout> descriptorSetLayouts{ globalSetLayout };
+    renderSystemLayout = LveDescriptorSetLayout::Builder(lveDevice)
+                             .addBinding(
+                                 0,
+                                 VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
+                                 VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT)
+                             .build();
+
+    std::vector<VkDescriptorSetLayout> descriptorSetLayouts{
+        globalSetLayout,
+        renderSystemLayout->getDescriptorSetLayout()};
 
     // Pipeline Layout: definisce come passare dati agli shader oltre ai dati dei vertici.
     // Include descrittori (texture, Uniform Buffer Objects) e push constants.
@@ -104,9 +113,24 @@ namespace lve {
     // Itera attraverso la mappa dei game object (coppie chiave-valore ID -> GameObject)
     for (auto& kv : frameInfo.gameObjects) {
       auto& obj = kv.second;
-      // Criterio di filtraggio: renderizza solo gli oggetti con modello e senza texture (gestiti da TextureRenderSystem)
-      if (obj.model == nullptr || obj.diffuseMap != nullptr)
+      if (obj.model == nullptr)
         continue;
+
+      auto bufferInfo = obj.getBufferInfo(frameInfo.frameIndex);
+      VkDescriptorSet gameObjectDescriptorSet;
+      LveDescriptorWriter(*renderSystemLayout, frameInfo.frameDescriptorPool)
+          .writeBuffer(0, &bufferInfo)
+          .build(gameObjectDescriptorSet);
+
+      vkCmdBindDescriptorSets(
+          frameInfo.commandBuffer,
+          VK_PIPELINE_BIND_POINT_GRAPHICS,
+          pipelineLayout,
+          1,  // starting set (0 is the globalDescriptorSet, 1 is the set specific to this system)
+          1,  // set count
+          &gameObjectDescriptorSet,
+          0,
+          nullptr);
 
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
