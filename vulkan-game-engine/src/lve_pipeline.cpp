@@ -1,5 +1,6 @@
 #include "lve_pipeline.hpp"
 #include "lve_model.hpp"
+#include "vulkan/vulkan_core.h"
 
 #include <cstdint>
 #include <fmt/format.h>
@@ -200,11 +201,11 @@ namespace lve {
     // ==========================================
     // COLOR BLENDING
     // ==========================================
+    // Blending disabilitato: il nuovo colore sovrascrive direttamente il valore precedente
+    configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
     // Controlla come combinare il colore calcolato dal fragment shader con quello già presente nel
     // framebuffer. Maschera dei canali RGBA che possono essere scritti
     configInfo.colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
-    // Blending disabilitato: il nuovo colore sovrascrive direttamente il valore precedente
-    configInfo.colorBlendAttachment.blendEnable = VK_FALSE;
     configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_ONE;  // Opzionale
     configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ZERO; // Opzionale
     configInfo.colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;             // Opzionale
@@ -253,5 +254,22 @@ namespace lve {
     // Imposta come default i binding e gli attributi standard estratti da LveModel::Vertex
     configInfo.bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
     configInfo.attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+  }
+
+  // Configura l'attachment per il color blending tradizionale basato su canale alfa:
+  // finalColor = srcColor * srcAlpha + dstColor * (1 - srcAlpha)
+  void LvePipeline::enableAlphaBlending(PipelineConfigInfo& configInfo) {
+    // Abilita il blending (disabilitato di default nelle altre pipeline per ragioni di performance)
+    configInfo.colorBlendAttachment.blendEnable = VK_TRUE;
+
+    configInfo.colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+    // Pesa il colore del frammento in entrata in base al suo canale alfa
+    configInfo.colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+    // Pesa il colore già presente nel framebuffer per (1 - alfa sorgente)
+    configInfo.colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+    configInfo.colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+    configInfo.colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+    configInfo.colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+    configInfo.colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
   }
 }

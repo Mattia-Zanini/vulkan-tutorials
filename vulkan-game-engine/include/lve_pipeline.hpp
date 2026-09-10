@@ -10,6 +10,8 @@
 namespace lve {
   // Struct per configurare i vari stadi a funzione fissa (Fixed Function) della pipeline grafica
   struct PipelineConfigInfo {
+    // Costruttore di default esplicito necessario poiché i costruttori di copia sono stati eliminati
+    PipelineConfigInfo() = default;
     PipelineConfigInfo(const PipelineConfigInfo&) = delete;
     PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 
@@ -56,6 +58,8 @@ namespace lve {
     // Lega la pipeline grafica al command buffer per le successive operazioni di disegno
     void bind(VkCommandBuffer commandBuffer);
     static void defaultPipelineConfigInfo(PipelineConfigInfo& configInfo);
+    // Configura l'attachment di color blend per abilitare l'alpha blending tradizionale (trasparenza)
+    static void enableAlphaBlending(PipelineConfigInfo& configInfo);
 
   private:
     static std::vector<char> readFile(const std::string& filePath);

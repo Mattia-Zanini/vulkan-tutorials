@@ -158,9 +158,12 @@ namespace lve {
 
         // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
+
+        // Gli oggetti solidi ed opachi devono sempre essere renderizzati prima di quelli semi-trasparenti
         simpleRenderSystem.renderGameObjects(frameInfo);
-        // Renderizza i billboard per visualizzare visivamente le point light nella scena
+        // Renderizza i billboard semi-trasparenti delle point light solo dopo gli oggetti opachi
         pointLightSystem.render(frameInfo);
+
         lveRenderer.endSwapChainRenderPass(commandBuffer);
         lveRenderer.endFrame();
       }
@@ -182,7 +185,7 @@ namespace lve {
     // Scala non uniforme lungo Y (1.5 rispetto a 3.0 su X e Z) per testare la correttezza della normalMatrix
     flatVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
     // Inserisce l'oggetto nella mappa associandone l'ID univoco come chiave
-    gameObjects.emplace(flatVase.getid(), std::move(flatVase));
+    gameObjects.emplace(flatVase.getId(), std::move(flatVase));
 
     // Carica lo stesso modello con shading liscio (smooth shading / vertex normals: normali interpolate sulla superficie)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj");
@@ -190,7 +193,7 @@ namespace lve {
     smoothVase.model = lveModel;
     smoothVase.transform.translation = { .5f, .5f, 0.f };
     smoothVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
-    gameObjects.emplace(smoothVase.getid(), std::move(smoothVase));
+    gameObjects.emplace(smoothVase.getId(), std::move(smoothVase));
 
     // Oggetto pavimento: quad piano orizzontale (2 triangoli) posizionato alla base dei vasi (Y = 0.5).
     // La scala su Y non ha effetto poiché i vertici del quad giacciono sul piano XZ (Y = 0)
@@ -199,7 +202,7 @@ namespace lve {
     floor.model = lveModel;
     floor.transform.translation = { 0.f, .5f, 0.f };
     floor.transform.scale = glm::vec3{ 3.f, 1.f, 3.f };
-    gameObjects.emplace(floor.getid(), std::move(floor));
+    gameObjects.emplace(floor.getId(), std::move(floor));
 
     // Palette di colori per istanziare un cerchio di sorgenti luminose puntiformi
     std::vector<glm::vec3> lightColors{
@@ -222,7 +225,7 @@ namespace lve {
         { 0.f, -1.f, 0.f });
       pointLight.transform.translation = glm::vec3(rotateLight * glm::vec4(-1.f, -1.f, -1.f, 1.f));
 
-      gameObjects.emplace(pointLight.getid(), std::move(pointLight));
+      gameObjects.emplace(pointLight.getId(), std::move(pointLight));
     }
   }
 

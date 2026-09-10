@@ -48,6 +48,8 @@ namespace lve {
     const glm::mat4& getView() const { return viewMatrix; }
     // Restituisce la matrice di vista inversa (permette di estrarre la posizione della camera nello spazio mondo)
     const glm::mat4& getInverseView() const { return inverseViewMatrix; }
+    // Restituisce la posizione della camera nello spazio mondo estraendola dall'ultima colonna della matrice di vista inversa
+    const glm::vec3 getPosition() const { return glm::vec3(inverseViewMatrix[3]); }
 
   private:
     // Matrice di proiezione 4x4 (inizializzata di default alla matrice identità)

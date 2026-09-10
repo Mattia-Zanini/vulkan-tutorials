@@ -9,6 +9,7 @@
 
 // std
 #include <cassert>
+#include <map>
 #include <stdexcept>
 
 namespace lve {
@@ -57,6 +58,8 @@ namespace lve {
 
     PipelineConfigInfo pipelineConfig{};
     LvePipeline::defaultPipelineConfigInfo(pipelineConfig);
+    // Abilita l'alpha blending per consentire la trasparenza e la sfumatura morbida dei bordi dei billboard
+    LvePipeline::enableAlphaBlending(pipelineConfig);
     // Questo sistema non fa uso di vertex buffer: i vertici del billboard sono generati nello shader.
     // Svuotiamo le descrizioni per evitare warning dai validation layers.
     pipelineConfig.attributeDescriptions.clear();
@@ -99,6 +102,20 @@ namespace lve {
   }
 
   void PointLightSystem::render(FrameInfo& frameInfo) {
+    // Ordina le luci per distanza dalla camera: con la semi-trasparenza è fondamentale
+    // renderizzare dal più lontano al più vicino (back-to-front) per evitare artefatti con il depth buffer
+    std::map<float, LveGameObject::id_t> sorted;
+    for (auto& kv : frameInfo.gameObjects) {
+      auto& obj = kv.second;
+      if (obj.pointLight == nullptr)
+        continue;
+
+      // Calcola la distanza al quadrato tra camera e luce (evita la radice quadrata non necessaria all'ordinamento)
+      auto offset = frameInfo.camera.getPosition() - obj.transform.translation;
+      float disSquared = glm::dot(offset, offset);
+      sorted[disSquared] = obj.getId();
+    }
+
     lvePipeline->bind(frameInfo.commandBuffer);
 
     vkCmdBindDescriptorSets(
@@ -111,11 +128,10 @@ namespace lve {
       0,
       nullptr);
 
-    // Itera tutti i game object ed effettua una draw call con push constants per ciascuna point light attiva
-    for (auto& kv : frameInfo.gameObjects) {
-      auto& obj = kv.second;
-      if (obj.pointLight == nullptr)
-        continue;
+    // Itera le luci ordinate all'inverso (da quella con distanza maggiore a quella minore: back-to-front)
+    for (auto it = sorted.rbegin(); it != sorted.rend(); ++it) {
+      // Recupera il riferimento al game object corrispondente tramite ID
+      auto& obj = frameInfo.gameObjects.at(it->second);
 
       PointLightPushConstants push{};
       push.position = glm::vec4(obj.transform.translation, 1.f);

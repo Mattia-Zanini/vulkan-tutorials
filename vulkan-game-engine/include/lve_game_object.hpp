@@ -60,7 +60,7 @@ namespace lve {
     LveGameObject& operator=(LveGameObject&&) = default;
 
     // Restituisce l'ID univoco dell'oggetto
-    id_t getid() const { return id; }
+    id_t getId() const { return id; }
 
     // Riferimento condiviso al modello: più game object possono condividere lo stesso vertex buffer allocato sulla GPU
     glm::vec3 color{};

@@ -67,7 +67,7 @@ void main() {
     // Clampa a zero per ignorare i casi in cui osservatore e luce si trovano su lati opposti della superficie
     blinnTerm = clamp(blinnTerm, 0, 1);
     // Esponente speculare: valori più alti schiacciano i valori bassi a zero, producendo un riflesso più nitido e compatto
-    blinnTerm = pow(blinnTerm, 32.0); // higher values -> sharper highlight
+    blinnTerm = pow(blinnTerm, 512.0); // higher values -> sharper highlight
     specularLight += intensity * blinnTerm;
   }
 

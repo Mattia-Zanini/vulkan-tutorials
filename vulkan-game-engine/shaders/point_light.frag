@@ -27,6 +27,8 @@ layout(push_constant) uniform Push {
   float radius;
 } push;
 
+const float M_PI = 3.1415926538;
+
 void main() {
   // Calcola la distanza dal centro del billboard
   float dis = sqrt(dot(fragOffset, fragOffset));
@@ -35,6 +37,9 @@ void main() {
     discard;
   }
 
-  // Assegna il colore RGB della specifica point light passato tramite push constants
-  outColor = vec4(push.color.xyz, 1.0);
+  // Funzione coseno continua per sfumare da 1.0 (centro) a 0.0 (bordo esterno):
+  // derivata nulla sia al centro che al bordo, evitando stacchi netti
+  float cosDis = 0.5 * (cos(dis * M_PI) + 1.0); // ranges from 1 -> 0
+  // Canale Alpha impostato a cosDis per la trasparenza; cosDis aggiunto a RGB rende il nucleo bianco brillante
+  outColor = vec4(push.color.xyz + cosDis, cosDis);
 }
