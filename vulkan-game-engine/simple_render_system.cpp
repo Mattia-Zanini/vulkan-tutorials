@@ -1,6 +1,7 @@
 #include "simple_render_system.hpp"
 #include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
+#include <cstddef>
 #include <cstdint>
 
 // libs
@@ -84,7 +85,7 @@ namespace lve {
     lvePipeline = std::make_unique<LvePipeline>(lveDevice, "shaders/simple_shader.vert.spv", "shaders/simple_shader.frag.spv", pipelineConfig);
   }
 
-  void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo, std::vector<LveGameObject>& gameObjects) {
+  void SimpleRenderSystem::renderGameObjects(FrameInfo& frameInfo) {
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(frameInfo.commandBuffer);
 
@@ -100,7 +101,13 @@ namespace lve {
       0,
       nullptr);
 
-    for (auto& obj : gameObjects) {
+    // Itera attraverso la mappa dei game object (coppie chiave-valore ID -> GameObject)
+    for (auto& kv : frameInfo.gameObjects) {
+      auto& obj = kv.second;
+      // Criterio di filtraggio: renderizza solo gli oggetti che possiedono un modello 3D associato
+      if (obj.model == nullptr)
+        continue;
+
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
 

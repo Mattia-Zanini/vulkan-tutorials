@@ -8,7 +8,6 @@
 
 // std
 #include <memory>
-#include <vector>
 
 namespace lve {
   class FirstApp {
@@ -42,7 +41,7 @@ namespace lve {
     // Pool globale per allocare i descriptor set condivisi tra più sistemi (es. UBO globale).
     // Dichiarato dopo lveDevice in modo da essere distrutto prima del device stesso.
     std::unique_ptr<LveDescriptorPool> globalPool{};
-    // Collezione dei Game Object presenti nella scena (ciascuno dotato di modello, trasformazione 2D e colore)
-    std::vector<LveGameObject> gameObjects;
+    // Mappa dei Game Object presenti nella scena indicizzati per ID
+    LveGameObject::Map gameObjects;
   };
 }

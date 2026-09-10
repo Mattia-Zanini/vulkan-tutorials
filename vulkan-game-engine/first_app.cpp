@@ -72,9 +72,10 @@ namespace lve {
     }
 
     // Definisce il layout del descriptor set globale ("blueprint" per la pipeline grafica).
-    // Specifica al binding 0 un descrittore di tipo Uniform Buffer accessibile dal Vertex Shader.
+    // Specifica al binding 0 un descrittore di tipo Uniform Buffer accessibile da tutti gli stadi grafici
+    // (VK_SHADER_STAGE_ALL_GRAPHICS) affinché anche il Fragment Shader possa accedere ai dati dell'UBO.
     auto globalSetLayout = LveDescriptorSetLayout::Builder(lveDevice)
-                             .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+                             .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_ALL_GRAPHICS)
                              .build();
 
     // Alloca dal pool globale e configura un descriptor set per ciascun frame in flight,
@@ -140,7 +141,14 @@ namespace lve {
       if (auto commandBuffer = lveRenderer.beginFrame()) {
         int frameIndex = lveRenderer.getFrameIndex();
         // Raggruppa i parametri del frame corrente (incluso il descriptor set per-frame dell'UBO) da passare ai render systems
-        FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera, globalDescriptorSets[frameIndex] };
+        FrameInfo frameInfo{
+          frameIndex,
+          frameTime,
+          commandBuffer,
+          camera,
+          globalDescriptorSets[frameIndex],
+          gameObjects
+        };
 
         // Fase 1: Aggiornamento degli oggetti e della memoria
         GlobalUbo ubo{};
@@ -151,7 +159,7 @@ namespace lve {
 
         // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
-        simpleRenderSystem.renderGameObjects(frameInfo, gameObjects);
+        simpleRenderSystem.renderGameObjects(frameInfo);
         lveRenderer.endSwapChainRenderPass(commandBuffer);
         lveRenderer.endFrame();
       }
@@ -172,7 +180,8 @@ namespace lve {
     flatVase.transform.translation = { -.5f, .5f, 0.f };
     // Scala non uniforme lungo Y (1.5 rispetto a 3.0 su X e Z) per testare la correttezza della normalMatrix
     flatVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
-    gameObjects.push_back(std::move(flatVase));
+    // Inserisce l'oggetto nella mappa associandone l'ID univoco come chiave
+    gameObjects.emplace(flatVase.getid(), std::move(flatVase));
 
     // Carica lo stesso modello con shading liscio (smooth shading / vertex normals: normali interpolate sulla superficie)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/smooth_vase.obj");
@@ -180,7 +189,7 @@ namespace lve {
     smoothVase.model = lveModel;
     smoothVase.transform.translation = { .5f, .5f, 0.f };
     smoothVase.transform.scale = glm::vec3{ 3.f, 1.5f, 3.f };
-    gameObjects.push_back(std::move(smoothVase));
+    gameObjects.emplace(smoothVase.getid(), std::move(smoothVase));
 
     // Oggetto pavimento: quad piano orizzontale (2 triangoli) posizionato alla base dei vasi (Y = 0.5).
     // La scala su Y non ha effetto poiché i vertici del quad giacciono sul piano XZ (Y = 0)
@@ -189,7 +198,7 @@ namespace lve {
     floor.model = lveModel;
     floor.transform.translation = { 0.f, .5f, 0.f };
     floor.transform.scale = glm::vec3{ 3.f, 1.f, 3.f };
-    gameObjects.push_back(std::move(floor));
+    gameObjects.emplace(floor.getid(), std::move(floor));
   }
 
 } // namespace lve

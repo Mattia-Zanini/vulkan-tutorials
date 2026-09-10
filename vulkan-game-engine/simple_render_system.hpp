@@ -2,13 +2,11 @@
 
 #include "lve_device.hpp"
 #include "lve_frame_info.hpp"
-#include "lve_game_object.hpp"
 #include "lve_pipeline.hpp"
 #include "vulkan/vulkan_core.h"
 
 // std
 #include <memory>
-#include <vector>
 
 namespace lve {
   // SimpleRenderSystem: sistema di rendering responsabile della pipeline grafica,
@@ -25,7 +23,7 @@ namespace lve {
     SimpleRenderSystem& operator=(const SimpleRenderSystem&) = delete;
 
     // Registra i comandi di rendering per ciascun game object compatibile ricevendo il contesto del frame (FrameInfo)
-    void renderGameObjects(FrameInfo& frameInfo, std::vector<LveGameObject>& gameObjects);
+    void renderGameObjects(FrameInfo& frameInfo);
 
   private:
     void createPipelineLayout(VkDescriptorSetLayout globalSetLayout);

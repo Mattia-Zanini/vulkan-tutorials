@@ -8,6 +8,7 @@
 
 // std
 #include <memory>
+#include <unordered_map>
 
 namespace lve {
 
@@ -31,6 +32,9 @@ namespace lve {
   class LveGameObject {
   public:
     using id_t = unsigned int;
+    // Mappa dei game object indicizzata per ID: permette ricerche rapide in tempo costante O(1)
+    // e facilita le relazioni tra oggetti memorizzando semplicemente l'ID
+    using Map = std::unordered_map<id_t, LveGameObject>;
 
     // Factory method per creare game object con identificativo ID univoco incrementale
     static LveGameObject createGameObject() {

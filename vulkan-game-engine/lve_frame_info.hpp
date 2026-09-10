@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lve_camera.hpp"
+#include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
 
 // lib
@@ -17,6 +18,7 @@ namespace lve {
     VkCommandBuffer commandBuffer;
     LveCamera& camera;
     VkDescriptorSet globalDescriptoSet; // Descriptor set globale per il frame corrente (contiene l'UBO)
+    LveGameObject::Map& gameObjects;    // Riferimento a tutti i game object attivi nella scena
   };
 
 } // namespace lve
