@@ -104,8 +104,8 @@ namespace lve {
     // Itera attraverso la mappa dei game object (coppie chiave-valore ID -> GameObject)
     for (auto& kv : frameInfo.gameObjects) {
       auto& obj = kv.second;
-      // Criterio di filtraggio: renderizza solo gli oggetti che possiedono un modello 3D associato
-      if (obj.model == nullptr)
+      // Criterio di filtraggio: renderizza solo gli oggetti con modello e senza texture (gestiti da TextureRenderSystem)
+      if (obj.model == nullptr || obj.diffuseMap != nullptr)
         continue;
 
       // Prepara i dati delle push constants specifici per questo oggetto

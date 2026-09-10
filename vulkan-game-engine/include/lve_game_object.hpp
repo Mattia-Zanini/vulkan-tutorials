@@ -2,6 +2,7 @@
 
 #include "glm/ext/matrix_float4x4.hpp"
 #include "lve_model.hpp"
+#include "lve_texture.hpp"
 
 // libs
 #include <cstddef>
@@ -67,6 +68,7 @@ namespace lve {
     TransformComponent transform{};
 
     std::shared_ptr<LveModel> model{};
+    std::shared_ptr<LveTexture> diffuseMap = nullptr;
     // Puntatore opzionale al componente point light (nullptr se l'oggetto non è una sorgente di luce).
     // Gli oggetti luce non hanno il modello associato, così da essere ignorati dal SimpleRenderSystem
     std::unique_ptr<PointLightComponent> pointLight = nullptr;

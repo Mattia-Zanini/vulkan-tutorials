@@ -12,6 +12,7 @@
 #include "lve_swap_chain.hpp"
 #include "systems/point_light_system.hpp"
 #include "systems/simple_render_system.hpp"
+#include "systems/texture_render_system.hpp"
 #include "vulkan/vulkan_core.h"
 
 // libs
@@ -37,6 +38,17 @@ namespace lve {
                    .setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
                    .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, LveSwapChain::MAX_FRAMES_IN_FLIGHT)
                    .build();
+
+    framePools.resize(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
+    auto framePoolBuilder = LveDescriptorPool::Builder(lveDevice)
+                                .setMaxSets(1000)
+                                .addPoolSize(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 1000)
+                                .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 1000)
+                                .setPoolFlags(VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT);
+    for (int i = 0; i < framePools.size(); i++) {
+      framePools[i] = framePoolBuilder.build();
+    }
+
     loadGameObjects();
   }
 
@@ -88,6 +100,11 @@ namespace lve {
       lveRenderer.getSwapChainRenderPass(),
       globalSetLayout->getDescriptorSetLayout()
     };
+    TextureRenderSystem textureRenderSystem{
+      lveDevice,
+      lveRenderer.getSwapChainRenderPass(),
+      globalSetLayout->getDescriptorSetLayout()
+    };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
 
@@ -133,6 +150,7 @@ namespace lve {
       // in tal caso saltiamo la registrazione e sottomissione dei comandi per questo frame
       if (auto commandBuffer = lveRenderer.beginFrame()) {
         int frameIndex = lveRenderer.getFrameIndex();
+        framePools[frameIndex]->resetPool();
         // Raggruppa i parametri del frame corrente (incluso il descriptor set per-frame dell'UBO) da passare ai render systems
         FrameInfo frameInfo{
           frameIndex,
@@ -140,6 +158,7 @@ namespace lve {
           commandBuffer,
           camera,
           globalDescriptorSets[frameIndex],
+          *framePools[frameIndex],
           gameObjects
         };
 
@@ -160,6 +179,7 @@ namespace lve {
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
 
         // Gli oggetti solidi ed opachi devono sempre essere renderizzati prima di quelli semi-trasparenti
+        textureRenderSystem.renderGameObjects(frameInfo);
         simpleRenderSystem.renderGameObjects(frameInfo);
         // Renderizza i billboard semi-trasparenti delle point light solo dopo gli oggetti opachi
         pointLightSystem.render(frameInfo);
@@ -198,8 +218,11 @@ namespace lve {
     // Oggetto pavimento: quad piano orizzontale (2 triangoli) posizionato alla base dei vasi (Y = 0.5).
     // La scala su Y non ha effetto poiché i vertici del quad giacciono sul piano XZ (Y = 0)
     lveModel = LveModel::createModelFromFile(lveDevice, "models/quad.obj");
+    std::shared_ptr<LveTexture> marbleTexture =
+        LveTexture::createTextureFromFile(lveDevice, "textures/missing.png");
     auto floor = LveGameObject::createGameObject();
     floor.model = lveModel;
+    floor.diffuseMap = marbleTexture;
     floor.transform.translation = { 0.f, .5f, 0.f };
     floor.transform.scale = glm::vec3{ 3.f, 1.f, 3.f };
     gameObjects.emplace(floor.getId(), std::move(floor));

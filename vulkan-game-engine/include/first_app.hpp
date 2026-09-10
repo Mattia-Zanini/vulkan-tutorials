@@ -41,6 +41,7 @@ namespace lve {
     // Pool globale per allocare i descriptor set condivisi tra più sistemi (es. UBO globale).
     // Dichiarato dopo lveDevice in modo da essere distrutto prima del device stesso.
     std::unique_ptr<LveDescriptorPool> globalPool{};
+    std::vector<std::unique_ptr<LveDescriptorPool>> framePools;
     // Mappa dei Game Object presenti nella scena indicizzati per ID
     LveGameObject::Map gameObjects;
   };

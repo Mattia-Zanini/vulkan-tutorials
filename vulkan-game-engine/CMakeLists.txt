@@ -83,3 +83,12 @@ add_custom_target(SyncModels ALL
     COMMENT "Sincronizzazione della cartella models in corso..."
 )
 add_dependencies(vulkanengine SyncModels)
+
+# Sincronizza automaticamente la cartella "textures" nella build directory
+add_custom_target(SyncTextures ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
+    "${CMAKE_CURRENT_SOURCE_DIR}/textures"
+    "${CMAKE_CURRENT_BINARY_DIR}/textures"
+    COMMENT "Sincronizzazione della cartella textures in corso..."
+)
+add_dependencies(vulkanengine SyncTextures)
