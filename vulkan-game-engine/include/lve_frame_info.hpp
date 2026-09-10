@@ -25,6 +25,7 @@ namespace lve {
     // Matrici projection e view separate: permette agli shader (come nei billboard) di estrarre i vettori Up e Right della camera
     glm::mat4 projection{ 1.f };
     glm::mat4 view{ 1.f };
+    glm::mat4 inverseView{ 1.f }; // Matrice di vista inversa per ricavare la posizione della camera nello spazio mondo
     // Colore della luce ambientale (RGB) con intensità memorizzata nella componente w (0.02)
     glm::vec4 ambientLightColor{ 1.f, 1.f, 1.f, .02f };
     PointLight pointLights[MAX_LIGHTS]; // Array di point light fisse inviate agli shader

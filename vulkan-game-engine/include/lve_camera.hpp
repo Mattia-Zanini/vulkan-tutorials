@@ -46,11 +46,15 @@ namespace lve {
     const glm::mat4& getProjection() const { return projectionMatrix; }
     // Restituisce la matrice di vista (camera transform) corrente
     const glm::mat4& getView() const { return viewMatrix; }
+    // Restituisce la matrice di vista inversa (permette di estrarre la posizione della camera nello spazio mondo)
+    const glm::mat4& getInverseView() const { return inverseViewMatrix; }
 
   private:
     // Matrice di proiezione 4x4 (inizializzata di default alla matrice identità)
     glm::mat4 projectionMatrix{ 1.f };
     // Matrice di vista 4x4 per la trasformazione della camera
     glm::mat4 viewMatrix{ 1.f };
+    // Matrice di vista inversa (trasforma dallo spazio camera allo spazio mondo; equivalente al transform del viewer)
+    glm::mat4 inverseViewMatrix{ 1.f };
   };
 } // namespace lve

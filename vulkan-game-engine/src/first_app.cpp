@@ -147,6 +147,7 @@ namespace lve {
         GlobalUbo ubo{};
         ubo.projection = camera.getProjection();
         ubo.view = camera.getView();
+        ubo.inverseView = camera.getInverseView(); // Fornisce la matrice di vista inversa agli shader per estrarre la posizione della camera
 
         // Aggiorna le luci nell'UBO prima della scrittura su buffer per inviare alla GPU le posizioni correnti del frame
         pointLightSystem.update(frameInfo, ubo);
