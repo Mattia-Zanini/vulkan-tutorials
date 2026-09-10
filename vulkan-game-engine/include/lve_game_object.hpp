@@ -87,6 +87,7 @@ namespace lve {
       assert(currentId < MAX_GAME_OBJECTS && "Max game object count exceeded!");
       auto gameObject = LveGameObject{ currentId++, *this };
       auto gameObjectId = gameObject.getId();
+      gameObject.diffuseMap = textureDefault;
       gameObjects.emplace(gameObjectId, std::move(gameObject));
       return gameObjects.at(gameObjectId);
     }
@@ -105,6 +106,7 @@ namespace lve {
 
   private:
     id_t currentId = 0;
+    std::shared_ptr<LveTexture> textureDefault;
   };
 
 } // namespace lve

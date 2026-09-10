@@ -14,6 +14,7 @@ layout(location = 3) in vec2 uv;
 layout(location = 0) out vec3 fragColor;
 layout(location = 1) out vec3 fragPosWorld;    // Posizione del vertice nello spazio mondo (interpolata per frammento)
 layout(location = 2) out vec3 fragNormalWorld; // Normale del vertice nello spazio mondo (interpolata per frammento)
+layout(location = 3) out vec2 fragUv;
 
 // Dati di una singola point light memorizzati nell'UBO (allineamento std140)
 struct PointLight {
@@ -54,4 +55,5 @@ void main() {
   // Inoltra posizione nello spazio mondo e colore del vertice allo stadio di rasterizzazione
   fragPosWorld = positionWorld.xyz;
   fragColor = color;
+  fragUv = uv;
 }

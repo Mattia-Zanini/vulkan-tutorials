@@ -54,6 +54,7 @@ namespace lve {
                                  0,
                                  VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,
                                  VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT)
+                             .addBinding(1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, VK_SHADER_STAGE_FRAGMENT_BIT)
                              .build();
 
     std::vector<VkDescriptorSetLayout> descriptorSetLayouts{
@@ -117,9 +118,11 @@ namespace lve {
         continue;
 
       auto bufferInfo = obj.getBufferInfo(frameInfo.frameIndex);
+      auto imageInfo = obj.diffuseMap->getImageInfo();
       VkDescriptorSet gameObjectDescriptorSet;
       LveDescriptorWriter(*renderSystemLayout, frameInfo.frameDescriptorPool)
           .writeBuffer(0, &bufferInfo)
+          .writeImage(1, &imageInfo)
           .build(gameObjectDescriptorSet);
 
       vkCmdBindDescriptorSets(

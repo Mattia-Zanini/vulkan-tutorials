@@ -4,6 +4,7 @@
 layout(location = 0) in vec3 fragColor;
 layout(location = 1) in vec3 fragPosWorld;    // Posizione del frammento nello spazio mondo
 layout(location = 2) in vec3 fragNormalWorld; // Normale del frammento nello spazio mondo
+layout(location = 3) in vec2 fragUv;
 
 layout(location = 0) out vec4 outColor;
 
@@ -22,6 +23,8 @@ layout(set = 0, binding = 0) uniform GlobalUbo {
   PointLight pointLights[10];
   int numLights;
 } ubo;
+
+layout (set = 1, binding = 1) uniform sampler2D diffuseMap;
 
 // Blocco di Push Constants accessibile nel Fragment Shader (stessa definizione e layout di memoria del vertex shader)
 layout(push_constant) uniform Push {
@@ -71,6 +74,7 @@ void main() {
     specularLight += intensity * blinnTerm;
   }
 
-  // Combina illuminazione diffusa e speculare modulandole con il colore del materiale (fragColor)
-  outColor = vec4(diffuseLight * fragColor + specularLight * fragColor, 1.0);
+  // Combina illuminazione diffusa (modulata dalla texture diffuseMap) e speculare
+  vec3 color = texture(diffuseMap, fragUv).xyz;
+  outColor = vec4(diffuseLight * color + specularLight * fragColor, 1.0);
 }
