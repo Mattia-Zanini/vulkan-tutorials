@@ -13,6 +13,9 @@ namespace lve {
     PipelineConfigInfo(const PipelineConfigInfo&) = delete;
     PipelineConfigInfo& operator=(const PipelineConfigInfo&) = delete;
 
+    // Descrizioni di binding e attributi dei vertici configurabili (possono essere lasciati vuoti per pipeline senza vertex buffer, es. billboard)
+    std::vector<VkVertexInputBindingDescription> bindingDescriptions{};
+    std::vector<VkVertexInputAttributeDescription> attributeDescriptions{};
     VkPipelineViewportStateCreateInfo viewportInfo;
     // 1° stadio (Input Assembler): raggruppa la lista di vertici grezzi in geometrie (es. triangoli, linee, punti)
     VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo;

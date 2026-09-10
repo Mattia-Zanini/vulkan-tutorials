@@ -1,4 +1,4 @@
-#include "simple_render_system.hpp"
+#include "systems/simple_render_system.hpp"
 #include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
 #include <cstddef>
@@ -97,7 +97,7 @@ namespace lve {
       pipelineLayout,
       0,
       1,
-      &frameInfo.globalDescriptoSet,
+      &frameInfo.globalDescriptorSet,
       0,
       nullptr);
 

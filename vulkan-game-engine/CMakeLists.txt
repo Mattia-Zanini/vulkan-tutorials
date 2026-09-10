@@ -36,7 +36,6 @@ endif()
 
 target_include_directories(vulkanengine PRIVATE
 	"${CMAKE_CURRENT_SOURCE_DIR}/include"
-	"${CMAKE_CURRENT_SOURCE_DIR}/include/systems"
 )
 
 target_link_libraries(vulkanengine PRIVATE

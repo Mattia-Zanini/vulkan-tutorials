@@ -11,7 +11,8 @@
 #include "lve_game_object.hpp"
 #include "lve_model.hpp"
 #include "lve_swap_chain.hpp"
-#include "simple_render_system.hpp"
+#include "systems/point_light_system.hpp"
+#include "systems/simple_render_system.hpp"
 #include "vulkan/vulkan_core.h"
 
 // libs
@@ -33,7 +34,9 @@ namespace lve {
   // Uniform Buffer Object (UBO) globale: permette di passare dati arbitrari in sola lettura agli shader
   // superando i limiti di dimensione delle push constants (128 byte garantiti vs almeno 16KB per gli UBO).
   struct GlobalUbo {
-    glm::mat4 projectionView{ 1.f };
+    // Matrici projection e view separate: permette agli shader (come nei billboard) di estrarre i vettori Up e Right della camera
+    glm::mat4 projection{ 1.f };
+    glm::mat4 view{ 1.f };
     // Colore della luce ambientale (RGB) con intensità memorizzata nella componente w (0.02)
     glm::vec4 ambientLightColor{ 1.f, 1.f, 1.f, .02f };
     // Posizione della point light nello spazio mondo
@@ -95,6 +98,12 @@ namespace lve {
       lveRenderer.getSwapChainRenderPass(),
       globalSetLayout->getDescriptorSetLayout()
     };
+    // Secondo sistema di rendering indipendente dedicato a disegnare le sorgenti luminose puntiformi come billboard 2D
+    PointLightSystem pointLightSystem{
+      lveDevice,
+      lveRenderer.getSwapChainRenderPass(),
+      globalSetLayout->getDescriptorSetLayout()
+    };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
 
@@ -152,7 +161,8 @@ namespace lve {
 
         // Fase 1: Aggiornamento degli oggetti e della memoria
         GlobalUbo ubo{};
-        ubo.projectionView = camera.getProjection() * camera.getView();
+        ubo.projection = camera.getProjection();
+        ubo.view = camera.getView();
         // Scrive i dati e ne esegue il flush sul buffer UBO dedicato al frame corrente
         uboBuffers[frameIndex]->writeToBuffer(&ubo);
         uboBuffers[frameIndex]->flush();
@@ -160,6 +170,8 @@ namespace lve {
         // Fase 2: Registrazione dei comandi di rendering
         lveRenderer.beginSwapChainRenderPass(commandBuffer);
         simpleRenderSystem.renderGameObjects(frameInfo);
+        // Renderizza i billboard per visualizzare visivamente le point light nella scena
+        pointLightSystem.render(frameInfo);
         lveRenderer.endSwapChainRenderPass(commandBuffer);
         lveRenderer.endFrame();
       }

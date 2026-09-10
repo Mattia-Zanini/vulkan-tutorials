@@ -82,11 +82,10 @@ namespace lve {
     shaderStages[1].pNext = nullptr;
     shaderStages[1].pSpecializationInfo = nullptr;
 
-    // Recupera le descrizioni dei binding e degli attributi dei vertici dal nostro modello.
-    // Il binding specifica il passo (stride) di avanzamento nel buffer di memoria;
-    // Gli attributi descrivono i singoli campi (posizione, colore, ecc.) e come mapparsi alle location dello shader.
-    auto bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
-    auto attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
+    // Utilizza le descrizioni dei vertici fornite da configInfo (per riferimento per evitare copie),
+    // permettendo a sistemi speciali (come le point light senza vertex buffer) di azzerarle ed evitare warning di validazione
+    auto& bindingDescriptions = configInfo.bindingDescriptions;
+    auto& attributeDescriptions = configInfo.attributeDescriptions;
 
     // Configura il vertex input state della pipeline collegando le descrizioni di binding e attributi
     VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
@@ -250,5 +249,9 @@ namespace lve {
     configInfo.dynamicStateInfo.pDynamicStates = configInfo.dynamicStateEnables.data();
     configInfo.dynamicStateInfo.dynamicStateCount = static_cast<uint32_t>(configInfo.dynamicStateEnables.size());
     configInfo.dynamicStateInfo.flags = 0;
+
+    // Imposta come default i binding e gli attributi standard estratti da LveModel::Vertex
+    configInfo.bindingDescriptions = LveModel::Vertex::getBindingDescriptions();
+    configInfo.attributeDescriptions = LveModel::Vertex::getAttributeDescriptions();
   }
 }

@@ -9,7 +9,8 @@ layout(location = 0) out vec4 outColor;
 
 // Uniform Buffer Object globale accessibile tramite descriptor set 0 al binding 0
 layout(set = 0, binding = 0) uniform GlobalUbo {
-  mat4 projectionViewMatrix;
+  mat4 projection;
+  mat4 view;
   vec4 ambientLightColor; // RGB = colore, A = intensità
   vec3 lightPosition;
   vec4 lightColor; // RGB = colore, A = intensità

@@ -17,7 +17,8 @@ layout(location = 2) out vec3 fragNormalWorld; // Normale del vertice nello spaz
 
 // Uniform Buffer Object globale accessibile tramite descriptor set 0 al binding 0
 layout(set = 0, binding = 0) uniform GlobalUbo {
-  mat4 projectionViewMatrix;
+  mat4 projection;
+  mat4 view;
   vec4 ambientLightColor; // RGB = colore, A = intensità
   vec3 lightPosition;
   vec4 lightColor; // RGB = colore, A = intensità
@@ -33,8 +34,8 @@ void main() {
   // Trasforma la posizione del vertice nello spazio mondo (necessario poiché la posizione della point light è in world space)
   vec4 positionWorld = push.modelMatrix * vec4(position, 1.0);
 
-  // Trasforma la posizione nello spazio di proiezione/clip
-  gl_Position = ubo.projectionViewMatrix * positionWorld;
+  // Trasforma la posizione nello spazio di proiezione/clip applicando separatamente view e projection (l'ordine di moltiplicazione è critico)
+  gl_Position = ubo.projection * ubo.view * positionWorld;
 
   // Trasforma la normale nello spazio mondo estraendo la sottomatrice 3x3 dalla normalMatrix (passata come mat4 per allineamento)
   fragNormalWorld = normalize(mat3(push.normalMatrix) * normal);
