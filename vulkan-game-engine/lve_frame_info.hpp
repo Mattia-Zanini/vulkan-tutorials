@@ -1,6 +1,7 @@
 #pragma once
 
 #include "lve_camera.hpp"
+#include "vulkan/vulkan_core.h"
 
 // lib
 #include <vulkan/vulkan.h>
@@ -15,6 +16,7 @@ namespace lve {
     float frameTime;
     VkCommandBuffer commandBuffer;
     LveCamera& camera;
+    VkDescriptorSet globalDescriptoSet; // Descriptor set globale per il frame corrente (contiene l'UBO)
   };
 
 } // namespace lve

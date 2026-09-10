@@ -13,25 +13,26 @@ layout(location = 3) in vec2 uv;
 // Output verso il fragment shader per il colore interpolato (per-vertex coloring)
 layout(location = 0) out vec3 fragColor;
 
+// Uniform Buffer Object globale accessibile tramite descriptor set 0 al binding 0
+layout(set = 0, binding = 0) uniform GlobalUbo {
+  mat4 projectionViewMatrix;
+  vec3 directionToLight;
+} ubo;
+
 // Blocco di Push Constants accessibile nel Vertex Shader
 layout(push_constant) uniform Push {
-  mat4 transform; // projection * view * model
+  mat4 modelMatrix; // Matrice di trasformazione specifica del singolo modello
   mat4 normalMatrix;
 } push;
-
-// Direzione della sorgente di luce nello spazio mondo, normalizzata a lunghezza unitaria.
-// Simula una luce direzionale (come il sole) posta a distanza infinita, dove i raggi sono paralleli per tutti i vertici.
-const vec3 DIRECTION_TO_LIGHT = normalize(vec3(1.0, -3.0, -1.0));
 
 // Luce ambientale: approssimazione dell'illuminazione indiretta (luce rimbalzata nell'ambiente).
 // Garantisce che anche le parti del modello non direttamente rivolte verso la sorgente luminosa non siano completamente nere.
 const float AMBIENT = 0.02;
 
 void main() {
-  // Applica la trasformazione affine moltiplicando la matrice 4x4 per la posizione espressa in coordinate omogenee.
-  // La quarta coordinata omogenea (w = 1.0) permette di applicare la componente di traslazione memorizzata nella matrice;
-  // per un vettore direzione, si utilizzerebbe invece w = 0.0 per ignorare la traslazione.
-  gl_Position = push.transform * vec4(position, 1.0);
+  // Trasforma la posizione del vertice combinando la matrice del modello dalle push constants con la matrice
+  // projection * view proveniente dall'UBO globale (l'ordine di moltiplicazione delle matrici è critico)
+  gl_Position = ubo.projectionViewMatrix * push.modelMatrix * vec4(position, 1.0);
 
   // Trasforma la normale nello spazio mondo estraendo la sottomatrice 3x3 dalla normalMatrix (passata come mat4 per allineamento).
   // La normalizzazione garantisce che il vettore risultante sia di lunghezza unitaria.
@@ -40,7 +41,7 @@ void main() {
   // Modello di illuminazione diffusa (Lambertiano): l'intensità luminosa è proporzionale al coseno dell'angolo
   // tra la normale e la direzione della luce (calcolato tramite prodotto scalare dot product).
   // La funzione max con 0 assicura che le superfici rivolte in direzione opposta alla luce abbiano intensità nulla.
-  float lighIntensity = AMBIENT + max(dot(normalWorldSpace, DIRECTION_TO_LIGHT), 0);
+  float lighIntensity = AMBIENT + max(dot(normalWorldSpace, ubo.directionToLight), 0);
 
   // Modula il colore del vertice moltiplicandolo per l'intensità luminosa calcolata
   fragColor = lighIntensity * color;

@@ -4,6 +4,7 @@
 #include "keyboard_movement_controller.hpp"
 #include "lve_buffer.hpp"
 #include "lve_camera.hpp"
+#include "lve_descriptors.hpp"
 #include "lve_frame_info.hpp"
 #include "lve_game_object.hpp"
 #include "lve_model.hpp"
@@ -34,7 +35,15 @@ namespace lve {
     glm::vec3 lightDirection = glm::normalize(glm::vec3{ 1.f, -3.f, -1.f });
   };
 
-  FirstApp::FirstApp() { loadGameObjects(); }
+  FirstApp::FirstApp() {
+    // Inizializza il pool globale allocando memoria per MAX_FRAMES_IN_FLIGHT descriptor set
+    // e altrettanti descrittori di tipo UNIFORM_BUFFER (uno per ciascun frame in flight).
+    globalPool = LveDescriptorPool::Builder(lveDevice)
+                   .setMaxSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT)
+                   .addPoolSize(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, LveSwapChain::MAX_FRAMES_IN_FLIGHT)
+                   .build();
+    loadGameObjects();
+  }
 
   FirstApp::~FirstApp() {}
 
@@ -54,9 +63,29 @@ namespace lve {
       uboBuffers[i]->map();
     }
 
+    // Definisce il layout del descriptor set globale ("blueprint" per la pipeline grafica).
+    // Specifica al binding 0 un descrittore di tipo Uniform Buffer accessibile dal Vertex Shader.
+    auto globalSetLayout = LveDescriptorSetLayout::Builder(lveDevice)
+                             .addBinding(0, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT)
+                             .build();
+
+    // Alloca dal pool globale e configura un descriptor set per ciascun frame in flight,
+    // associando il binding 0 all'UBO dedicato a quel frame tramite LveDescriptorWriter.
+    std::vector<VkDescriptorSet> globalDescriptorSets(LveSwapChain::MAX_FRAMES_IN_FLIGHT);
+    for (int i = 0; i < globalDescriptorSets.size(); i++) {
+      auto bufferInfo = uboBuffers[i]->descriptorInfo();
+      LveDescriptorWriter(*globalSetLayout, *globalPool)
+        .writeBuffer(0, &bufferInfo)
+        .build(globalDescriptorSets[i]);
+    }
+
     // Sistema di rendering: incapsula pipeline, layout e logica di disegno per i game object,
-    // configurandosi con il render pass fornito dal renderer
-    SimpleRenderSystem simpleRenderSystem{ lveDevice, lveRenderer.getSwapChainRenderPass() };
+    // configurandosi con il render pass fornito dal renderer e il layout dei descriptor set
+    SimpleRenderSystem simpleRenderSystem{
+      lveDevice,
+      lveRenderer.getSwapChainRenderPass(),
+      globalSetLayout->getDescriptorSetLayout()
+    };
     // Camera: memorizza la matrice di proiezione (ortografica o prospettica)
     LveCamera camera{};
 
@@ -100,8 +129,8 @@ namespace lve {
       // in tal caso saltiamo la registrazione e sottomissione dei comandi per questo frame
       if (auto commandBuffer = lveRenderer.beginFrame()) {
         int frameIndex = lveRenderer.getFrameIndex();
-        // Raggruppa i parametri del frame corrente in una singola struct da passare ai render systems
-        FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera };
+        // Raggruppa i parametri del frame corrente (incluso il descriptor set per-frame dell'UBO) da passare ai render systems
+        FrameInfo frameInfo{ frameIndex, frameTime, commandBuffer, camera, globalDescriptorSets[frameIndex] };
 
         // Fase 1: Aggiornamento degli oggetti e della memoria
         GlobalUbo ubo{};

@@ -1,6 +1,7 @@
 #include "simple_render_system.hpp"
 #include "lve_game_object.hpp"
 #include "vulkan/vulkan_core.h"
+#include <cstdint>
 
 // libs
 #define GLM_FORCE_RADIANS
@@ -21,15 +22,16 @@ namespace lve {
   struct SimplePushConstantData {
     // Matrice di trasformazione affine 4x4 (combina scala, rotazione ed offset/traslazione tramite coordinate omogenee).
     // Inizializzata di default alla matrice identità.
-    glm::mat4 transform{ 1.f };
+    glm::mat4 modelMatrix{ 1.f };
     // Matrice delle normali passata come mat4 (anziché mat3) per rispettare le regole di allineamento
     // di Vulkan (dove ogni riga/colonna richiede un allineamento a 16 byte); GLM gestisce automaticamente il padding
     glm::mat4 normalMatrix{ 1.f };
   };
 
-  SimpleRenderSystem::SimpleRenderSystem(LveDevice& device, VkRenderPass renderPass) : lveDevice{ device } {
+  SimpleRenderSystem::SimpleRenderSystem(LveDevice& device, VkRenderPass renderPass, VkDescriptorSetLayout globalSetLayout)
+    : lveDevice{ device } {
     // Inizializza il layout delle push constants e crea la pipeline grafica associata al render pass specificato
-    createPipelineLayout();
+    createPipelineLayout(globalSetLayout);
     createPipeline(renderPass);
   }
 
@@ -38,7 +40,7 @@ namespace lve {
     vkDestroyPipelineLayout(lveDevice.device(), pipelineLayout, nullptr);
   }
 
-  void SimpleRenderSystem::createPipelineLayout() {
+  void SimpleRenderSystem::createPipelineLayout(VkDescriptorSetLayout globalSetLayout) {
     // Configura il range di push constants: specifica quali stadi dello shader possono accedervi,
     // l'offset di partenza (0) e la dimensione totale occupata in byte.
     VkPushConstantRange pushConstantRange{};
@@ -46,13 +48,15 @@ namespace lve {
     pushConstantRange.offset = 0;
     pushConstantRange.size = sizeof(SimplePushConstantData);
 
+    std::vector<VkDescriptorSetLayout> descriptorSetLayouts{ globalSetLayout };
+
     // Pipeline Layout: definisce come passare dati agli shader oltre ai dati dei vertici.
     // Include descrittori (texture, Uniform Buffer Objects) e push constants.
     VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
     pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-    // Per ora creiamo un layout vuoto per i set di descrittori
-    pipelineLayoutInfo.setLayoutCount = 0;
-    pipelineLayoutInfo.pSetLayouts = nullptr;
+    // Specifica il numero e i puntatori ai descriptor set layout attesi dalla pipeline (set 0, set 1, ecc.)
+    pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayouts.size());
+    pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
     // Collega il range di push constants al layout della pipeline grafica
     pipelineLayoutInfo.pushConstantRangeCount = 1;
     pipelineLayoutInfo.pPushConstantRanges = &pushConstantRange;
@@ -84,20 +88,25 @@ namespace lve {
     // Esegue il bind della pipeline una sola volta per tutti gli oggetti che condividono lo stesso stato di rendering
     lvePipeline->bind(frameInfo.commandBuffer);
 
-    // Ottimizzazione: precalcola la moltiplicazione projection * view una sola volta per frame,
-    // invece di farlo per ogni oggetto. Questo sposta gli oggetti dalle coordinate del mondo
-    // alle coordinate della camera, e infine nello spazio di clip (frustum).
-    auto projectionView = frameInfo.camera.getProjection() * frameInfo.camera.getView();
+    // Esegue il bind del descriptor set globale (set 0) una sola volta all'esterno del ciclo degli oggetti.
+    // Essendo condiviso da tutti gli oggetti della scena nel frame corrente, non serve ri-eseguire il bind a ogni draw call.
+    vkCmdBindDescriptorSets(
+      frameInfo.commandBuffer,
+      VK_PIPELINE_BIND_POINT_GRAPHICS,
+      pipelineLayout,
+      0,
+      1,
+      &frameInfo.globalDescriptoSet,
+      0,
+      nullptr);
 
     for (auto& obj : gameObjects) {
       // Prepara i dati delle push constants specifici per questo oggetto
       SimplePushConstantData push{};
 
-      // Calcola la modelMatrix una volta sola per evitare calcoli duplicati
-      auto modelMatrix = obj.transform.mat4();
-      // Combina projectionView (projection * view) con la matrice di trasformazione del modello (modelMatrix).
-      // Sequenza: Model -> View -> Projection
-      push.transform = projectionView * modelMatrix;
+      // Matrice di trasformazione del modello (Model matrix): non serve più moltiplicarla per projectionView
+      // qui sulla CPU, poiché projectionView viene letta direttamente dall'UBO globale nello shader
+      push.modelMatrix = obj.transform.mat4();
       // Assegna la matrice delle normali calcolata per trasformare le normali nello spazio mondo
       push.normalMatrix = obj.transform.normalMatrix();
 

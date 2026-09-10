@@ -6,7 +6,7 @@ layout(location = 0) out vec4 outColor;
 
 // Blocco di Push Constants accessibile nel Fragment Shader (stessa definizione e layout di memoria del vertex shader)
 layout(push_constant) uniform Push {
-  mat4 transform; // Mantiene allineato il layout di memoria con il blocco push constants del vertex shader
+  mat4 modelMatrix; // Mantiene allineato il layout di memoria con il blocco push constants del vertex shader
   mat4 normalMatrix;
 } push;
 
