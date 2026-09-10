@@ -22,8 +22,8 @@ find_package(fmt CONFIG REQUIRED)
 
 # Aggiungi il percorso delle directory dei file sorgente
 # Utilizza GLOB per raccogliere automaticamente i file sorgente
-file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
-file(GLOB HEADERS CONFIGURE_DEPENDS "*.hpp" "*.h")
+file(GLOB SOURCES CONFIGURE_DEPENDS "src/*.cpp" "src/systems/*.cpp")
+file(GLOB HEADERS CONFIGURE_DEPENDS "include/*.hpp" "include/*.h" "include/systems/*.hpp")
 
 add_executable(vulkanengine
 	${SOURCES}
@@ -33,6 +33,11 @@ add_executable(vulkanengine
 if(MSVC)
     target_compile_options(vulkanengine PRIVATE /std:c++latest)
 endif()
+
+target_include_directories(vulkanengine PRIVATE
+	"${CMAKE_CURRENT_SOURCE_DIR}/include"
+	"${CMAKE_CURRENT_SOURCE_DIR}/include/systems"
+)
 
 target_link_libraries(vulkanengine PRIVATE
 	Vulkan::Vulkan
