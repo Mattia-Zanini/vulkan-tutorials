@@ -48,9 +48,11 @@ namespace lve {
 
     vkDestroyRenderPass(device.device(), renderPass, nullptr);
 
-    // cleanup synchronization objects
-    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+    // Distrugge i semafori di fine rendering allocati per ciascuna immagine della swapchain
+    for (size_t i = 0; i < renderFinishedSemaphores.size(); i++) {
       vkDestroySemaphore(device.device(), renderFinishedSemaphores[i], nullptr);
+    }
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
       vkDestroySemaphore(device.device(), imageAvailableSemaphores[i], nullptr);
       vkDestroyFence(device.device(), inFlightFences[i], nullptr);
     }
@@ -84,7 +86,10 @@ namespace lve {
     submitInfo.commandBufferCount = 1;
     submitInfo.pCommandBuffers = buffers;
 
-    VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
+    // Associa il semaforo di fine rendering all'immagine della swapchain (*imageIndex) anziché al frame in flight (currentFrame):
+    // risolve la race condition con il presentation engine (VUID-vkQueueSubmit-pSignalSemaphores-00067)
+    // garantendo che il semaforo venga riutilizzato solo dopo che l'immagine associata è stata riacquisita
+    VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[*imageIndex] };
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
@@ -329,7 +334,6 @@ namespace lve {
 
   void LveSwapChain::createSyncObjects() {
     imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
-    renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
     inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
     imagesInFlight.resize(imageCount(), VK_NULL_HANDLE);
 
@@ -341,8 +345,19 @@ namespace lve {
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
     for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-      if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS || vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS || vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+      if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+          vkCreateFence(device.device(), &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
         throw std::runtime_error("failed to create synchronization objects for a frame!");
+      }
+    }
+
+    // Alloca un renderFinishedSemaphore dedicato per ogni immagine della swapchain (anziché MAX_FRAMES_IN_FLIGHT):
+    // poiché vkQueuePresentKHR non fornisce un fence lato CPU, legare il semaforo all'immagine garantisce
+    // che non venga riutilizzato mentre il presentation engine lo sta ancora consumando
+    renderFinishedSemaphores.resize(imageCount());
+    for (size_t i = 0; i < imageCount(); i++) {
+      if (vkCreateSemaphore(device.device(), &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create render finished semaphore for image!");
       }
     }
   }
